@@ -1,0 +1,108 @@
+================================================================================
+   SHERMAN BIDDING SYSTEM - QUICK START GUIDE
+================================================================================
+
+🎉 YOUR STANDALONE HTML FILE IS READY!
+
+📁 File: Modular-Bidding.html (191 KB)
+📍 Location: Desktop\Modular Bidding\
+
+================================================================================
+   3 SIMPLE STEPS TO GET STARTED
+================================================================================
+
+   STEP 1: DOUBLE-CLICK
+   ────────────────────
+   Find "Modular-Bidding.html" and double-click it.
+   It will open in your default web browser.
+
+   STEP 2: LOGIN
+   ─────────────
+   Username: SHERMAN
+   Password: BIDDING
+
+   STEP 3: START BIDDING!
+   ──────────────────────
+   • Click "+ New Customer" to add a customer
+   • Click "+ New Quote" to create a quote for that customer
+   • Everything saves automatically!
+
+================================================================================
+   WHAT YOU CAN DO
+================================================================================
+
+   ✅ Manage Customers
+      - Add customer contact info
+      - Track site addresses
+      - Multiple phone numbers and emails
+
+   ✅ Create Quotes
+      - Choose from 60+ home models
+      - Select services needed
+      - Add custom services
+      - Automatic price calculations
+
+   ✅ View Pier Diagrams
+      - Automatic pier layout generation
+      - Cross-section views
+      - Print-ready diagrams
+
+   ✅ Customer Portal
+      - Customers can login to view their quotes
+      - Username: firstnamelastname (no spaces)
+      - Password: mybid
+
+   ✅ Generate Printable Quotes
+      - Professional customer-facing quotes
+      - Email-ready format
+      - Include floor plans
+
+================================================================================
+   TROUBLESHOOTING
+================================================================================
+
+   ❓ Page is blank?
+      → Press F12 to open developer console
+      → Check for JavaScript errors
+      → Make sure JavaScript is enabled in browser
+
+   ❓ Data not saving?
+      → Check that cookies/localStorage are enabled
+      → Try a different browser
+
+   ❓ Need help?
+      → Read README-HTML.txt for detailed instructions
+      → Read CONVERSION-SUMMARY.md for technical details
+
+================================================================================
+   IMPORTANT NOTES
+================================================================================
+
+   💾 Your data is saved in your browser's localStorage
+      - Data persists even after closing the browser
+      - Each browser has separate data
+      - To reset: Clear browser cache
+
+   🌐 Internet required for:
+      - Floor plan images (from claytonhomes.com)
+      - First-time page load (CDN scripts)
+      - After first load, works mostly offline
+
+   📱 Works on mobile browsers too!
+      - Same file works on phones and tablets
+      - Just email or copy the file to your device
+
+================================================================================
+   CONTACT
+================================================================================
+
+   Sherman Pole Buildings
+   📞 (320) 679-3438
+   📍 2244 Hwy 65, Mora, MN 55051
+
+================================================================================
+
+                        🚀 READY TO GO!
+            Just double-click Modular-Bidding.html to start!
+
+================================================================================
