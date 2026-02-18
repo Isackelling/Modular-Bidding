@@ -1065,10 +1065,16 @@ function AppInner() {
   };
 
   const delQuote = async id => {
-    await saveQuotes(quotes.filter(q => q.id !== id));
+    const isContract = contracts.find(c => c.id === id);
+    if (isContract) {
+      await saveContracts(contracts.filter(c => c.id !== id));
+      setSelContract(null);
+    } else {
+      await saveQuotes(quotes.filter(q => q.id !== id));
+      setSelQuote(null);
+    }
     if (selCustomer) setView('viewCustomer');
     else setView('dashboard');
-    setSelQuote(null);
     setDeleteConfirm(null);
   };
 
@@ -1686,12 +1692,18 @@ function AppInner() {
                     const ac = currentItem.scrubbCosts?.installation_of_home || 0;
                     trackingItems.push({ key: 'installation_of_home', name: 'Installation of Home', contractPrice: installSvc.cost, actualCost: ac, variance: ac > 0 ? installSvc.cost - ac : 0, variancePct: installSvc.cost > 0 && ac > 0 ? (((installSvc.cost - ac) / installSvc.cost) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.installation_of_home || [] });
                   }
+                  // Determine which services were added via change orders
+                  const coAddedKeys = new Set();
+                  (currentItem.changeOrderHistory || []).forEach(co => {
+                    if (!co.isReversal) (co.additions || []).forEach(k => coAddedKeys.add(k));
+                  });
+
                   Object.entries(currentItem.selectedServices || {}).filter(([key, sel]) => sel && !SUMMARY_SERVICES.includes(key) && services[key]).forEach(([key]) => {
                     const svc = services[key];
                     const cp = totals?.svc?.find(s => s.key === key)?.cost || 0;
                     const ac = currentItem.scrubbCosts?.[key] || 0;
                     const v = ac > 0 ? cp - ac : 0;
-                    trackingItems.push({ key, name: svc?.name || key, contractPrice: cp, actualCost: ac, variance: v, variancePct: cp > 0 && ac > 0 ? ((v / cp) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.[key] || [], isAllowance: ALLOWANCE_ITEMS.includes(key) });
+                    trackingItems.push({ key, name: svc?.name || key, contractPrice: cp, actualCost: ac, variance: v, variancePct: cp > 0 && ac > 0 ? ((v / cp) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.[key] || [], isAllowance: ALLOWANCE_ITEMS.includes(key), isChangeOrderAddition: coAddedKeys.has(key) });
                   });
 
                   if (trackingItems.length === 0) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}><p>No items to track.</p></div>;
@@ -1822,33 +1834,61 @@ function AppInner() {
                           <strong>Purpose:</strong> A 2% fund for change orders and allowance adjustments. When allowances come in under budget, savings are added here. When costs exceed estimates or change orders are made, funds are drawn from here first, minimizing customer out-of-pocket costs. At project completion, if there are no overages or change orders, the customer receives back the full 2% contingency amount plus any allowance savings.
                         </p>
                         {(() => {
-                          const startC = totals.contingency || 0;
-                          const savings = trackingItems.filter(i => ALLOWANCE_ITEMS.includes(i.key) && i.variance > 0).reduce((s, i) => s + i.variance, 0);
-                          const overages = trackingItems.filter(i => ALLOWANCE_ITEMS.includes(i.key) && i.variance < 0).reduce((s, i) => s + Math.abs(i.variance), 0);
+                          // Starting fund: original 2% BEFORE any CO additions inflated the total
+                          const coHistory = currentItem.changeOrderHistory || [];
+                          const startC = coHistory.length > 0
+                            ? (coHistory[0].contingencyUsed || 0) + (coHistory[0].contingencyBalance || 0)
+                            : (totals.contingency || 0);
+
+                          // CO service costs: full contract price of each CO-added service draws from fund
+                          const coServiceItems = trackingItems.filter(i => i.isChangeOrderAddition);
+                          const coServiceCosts = coServiceItems.reduce((s, i) => s + i.contractPrice, 0);
+
+                          // Allowance variances (only items with actual costs entered)
+                          const allowanceItemsWithCosts = trackingItems.filter(i => ALLOWANCE_ITEMS.includes(i.key) && i.actualCost > 0);
+                          const savings = allowanceItemsWithCosts.filter(i => i.variance > 0).reduce((s, i) => s + i.variance, 0);
+                          const overages = allowanceItemsWithCosts.filter(i => i.variance < 0).reduce((s, i) => s + Math.abs(i.variance), 0);
+
+                          // Customer contingency payments REFILL the fund (add back)
                           const payments = currentItem.scrubbPayments || [];
                           const cPayments = payments.filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
-                          const coHistory = currentItem.changeOrderHistory || [];
-                          const coUsed = coHistory.reduce((s, co) => s + (co.contingencyUsed || 0), 0);
-                          const balance = startC + savings - overages - cPayments - coUsed;
-                          const amountExceeded = Math.max(0, (overages + coUsed) - (startC + savings));
-                          const contingencyExceeded = amountExceeded > 0;
+
+                          // Running balance
+                          const balance = startC - coServiceCosts + savings - overages + cPayments;
+                          const fundOverdrafted = balance < 0;
+                          const overdraftAmount = Math.abs(Math.min(0, balance));
                           return (
                             <div>
                               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
                                 <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}><div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Starting Fund (2%)</div><div style={{ fontSize: 20, fontWeight: 700, color: '#1565c0' }}>{fmt(startC)}</div></div>
-                                <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}><div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Current Balance</div><div style={{ fontSize: 20, fontWeight: 700, color: balance > 0 ? '#28a745' : '#dc3545' }}>{fmt(balance)}</div></div>
+                                <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}><div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Current Balance</div><div style={{ fontSize: 20, fontWeight: 700, color: balance >= 0 ? '#28a745' : '#dc3545' }}>{fmt(balance)}</div></div>
                               </div>
-                              {balance < 0 && (
+                              {fundOverdrafted && (
                                 <div style={{ padding: 16, background: '#f8d7da', border: '2px solid #dc3545', borderRadius: 8, marginBottom: 16, textAlign: 'center' }}>
                                   <div style={{ fontSize: 18, fontWeight: 700, color: '#dc3545', marginBottom: 6 }}>CONTINGENCY FUND OVERDRAWN</div>
-                                  <div style={{ fontSize: 14, color: '#721c24', marginBottom: 8 }}>The contingency fund is negative by <strong>{fmtCurrency(Math.abs(balance))}</strong>.</div>
-                                  <div style={{ fontSize: 13, color: '#721c24' }}>A payment must be collected from the customer before any additional work can continue.</div>
+                                  <div style={{ fontSize: 14, color: '#721c24', marginBottom: 8 }}>The contingency fund is negative by <strong>{fmt(overdraftAmount)}</strong>.</div>
+                                  <div style={{ fontSize: 13, color: '#721c24' }}>The customer must pay <strong>{fmt(overdraftAmount)}</strong> to cover the deficit. The contract amount does not change.</div>
+                                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginTop: 12 }}>
+                                    <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Total Draws</div><div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(coServiceCosts + overages)}</div></div>
+                                    <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Fund + Savings</div><div style={{ fontSize: 16, fontWeight: 700, color: '#28a745' }}>{fmt(startC + savings + cPayments)}</div></div>
+                                    <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Customer Owes</div><div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(overdraftAmount)}</div></div>
+                                  </div>
                                 </div>
                               )}
+                              {/* Line-item breakdown */}
                               <div style={{ padding: 12, background: '#fff', borderRadius: 6, marginBottom: 8 }}>
-                                <div style={{ marginBottom: 8 }}><div style={{ fontSize: 12, color: '#666' }}>Allowance Savings (added to fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#28a745' }}>+{fmt(savings)}</div></div>
-                                <div style={{ marginBottom: 8 }}><div style={{ fontSize: 12, color: '#666' }}>Allowance Overages (drawn from fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#dc3545' }}>-{fmt(overages)}</div></div>
-                                {coUsed !== 0 && <div><div style={{ fontSize: 12, color: '#666' }}>Change Orders ({coUsed > 0 ? 'drawn from' : 'added to'} fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: coUsed > 0 ? '#dc3545' : '#28a745' }}>{coUsed > 0 ? '-' : '+'}{fmt(Math.abs(coUsed))}</div></div>}
+                                {coServiceItems.map(item => (
+                                  <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                                    <span style={{ fontSize: 13, color: '#333' }}>CO: {item.name}</span>
+                                    <span style={{ fontSize: 13, fontWeight: 600, color: '#dc3545' }}>-{fmt(item.contractPrice)}</span>
+                                  </div>
+                                ))}
+                                {savings > 0 && <div style={{ marginBottom: 6 }}><div style={{ fontSize: 12, color: '#666' }}>Allowance Savings (added to fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#28a745' }}>+{fmt(savings)}</div></div>}
+                                {overages > 0 && <div style={{ marginBottom: 6 }}><div style={{ fontSize: 12, color: '#666' }}>Allowance Overages (drawn from fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#dc3545' }}>-{fmt(overages)}</div></div>}
+                                {cPayments > 0 && <div style={{ marginBottom: 6 }}><div style={{ fontSize: 12, color: '#666' }}>Customer Payments (refunding fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#28a745' }}>+{fmt(cPayments)}</div></div>}
+                                {coServiceItems.length === 0 && savings === 0 && overages === 0 && cPayments === 0 && (
+                                  <div style={{ fontSize: 13, color: '#999', textAlign: 'center', padding: 8 }}>No activity yet — the full 2% fund is available.</div>
+                                )}
                               </div>
 
                               {/* Change Order History */}
@@ -1980,7 +2020,7 @@ function AppInner() {
                                 const totalPmts = pmts.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
                                 const contingencyPmts = pmts.filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
                                 const regularPmts = pmts.filter(p => !p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
-                                const remainingBalance = amountExceeded - contingencyPmts;
+                                const remainingBalance = overdraftAmount - contingencyPmts;
                                 const handleAddPmt = () => {
                                   if (!newPayment.amount || parseFloat(newPayment.amount) <= 0) { NotificationSystem.error('Please enter a valid amount'); return; }
                                   const pmt = { id: genId(), amount: parseFloat(newPayment.amount), date: newPayment.date || new Date().toISOString().split('T')[0], notes: newPayment.notes || '', isContingencyPayment: newPayment.isContingencyPayment || false, createdAt: new Date().toISOString(), createdBy: userName };
@@ -2001,15 +2041,15 @@ function AppInner() {
                                         <div><div style={{ fontSize: 11, color: '#666' }}>Contingency Fund</div><div style={{ fontSize: 16, fontWeight: 700, color: '#ff9800' }}>{fmt(contingencyPmts)}</div></div>
                                       </div>
                                     </div>
-                                    {contingencyExceeded && (
+                                    {fundOverdrafted && (
                                       <div style={{ marginBottom: 16, padding: 12, background: '#fff3cd', borderRadius: 4, border: '1px solid #ffc107' }}>
                                         <div style={{ fontSize: 12, color: '#856404', marginBottom: 8 }}>
-                                          Warning: Contingency fund exceeded by <strong>{fmt(amountExceeded)}</strong>
+                                          Contingency fund overdrafted by <strong>{fmt(overdraftAmount)}</strong> — customer must pay to refund.
                                         </div>
                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-                                          <div><div style={{ fontSize: 11, color: '#666' }}>Amount Exceeded</div><div style={{ fontSize: 14, fontWeight: 600, color: '#dc3545' }}>{fmt(amountExceeded)}</div></div>
-                                          <div><div style={{ fontSize: 11, color: '#666' }}>Contingency Payments</div><div style={{ fontSize: 14, fontWeight: 600, color: '#28a745' }}>{fmt(contingencyPmts)}</div></div>
-                                          <div><div style={{ fontSize: 11, color: '#666' }}>Balance Owed</div><div style={{ fontSize: 14, fontWeight: 600, color: remainingBalance > 0 ? '#dc3545' : '#28a745' }}>{fmt(remainingBalance)}</div></div>
+                                          <div><div style={{ fontSize: 11, color: '#666' }}>Overdraft Amount</div><div style={{ fontSize: 14, fontWeight: 600, color: '#dc3545' }}>{fmt(overdraftAmount)}</div></div>
+                                          <div><div style={{ fontSize: 11, color: '#666' }}>Customer Paid</div><div style={{ fontSize: 14, fontWeight: 600, color: '#28a745' }}>{fmt(contingencyPmts)}</div></div>
+                                          <div><div style={{ fontSize: 11, color: '#666' }}>Still Owed</div><div style={{ fontSize: 14, fontWeight: 600, color: remainingBalance > 0 ? '#dc3545' : '#28a745' }}>{fmt(Math.max(0, remainingBalance))}</div></div>
                                         </div>
                                       </div>
                                     )}
@@ -4227,11 +4267,11 @@ function AppInner() {
         )}
       </div>
 
-      {/* Delete Quote Confirmation Modal */}
+      {/* Delete Quote/Contract Confirmation Modal */}
       {deleteConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div style={{ ...S.card, textAlign: 'center' }}>
-            <h3>Delete this quote?</h3>
+            <h3>Delete this {contracts.find(c => c.id === deleteConfirm.id) ? 'contract' : 'quote'}?</h3>
             <p style={{ color: '#666' }}>This action cannot be undone.</p>
             <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
               <button style={S.btnDanger} onClick={() => delQuote(deleteConfirm.id)}>Delete</button>

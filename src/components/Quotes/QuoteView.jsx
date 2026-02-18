@@ -318,10 +318,6 @@ const QuoteView = ({
           showPaymentForm={showPaymentForm} setShowPaymentForm={setShowPaymentForm}
           newPayment={newPayment} setNewPayment={setNewPayment}
           saveAllowanceProgressToFolders={saveAllowanceProgressToFolders}
-          calcTotals={calcTotals}
-          materials={materials} services={services}
-          sewerPricing={sewerPricing} patioPricing={patioPricing}
-          driveRates={driveRates} foundationPricing={foundationPricing}
         />
       )}
     </div>

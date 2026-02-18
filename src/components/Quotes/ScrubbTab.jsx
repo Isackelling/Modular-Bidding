@@ -26,10 +26,6 @@ const ScrubbTab = ({
   showPaymentForm, setShowPaymentForm,
   newPayment, setNewPayment,
   saveAllowanceProgressToFolders,
-  calcTotals,
-  materials, services: servicesProp,
-  sewerPricing, patioPricing,
-  driveRates, foundationPricing,
 }) => {
   return (
     <div style={S.box}>
@@ -50,6 +46,14 @@ const ScrubbTab = ({
 
         const services = DEFAULT_SERVICES;
         const trackingItems = [];
+
+        // Determine which services were added via change orders
+        const changeOrderAdditions = new Set();
+        (currentItem.changeOrderHistory || []).forEach(co => {
+          if (!co.isReversal) {
+            (co.additions || []).forEach(key => changeOrderAdditions.add(key));
+          }
+        });
 
         // 1. Home from Dealership
         if (totals?.homePrice > 0) {
@@ -97,7 +101,8 @@ const ScrubbTab = ({
               variance,
               variancePct,
               docs: currentItem.scrubbDocs?.[key] || [],
-              isAllowance
+              isAllowance,
+              isChangeOrderAddition: changeOrderAdditions.has(key)
             };
           });
 
@@ -211,10 +216,6 @@ const ScrubbTab = ({
               newPayment={newPayment} setNewPayment={setNewPayment}
               saveAllowanceProgressToFolders={saveAllowanceProgressToFolders}
               custForQuote={custForQuote}
-              calcTotals={calcTotals}
-              materials={materials} servicesProp={servicesProp}
-              sewerPricing={sewerPricing} patioPricing={patioPricing}
-              driveRates={driveRates} foundationPricing={foundationPricing}
             />
           </div>
         );
@@ -443,95 +444,223 @@ const PermitRow = ({ svc, S, currentItem, setQuotes, setSelQuote, userName, setE
 
 /** Regular service row in the scrubb table */
 const ServiceRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, setSelContract, quotes, contracts, saveQuotes, saveContracts, userName, scrubbEditingService, setScrubbEditingService, scrubbNewCost, setScrubbNewCost, setQuotes }) => {
+  const [coUnitPrice, setCoUnitPrice] = React.useState('');
+  const [coQuantity, setCoQuantity] = React.useState('1');
+
+  const isEditing = scrubbEditingService === svc.key;
+  const isCO = svc.isChangeOrderAddition;
+
+  const handleStartEdit = () => {
+    setScrubbEditingService(svc.key);
+    if (isCO) {
+      const details = currentItem.scrubbCODetails?.[svc.key];
+      if (details) {
+        setCoUnitPrice(details.unitPrice?.toString() || '');
+        setCoQuantity(details.quantity?.toString() || '1');
+      } else {
+        setCoUnitPrice(svc.actualCost > 0 ? svc.actualCost.toString() : '');
+        setCoQuantity('1');
+      }
+    } else {
+      setScrubbNewCost(svc.actualCost.toString());
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setScrubbEditingService(null);
+    setScrubbNewCost('');
+  };
+
+  const handleSaveCO = () => {
+    const unitPrice = parseFloat(coUnitPrice) || 0;
+    const qty = parseInt(coQuantity) || 1;
+    const cost = unitPrice * qty;
+    const previousCost = svc.actualCost || 0;
+
+    const historyEntry = {
+      id: genId(),
+      serviceKey: svc.key,
+      serviceName: svc.name,
+      previousCost,
+      newCost: cost,
+      unitPrice,
+      quantity: qty,
+      contractPrice: svc.contractPrice,
+      variance: cost > 0 ? svc.contractPrice - cost : 0,
+      isAllowance: false,
+      isChangeOrderAddition: true,
+      updatedAt: new Date().toISOString(),
+      updatedBy: userName
+    };
+
+    const updatedItem = {
+      ...currentItem,
+      scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost },
+      scrubbCODetails: {
+        ...(currentItem.scrubbCODetails || {}),
+        [svc.key]: { unitPrice, quantity: qty }
+      },
+      scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry],
+      updatedAt: Date.now(),
+      updatedBy: userName
+    };
+
+    if (selQuote && selQuote.id === currentItem.id) {
+      const updated = quotes.map(q => q.id === currentItem.id ? updatedItem : q);
+      saveQuotes(updated);
+      setSelQuote(updatedItem);
+    } else if (selContract && selContract.id === currentItem.id) {
+      const updated = contracts.map(c => c.id === currentItem.id ? updatedItem : c);
+      saveContracts(updated);
+      setSelContract(updatedItem);
+    }
+
+    setScrubbEditingService(null);
+    setScrubbNewCost('');
+  };
+
+  const handleSaveRegular = () => {
+    const cost = parseFloat(scrubbNewCost) || 0;
+    const previousCost = svc.actualCost || 0;
+    const isAllowanceItem = ALLOWANCE_ITEMS.includes(svc.key);
+
+    const historyEntry = {
+      id: genId(),
+      serviceKey: svc.key,
+      serviceName: svc.name,
+      previousCost: previousCost,
+      newCost: cost,
+      contractPrice: svc.contractPrice,
+      variance: cost > 0 ? svc.contractPrice - cost : 0,
+      isAllowance: isAllowanceItem,
+      updatedAt: new Date().toISOString(),
+      updatedBy: userName
+    };
+
+    const updatedItem = {
+      ...currentItem,
+      scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost },
+      scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry],
+      updatedAt: Date.now(),
+      updatedBy: userName
+    };
+
+    if (selQuote && selQuote.id === currentItem.id) {
+      const updated = quotes.map(q => q.id === currentItem.id ? updatedItem : q);
+      saveQuotes(updated);
+      setSelQuote(updatedItem);
+    } else if (selContract && selContract.id === currentItem.id) {
+      const updated = contracts.map(c => c.id === currentItem.id ? updatedItem : c);
+      saveContracts(updated);
+      setSelContract(updatedItem);
+    }
+
+    setScrubbEditingService(null);
+    setScrubbNewCost('');
+
+    if (isAllowanceItem) {
+      const varianceVal = cost > 0 ? svc.contractPrice - cost : 0;
+      const message = varianceVal > 0
+        ? `\u2705 Allowance updated!\n\n${svc.name} came in ${fmt(varianceVal)} under budget.\nThis amount has been added to the contingency fund.`
+        : varianceVal < 0
+        ? `\u26A0\uFE0F Allowance updated!\n\n${svc.name} is ${fmt(Math.abs(varianceVal))} over budget.\nThis amount will be drawn from the contingency fund.`
+        : `\u2705 Allowance updated!\n\n${svc.name} is exactly on budget.`;
+      alert(message);
+    }
+  };
+
   return (
     <tr>
       <td style={S.td}>
         <strong>{svc.name}</strong>
         {svc.isAllowance && <span style={{ marginLeft: 8, fontSize: 11, color: '#856404', fontWeight: 600, background: '#ffc107', padding: '2px 6px', borderRadius: 3 }}>ALLOWANCE</span>}
+        {isCO && <span style={{ marginLeft: 8, fontSize: 11, color: '#fff', fontWeight: 600, background: '#17a2b8', padding: '2px 6px', borderRadius: 3 }}>CHANGE ORDER</span>}
       </td>
       <td style={{ ...S.td, color: '#2c5530', fontWeight: 600 }}>{fmt(svc.contractPrice)}</td>
       <td style={S.td}>
-        {scrubbEditingService === svc.key ? (
-          <div style={{ display: 'flex', gap: 4 }}>
-            <input
-              type="number"
-              style={{ ...S.inputEdit, width: 100 }}
-              value={scrubbNewCost}
-              onChange={e => setScrubbNewCost(e.target.value)}
-              placeholder="0.00"
-              autoFocus
-            />
-            <button
-              style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }}
-              onClick={() => {
-                const cost = parseFloat(scrubbNewCost) || 0;
-                const previousCost = svc.actualCost || 0;
-                const isAllowanceItem = ALLOWANCE_ITEMS.includes(svc.key);
-
-                const historyEntry = {
-                  id: genId(),
-                  serviceKey: svc.key,
-                  serviceName: svc.name,
-                  previousCost: previousCost,
-                  newCost: cost,
-                  contractPrice: svc.contractPrice,
-                  variance: cost > 0 ? svc.contractPrice - cost : 0,
-                  isAllowance: isAllowanceItem,
-                  updatedAt: new Date().toISOString(),
-                  updatedBy: userName
-                };
-
-                const updatedItem = {
-                  ...currentItem,
-                  scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost },
-                  scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry],
-                  updatedAt: Date.now(),
-                  updatedBy: userName
-                };
-
-                if (selQuote && selQuote.id === currentItem.id) {
-                  const updated = quotes.map(q => q.id === currentItem.id ? updatedItem : q);
-                  saveQuotes(updated);
-                  setSelQuote(updatedItem);
-                } else if (selContract && selContract.id === currentItem.id) {
-                  const updated = contracts.map(c => c.id === currentItem.id ? updatedItem : c);
-                  saveContracts(updated);
-                  setSelContract(updatedItem);
-                }
-
-                setScrubbEditingService(null);
-                setScrubbNewCost('');
-
-                if (isAllowanceItem) {
-                  const varianceVal = cost > 0 ? svc.contractPrice - cost : 0;
-                  const message = varianceVal > 0
-                    ? `\u2705 Allowance updated!\n\n${svc.name} came in ${fmt(varianceVal)} under budget.\nThis amount has been added to the contingency fund.`
-                    : varianceVal < 0
-                    ? `\u26A0\uFE0F Allowance updated!\n\n${svc.name} is ${fmt(Math.abs(varianceVal))} over budget.\nThis amount will be drawn from the contingency fund.`
-                    : `\u2705 Allowance updated!\n\n${svc.name} is exactly on budget.`;
-                  alert(message);
-                }
-              }}
-            >{'\u2713'}</button>
-            <button
-              style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }}
-              onClick={() => {
-                setScrubbEditingService(null);
-                setScrubbNewCost('');
-              }}
-            >{'\u2715'}</button>
-          </div>
+        {isEditing ? (
+          isCO ? (
+            /* Change Order service: editable unit price + quantity */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: 10, color: '#666', display: 'block', marginBottom: 2 }}>Unit Price</label>
+                  <input
+                    type="number"
+                    style={{ ...S.inputEdit, width: '100%' }}
+                    value={coUnitPrice}
+                    onChange={e => setCoUnitPrice(e.target.value)}
+                    placeholder="0.00"
+                    autoFocus
+                  />
+                </div>
+                <div style={{ width: 60 }}>
+                  <label style={{ fontSize: 10, color: '#666', display: 'block', marginBottom: 2 }}>Qty</label>
+                  <input
+                    type="number"
+                    style={{ ...S.inputEdit, width: '100%' }}
+                    value={coQuantity}
+                    onChange={e => setCoQuantity(e.target.value)}
+                    placeholder="1"
+                    min="1"
+                  />
+                </div>
+              </div>
+              <div style={{ fontSize: 12, color: '#1565c0', fontWeight: 600 }}>
+                Total: {fmt((parseFloat(coUnitPrice) || 0) * (parseInt(coQuantity) || 1))}
+              </div>
+              <div style={{ display: 'flex', gap: 4 }}>
+                <button
+                  style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }}
+                  onClick={handleSaveCO}
+                >{'\u2713'}</button>
+                <button
+                  style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }}
+                  onClick={handleCancelEdit}
+                >{'\u2715'}</button>
+              </div>
+            </div>
+          ) : (
+            /* Regular service: single cost input */
+            <div style={{ display: 'flex', gap: 4 }}>
+              <input
+                type="number"
+                style={{ ...S.inputEdit, width: 100 }}
+                value={scrubbNewCost}
+                onChange={e => setScrubbNewCost(e.target.value)}
+                placeholder="0.00"
+                autoFocus
+              />
+              <button
+                style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }}
+                onClick={handleSaveRegular}
+              >{'\u2713'}</button>
+              <button
+                style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }}
+                onClick={handleCancelEdit}
+              >{'\u2715'}</button>
+            </div>
+          )
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ color: svc.actualCost > 0 ? '#000' : '#999' }}>
-              {svc.actualCost > 0 ? fmt(svc.actualCost) : 'Not entered'}
-            </span>
+            {isCO && svc.actualCost > 0 ? (
+              <span>
+                {(() => {
+                  const details = currentItem.scrubbCODetails?.[svc.key];
+                  if (details && details.quantity > 1) {
+                    return `${details.quantity} \u00D7 ${fmt(details.unitPrice)} = ${fmt(svc.actualCost)}`;
+                  }
+                  return fmt(svc.actualCost);
+                })()}
+              </span>
+            ) : (
+              <span style={{ color: svc.actualCost > 0 ? '#000' : '#999' }}>
+                {svc.actualCost > 0 ? fmt(svc.actualCost) : 'Not entered'}
+              </span>
+            )}
             <button
               style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }}
-              onClick={() => {
-                setScrubbEditingService(svc.key);
-                setScrubbNewCost(svc.actualCost.toString());
-              }}
+              onClick={handleStartEdit}
             >{'\u270F\uFE0F'}</button>
           </div>
         )}
@@ -608,7 +737,10 @@ const ServiceRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, s
   );
 };
 
-/** Contingency Fund Tracker sub-component */
+/** Contingency Fund Tracker - Tracks the 2% contingency fund balance.
+ *  The fund is a customer lifeline: it absorbs allowance overages and
+ *  change-order service costs so the contract bottom line never changes.
+ *  If the fund goes negative the customer must pay to cover the deficit. */
 const ContingencyTracker = ({
   S, currentItem, totals, trackingItems,
   selQuote, setSelQuote,
@@ -620,33 +752,67 @@ const ContingencyTracker = ({
   newPayment, setNewPayment,
   saveAllowanceProgressToFolders,
   custForQuote,
-  calcTotals,
-  materials, servicesProp,
-  sewerPricing, patioPricing,
-  driveRates, foundationPricing,
 }) => {
-  const startingContingency = totals.contingency || 0;
+  const coHistory = currentItem.changeOrderHistory || [];
 
-  const allowanceSavings = trackingItems
-    .filter(item => ALLOWANCE_ITEMS.includes(item.key) && item.variance > 0)
+  // V2 TRACKER - Log all values for debugging
+  console.log('=== CONTINGENCY TRACKER V2 ===');
+  console.log('CO History:', JSON.stringify(coHistory.map(co => ({ additions: co.additions, contingencyUsed: co.contingencyUsed, contingencyBalance: co.contingencyBalance, totalChange: co.totalChange }))));
+  console.log('Tracking items (CO):', trackingItems.filter(i => i.isChangeOrderAddition).map(i => ({ key: i.key, contractPrice: i.contractPrice })));
+  console.log('totals.contingency (inflated):', totals.contingency);
+
+  // ── Starting Fund ──
+  // The original 2% contingency BEFORE any change orders inflated the total.
+  // The CO save logic stores contingencyUsed + contingencyBalance = original fund.
+  const startingContingency = coHistory.length > 0
+    ? (coHistory[0].contingencyUsed || 0) + (coHistory[0].contingencyBalance || 0)
+    : (totals.contingency || 0);
+
+  // ── Change-Order Service Draws ──
+  // Full contract price of every CO-added service is drawn from the fund.
+  const coServiceItems = trackingItems.filter(item => item.isChangeOrderAddition);
+  const coServiceCosts = coServiceItems.reduce((sum, item) => sum + item.contractPrice, 0);
+
+  // ── Allowance Variances ──
+  // Only count items where actual cost has been entered (actualCost > 0).
+  const allowanceItems = trackingItems.filter(
+    item => ALLOWANCE_ITEMS.includes(item.key) && item.actualCost > 0
+  );
+  const allowanceSavings = allowanceItems
+    .filter(item => item.variance > 0)
     .reduce((sum, item) => sum + item.variance, 0);
-
-  const allowanceOverages = trackingItems
-    .filter(item => ALLOWANCE_ITEMS.includes(item.key) && item.variance < 0)
+  const allowanceOverages = allowanceItems
+    .filter(item => item.variance < 0)
     .reduce((sum, item) => sum + Math.abs(item.variance), 0);
 
+  // ── Customer Contingency Payments (refill the fund) ──
   const payments = currentItem.scrubbPayments || [];
-  const contingencyPaymentsApplied = payments.filter(p => p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
+  const contingencyPaymentsReceived = payments
+    .filter(p => p.isContingencyPayment)
+    .reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
 
-  const currentBalance = startingContingency + allowanceSavings - allowanceOverages - contingencyPaymentsApplied;
+  // ── Running Balance ──
+  const currentBalance =
+    startingContingency
+    - coServiceCosts
+    + allowanceSavings
+    - allowanceOverages
+    + contingencyPaymentsReceived;
+
+  const fundOverdrafted = currentBalance < 0;
+  const overdraftAmount = Math.abs(Math.min(0, currentBalance));
 
   return (
     <div style={{ marginTop: 24, padding: 20, background: '#e3f2fd', borderRadius: 8, border: '2px solid #1565c0' }}>
-      <h3 style={{ marginTop: 0, color: '#1565c0' }}>{'\u{1F4B0}'} Contingency Fund Tracker</h3>
+      <h3 style={{ marginTop: 0, color: '#1565c0' }}>Contingency Fund Tracker (v2)</h3>
       <p style={{ fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 1.6 }}>
-        <strong>Purpose:</strong> A 2% fund for change orders and allowance adjustments. When allowances come in under budget, savings are added here. When costs exceed estimates or change orders are made, funds are drawn from here first, minimizing customer out-of-pocket costs. At project completion, if there are no overages or change orders, the customer receives back the full 2% contingency amount plus any allowance savings.
+        <strong>Purpose:</strong> A 2% fund that acts as a lifeline for the customer.
+        Allowance savings add to it; allowance overages and change-order services draw from it.
+        The contract amount never changes — only this fund is affected.
+        At project completion any remaining balance is returned to the customer.
       </p>
 
+      {/* ── Top Cards: Starting Fund + Current Balance ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
         <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Starting Fund (2%)</div>
@@ -654,52 +820,106 @@ const ContingencyTracker = ({
         </div>
         <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Current Balance</div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: currentBalance > 0 ? '#28a745' : '#dc3545' }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: currentBalance >= 0 ? '#28a745' : '#dc3545' }}>
             {fmt(currentBalance)}
           </div>
         </div>
       </div>
 
-      <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}>
-        <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 12, color: '#666' }}>Allowance Savings (added to fund)</div>
-          <div style={{ fontSize: 16, fontWeight: 600, color: '#28a745' }}>+{fmt(allowanceSavings)}</div>
-        </div>
-        <div>
-          <div style={{ fontSize: 12, color: '#666' }}>Allowance Overages (drawn from fund)</div>
-          <div style={{ fontSize: 16, fontWeight: 600, color: '#dc3545' }}>-{fmt(allowanceOverages)}</div>
-        </div>
+      {/* ── Line-item Breakdown ── */}
+      <div style={{ padding: 12, background: '#fff', borderRadius: 6, marginBottom: 12 }}>
+        {coServiceItems.length > 0 && coServiceItems.map(item => (
+          <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 13, color: '#333' }}>CO: {item.name}</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#dc3545' }}>-{fmt(item.contractPrice)}</span>
+          </div>
+        ))}
+        {allowanceItems.filter(i => i.variance > 0).map(item => (
+          <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 13, color: '#333' }}>{item.name} (under budget)</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#28a745' }}>+{fmt(item.variance)}</span>
+          </div>
+        ))}
+        {allowanceItems.filter(i => i.variance < 0).map(item => (
+          <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 13, color: '#333' }}>{item.name} (over budget)</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#dc3545' }}>-{fmt(Math.abs(item.variance))}</span>
+          </div>
+        ))}
+        {contingencyPaymentsReceived > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 13, color: '#333' }}>Customer Payments (refund)</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#28a745' }}>+{fmt(contingencyPaymentsReceived)}</span>
+          </div>
+        )}
+        {coServiceItems.length === 0 && allowanceItems.length === 0 && contingencyPaymentsReceived === 0 && (
+          <div style={{ fontSize: 13, color: '#999', textAlign: 'center', padding: 8 }}>
+            No activity yet — the full 2% fund is available.
+          </div>
+        )}
       </div>
 
-      <p style={{ fontSize: 11, color: '#666', marginTop: 12, marginBottom: 0, fontStyle: 'italic' }}>
-        * Only allowances (permits, well, sand pad, sewer, etc.) affect the contingency fund. Other services are tracked separately.
+      {/* ── Overdraft Warning ── */}
+      {fundOverdrafted && (
+        <div style={{
+          marginBottom: 12, padding: 16, borderRadius: 8,
+          background: '#f8d7da', border: '2px solid #dc3545',
+          animation: 'pulse 2s infinite'
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#721c24', marginBottom: 8 }}>
+            {'\u26A0\uFE0F'} CONTINGENCY FUND OVERDRAFTED
+          </div>
+          <div style={{ fontSize: 14, color: '#721c24', marginBottom: 12 }}>
+            The contingency fund has gone negative. The customer must pay <strong>{fmt(overdraftAmount)}</strong> to cover the deficit. The contract amount does not change.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+            <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}>
+              <div style={{ fontSize: 11, color: '#666' }}>Total Draws</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(coServiceCosts + allowanceOverages)}</div>
+            </div>
+            <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}>
+              <div style={{ fontSize: 11, color: '#666' }}>Fund + Savings</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#28a745' }}>{fmt(startingContingency + allowanceSavings + contingencyPaymentsReceived)}</div>
+            </div>
+            <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}>
+              <div style={{ fontSize: 11, color: '#666' }}>Customer Owes</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(overdraftAmount)}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <p style={{ fontSize: 11, color: '#666', marginTop: 0, marginBottom: 0, fontStyle: 'italic' }}>
+        * Allowances (permits, well, sand pad, sewer, gravel driveway, crane) and change-order additions affect this fund. Other services are tracked separately.
       </p>
 
-      {/* Allowance Update History */}
+      {/* ── Allowance & CO History ── */}
       {(() => {
-        const allowanceHistory = (selQuote?.scrubbHistory || [])
-          .filter(entry => entry.isAllowance)
+        const ci = selQuote || selContract;
+        const scrubbHistory = (ci?.scrubbHistory || [])
+          .filter(entry => entry.isAllowance || entry.isChangeOrderAddition)
           .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
-        if (allowanceHistory.length === 0) return null;
+        if (scrubbHistory.length === 0) return null;
 
         return (
-          <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 6, border: '1px solid #e0e0e0' }}>
+          <div style={{ marginTop: 16, padding: 16, background: '#f8f9fa', borderRadius: 6, border: '1px solid #e0e0e0' }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#2c5530', marginBottom: 12 }}>
-              {'\u{1F4CB}'} Allowance Update History
+              Allowance & Change Order History
             </div>
             <div style={{ maxHeight: 200, overflowY: 'auto' }}>
-              {allowanceHistory.map(entry => {
+              {scrubbHistory.map(entry => {
                 const date = new Date(entry.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 const time = new Date(entry.updatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-                const variance = entry.variance;
-                const statusColor = variance > 0 ? '#28a745' : variance < 0 ? '#dc3545' : '#666';
-                const statusText = variance > 0 ? 'Under Budget' : variance < 0 ? 'Over Budget' : 'On Budget';
+                const isCO = entry.isChangeOrderAddition;
+                const v = entry.variance;
+                const color = isCO ? '#17a2b8' : (v > 0 ? '#28a745' : v < 0 ? '#dc3545' : '#666');
+                const label = isCO ? 'Change Order' : (v > 0 ? 'Under Budget' : v < 0 ? 'Over Budget' : 'On Budget');
 
                 return (
                   <div key={entry.id} style={{
                     padding: 8, marginBottom: 8, background: '#fff', borderRadius: 4,
-                    borderLeft: `3px solid ${statusColor}`
+                    borderLeft: `3px solid ${color}`
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 4 }}>
                       <div>
@@ -707,19 +927,24 @@ const ContingencyTracker = ({
                         <div style={{ fontSize: 11, color: '#666' }}>{date} at {time}</div>
                       </div>
                       <div style={{
-                        fontSize: 11, fontWeight: 700, color: statusColor,
+                        fontSize: 11, fontWeight: 700,
+                        color: isCO ? '#fff' : color,
                         padding: '2px 8px',
-                        background: variance > 0 ? '#d1e7dd' : variance < 0 ? '#f8d7da' : '#e0e0e0',
+                        background: isCO ? '#17a2b8' : (v > 0 ? '#d1e7dd' : v < 0 ? '#f8d7da' : '#e0e0e0'),
                         borderRadius: 10
                       }}>
-                        {statusText}
+                        {label}
                       </div>
                     </div>
                     <div style={{ fontSize: 12, color: '#666' }}>
-                      Estimated: {fmt(entry.contractPrice)} {'\u2192'} Actual: {fmt(entry.newCost)}
-                      <span style={{ fontWeight: 700, color: statusColor, marginLeft: 8 }}>
-                        ({variance >= 0 ? '+' : ''}{fmt(variance)})
-                      </span>
+                      {isCO && entry.quantity ? (
+                        <>Cost: {entry.quantity} x {fmt(entry.unitPrice)} = {fmt(entry.newCost)} (drawn from contingency)</>
+                      ) : (
+                        <>Estimated: {fmt(entry.contractPrice)} &rarr; Actual: {fmt(entry.newCost)}
+                        <span style={{ fontWeight: 700, color, marginLeft: 8 }}>
+                          ({v >= 0 ? '+' : ''}{fmt(v)})
+                        </span></>
+                      )}
                     </div>
                     <div style={{ fontSize: 10, color: '#999', marginTop: 2 }}>
                       Updated by {entry.updatedBy}
@@ -732,27 +957,15 @@ const ContingencyTracker = ({
         );
       })()}
 
-      {/* Payment Tracking Section */}
+      {/* ── Payment Tracking ── */}
       {(() => {
         const ci = selQuote || selContract;
         if (!ci) return null;
-
-        const recalcTotals = calcTotals(ci, materials, servicesProp, sewerPricing, patioPricing, driveRates, foundationPricing);
-        const startCont = recalcTotals.contingency || 0;
-        const asSavings = (ci.scrubbHistory || [])
-          .filter(e => e.isAllowance && e.variance > 0)
-          .reduce((sum, e) => sum + e.variance, 0);
-        const asOverages = (ci.scrubbHistory || [])
-          .filter(e => e.isAllowance && e.variance < 0)
-          .reduce((sum, e) => sum + Math.abs(e.variance), 0);
-        const amountExceeded = Math.max(0, asOverages - (startCont + asSavings));
-        const contingencyExceeded = amountExceeded > 0;
 
         const pmts = ci.scrubbPayments || [];
         const totalPayments = pmts.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
         const contingencyPayments = pmts.filter(p => p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
         const regularPayments = pmts.filter(p => !p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
-        const remainingBalance = amountExceeded - contingencyPayments;
 
         const handleAddPayment = () => {
           if (!newPayment.amount || parseFloat(newPayment.amount) <= 0) {
@@ -793,16 +1006,13 @@ const ContingencyTracker = ({
         };
 
         return (
-          <div style={{ marginTop: 20, padding: 16, background: '#e3f2fd', borderRadius: 6, border: '1px solid #2196f3' }}>
+          <div style={{ marginTop: 16, padding: 16, background: '#e3f2fd', borderRadius: 6, border: '1px solid #2196f3' }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#1565c0', marginBottom: 12 }}>
-              {'\u{1F4B0}'} Payment Tracking
+              Payment Tracking
             </div>
 
             <div style={{ marginBottom: 16, padding: 12, background: '#fff', borderRadius: 4, border: '1px solid #e0e0e0' }}>
-              <div style={{ fontSize: 11, color: '#666', marginBottom: 8 }}>
-                Track all project payments (down payment, progress payments, etc.)
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginTop: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
                 <div>
                   <div style={{ fontSize: 11, color: '#666' }}>Total Payments</div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: '#1565c0' }}>{fmt(totalPayments)}</div>
@@ -818,24 +1028,24 @@ const ContingencyTracker = ({
               </div>
             </div>
 
-            {contingencyExceeded && (
+            {fundOverdrafted && (
               <div style={{ marginBottom: 16, padding: 12, background: '#fff3cd', borderRadius: 4, border: '1px solid #ffc107' }}>
                 <div style={{ fontSize: 12, color: '#856404', marginBottom: 8 }}>
-                  {'\u26A0\uFE0F'} Note: Contingency fund exceeded by <strong>{fmt(amountExceeded)}</strong>
+                  {'\u26A0\uFE0F'} Contingency fund overdrafted by <strong>{fmt(overdraftAmount)}</strong> — customer must pay to refund.
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
                   <div>
-                    <div style={{ fontSize: 11, color: '#666' }}>Amount Exceeded</div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: '#dc3545' }}>{fmt(amountExceeded)}</div>
+                    <div style={{ fontSize: 11, color: '#666' }}>Overdraft Amount</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#dc3545' }}>{fmt(overdraftAmount)}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, color: '#666' }}>Contingency Payments</div>
+                    <div style={{ fontSize: 11, color: '#666' }}>Customer Paid</div>
                     <div style={{ fontSize: 14, fontWeight: 600, color: '#28a745' }}>{fmt(contingencyPayments)}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, color: '#666' }}>Balance Owed</div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: remainingBalance > 0 ? '#dc3545' : '#28a745' }}>
-                      {fmt(remainingBalance)}
+                    <div style={{ fontSize: 11, color: '#666' }}>Still Owed</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: (overdraftAmount - contingencyPayments) > 0 ? '#dc3545' : '#28a745' }}>
+                      {fmt(Math.max(0, overdraftAmount - contingencyPayments))}
                     </div>
                   </div>
                 </div>
@@ -855,12 +1065,8 @@ const ContingencyTracker = ({
                       const paymentDate = payment.date ? new Date(payment.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
                       const createdDate = new Date(payment.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                       const createdTime = new Date(payment.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-
                       const isContingency = payment.isContingencyPayment;
                       const borderColor = isContingency ? '#ff9800' : '#28a745';
-                      const badgeColor = isContingency ? '#ff9800' : '#28a745';
-                      const badgeBg = isContingency ? '#fff3e0' : '#d1e7dd';
-                      const badgeText = isContingency ? 'Contingency Fund' : 'Regular Payment';
 
                       return (
                         <div key={payment.id} style={{
@@ -873,16 +1079,16 @@ const ContingencyTracker = ({
                               <div style={{ fontSize: 11, color: '#666' }}>Payment Date: {paymentDate}</div>
                             </div>
                             <div style={{
-                              fontSize: 11, fontWeight: 600, color: badgeColor,
-                              padding: '2px 8px', background: badgeBg, borderRadius: 10
+                              fontSize: 11, fontWeight: 600, color: isContingency ? '#ff9800' : '#28a745',
+                              padding: '2px 8px',
+                              background: isContingency ? '#fff3e0' : '#d1e7dd',
+                              borderRadius: 10
                             }}>
-                              {badgeText}
+                              {isContingency ? 'Contingency Fund' : 'Regular Payment'}
                             </div>
                           </div>
                           {payment.notes && (
-                            <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>
-                              {payment.notes}
-                            </div>
+                            <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{payment.notes}</div>
                           )}
                           <div style={{ fontSize: 10, color: '#999', marginTop: 2 }}>
                             Recorded on {createdDate} at {createdTime} by {payment.createdBy}
@@ -953,11 +1159,11 @@ const ContingencyTracker = ({
                       style={{ marginRight: 8, width: 16, height: 16, cursor: 'pointer' }}
                     />
                     <span style={{ fontSize: 12, fontWeight: 600, color: '#856404' }}>
-                      {'\u{1F4B0}'} Apply to Contingency Fund
+                      Apply to Contingency Fund
                     </span>
                   </label>
                   <div style={{ fontSize: 11, color: '#666', marginTop: 4, marginLeft: 24 }}>
-                    Check this if payment is specifically for contingency fund overages
+                    Check this if customer is paying to refund the contingency fund
                   </div>
                 </div>
 
@@ -989,7 +1195,7 @@ const ContingencyTracker = ({
         onClick={() => saveAllowanceProgressToFolders(selQuote || selContract, custForQuote)}
         title="Generate and save allowance progress update for customer"
       >
-        {'\u{1F4C4}'} Generate Customer Update
+        Generate Customer Update
       </button>
     </div>
   );
