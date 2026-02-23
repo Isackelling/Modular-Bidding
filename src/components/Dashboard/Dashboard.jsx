@@ -9,6 +9,7 @@ const Dashboard = ({
   myCustomers,
   myQuotes,
   quotes,
+  contracts,
   searchQuery,
   setSearchQuery,
   isAdmin,
@@ -24,13 +25,15 @@ const Dashboard = ({
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     const custQuotes = quotes.filter(q => q.customerId === c.id);
+    const custContracts = (contracts || []).filter(ct => ct.customerId === c.id);
     const matchesName = (c.firstName + ' ' + c.lastName).toLowerCase().includes(query);
     const matchesPhone = (c.phone || '').toLowerCase().includes(query);
     const matchesEmail = (c.email || '').toLowerCase().includes(query);
-    const matchesQuoteNumber = custQuotes.some(q =>
-      (q.quoteNumber || '').toLowerCase().includes(query)
+    const matchesAddress = ((c.siteAddress || '') + ' ' + (c.siteCity || '') + ' ' + (c.siteState || '') + ' ' + (c.siteZip || '')).toLowerCase().includes(query);
+    const matchesQuoteNumber = [...custQuotes, ...custContracts].some(q =>
+      (q.id || '').slice(-8).toUpperCase().toLowerCase().includes(query)
     );
-    return matchesName || matchesPhone || matchesEmail || matchesQuoteNumber;
+    return matchesName || matchesPhone || matchesEmail || matchesAddress || matchesQuoteNumber;
   });
 
   return (
@@ -64,7 +67,7 @@ const Dashboard = ({
           <span style={{ fontSize: 18 }}>🔍</span>
           <input
             type="text"
-            placeholder="Search by customer name, phone, email, or quote number..."
+            placeholder="Search by name, phone, email, address, or quote number..."
             style={{ ...S.input, marginBottom: 0, flex: 1 }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

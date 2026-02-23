@@ -229,10 +229,15 @@ function AppInner() {
   // Scrubb state
   const [scrubbEditingService, setScrubbEditingService] = useState(null);
   const [scrubbNewCost, setScrubbNewCost] = useState('');
+  const [nhlExpanded, setNhlExpanded] = useState(false);
   const [showPermitModal, setShowPermitModal] = useState(false);
   const [editingPermitEntry, setEditingPermitEntry] = useState(null);
   const [permitEntryName, setPermitEntryName] = useState('');
   const [permitEntryCost, setPermitEntryCost] = useState('');
+  const [showAddlMaterialModal, setShowAddlMaterialModal] = useState(false);
+  const [editingMaterialEntry, setEditingMaterialEntry] = useState(null);
+  const [materialEntryName, setMaterialEntryName] = useState('');
+  const [materialEntryCost, setMaterialEntryCost] = useState('');
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [newPayment, setNewPayment] = useState({ amount: '', date: '', notes: '', isContingencyPayment: false });
 
@@ -1065,16 +1070,18 @@ function AppInner() {
   };
 
   const delQuote = async id => {
-    const isContract = contracts.find(c => c.id === id);
-    if (isContract) {
-      await saveContracts(contracts.filter(c => c.id !== id));
-      setSelContract(null);
-    } else {
-      await saveQuotes(quotes.filter(q => q.id !== id));
-      setSelQuote(null);
+    try {
+      const inQuotes = quotes.some(q => q.id === id);
+      const inContracts = contracts.some(c => c.id === id);
+      if (inQuotes) await saveQuotes(quotes.filter(q => q.id !== id));
+      if (inContracts) await saveContracts(contracts.filter(c => c.id !== id));
+    } catch (err) {
+      console.error('Delete failed:', err);
     }
     if (selCustomer) setView('viewCustomer');
     else setView('dashboard');
+    setSelQuote(null);
+    setSelContract(null);
     setDeleteConfirm(null);
   };
 
@@ -1112,6 +1119,11 @@ function AppInner() {
         console.error('Error generating Scope of Work:', error);
         alert('Quote accepted and converted to Contract!');
       }
+      // Final cleanup: ensure the quote is removed from localStorage and state
+      // (folderSavers may have re-added it due to stale closure)
+      const cleanQuotes = JSON.parse(localStorage.getItem('sherman_quotes') || '[]').filter(x => x.id !== q.id);
+      localStorage.setItem('sherman_quotes', JSON.stringify(cleanQuotes));
+      setQuotes(cleanQuotes);
     } else if (isContract) {
       const u = contracts.map(x => x.id === q.id ? { ...x, status: s } : x);
       await saveContracts(u);
@@ -1394,6 +1406,7 @@ function AppInner() {
             myCustomers={myCustomers}
             myQuotes={myQuotes}
             quotes={quotes}
+            contracts={contracts}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             isAdmin={isAdmin}
@@ -1505,8 +1518,11 @@ function AppInner() {
                     ['Draft', 'Sent', 'Accepted', 'Declined'].map(s => <option key={s} value={s}>{s}</option>)
                   )}
                 </select>
-                <button style={S.btnSm} onClick={() => startEdit(currentItem)}>Edit</button>
-                {selContract && <button style={{ ...S.btnSm, background: '#1565c0' }} onClick={() => startChangeOrder(currentItem)}>Change Order</button>}
+                {selContract ? (
+                  <button style={{ ...S.btnSm, background: '#1565c0' }} onClick={() => startChangeOrder(currentItem)}>Change Order</button>
+                ) : (
+                  <button style={S.btnSm} onClick={() => startEdit(currentItem)}>Edit</button>
+                )}
               </div>
             </div>
 
@@ -1683,34 +1699,107 @@ function AppInner() {
                   if (!totals) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}><p>Unable to load cost tracking data.</p></div>;
 
                   const trackingItems = [];
-                  if (totals?.homePrice > 0) {
-                    const ac = currentItem.scrubbCosts?.home_dealership || 0;
-                    trackingItems.push({ key: 'home_dealership', name: 'Home from Dealership', contractPrice: totals.homePrice, actualCost: ac, variance: ac > 0 ? totals.homePrice - ac : 0, variancePct: totals.homePrice > 0 && ac > 0 ? (((totals.homePrice - ac) / totals.homePrice) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.home_dealership || [] });
-                  }
-                  const installSvc = totals?.svc?.find(s => s.key === 'installation_of_home');
-                  if (installSvc) {
-                    const ac = currentItem.scrubbCosts?.installation_of_home || 0;
-                    trackingItems.push({ key: 'installation_of_home', name: 'Installation of Home', contractPrice: installSvc.cost, actualCost: ac, variance: ac > 0 ? installSvc.cost - ac : 0, variancePct: installSvc.cost > 0 && ac > 0 ? (((installSvc.cost - ac) / installSvc.cost) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.installation_of_home || [] });
-                  }
-                  // Determine which services were added via change orders
-                  const coAddedKeys = new Set();
-                  (currentItem.changeOrderHistory || []).forEach(co => {
-                    if (!co.isReversal) (co.additions || []).forEach(k => coAddedKeys.add(k));
-                  });
-
-                  Object.entries(currentItem.selectedServices || {}).filter(([key, sel]) => sel && !SUMMARY_SERVICES.includes(key) && services[key]).forEach(([key]) => {
-                    const svc = services[key];
-                    const cp = totals?.svc?.find(s => s.key === key)?.cost || 0;
+                  const mkItem = (key, name, cp, cat, isAllowance = false) => {
                     const ac = currentItem.scrubbCosts?.[key] || 0;
                     const v = ac > 0 ? cp - ac : 0;
-                    trackingItems.push({ key, name: svc?.name || key, contractPrice: cp, actualCost: ac, variance: v, variancePct: cp > 0 && ac > 0 ? ((v / cp) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.[key] || [], isAllowance: ALLOWANCE_ITEMS.includes(key), isChangeOrderAddition: coAddedKeys.has(key) });
+                    return { key, name, contractPrice: cp, actualCost: ac, variance: v, variancePct: cp > 0 && ac > 0 ? ((v / cp) * 100).toFixed(1) : '0.0', docs: currentItem.scrubbDocs?.[key] || [], isAllowance, category: cat };
+                  };
+
+                  // Home
+                  if (totals?.homePrice > 0) trackingItems.push(mkItem('home_dealership', 'Home from Dealership', totals.homePrice, 'home'));
+
+                  // NHL Contract: lumped Materials + Installation of Home + Painting
+                  const NHL_KEYS = ['installation_of_home', 'painting'];
+                  const svcArr = totals?.svc || [];
+                  const nhlSubs = [];
+                  const installSvc = svcArr.find(s => s.key === 'installation_of_home');
+                  if (installSvc?.cost > 0) nhlSubs.push({ label: 'Install', cost: installSvc.cost });
+                  const paintSvc = svcArr.find(s => s.key === 'painting');
+                  if (paintSvc?.cost > 0) nhlSubs.push({ label: 'Paint', cost: paintSvc.cost });
+                  if (totals.matT > 0) nhlSubs.push({ label: 'Install Materials', cost: totals.matT });
+                  const nhlTotal = nhlSubs.reduce((sum, s) => sum + s.cost, 0);
+                  if (nhlTotal > 0) {
+                    const nhlItem = mkItem('nhl_contract', 'NHL Contract', nhlTotal, 'services');
+                    nhlItem.subItems = nhlSubs;
+                    trackingItems.push(nhlItem);
+                  }
+
+                  // All other services from totals.svc
+                  svcArr.forEach(s => {
+                    if (s.cost > 0 && !NHL_KEYS.includes(s.key)) {
+                      const item = mkItem(s.key, s.item, s.cost, 'services', ALLOWANCE_ITEMS.includes(s.key));
+                      // Permits uses permitEntries for actual cost, not scrubbCosts
+                      if (s.key === 'permits') {
+                        const pe = currentItem.permitEntries || [];
+                        const peTotal = pe.reduce((sum, e) => sum + (parseFloat(e.cost) || 0), 0);
+                        item.actualCost = peTotal;
+                        item.variance = peTotal > 0 ? s.cost - peTotal : 0;
+                        item.variancePct = s.cost > 0 && peTotal > 0 ? ((item.variance / s.cost) * 100).toFixed(1) : '0.0';
+                      }
+                      trackingItems.push(item);
+                    }
                   });
 
+                  // Project Command
+                  if (totals.projCmd?.total > 0) trackingItems.push(mkItem('project_command', 'Project Command (PS + PM + PC)', totals.projCmd.total, 'services'));
+
+                  // Additional Materials (always show — entries-based like permits)
+                  trackingItems.push({ key: 'addl_materials', name: 'Additional Materials', contractPrice: 0, actualCost: 0, variance: 0, variancePct: '0.0', docs: currentItem.scrubbDocs?.['addl_materials'] || [], isAllowance: false, category: 'services' });
+
+                  // Overhead & Markup — fixed costs, actualCost = contractPrice
+                  if (totals.oh > 0) trackingItems.push({ ...mkItem('overhead', 'Overhead (5%)', totals.oh, 'margin'), actualCost: totals.oh });
+                  if (totals.mu > 0) trackingItems.push({ ...mkItem('markup', 'Markup (10%)', totals.mu, 'margin'), actualCost: totals.mu });
+
                   if (trackingItems.length === 0) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}><p>No items to track.</p></div>;
+
+                  const startC = totals.contingency || 0;
+
+                  // Format number string with commas as user types
+                  const fmtInput = (val) => {
+                    const raw = val.replace(/[^0-9.]/g, '');
+                    const parts = raw.split('.');
+                    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return parts.length > 1 ? parts[0] + '.' + parts[1].slice(0, 2) : parts[0];
+                  };
+                  const parseInput = (val) => parseFloat(val.replace(/,/g, '')) || 0;
 
                   const saveScrubbUpdate = (updatedItem) => {
                     if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
                     else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+                  };
+
+                  const handleScrubbSave = (svc) => {
+                    const cost = parseInput(scrubbNewCost);
+                    const historyEntry = { id: genId(), serviceKey: svc.key, serviceName: svc.name, previousCost: svc.actualCost || 0, newCost: cost, contractPrice: svc.contractPrice, variance: cost > 0 ? svc.contractPrice - cost : 0, isAllowance: ALLOWANCE_ITEMS.includes(svc.key), updatedAt: new Date().toISOString(), updatedBy: userName };
+                    saveScrubbUpdate({ ...currentItem, scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost }, scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry], updatedAt: Date.now(), updatedBy: userName });
+                    setScrubbEditingService(null); setScrubbNewCost('');
+                    if (ALLOWANCE_ITEMS.includes(svc.key)) {
+                      const v = cost > 0 ? svc.contractPrice - cost : 0;
+                      const updatedCosts = { ...(currentItem.scrubbCosts || {}), [svc.key]: cost };
+                      let newSavings = 0, newOverages = 0;
+                      trackingItems.forEach(ti => {
+                        if (ALLOWANCE_ITEMS.includes(ti.key)) {
+                          const ac = ti.key === svc.key ? cost : (updatedCosts[ti.key] || ti.actualCost || 0);
+                          if (ac > 0) {
+                            const diff = ti.contractPrice - ac;
+                            if (diff > 0) newSavings += diff; else newOverages += Math.abs(diff);
+                          }
+                        }
+                      });
+                      const coUsedCheck = (currentItem.changeOrderHistory || []).reduce((s, co) => s + (co.contingencyUsed || 0), 0);
+                      const cPmtsCheck = (currentItem.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
+                      const balanceAfter = startC + newSavings - newOverages - cPmtsCheck - coUsedCheck;
+                      if (balanceAfter < 0) {
+                        alert(
+                          `⚠️ CONTINGENCY FUND OVERDRAWN ⚠️\n\n` +
+                          `${svc.name} is ${fmt(Math.abs(v))} over budget.\n\n` +
+                          `The contingency fund is now negative by ${fmt(Math.abs(balanceAfter))}.\n\n` +
+                          `A payment must be collected from the customer before any additional work can continue.`
+                        );
+                      } else {
+                        alert(v > 0 ? `${svc.name} came in ${fmt(v)} under budget.\nAdded to contingency fund.` : v < 0 ? `${svc.name} is ${fmt(Math.abs(v))} over budget.\nDrawn from contingency fund.` : `${svc.name} is exactly on budget.`);
+                      }
+                    }
                   };
 
                   return (
@@ -1718,7 +1807,12 @@ function AppInner() {
                       <table style={S.table}>
                         <thead><tr><th style={S.th}>Service</th><th style={S.th}>Contract Price</th><th style={S.th}>Actual Cost</th><th style={S.th}>Variance</th><th style={S.th}>Docs</th><th style={S.th}></th></tr></thead>
                         <tbody>
-                          {trackingItems.map(svc => {
+                          {[{ key: 'home', label: 'Home' }, { key: 'services', label: 'Services & Site Work' }, { key: 'cost_basis', label: 'Cost Basis' }, { key: 'margin', label: 'Margin' }].map(group => {
+                            const items = trackingItems.filter(i => i.category === group.key);
+                            if (items.length === 0) return null;
+                            return (<React.Fragment key={group.key}>
+                              <tr><td colSpan={6} style={{ background: '#e9ecef', fontWeight: 700, fontSize: 13, padding: '8px 12px', color: '#2c5530', borderBottom: '2px solid #2c5530' }}>{group.label}</td></tr>
+                              {items.map(svc => {
                             if (svc.key === 'permits') {
                               const pe = currentItem.permitEntries || [];
                               const totalPC = pe.reduce((sum, e) => sum + (parseFloat(e.cost) || 0), 0);
@@ -1747,60 +1841,60 @@ function AppInner() {
                                 </tr>
                               );
                             }
-                            return (
-                              <tr key={svc.key}>
-                                <td style={S.td}><strong>{svc.name}</strong>{svc.isAllowance && <span style={{ marginLeft: 8, fontSize: 11, color: '#856404', fontWeight: 600, background: '#ffc107', padding: '2px 6px', borderRadius: 3 }}>ALLOWANCE</span>}</td>
-                                <td style={{ ...S.td, color: '#2c5530', fontWeight: 600 }}>{fmt(svc.contractPrice)}</td>
-                                <td style={S.td}>
-                                  {scrubbEditingService === svc.key ? (
-                                    <div style={{ display: 'flex', gap: 4 }}>
-                                      <input type="number" style={{ ...S.inputEdit, width: 100 }} value={scrubbNewCost} onChange={e => setScrubbNewCost(e.target.value)} placeholder="0.00" autoFocus />
-                                      <button style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }} onClick={() => {
-                                        const cost = parseFloat(scrubbNewCost) || 0;
-                                        const historyEntry = { id: genId(), serviceKey: svc.key, serviceName: svc.name, previousCost: svc.actualCost || 0, newCost: cost, contractPrice: svc.contractPrice, variance: cost > 0 ? svc.contractPrice - cost : 0, isAllowance: ALLOWANCE_ITEMS.includes(svc.key), updatedAt: new Date().toISOString(), updatedBy: userName };
-                                        saveScrubbUpdate({ ...currentItem, scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost }, scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry], updatedAt: Date.now(), updatedBy: userName });
-                                        setScrubbEditingService(null); setScrubbNewCost('');
-                                        if (ALLOWANCE_ITEMS.includes(svc.key)) {
-                                          const v = cost > 0 ? svc.contractPrice - cost : 0;
-                                          // Calculate full contingency balance after this update
-                                          const updatedCosts = { ...(currentItem.scrubbCosts || {}), [svc.key]: cost };
-                                          let newSavings = 0, newOverages = 0;
-                                          trackingItems.forEach(ti => {
-                                            if (ALLOWANCE_ITEMS.includes(ti.key)) {
-                                              const ac = ti.key === svc.key ? cost : (updatedCosts[ti.key] || ti.actualCost || 0);
-                                              if (ac > 0) {
-                                                const diff = ti.contractPrice - ac;
-                                                if (diff > 0) newSavings += diff; else newOverages += Math.abs(diff);
-                                              }
-                                            }
-                                          });
-                                          const coUsedCheck = (currentItem.changeOrderHistory || []).reduce((s, co) => s + (co.contingencyUsed || 0), 0);
-                                          const cPmtsCheck = (currentItem.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
-                                          const balanceAfter = startC + newSavings - newOverages - cPmtsCheck - coUsedCheck;
-                                          if (balanceAfter < 0) {
-                                            alert(
-                                              `⚠️ CONTINGENCY FUND OVERDRAWN ⚠️\n\n` +
-                                              `${svc.name} is ${fmt(Math.abs(v))} over budget.\n\n` +
-                                              `The contingency fund is now negative by ${fmt(Math.abs(balanceAfter))}.\n\n` +
-                                              `A payment must be collected from the customer before any additional work can continue.`
-                                            );
-                                          } else {
-                                            alert(v > 0 ? `${svc.name} came in ${fmt(v)} under budget.\nAdded to contingency fund.` : v < 0 ? `${svc.name} is ${fmt(Math.abs(v))} over budget.\nDrawn from contingency fund.` : `${svc.name} is exactly on budget.`);
-                                          }
-                                        }
-                                      }}>✓</button>
-                                      <button style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }} onClick={() => { setScrubbEditingService(null); setScrubbNewCost(''); }}>✕</button>
+                            // Additional Materials: entries-based like permits
+                            if (svc.key === 'addl_materials') {
+                              const me = currentItem.addlMaterialEntries || [];
+                              const totalMC = me.reduce((sum, e) => sum + (parseFloat(e.cost) || 0), 0);
+                              return (
+                                <tr key={svc.key}>
+                                  <td style={S.td}><strong>{svc.name}</strong></td>
+                                  <td style={{ ...S.td, color: '#999' }}>-</td>
+                                  <td style={S.td}>
+                                    {me.length > 0 ? <div style={{ marginBottom: 8 }}>{me.map((entry, idx) => (
+                                      <div key={entry.id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', marginBottom: 4, background: '#f8f9fa', borderRadius: 4, fontSize: 13 }}>
+                                        <span>{entry.name}</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                          <span style={{ fontWeight: 600 }}>{fmt(entry.cost)}</span>
+                                          <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 11 }} onClick={() => { setEditingMaterialEntry(entry); setMaterialEntryName(entry.name); setMaterialEntryCost(entry.cost.toString()); setShowAddlMaterialModal(true); }}>✏️</button>
+                                          <button style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 11 }} onClick={() => { if (confirm(`Delete ${entry.name}?`)) { const updated = me.filter((_, i) => i !== idx); saveScrubbUpdate({ ...currentItem, addlMaterialEntries: updated, updatedAt: Date.now(), updatedBy: userName }); } }}>🗑️</button>
+                                        </div>
+                                      </div>
+                                    ))}<div style={{ borderTop: '1px solid #ddd', paddingTop: 4, marginTop: 4, fontWeight: 600, fontSize: 14 }}>Total: {fmt(totalMC)}</div></div> : <div style={{ color: '#999', marginBottom: 8 }}>No materials entered</div>}
+                                    <button style={{ ...S.btnSm, padding: '4px 12px', fontSize: 12, width: '100%' }} onClick={() => { setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost(''); setShowAddlMaterialModal(true); }}>+ Add Material</button>
+                                  </td>
+                                  <td style={S.td}></td>
+                                  <td style={S.td}></td>
+                                  <td style={S.td}></td>
+                                </tr>
+                              );
+                            }
+                            // NHL Contract: expandable row
+                            if (svc.key === 'nhl_contract') {
+                              return (<React.Fragment key={svc.key}>
+                                <tr>
+                                  <td style={S.td}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                      <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 14, padding: 0, lineHeight: 1 }} onClick={() => setNhlExpanded(p => !p)}>{nhlExpanded ? '▼' : '▶'}</button>
+                                      <strong>{svc.name}</strong>
                                     </div>
-                                  ) : (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                      <span style={{ color: svc.actualCost > 0 ? '#000' : '#999' }}>{svc.actualCost > 0 ? fmt(svc.actualCost) : 'Not entered'}</span>
-                                      <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => { setScrubbEditingService(svc.key); setScrubbNewCost(svc.actualCost.toString()); }}>✏️</button>
-                                    </div>
-                                  )}
-                                </td>
-                                <td style={{ ...S.td, color: svc.actualCost > 0 ? (svc.variance > 0 ? '#28a745' : svc.variance < 0 ? '#dc3545' : '#666') : '#999', fontWeight: svc.actualCost > 0 ? 600 : 400 }}>{svc.actualCost > 0 ? <>{svc.variance >= 0 ? '+' : ''}{fmt(svc.variance)} ({svc.variancePct}%)</> : '-'}</td>
-                                <td style={S.td}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  </td>
+                                  <td style={{ ...S.td, color: '#2c5530', fontWeight: 600 }}>{fmt(svc.contractPrice)}</td>
+                                  <td style={S.td}>
+                                    {scrubbEditingService === svc.key ? (
+                                      <div style={{ display: 'flex', gap: 4 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #2c5530', borderRadius: 4, padding: '0 8px' }}><span style={{ color: '#666', fontSize: 14 }}>$</span><input type="text" inputMode="decimal" style={{ ...S.inputEdit, width: 110, border: 'none', padding: '6px 4px' }} value={fmtInput(scrubbNewCost)} onChange={e => setScrubbNewCost(e.target.value.replace(/[^0-9.]/g, ''))} onKeyDown={e => { if (e.key === 'Enter') handleScrubbSave(svc); if (e.key === 'Escape') { setScrubbEditingService(null); setScrubbNewCost(''); } }} placeholder="0.00" autoFocus /></div>
+                                        <button style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }} onClick={() => handleScrubbSave(svc)}>✓</button>
+                                        <button style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }} onClick={() => { setScrubbEditingService(null); setScrubbNewCost(''); }}>✕</button>
+                                      </div>
+                                    ) : (
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <span style={{ color: svc.actualCost > 0 ? '#000' : '#999' }}>{svc.actualCost > 0 ? fmt(svc.actualCost) : 'Not entered'}</span>
+                                        <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => { setScrubbEditingService(svc.key); setScrubbNewCost(svc.actualCost > 0 ? svc.actualCost.toString() : ''); }}>✏️</button>
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td style={S.td}>{svc.actualCost > 0 ? <span style={{ color: svc.variance > 0 ? '#28a745' : svc.variance < 0 ? '#dc3545' : '#666', fontWeight: 600 }}>{svc.variance >= 0 ? '+' : ''}{fmt(svc.variance)} ({svc.variancePct}%)</span> : '-'}</td>
+                                  <td style={S.td}><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <span style={{ fontSize: 12, color: '#666' }}>{svc.docs.length} file{svc.docs.length !== 1 ? 's' : ''}</span>
                                     <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
                                       const fileName = prompt('Document name:'); if (!fileName) return;
@@ -1808,11 +1902,56 @@ function AppInner() {
                                       const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
                                       saveScrubbUpdate({ ...currentItem, scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] }, updatedAt: Date.now(), updatedBy: userName });
                                     }}>+ Add Doc</button>
-                                  </div>
+                                  </div></td>
+                                  <td style={S.td}>{svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => alert(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
+                                </tr>
+                                {nhlExpanded && svc.subItems?.map((sub, idx) => (
+                                  <tr key={`nhl-sub-${idx}`} style={{ background: '#f8f9fa' }}>
+                                    <td style={{ ...S.td, paddingLeft: 36, fontSize: 13, color: '#555' }}>{sub.label}</td>
+                                    <td style={{ ...S.td, fontSize: 13, color: '#555' }}>{fmt(sub.cost)}</td>
+                                    <td style={S.td}></td><td style={S.td}></td><td style={S.td}></td><td style={S.td}></td>
+                                  </tr>
+                                ))}
+                              </React.Fragment>);
+                            }
+                            const readOnly = svc.category === 'cost_basis' || svc.category === 'margin';
+                            return (
+                              <tr key={svc.key} style={readOnly ? { background: '#f8f9fa' } : {}}>
+                                <td style={S.td}><strong>{svc.name}</strong>{svc.isAllowance && <span style={{ marginLeft: 8, fontSize: 11, color: '#856404', fontWeight: 600, background: '#ffc107', padding: '2px 6px', borderRadius: 3 }}>ALLOWANCE</span>}</td>
+                                <td style={{ ...S.td, color: '#2c5530', fontWeight: 600 }}>{fmt(svc.contractPrice)}</td>
+                                <td style={S.td}>
+                                  {readOnly ? (
+                                    <span style={{ color: '#666', fontStyle: 'italic', fontSize: 12 }}>Fixed cost</span>
+                                  ) : scrubbEditingService === svc.key ? (
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #2c5530', borderRadius: 4, padding: '0 8px' }}><span style={{ color: '#666', fontSize: 14 }}>$</span><input type="text" inputMode="decimal" style={{ ...S.inputEdit, width: 110, border: 'none', padding: '6px 4px' }} value={fmtInput(scrubbNewCost)} onChange={e => setScrubbNewCost(e.target.value.replace(/[^0-9.]/g, ''))} onKeyDown={e => { if (e.key === 'Enter') handleScrubbSave(svc); if (e.key === 'Escape') { setScrubbEditingService(null); setScrubbNewCost(''); } }} placeholder="0.00" autoFocus /></div>
+                                      <button style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }} onClick={() => handleScrubbSave(svc)}>✓</button>
+                                      <button style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }} onClick={() => { setScrubbEditingService(null); setScrubbNewCost(''); }}>✕</button>
+                                    </div>
+                                  ) : (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                      <span style={{ color: svc.actualCost > 0 ? '#000' : '#999' }}>{svc.actualCost > 0 ? fmt(svc.actualCost) : 'Not entered'}</span>
+                                      <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => { setScrubbEditingService(svc.key); setScrubbNewCost(svc.actualCost > 0 ? svc.actualCost.toString() : ''); }}>✏️</button>
+                                    </div>
+                                  )}
                                 </td>
-                                <td style={S.td}>{svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => alert(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
+                                <td style={S.td}>{readOnly ? <span style={{ color: '#666' }}>-</span> : svc.actualCost > 0 ? <span style={{ color: svc.variance > 0 ? '#28a745' : svc.variance < 0 ? '#dc3545' : '#666', fontWeight: 600 }}>{svc.variance >= 0 ? '+' : ''}{fmt(svc.variance)} ({svc.variancePct}%)</span> : '-'}</td>
+                                <td style={S.td}>
+                                  {readOnly ? null : <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <span style={{ fontSize: 12, color: '#666' }}>{svc.docs.length} file{svc.docs.length !== 1 ? 's' : ''}</span>
+                                    <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
+                                      const fileName = prompt('Document name:'); if (!fileName) return;
+                                      const fileUrl = prompt('Document URL (or leave blank):');
+                                      const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
+                                      saveScrubbUpdate({ ...currentItem, scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] }, updatedAt: Date.now(), updatedBy: userName });
+                                    }}>+ Add Doc</button>
+                                  </div>}
+                                </td>
+                                <td style={S.td}>{!readOnly && svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => alert(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
                               </tr>
                             );
+                          })}
+                            </React.Fragment>);
                           })}
                         </tbody>
                       </table>
@@ -1820,11 +1959,19 @@ function AppInner() {
                       {/* Summary */}
                       <div style={{ marginTop: 32, padding: 20, background: '#f8f9fa', borderRadius: 8 }}>
                         <h3 style={{ marginTop: 0 }}>Summary</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-                          <div><div style={{ fontSize: 12, color: '#666' }}>Total Contract Price</div><div style={{ fontSize: 24, fontWeight: 700, color: '#2c5530' }}>{fmt(trackingItems.reduce((s, i) => s + i.contractPrice, 0))}</div></div>
-                          <div><div style={{ fontSize: 12, color: '#666' }}>Total Actual Cost</div><div style={{ fontSize: 24, fontWeight: 700, color: '#1565c0' }}>{fmt(trackingItems.reduce((s, i) => s + i.actualCost, 0))}</div></div>
-                          <div><div style={{ fontSize: 12, color: '#666' }}>Total Variance</div><div style={{ fontSize: 24, fontWeight: 700, color: (() => { const tv = trackingItems.reduce((s, i) => s + i.variance, 0); return tv > 0 ? '#28a745' : tv < 0 ? '#dc3545' : '#666'; })() }}>{(() => { const tv = trackingItems.reduce((s, i) => s + i.variance, 0); return (tv >= 0 ? '+' : '') + fmt(tv); })()}</div></div>
-                        </div>
+                        {(() => {
+                          const totalContract = trackingItems.reduce((s, i) => s + i.contractPrice, 0);
+                          const totalActual = trackingItems.reduce((s, i) => s + i.actualCost, 0);
+                          const totalVar = trackingItems.reduce((s, i) => s + i.variance, 0);
+                          const overBudget = totalActual > totalContract;
+                          return (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+                              <div><div style={{ fontSize: 12, color: '#666' }}>Total Contract Price</div><div style={{ fontSize: 24, fontWeight: 700, color: '#2c5530' }}>{fmt(totalContract)}</div></div>
+                              <div><div style={{ fontSize: 12, color: '#666' }}>Total Actual Cost</div><div style={{ fontSize: 24, fontWeight: 700, color: overBudget ? '#dc3545' : '#1565c0' }}>{fmt(totalActual)}</div></div>
+                              <div><div style={{ fontSize: 12, color: '#666' }}>Total Variance</div><div style={{ fontSize: 24, fontWeight: 700, color: overBudget ? '#dc3545' : totalVar > 0 ? '#28a745' : totalVar < 0 ? '#dc3545' : '#666' }}>{(totalVar >= 0 ? '+' : '') + fmt(totalVar)}</div></div>
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       {/* Contingency Fund Tracker */}
@@ -1890,6 +2037,41 @@ function AppInner() {
                                   <div style={{ fontSize: 13, color: '#999', textAlign: 'center', padding: 8 }}>No activity yet — the full 2% fund is available.</div>
                                 )}
                               </div>
+
+                              {/* Allowance Item Breakdown */}
+                              {(() => {
+                                const allowanceItems = trackingItems.filter(i => ALLOWANCE_ITEMS.includes(i.key) && i.actualCost > 0);
+                                if (allowanceItems.length === 0) return null;
+                                return (
+                                  <div style={{ marginTop: 12, padding: 16, background: '#fff', borderRadius: 6, border: '1px solid #e0e0e0' }}>
+                                    <div style={{ fontSize: 14, fontWeight: 700, color: '#2c5530', marginBottom: 12 }}>Allowance Breakdown</div>
+                                    {allowanceItems.map(item => {
+                                      const vc = item.variance > 0 ? '#28a745' : item.variance < 0 ? '#dc3545' : '#666';
+                                      const label = item.variance > 0 ? 'Under Budget' : item.variance < 0 ? 'Over Budget' : 'On Budget';
+                                      const permitEntries = item.key === 'permits' ? (currentItem.permitEntries || []) : [];
+                                      return (
+                                        <div key={item.key} style={{ padding: 8, marginBottom: 6, background: '#f8f9fa', borderRadius: 4, borderLeft: `3px solid ${vc}` }}>
+                                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <span style={{ fontSize: 13, fontWeight: 600 }}>{item.name}</span>
+                                            <span style={{ fontSize: 11, fontWeight: 600, color: vc, padding: '2px 8px', background: item.variance > 0 ? '#d1e7dd' : item.variance < 0 ? '#f8d7da' : '#e0e0e0', borderRadius: 10 }}>{label}</span>
+                                          </div>
+                                          <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Budget: {fmt(item.contractPrice)} | Actual: {fmt(item.actualCost)} <span style={{ fontWeight: 700, color: vc, marginLeft: 8 }}>({item.variance >= 0 ? '+' : ''}{fmt(item.variance)})</span></div>
+                                          {permitEntries.length > 0 && (
+                                            <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid #e0e0e0' }}>
+                                              {permitEntries.map((pe, idx) => (
+                                                <div key={pe.id || idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0 3px 12px', fontSize: 12, color: '#555' }}>
+                                                  <span>{pe.name}</span>
+                                                  <span style={{ fontWeight: 600 }}>{fmt(pe.cost)}</span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                );
+                              })()}
 
                               {/* Change Order History */}
                               {coHistory.length > 0 && (
@@ -2126,6 +2308,40 @@ function AppInner() {
                       else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
                       setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost('');
                     }}>{editingPermitEntry ? 'Update' : 'Add'} Permit</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showAddlMaterialModal && (
+              <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                <div style={{ background: '#fff', padding: 32, borderRadius: 8, maxWidth: 500, width: '90%', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+                  <h3 style={{ marginTop: 0 }}>{editingMaterialEntry ? 'Edit Material' : 'Add Material'}</h3>
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ ...S.label, color: '#333' }}>Material Name</label>
+                    <input type="text" style={S.input} value={materialEntryName} onChange={e => setMaterialEntryName(e.target.value)} placeholder="e.g., Lumber, Hardware, Fixtures" autoFocus />
+                  </div>
+                  <div style={{ marginBottom: 24 }}>
+                    <label style={{ ...S.label, color: '#333' }}>Cost</label>
+                    <input type="number" style={S.input} value={materialEntryCost} onChange={e => setMaterialEntryCost(e.target.value)} placeholder="0.00" />
+                  </div>
+                  <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+                    <button style={{ ...S.btn2, background: '#666' }} onClick={() => { setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost(''); }}>Cancel</button>
+                    <button style={S.btn} onClick={() => {
+                      if (!materialEntryName.trim()) { alert('Please enter a material name'); return; }
+                      const cost = parseFloat(materialEntryCost) || 0;
+                      const currentEntries = currentItem.addlMaterialEntries || [];
+                      let updatedEntries;
+                      if (editingMaterialEntry) {
+                        updatedEntries = currentEntries.map(entry => entry.id === editingMaterialEntry.id ? { ...entry, name: materialEntryName, cost } : entry);
+                      } else {
+                        updatedEntries = [...currentEntries, { id: genId(), name: materialEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
+                      }
+                      const updatedItem = { ...currentItem, addlMaterialEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
+                      if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
+                      else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+                      setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost('');
+                    }}>{editingMaterialEntry ? 'Update' : 'Add'} Material</button>
                   </div>
                 </div>
               </div>
@@ -4270,11 +4486,33 @@ function AppInner() {
       {/* Delete Quote/Contract Confirmation Modal */}
       {deleteConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ ...S.card, textAlign: 'center' }}>
-            <h3>Delete this {contracts.find(c => c.id === deleteConfirm.id) ? 'contract' : 'quote'}?</h3>
-            <p style={{ color: '#666' }}>This action cannot be undone.</p>
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-              <button style={S.btnDanger} onClick={() => delQuote(deleteConfirm.id)}>Delete</button>
+          <div style={{ ...S.card, textAlign: 'center', maxWidth: 420 }}>
+            <h3 style={{ marginBottom: 8 }}>
+              Delete this {contracts.some(c => c.id === deleteConfirm.id) ? 'contract' : 'quote'}?
+            </h3>
+            <p style={{ color: '#666', margin: '0 0 4px', fontSize: 14 }}>
+              {deleteConfirm.homeModel !== 'NONE' ? deleteConfirm.homeModel : `${deleteConfirm.houseWidth}' × ${deleteConfirm.houseLength}'`}
+            </p>
+            <p style={{
+              display: 'inline-block',
+              padding: '2px 10px',
+              borderRadius: 4,
+              fontSize: 13,
+              fontWeight: 700,
+              background: ['Accepted', 'Under Contract', 'Completed'].includes(deleteConfirm.status) ? '#dc3545' : '#ffc107',
+              color: ['Accepted', 'Under Contract', 'Completed'].includes(deleteConfirm.status) ? '#fff' : '#000',
+              marginBottom: 12
+            }}>
+              Status: {deleteConfirm.status}
+            </p>
+            {['Accepted', 'Under Contract', 'Completed', 'Cancelled'].includes(deleteConfirm.status) && (
+              <p style={{ color: '#dc3545', fontWeight: 600, fontSize: 14, margin: '0 0 8px' }}>
+                All associated data, change orders, payments, and files will be permanently lost.
+              </p>
+            )}
+            <p style={{ color: '#666', fontSize: 13 }}>This action cannot be undone.</p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 16 }}>
+              <button style={S.btnDanger} onClick={() => delQuote(deleteConfirm.id)}>Yes, Delete</button>
               <button style={S.btn2} onClick={() => setDeleteConfirm(null)}>Cancel</button>
             </div>
           </div>

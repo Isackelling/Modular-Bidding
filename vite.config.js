@@ -6,7 +6,10 @@ export default defineConfig({
   server: {
     port: 3001,
     open: true,
-    host: true
+    host: true,
+    watch: {
+      usePolling: true
+    }
   },
   build: {
     outDir: 'dist',

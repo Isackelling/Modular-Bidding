@@ -41,6 +41,22 @@ const CustomerView = ({
   const custContracts = allCustContracts.filter(c => c.status !== 'Cancelled');
   const cancelledContracts = allCustContracts.filter(c => c.status === 'Cancelled');
 
+  // Sort within sections: status priority, then newest first
+  const CONTRACT_PRIORITY = { 'Completed': 0, 'Under Contract': 1, 'Accepted': 2 };
+  const QUOTE_PRIORITY = { 'Sent': 0, 'Draft': 1, 'Declined': 2 };
+  const sortedContracts = custContracts.slice().sort((a, b) => {
+    const pa = CONTRACT_PRIORITY[a.status] ?? 3;
+    const pb = CONTRACT_PRIORITY[b.status] ?? 3;
+    if (pa !== pb) return pa - pb;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+  const sortedQuotes = custQuotes.slice().sort((a, b) => {
+    const pa = QUOTE_PRIORITY[a.status] ?? 3;
+    const pb = QUOTE_PRIORITY[b.status] ?? 3;
+    if (pa !== pb) return pa - pb;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
   const renderProjectCard = (item, isContract) => {
     const t = CalcHelpers.calculateQuoteTotals(item, selCustomer, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing);
     const qType = QUOTE_TYPES.find(qt => qt.id === item.quoteType) || QUOTE_TYPES[0];
@@ -280,29 +296,29 @@ const CustomerView = ({
 
       {/* Quotes & Contracts */}
       <div style={{ ...S.box, marginTop: 24 }}>
-        {custQuotes.length === 0 && custContracts.length === 0 && cancelledContracts.length === 0 ? (
+        {sortedQuotes.length === 0 && sortedContracts.length === 0 && cancelledContracts.length === 0 ? (
           <div>
             <h2 style={{ margin: '0 0 16px' }}>Quotes & Contracts</h2>
             <p style={{ color: '#666', textAlign: 'center', padding: 20 }}>No quotes yet. Click "+ New Quote" to create one.</p>
           </div>
         ) : (
           <div>
-            {custContracts.length > 0 && (
+            {sortedContracts.length > 0 && (
               <div style={{ marginBottom: 32 }}>
-                <h2 style={{ margin: '0 0 16px', color: '#2c5530' }}>📜 Contracts ({custContracts.length})</h2>
+                <h2 style={{ margin: '0 0 16px', color: '#2c5530' }}>📜 Contracts ({sortedContracts.length})</h2>
                 <div style={S.grid}>
-                  {custContracts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(c => renderProjectCard(c, true))}
+                  {sortedContracts.map(c => renderProjectCard(c, true))}
                 </div>
               </div>
             )}
 
             <div>
-              <h2 style={{ margin: '0 0 16px' }}>📋 Quotes ({custQuotes.length})</h2>
-              {custQuotes.length === 0 ? (
+              <h2 style={{ margin: '0 0 16px' }}>📋 Quotes ({sortedQuotes.length})</h2>
+              {sortedQuotes.length === 0 ? (
                 <p style={{ color: '#666', textAlign: 'center', padding: 20 }}>No pending quotes.</p>
               ) : (
                 <div style={S.grid}>
-                  {custQuotes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(q => renderProjectCard(q, false))}
+                  {sortedQuotes.map(q => renderProjectCard(q, false))}
                 </div>
               )}
             </div>
