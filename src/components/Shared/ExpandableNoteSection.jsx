@@ -23,7 +23,7 @@ const ExpandableNoteSection = ({
   onDeleteCrewNote,
   userName = 'User'
 }) => {
-  const [isCrewExpanded, setIsCrewExpanded] = React.useState(true);
+  const [isCrewExpanded, setIsCrewExpanded] = React.useState(false);
 
   const formatDateTime = (isoString) => {
     const date = new Date(isoString);
