@@ -218,6 +218,10 @@ function AppInner() {
   const [pricingTab, setPricingTab] = useState('homes');
   const [pricingEditMode, setPricingEditMode] = useState(false);
   const [expandedServiceNotes, setExpandedServiceNotes] = useState({});
+  const [installSvcCollapsed, setInstallSvcCollapsed] = useState(true);
+  const [proSvcCollapsed, setProSvcCollapsed] = useState(true);
+  const [homeSelCollapsed, setHomeSelCollapsed] = useState(true);
+  const [houseSpecsCollapsed, setHouseSpecsCollapsed] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleteCustomerConfirm, setDeleteCustomerConfirm] = useState(null);
 
@@ -2839,7 +2843,12 @@ function AppInner() {
             </div>
           </div>
 
-          <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Home Selection</h2>
+          <div style={S.box}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: homeSelCollapsed ? 0 : 8 }} onClick={() => setHomeSelCollapsed(p => !p)}>
+              <h2 style={{ marginTop: 0, borderBottom: homeSelCollapsed ? 'none' : '2px solid #2c5530', paddingBottom: homeSelCollapsed ? 0 : 8, flex: 1 }}>Home Selection</h2>
+              <span style={{ fontSize: 18, color: '#2c5530', fontWeight: 600 }}>{homeSelCollapsed ? '▶' : '▼'}</span>
+            </div>
+            {!homeSelCollapsed && <>
             <p style={{ fontSize: 12, color: '#666', marginBottom: 10 }}>Selecting a home will auto-fill dimensions below</p>
             <div style={S.row}>
               <div style={{ gridColumn: 'span 2' }}><label style={S.label}>Model</label><select style={S.select} value={newQ.homeModel} onChange={e => updateField('homeModel', e.target.value)}>{homeModels.map(m => <option key={m.name} value={m.name}>{m.name}{m.width > 0 ? ` (${m.width}x${m.length})` : ''} {m.price > 0 && `- ${fmt(m.price * HOME_MARKUP)}`}</option>)}</select></div>
@@ -2933,9 +2942,15 @@ function AppInner() {
               onDeleteCrewNote={handleDeleteCrewNote}
               userName={userName}
             />
+            </>}
           </div>
 
-          <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>House Specs</h2>
+          <div style={S.box}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: houseSpecsCollapsed ? 0 : 8 }} onClick={() => setHouseSpecsCollapsed(p => !p)}>
+              <h2 style={{ marginTop: 0, borderBottom: houseSpecsCollapsed ? 'none' : '2px solid #2c5530', paddingBottom: houseSpecsCollapsed ? 0 : 8, flex: 1 }}>House Specs</h2>
+              <span style={{ fontSize: 18, color: '#2c5530', fontWeight: 600 }}>{houseSpecsCollapsed ? '▶' : '▼'}</span>
+            </div>
+            {!houseSpecsCollapsed && <>
             {!isAdmin && newQ.houseWidth && newQ.houseLength ? (
               // Sales view - read only display
               <div>
@@ -3156,6 +3171,7 @@ function AppInner() {
               onDeleteCrewNote={handleDeleteCrewNote}
               userName={userName}
             />
+            </>}
           </div>
 
           {/* Pier Diagram Section - Standalone for better visibility */}
@@ -3185,7 +3201,11 @@ function AppInner() {
           )}
 
           <div style={S.box}>
-            <h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Home Installation Services</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: installSvcCollapsed ? 0 : 8 }} onClick={() => setInstallSvcCollapsed(p => !p)}>
+              <h2 style={{ marginTop: 0, borderBottom: installSvcCollapsed ? 'none' : '2px solid #2c5530', paddingBottom: installSvcCollapsed ? 0 : 8, flex: 1 }}>Home Installation Services</h2>
+              <span style={{ fontSize: 18, color: '#2c5530', fontWeight: 600 }}>{installSvcCollapsed ? '▶' : '▼'}</span>
+            </div>
+            {!installSvcCollapsed && <>
             <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
               Select installation services and edit prices as needed. Prices can be customized per quote.
             </p>
@@ -3257,10 +3277,15 @@ function AppInner() {
                 </React.Fragment>;
               })}
             </div>
-
+            </>}
           </div>
 
-          <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Professional Services</h2>
+          <div style={S.box}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: proSvcCollapsed ? 0 : 8 }} onClick={() => setProSvcCollapsed(p => !p)}>
+              <h2 style={{ marginTop: 0, borderBottom: proSvcCollapsed ? 'none' : '2px solid #2c5530', paddingBottom: proSvcCollapsed ? 0 : 8, flex: 1 }}>Professional Services</h2>
+              <span style={{ fontSize: 18, color: '#2c5530', fontWeight: 600 }}>{proSvcCollapsed ? '▶' : '▼'}</span>
+            </div>
+            {!proSvcCollapsed && <>
             <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>Items marked with <span style={{ background: '#fff3cd', padding: '2px 6px', borderRadius: 3, fontSize: 11 }}>ALLOWANCE</span> are estimates that may vary based on site conditions. Final costs will be confirmed upon completion of work.</p>
             <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden' }}>
               {(() => {
@@ -3648,6 +3673,7 @@ function AppInner() {
                 </div>
               </div>
             </div>
+            </>}
           </div>
 
           {totals && <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Quote Summary</h2>
