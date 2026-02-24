@@ -19,6 +19,12 @@ export const SUMMARY_SERVICES = [
   'gas_propane'
 ];
 
+// Services requiring installer's license per MN state statute
+export const LICENSED_SERVICES = [
+  'installation_of_home', 'siding_install', 'permits',
+  'electric_connection', 'concrete_skirting', 'plumbing', 'gas_propane'
+];
+
 // Additional home options (displayed in House Specs section only)
 export const HOME_OPTIONS = [
   'lp_siding',

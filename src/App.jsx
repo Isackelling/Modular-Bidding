@@ -13,7 +13,7 @@ import {
   DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION,
   DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION,
   MIN_MILES, HOME_MARKUP, QUOTE_TYPES, WARRANTIES, CHECKLIST, DELIVERY,
-  ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS,
+  ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES,
   INSTALLATION_COSTS, PIER_SPECS, PRICING,
 } from './constants/index.js';
 
@@ -3201,7 +3201,10 @@ function AppInner() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: sel ? (ovr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: idx < SUMMARY_SERVICES.length - 1 ? '1px solid #eee' : 'none' }}>
                     <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
                     {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
-                    <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>{svc.name}</span>
+                    <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
+                      {svc.name}
+                      {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
+                    </span>
                     {sel ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ fontSize: 11, color: '#666' }}>$</span>
@@ -3273,7 +3276,11 @@ function AppInner() {
                       <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
                       {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
                       {svc.hasDays && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={days} onChange={e => setNewQ(p => ({ ...p, serviceDays: { ...p.serviceDays, [k]: parseInt(e.target.value) || 1 } }))} placeholder="Days" title="Number of days crew will be on site" />}
-                      <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>{svc.name} {isAllowance && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}</span>
+                      <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
+                        {svc.name}
+                        {isAllowance && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
+                        {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
+                      </span>
                       {sel ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                           <span style={{ fontSize: 11, color: '#666' }}>$</span>
