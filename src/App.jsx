@@ -3174,32 +3174,6 @@ function AppInner() {
             </>}
           </div>
 
-          {/* Pier Diagram Section - Standalone for better visibility */}
-          {newQ.houseWidth && newQ.houseLength && (
-            <div style={S.box}>
-              <div
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isPierDiagramExpanded ? 16 : 0, cursor: 'pointer', borderBottom: '2px solid #2c5530', paddingBottom: 8 }}
-                onClick={() => setIsPierDiagramExpanded(!isPierDiagramExpanded)}
-              >
-                <h2 style={{ margin: 0, cursor: 'pointer' }}>
-                  {isPierDiagramExpanded ? '▼' : '▶'} Pier Layout & Plan View
-                </h2>
-                <button
-                  type="button"
-                  style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
-                  onClick={(e) => { e.stopPropagation(); setIsPierDiagramExpanded(!isPierDiagramExpanded); }}
-                >
-                  {isPierDiagramExpanded ? 'Minimize' : 'Maximize'}
-                </button>
-              </div>
-              {isPierDiagramExpanded && (
-                <div style={{ marginTop: 16 }}>
-                  <PierDiagram quote={newQ} />
-                </div>
-              )}
-            </div>
-          )}
-
           <div style={S.box}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: installSvcCollapsed ? 0 : 8 }} onClick={() => setInstallSvcCollapsed(p => !p)}>
               <h2 style={{ marginTop: 0, borderBottom: installSvcCollapsed ? 'none' : '2px solid #2c5530', paddingBottom: installSvcCollapsed ? 0 : 8, flex: 1 }}>Home Installation Services</h2>
@@ -3895,6 +3869,32 @@ function AppInner() {
               </div>
             </div>
           </div>}
+
+          {/* Pier Diagram Section */}
+          {newQ.houseWidth && newQ.houseLength && (
+            <div style={S.box}>
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isPierDiagramExpanded ? 16 : 0, cursor: 'pointer', borderBottom: '2px solid #2c5530', paddingBottom: 8 }}
+                onClick={() => setIsPierDiagramExpanded(!isPierDiagramExpanded)}
+              >
+                <h2 style={{ margin: 0, cursor: 'pointer' }}>
+                  {isPierDiagramExpanded ? '▼' : '▶'} Pier Layout & Plan View
+                </h2>
+                <button
+                  type="button"
+                  style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                  onClick={(e) => { e.stopPropagation(); setIsPierDiagramExpanded(!isPierDiagramExpanded); }}
+                >
+                  {isPierDiagramExpanded ? 'Minimize' : 'Maximize'}
+                </button>
+              </div>
+              {isPierDiagramExpanded && (
+                <div style={{ marginTop: 16 }}>
+                  <PierDiagram quote={newQ} />
+                </div>
+              )}
+            </div>
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 24, paddingTop: 24, borderTop: '2px solid #e0e0e0' }}>
             <button style={S.btn2} onClick={cancelEdit}>← Back</button>
