@@ -1823,9 +1823,9 @@ ${(() => {
     <div class="section-header-title">
       📋 NOTE SUMMARY (${totalNotes} Notes)
     </div>
-    <div class="section-toggle-btn" id="toggle-note-summary">−</div>
+    <div class="section-toggle-btn" id="toggle-note-summary">+</div>
   </div>
-  <div class="section-content expanded" id="content-note-summary">
+  <div class="section-content" id="content-note-summary">
 ${crewTotal > 0 ? `
   <div style="margin-bottom:${custTotal > 0 ? '20px' : '0'}">
     <div style="font-size:15px;font-weight:800;color:#e65100;margin-bottom:10px">🔧 Crew Notes (${crewTotal})</div>
