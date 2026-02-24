@@ -33,9 +33,15 @@ const CustomerView = ({
   onStartChangeOrder,
   onDeleteQuote,
   onUpdateStatus,
+  onUpdateQuoteNotes,
+  userName,
   emptyQuote,
   styles: S
 }) => {
+  const [noteMode, setNoteMode] = React.useState(null); // 'crew' | 'customer' | null
+  const [noteQuoteId, setNoteQuoteId] = React.useState('');
+  const [noteDraft, setNoteDraft] = React.useState('');
+
   const custQuotes = quotes.filter(q => q.customerId === selCustomer.id);
   const allCustContracts = contracts.filter(c => c.customerId === selCustomer.id);
   const custContracts = allCustContracts.filter(c => c.status !== 'Cancelled');
@@ -293,6 +299,149 @@ const CustomerView = ({
           </div>
         )}
       </div>
+
+      {/* General Project Notes */}
+      {(() => {
+        const allItems = [...custQuotes, ...allCustContracts];
+        if (allItems.length === 0) return null;
+        const formatNoteDate = (iso) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+        const getQuoteLabel = (item) => {
+          const num = item.id?.slice(-8).toUpperCase() || 'N/A';
+          const model = item.homeModel && item.homeModel !== 'NONE' ? item.homeModel : '';
+          const isContract = allCustContracts.some(c => c.id === item.id);
+          return `${isContract ? 'Contract' : 'Quote'} #${num}${model ? ` - ${model}` : ''} (${item.status})`;
+        };
+        const selectedItem = allItems.find(i => i.id === noteQuoteId);
+
+        const handlePublish = () => {
+          if (!noteDraft.trim() || !selectedItem) return;
+          const note = { text: noteDraft, publishedAt: new Date().toISOString(), publishedBy: userName || 'User' };
+          const field = noteMode === 'crew' ? 'publishedGeneralCrewNotes' : 'publishedGeneralCustomerNotes';
+          const existing = selectedItem[field] || [];
+          onUpdateQuoteNotes(noteQuoteId, { [field]: [...existing, note] });
+          setNoteDraft('');
+          setNoteMode(null);
+          setNoteQuoteId('');
+        };
+
+        const handleDelete = (item, field, noteIndex) => {
+          if (!window.confirm('Delete this note?')) return;
+          const existing = item[field] || [];
+          onUpdateQuoteNotes(item.id, { [field]: existing.filter((_, idx) => idx !== noteIndex) });
+        };
+
+        // Collect all published general notes across all quotes/contracts
+        const allCrewNotes = allItems.flatMap(item =>
+          (item.publishedGeneralCrewNotes || []).map(n => ({ ...n, quoteLabel: getQuoteLabel(item), quoteId: item.id, field: 'publishedGeneralCrewNotes', item }))
+        );
+        const allCustNotes = allItems.flatMap(item =>
+          (item.publishedGeneralCustomerNotes || []).map(n => ({ ...n, quoteLabel: getQuoteLabel(item), quoteId: item.id, field: 'publishedGeneralCustomerNotes', item }))
+        );
+
+        return (
+          <div style={{ ...S.box, marginTop: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <h3 style={{ margin: 0, color: '#2c5530' }}>General Project Notes</h3>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={() => { setNoteMode(noteMode === 'crew' ? null : 'crew'); setNoteDraft(''); setNoteQuoteId(''); }}
+                  style={{ padding: '6px 14px', background: noteMode === 'crew' ? '#e65100' : '#fff3e0', color: noteMode === 'crew' ? '#fff' : '#e65100', border: '2px solid #e65100', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  {noteMode === 'crew' ? '✕ Cancel' : '+ Crew Note'}
+                </button>
+                <button
+                  onClick={() => { setNoteMode(noteMode === 'customer' ? null : 'customer'); setNoteDraft(''); setNoteQuoteId(''); }}
+                  style={{ padding: '6px 14px', background: noteMode === 'customer' ? '#1565c0' : '#e3f2fd', color: noteMode === 'customer' ? '#fff' : '#1565c0', border: '2px solid #1565c0', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  {noteMode === 'customer' ? '✕ Cancel' : '+ Customer Note'}
+                </button>
+              </div>
+            </div>
+
+            {/* Inline note form */}
+            {noteMode && (
+              <div style={{ padding: 16, background: noteMode === 'crew' ? '#fff3e0' : '#e3f2fd', borderRadius: 8, marginBottom: 16, border: `2px solid ${noteMode === 'crew' ? '#ffb74d' : '#90caf9'}` }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: noteMode === 'crew' ? '#e65100' : '#1565c0', marginBottom: 10 }}>
+                  {noteMode === 'crew' ? '🔧 New Crew Note (staff only)' : '💬 New Customer Note (visible to customer)'}
+                </div>
+                <select
+                  value={noteQuoteId}
+                  onChange={e => setNoteQuoteId(e.target.value)}
+                  style={{ ...S.select, marginBottom: 10 }}
+                >
+                  <option value="">-- Select a quote/contract --</option>
+                  {allItems.map(item => (
+                    <option key={item.id} value={item.id}>{getQuoteLabel(item)}</option>
+                  ))}
+                </select>
+                {noteQuoteId && (
+                  <>
+                    <textarea
+                      style={{ width: '100%', minHeight: 80, padding: 12, fontSize: 14, fontFamily: 'inherit', border: `1px solid ${noteMode === 'crew' ? '#ffb74d' : '#90caf9'}`, borderRadius: 4, resize: 'vertical' }}
+                      placeholder={noteMode === 'crew' ? 'Type crew instructions...' : 'Type customer note...'}
+                      value={noteDraft}
+                      onChange={e => setNoteDraft(e.target.value)}
+                      autoFocus
+                    />
+                    {noteDraft.trim() && (
+                      <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+                        <button onClick={handlePublish} style={{ padding: '8px 20px', background: noteMode === 'crew' ? '#e65100' : '#1565c0', color: '#fff', border: 'none', borderRadius: 6, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                          📤 Publish Note
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Display existing notes */}
+            {allCrewNotes.length === 0 && allCustNotes.length === 0 && !noteMode && (
+              <p style={{ color: '#999', fontSize: 13, fontStyle: 'italic', margin: 0 }}>No general notes yet. Use the buttons above to add crew or customer notes.</p>
+            )}
+
+            {allCrewNotes.length > 0 && (
+              <div style={{ marginBottom: allCustNotes.length > 0 ? 16 : 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#e65100', marginBottom: 8 }}>🔧 Crew Notes ({allCrewNotes.length})</div>
+                {allCrewNotes.map((note, idx) => {
+                  const noteIndex = (note.item.publishedGeneralCrewNotes || []).findIndex(n => n.publishedAt === note.publishedAt && n.text === note.text);
+                  return (
+                    <div key={idx} style={{ padding: 10, background: '#fff', borderRadius: 4, marginBottom: 6, border: '1px solid #fff3e0', borderLeft: '4px solid #ff6b35' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, lineHeight: 1.5 }}>{note.text}</div>
+                          <div style={{ fontSize: 11, color: '#999', marginTop: 4 }}>{note.quoteLabel} — {formatNoteDate(note.publishedAt)} by {note.publishedBy}</div>
+                        </div>
+                        <button onClick={() => handleDelete(note.item, 'publishedGeneralCrewNotes', noteIndex)} style={{ padding: '3px 10px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer', marginLeft: 8 }}>🗑️</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {allCustNotes.length > 0 && (
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#1565c0', marginBottom: 8 }}>💬 Customer Notes ({allCustNotes.length})</div>
+                {allCustNotes.map((note, idx) => {
+                  const noteIndex = (note.item.publishedGeneralCustomerNotes || []).findIndex(n => n.publishedAt === note.publishedAt && n.text === note.text);
+                  return (
+                    <div key={idx} style={{ padding: 10, background: '#fff', borderRadius: 4, marginBottom: 6, border: '1px solid #e3f2fd', borderLeft: '4px solid #1565c0' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, lineHeight: 1.5 }}>{note.text}</div>
+                          <div style={{ fontSize: 11, color: '#999', marginTop: 4 }}>{note.quoteLabel} — {formatNoteDate(note.publishedAt)} by {note.publishedBy}</div>
+                        </div>
+                        <button onClick={() => handleDelete(note.item, 'publishedGeneralCustomerNotes', noteIndex)} style={{ padding: '3px 10px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer', marginLeft: 8 }}>🗑️</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Quotes & Contracts */}
       <div style={{ ...S.box, marginTop: 24 }}>
