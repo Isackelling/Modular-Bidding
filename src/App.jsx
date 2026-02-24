@@ -2944,7 +2944,7 @@ function AppInner() {
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Length</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.houseLength}'</div></div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Type</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.singleDouble}</div></div>
                 </div>
-                <div style={S.row}><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>I-Beam</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div></div></div>
+                <div style={S.row}><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>I-Beam</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div></div><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Walk-In Doors</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.walkDoors || '2'}</div></div></div>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3045,7 +3045,7 @@ function AppInner() {
               // Admin view - full editing
               <>
                 <div style={S.row}><div><label style={S.label}>Width</label><input style={S.input} type="number" value={newQ.houseWidth} onChange={e => updateField('houseWidth', e.target.value)} /></div><div><label style={S.label}>Length</label><input style={S.input} type="number" value={newQ.houseLength} onChange={e => updateField('houseLength', e.target.value)} /></div><div><label style={S.label}>Type</label><select style={S.select} value={newQ.singleDouble} onChange={e => updateField('singleDouble', e.target.value)}><option value="Single">Single</option><option value="Double">Double</option></select></div></div>
-                <div style={S.row}><div><label style={S.label}>I-Beam</label><input style={{ ...S.input, background: '#f8f9fa' }} value={`${newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"`} readOnly /></div></div>
+                <div style={S.row}><div><label style={S.label}>I-Beam</label><input style={{ ...S.input, background: '#f8f9fa' }} value={`${newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"`} readOnly /></div><div><label style={S.label}># of Walk-In Doors</label><input style={S.input} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" /></div></div>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3254,20 +3254,6 @@ function AppInner() {
               })}
             </div>
 
-            <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #e0e0e0' }}>
-              <div style={{ maxWidth: '300px' }}>
-                <label style={S.label}># of Walk-In Doors</label>
-                <input
-                  style={S.input}
-                  type="number"
-                  min="0"
-                  value={newQ.walkDoors || ''}
-                  onChange={e => updateField('walkDoors', e.target.value)}
-                  placeholder="Enter number of doors"
-                />
-                <p style={{ fontSize: 11, color: '#666', marginTop: 4 }}>Enter the total number of walk-in doors for this installation</p>
-              </div>
-            </div>
           </div>
 
           <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Professional Services</h2>
