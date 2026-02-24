@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: '/Modular-Bidding-Preview/',
+  base: '/Modular-Bidding/',
   plugins: [react()],
   server: {
     port: 3001,
