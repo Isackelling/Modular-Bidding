@@ -5,18 +5,20 @@ export const ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer
 
 // Services displayed in Install Services section (not Professional Services section)
 export const SUMMARY_SERVICES = [
+  // MN Licensed services first
   'installation_of_home',
-  'drywall',
-  'painting',
-  'carpet',
-  'dumpster',
   'siding_install',
-  'interior_trim_out',
   'permits',
   'electric_connection',
   'concrete_skirting',
   'plumbing',
-  'gas_propane'
+  'gas_propane',
+  // Other install services
+  'drywall',
+  'painting',
+  'carpet',
+  'dumpster',
+  'interior_trim_out'
 ];
 
 // Services requiring installer's license per MN state statute

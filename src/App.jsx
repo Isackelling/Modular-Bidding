@@ -3263,7 +3263,11 @@ function AppInner() {
             <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>Items marked with <span style={{ background: '#fff3cd', padding: '2px 6px', borderRadius: 3, fontSize: 11 }}>ALLOWANCE</span> are estimates that may vary based on site conditions. Final costs will be confirmed upon completion of work.</p>
             <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden' }}>
               {(() => {
-                const proServices = Object.entries(services).filter(([k]) => !SUMMARY_SERVICES.includes(k) && !HOME_OPTIONS.includes(k));
+                const proServices = Object.entries(services).filter(([k]) => !SUMMARY_SERVICES.includes(k) && !HOME_OPTIONS.includes(k)).sort((a, b) => {
+                  const aAllow = ALLOWANCE_ITEMS.includes(a[0]) ? 0 : 1;
+                  const bAllow = ALLOWANCE_ITEMS.includes(b[0]) ? 0 : 1;
+                  return aAllow - bAllow;
+                });
                 return proServices.map(([k, svc], idx) => {
                   const sel = newQ.selectedServices?.[k];
                   const ovr = newQ.servicePriceOverrides?.[k];
