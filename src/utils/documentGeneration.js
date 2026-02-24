@@ -1895,9 +1895,9 @@ ${(() => {
     <div class="section-header-title">
       🔧 CREW NOTE SUMMARY (${crewTotal} Notes)
     </div>
-    <div class="section-toggle-btn" id="toggle-crew-note-summary">+</div>
+    <div class="section-toggle-btn" id="toggle-crew-note-summary">−</div>
   </div>
-  <div class="section-content" id="content-crew-note-summary">
+  <div class="section-content expanded" id="content-crew-note-summary">
 ${crewNotes.map(svc => `
     <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #ff6b35">
       <div style="font-size:18px;font-weight:800;color:#2c5530;margin-bottom:12px">${svc.name}</div>
@@ -1926,9 +1926,9 @@ ${crewNotes.map(svc => `
     <div class="section-header-title">
       💬 CUSTOMER NOTE SUMMARY (${custTotal} Notes)
     </div>
-    <div class="section-toggle-btn" id="toggle-customer-note-summary">+</div>
+    <div class="section-toggle-btn" id="toggle-customer-note-summary">−</div>
   </div>
-  <div class="section-content" id="content-customer-note-summary">
+  <div class="section-content expanded" id="content-customer-note-summary">
     <div style="background:#e3f2fd;border:2px solid #1565c0;border-radius:8px;padding:15px;margin-bottom:15px">
       <div style="font-size:14px;color:#1565c0;font-weight:700">ℹ️ These are the notes that were shared with the customer. Review so you know exactly what was communicated.</div>
     </div>

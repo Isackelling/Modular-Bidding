@@ -364,18 +364,42 @@ const CustomerView = ({
                 <div style={{ fontSize: 14, fontWeight: 700, color: noteMode === 'crew' ? '#e65100' : '#1565c0', marginBottom: 10 }}>
                   {noteMode === 'crew' ? '🔧 New Crew Note (staff only)' : '💬 New Customer Note (visible to customer)'}
                 </div>
-                <select
-                  value={noteQuoteId}
-                  onChange={e => setNoteQuoteId(e.target.value)}
-                  style={{ ...S.select, marginBottom: 10 }}
-                >
-                  <option value="">-- Select a quote/contract --</option>
-                  {allItems.map(item => (
-                    <option key={item.id} value={item.id}>{getQuoteLabel(item)}</option>
-                  ))}
-                </select>
-                {noteQuoteId && (
+
+                {!noteQuoteId ? (
                   <>
+                    <div style={{ fontSize: 13, color: '#666', marginBottom: 10 }}>Choose a quote or contract to add this note to:</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
+                      {allItems.map(item => {
+                        const num = item.id?.slice(-8).toUpperCase() || '';
+                        const isContract = allCustContracts.some(c => c.id === item.id);
+                        const model = item.homeModel && item.homeModel !== 'NONE' ? item.homeModel : 'Custom';
+                        const statusColors = { Draft: '#6c757d', Sent: '#0d6efd', Accepted: '#198754', 'Under Contract': '#2c5530', Completed: '#198754', Declined: '#dc3545', Cancelled: '#dc3545' };
+                        const accentColor = noteMode === 'crew' ? '#e65100' : '#1565c0';
+                        return (
+                          <div
+                            key={item.id}
+                            onClick={() => setNoteQuoteId(item.id)}
+                            style={{ padding: 14, background: '#fff', borderRadius: 8, border: '2px solid #dee2e6', cursor: 'pointer', transition: 'all 0.15s' }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = accentColor; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#dee2e6'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+                          >
+                            <div style={{ fontSize: 11, fontWeight: 700, color: isContract ? '#2c5530' : '#0d6efd', marginBottom: 4 }}>
+                              {isContract ? '📜 CONTRACT' : '📋 QUOTE'}
+                            </div>
+                            <div style={{ fontSize: 15, fontWeight: 700, color: '#222', marginBottom: 4 }}>{model}</div>
+                            <div style={{ fontSize: 12, color: '#666', marginBottom: 6 }}>#{num}</div>
+                            <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600, background: statusColors[item.status] || '#6c757d', color: '#fff' }}>{item.status}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                      <button onClick={() => setNoteQuoteId('')} style={{ padding: '4px 10px', background: 'transparent', border: '1px solid #999', borderRadius: 4, fontSize: 12, cursor: 'pointer', color: '#666' }}>← Back</button>
+                      <span style={{ fontSize: 13, color: '#666' }}>Adding note to: <strong>{getQuoteLabel(selectedItem)}</strong></span>
+                    </div>
                     <textarea
                       style={{ width: '100%', minHeight: 80, padding: 12, fontSize: 14, fontFamily: 'inherit', border: `1px solid ${noteMode === 'crew' ? '#ffb74d' : '#90caf9'}`, borderRadius: 4, resize: 'vertical' }}
                       placeholder={noteMode === 'crew' ? 'Type crew instructions...' : 'Type customer note...'}
