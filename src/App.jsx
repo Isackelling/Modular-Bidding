@@ -3203,6 +3203,7 @@ function AppInner() {
                     {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
                     <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
                       {svc.name}
+                      {ALLOWANCE_ITEMS.includes(k) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
                       {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
                     </span>
                     {sel ? (
