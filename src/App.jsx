@@ -174,7 +174,7 @@ function AppInner() {
   const [isCustomerPortal, setIsCustomerPortal] = useState(false);
   const [customerData, setCustomerData] = useState(null);
   const [userRole, setUserRole] = useState('sales');
-  const [originalRole, setOriginalRole] = useState('sales');
+  const [originalRole, setOriginalRole] = useState('admin');
   const [userName, setUserName] = useState('SHERMAN');
   const [loginU, setLoginU] = useState('');
   const [loginP, setLoginP] = useState('');
