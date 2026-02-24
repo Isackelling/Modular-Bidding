@@ -14,6 +14,9 @@ export const SUMMARY_SERVICES = [
   'interior_trim_out'
 ];
 
+// Installer services (displayed in separate Installer Services section)
+export const INSTALLER_SERVICES = ['permits', 'electric_connection', 'concrete_skirting', 'plumbing', 'gas_propane'];
+
 // Additional home options (displayed in House Specs section only)
 export const HOME_OPTIONS = [
   'lp_siding',
