@@ -909,28 +909,40 @@ function AppInner() {
         previousCustomerTotal = currentHistory[currentHistory.length - 1].newTotal;
       }
 
+      // Contracts: COs only adjust contingency fund, NEVER change contracted price
+      // Quotes: COs change the bottom line directly (no contingency fund yet)
+      const isContract = contracts.find(c => c.id === editingQuoteId);
       let contingencyUsed = 0;
       let customerCost = 0;
-      if (totalChange > 0) {
-        // Cost increase - use contingency first, then charge customer
-        if (runningContingency > 0) {
-          const contingencyToApply = Math.min(totalChange, runningContingency);
-          const proposedCustomerCost = totalChange - contingencyToApply;
-          const applyContingency = window.confirm(
+
+      if (isContract) {
+        // CONTRACT: entire change draws from contingency, customer total never changes
+        contingencyUsed = totalChange; // positive = drawn, negative = added back
+        customerCost = 0;
+        const remainingContingency = runningContingency - totalChange;
+        if (remainingContingency < 0) {
+          const proceed = window.confirm(
             `Change Order Cost: ${fmt(totalChange)}\n\n` +
             `Contingency Available: ${fmt(runningContingency)}\n` +
-            `Apply ${fmt(contingencyToApply)} from contingency?\n\n` +
-            `Customer Additional Cost: ${fmt(proposedCustomerCost)}\n` +
-            `Remaining Contingency: ${fmt(runningContingency - contingencyToApply)}\n\n` +
-            `Click OK to apply contingency, or Cancel to charge full amount to customer.`
+            `Remaining After CO: ${fmt(remainingContingency)}\n\n` +
+            `WARNING: This will overdraft the contingency fund by ${fmt(Math.abs(remainingContingency))}.\n` +
+            `The contracted price will NOT change.\n\n` +
+            `Proceed anyway?`
           );
-          if (applyContingency) { contingencyUsed = contingencyToApply; customerCost = proposedCustomerCost; }
-          else { customerCost = totalChange; }
-        } else { customerCost = totalChange; }
-      } else if (totalChange < 0) {
-        // Cost decrease - savings go back to contingency
-        contingencyUsed = totalChange; // Negative value = adds back to contingency
-        customerCost = 0;
+          if (!proceed) return;
+        } else {
+          const proceed = window.confirm(
+            `Change Order Cost: ${fmt(totalChange)}\n\n` +
+            `Contingency Available: ${fmt(runningContingency)}\n` +
+            `Remaining After CO: ${fmt(remainingContingency)}\n\n` +
+            `The contracted price will NOT change. This will be drawn from the contingency fund.\n\n` +
+            `Proceed?`
+          );
+          if (!proceed) return;
+        }
+      } else {
+        // QUOTE: changes affect the bottom line directly
+        customerCost = totalChange;
       }
 
       // Generate change order document
@@ -2348,22 +2360,34 @@ function AppInner() {
             )}
 
             {/* Scope of Work tab */}
-            {quoteTab === 'scope' && selContract && (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h3>Scope of Work</h3>
-                  {!scopeEditMode ? (
-                    <button style={S.btnSm} onClick={enterScopeEditMode}>Edit</button>
-                  ) : (
+            {quoteTab === 'scope' && selContract && (() => {
+              const scopeHtml = generateScopeOfWorkDocument(currentItem, custForQuote, services);
+              return (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <h3 style={{ margin: 0 }}>Scope of Work</h3>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={S.btnSm} onClick={saveScopeChanges}>Save</button>
-                      <button style={S.btn2} onClick={cancelScopeEdit}>Cancel</button>
+                      <button style={{ ...S.btnSm, background: '#6f42c1' }} onClick={() => {
+                        const w = window.open('', '_blank');
+                        if (w) { w.document.write(scopeHtml); w.document.close(); }
+                      }}>Open in New Tab</button>
+                      <button style={S.btnSm} onClick={() => {
+                        const blob = new Blob([scopeHtml], { type: 'text/html' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url; a.download = `Scope_of_Work_${DocumentUtils.getQuoteNum(currentItem)}.html`;
+                        a.click(); URL.revokeObjectURL(url);
+                      }}>Download</button>
                     </div>
-                  )}
+                  </div>
+                  <iframe
+                    srcDoc={scopeHtml}
+                    style={{ width: '100%', height: 'calc(100vh - 200px)', border: '1px solid #e0e0e0', borderRadius: 8 }}
+                    title="Scope of Work"
+                  />
                 </div>
-                <p style={{ color: '#666', fontSize: 14 }}>Scope of Work document for this contract.</p>
-              </div>
-            )}
+              );
+            })()}
           </div>
         )}
 
@@ -2372,31 +2396,14 @@ function AppInner() {
 
           {/* Change Order Banner */}
           {originalQuoteForComparison && (
-            <div style={{ background: '#fff3cd', border: '2px solid #ffc107', borderRadius: 8, padding: 16, marginBottom: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <h3 style={{ margin: 0, color: '#856404' }}>CHANGE ORDER #{newQ.changeOrderNum}{newQ.changeOrderVersion}</h3>
-                  <p style={{ margin: '4px 0 0', fontSize: 13, color: '#666' }}>
-                    Original Quote: #{DocumentUtils.getQuoteNum(originalQuoteForComparison)} |
-                    Original Total: {fmt(CalcHelpers.calculateQuoteTotals(originalQuoteForComparison, selCustomer, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates).totalWithContingency)}
-                  </p>
-                </div>
-                <button
-                  style={{ ...S.btnSm, background: '#2c5530' }}
-                  onClick={() => {
-                    const isContract = contracts.find(c => c.id === originalQuoteForComparison.id);
-                    if (isContract) {
-                      setSelContract(originalQuoteForComparison);
-                      setSelQuote(null);
-                    } else {
-                      setSelQuote(originalQuoteForComparison);
-                      setSelContract(null);
-                    }
-                    setView('viewQuote');
-                    setOriginalQuoteForComparison(null);
-                  }}
-                >View Original →</button>
-              </div>
+            <div style={{ marginBottom: 20 }}>
+              <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: '#1a1a1a' }}>
+                Change Order #{newQ.changeOrderNum}{newQ.changeOrderVersion}
+              </h1>
+              <p style={{ margin: '6px 0 0', fontSize: 14, color: '#888', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ color: '#ffc107', fontSize: 16 }}>&#9888;</span>
+                Original Quote: {originalQuoteForComparison.homeModel} — {fmt(CalcHelpers.calculateQuoteTotals(originalQuoteForComparison, selCustomer, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates).totalWithContingency)}
+              </p>
             </div>
           )}
 
@@ -2421,34 +2428,37 @@ function AppInner() {
 
           {/* Change Order Tracking Interface */}
           {originalQuoteForComparison ? (
-            <div>
-              {/* Change Order Items Section */}
-              <div style={{ ...S.box, marginBottom: 24, background: '#fffef0', border: '3px solid #ffc107' }}>
-                <h2 style={{ marginTop: 0, color: '#856404', borderBottom: '2px solid #ffc107', paddingBottom: 8 }}>
-                  Original Quote Items
-                </h2>
-                <p style={{ fontSize: 13, color: '#666', marginBottom: 16 }}>
-                  Review items from the accepted quote. You can delete items, adjust costs, or add new items below.
-                </p>
-
-                {/* Home Base Price */}
-                <div style={{ marginBottom: 24 }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, color: '#2c5530', marginBottom: 12 }}>Home</h3>
-                  <div style={{ background: '#fff', padding: 16, borderRadius: 8 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 100px', gap: 12, alignItems: 'center' }}>
-                      <div>
-                        <div style={{ fontWeight: 600 }}>Home Base Price</div>
-                        <div style={{ fontSize: 12, color: '#666' }}>{originalQuoteForComparison.homeModel}</div>
-                      </div>
-                      <div style={{ textAlign: 'right', color: '#666' }}>
+            <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+              {/* LEFT COLUMN - Services Table */}
+              <div style={{ flex: '1 1 0', minWidth: 0 }}>
+              <div style={{ ...S.box, marginBottom: 24 }}>
+                {/* Table Header */}
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #e0e0e0' }}>
+                      <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#666' }}>Service</th>
+                      <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#666' }}>Original</th>
+                      <th style={{ textAlign: 'center', padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#666' }}>Adj.</th>
+                      <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#666' }}>New Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* Home Base Price Row */}
+                    <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                      <td style={{ padding: '14px 16px', fontWeight: 600, fontSize: 14 }}>
+                        Installation of Home
+                        {changeOrderAdjustments['home_base_price']?.amount ? (
+                          <span style={{ marginLeft: 8, fontSize: 11, padding: '2px 10px', background: '#1976d2', color: '#fff', borderRadius: 10, fontWeight: 600 }}>ADJUSTED</span>
+                        ) : null}
+                      </td>
+                      <td style={{ textAlign: 'right', padding: '14px 16px', color: '#666', fontSize: 14 }}>
                         {fmt((parseFloat(originalQuoteForComparison.homeBasePrice) || 0) * HOME_MARKUP)}
-                      </div>
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '14px 16px' }}>
+                        {changeOrderAdjustments['home_base_price']?.amount ? (
                           <input
                             type="number"
-                            style={{ width: '80px', padding: '6px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }}
-                            placeholder="$0"
+                            style={{ width: 80, padding: '6px 8px', border: '2px solid #1976d2', borderRadius: 6, fontSize: 13, textAlign: 'center', fontWeight: 600, color: '#1976d2', background: '#e3f2fd' }}
                             value={changeOrderAdjustments['home_base_price']?.amount || ''}
                             onChange={e => {
                               const amount = parseFloat(e.target.value) || 0;
@@ -2457,42 +2467,27 @@ function AppInner() {
                                 home_base_price: { ...prev['home_base_price'], amount }
                               }));
                             }}
-                            disabled={changeOrderAdjustments['home_base_price']?.locked}
                           />
-                          <button
-                            onClick={() => setChangeOrderAdjustments(prev => ({
-                              ...prev,
-                              home_base_price: {
-                                ...prev['home_base_price'],
-                                locked: !prev['home_base_price']?.locked
-                              }
-                            }))}
-                            style={{
-                              background: changeOrderAdjustments['home_base_price']?.locked ? '#28a745' : '#6c757d',
-                              border: 'none',
-                              color: '#fff',
-                              padding: '6px 8px',
-                              borderRadius: 4,
-                              cursor: 'pointer',
-                              fontSize: 11,
-                              fontWeight: 600,
-                              whiteSpace: 'nowrap'
+                        ) : (
+                          <input
+                            type="number"
+                            placeholder="—"
+                            style={{ width: 80, padding: '6px 8px', border: '1px solid #e0e0e0', borderRadius: 6, fontSize: 13, textAlign: 'center', color: '#999', background: '#fafafa' }}
+                            value={changeOrderAdjustments['home_base_price']?.amount || ''}
+                            onChange={e => {
+                              const amount = parseFloat(e.target.value) || 0;
+                              setChangeOrderAdjustments(prev => ({
+                                ...prev,
+                                home_base_price: { ...prev['home_base_price'], amount }
+                              }));
                             }}
-                            title={changeOrderAdjustments['home_base_price']?.locked ? "Unlock to edit" : "Lock adjustment"}
-                          >
-                            {changeOrderAdjustments['home_base_price']?.locked ? '🔒' : '✓'}
-                          </button>
-                        </div>
-                      </div>
-                      <div style={{ textAlign: 'right', fontWeight: 700, color: '#2c5530' }}>
+                          />
+                        )}
+                      </td>
+                      <td style={{ textAlign: 'right', padding: '14px 16px', fontWeight: 700, fontSize: 14, color: '#1a1a1a' }}>
                         {fmt((parseFloat(originalQuoteForComparison.homeBasePrice) || 0) * HOME_MARKUP + (changeOrderAdjustments['home_base_price']?.amount || 0))}
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: 12, color: '#999' }}>Locked</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      </td>
+                    </tr>
 
                 {/* Services */}
                 {(() => {
@@ -2501,389 +2496,300 @@ function AppInner() {
                   const originalServiceKeys = Object.keys(originalQuoteForComparison.selectedServices || {}).filter(key => originalQuoteForComparison.selectedServices[key] && services[key]);
                   if (originalServiceKeys.length === 0) return null;
 
-                  return (
-                    <div style={{ marginBottom: 24 }}>
-                      <h3 style={{ fontSize: 16, fontWeight: 700, color: '#2c5530', marginBottom: 12 }}>Selected Services</h3>
-                      <div style={{ background: '#fff', padding: 16, borderRadius: 8 }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 100px', gap: 12, alignItems: 'center', fontWeight: 600, fontSize: 12, color: '#666', marginBottom: 12, paddingBottom: 8, borderBottom: '2px solid #eee' }}>
-                          <div>Service</div>
-                          <div style={{ textAlign: 'right' }}>Original Cost</div>
-                          <div style={{ textAlign: 'right' }}>Adjustment</div>
-                          <div style={{ textAlign: 'right' }}>New Cost</div>
-                          <div style={{ textAlign: 'center' }}>Actions</div>
-                        </div>
-
-                        {originalServiceKeys.map(serviceKey => {
+                  return originalServiceKeys.map(serviceKey => {
                           const service = services[serviceKey];
                           const isDeleted = changeOrderDeletions.includes(serviceKey);
                           const adjustment = changeOrderAdjustments[serviceKey]?.amount || 0;
+                          const hasAdjustment = adjustment !== 0;
 
                           const serviceInTotals = origTotals.svc.find(s => s.key === serviceKey);
                           const originalCost = serviceInTotals?.cost || 0;
                           const newCost = originalCost + adjustment;
 
                           return (
-                            <div key={serviceKey} style={{
-                              display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 100px', gap: 12, alignItems: 'center',
-                              padding: '8px 0', borderBottom: '1px solid #eee',
-                              opacity: isDeleted ? 0.4 : 1,
-                              textDecoration: isDeleted ? 'line-through' : 'none'
+                            <tr key={serviceKey} style={{
+                              borderBottom: '1px solid #f0f0f0',
+                              background: isDeleted ? '#fff5f5' : 'transparent',
+                              cursor: 'pointer'
+                            }} onClick={() => {
+                              if (isDeleted) {
+                                setChangeOrderDeletions(prev => prev.filter(id => id !== serviceKey));
+                              } else {
+                                setChangeOrderDeletions(prev => [...prev, serviceKey]);
+                              }
                             }}>
-                              <div>
-                                <span style={{ fontWeight: 600, fontSize: 13 }}>{service.name}</span>
-                                {ALLOWANCE_ITEMS.includes(serviceKey) && <span style={{ marginLeft: 6, fontSize: 10, padding: '1px 6px', background: '#fff3cd', color: '#856404', borderRadius: 10, fontWeight: 600 }}>Allowance</span>}
-                                {isDeleted && <span style={{ marginLeft: 8, fontSize: 11, color: '#dc3545', fontWeight: 600 }}>DELETED</span>}
-                              </div>
-                              <div style={{ textAlign: 'right', color: '#666' }}>{fmt(originalCost)}</div>
-                              <div>
-                                {!isDeleted && (
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                                    <input
-                                      type="number"
-                                      style={{ width: '80px', padding: '6px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }}
-                                      placeholder="$0"
-                                      value={changeOrderAdjustments[serviceKey]?.amount || ''}
-                                      onChange={e => {
-                                        const amount = parseFloat(e.target.value) || 0;
-                                        setChangeOrderAdjustments(prev => ({
-                                          ...prev,
-                                          [serviceKey]: { ...prev[serviceKey], amount }
-                                        }));
-                                      }}
-                                      disabled={changeOrderAdjustments[serviceKey]?.locked}
-                                    />
-                                    <button
-                                      onClick={() => setChangeOrderAdjustments(prev => ({
-                                        ...prev,
-                                        [serviceKey]: {
-                                          ...prev[serviceKey],
-                                          locked: !prev[serviceKey]?.locked
-                                        }
-                                      }))}
-                                      style={{
-                                        background: changeOrderAdjustments[serviceKey]?.locked ? '#28a745' : '#6c757d',
-                                        border: 'none',
-                                        color: '#fff',
-                                        padding: '6px 8px',
-                                        borderRadius: 4,
-                                        cursor: 'pointer',
-                                        fontSize: 11,
-                                        fontWeight: 600,
-                                        whiteSpace: 'nowrap'
-                                      }}
-                                      title={changeOrderAdjustments[serviceKey]?.locked ? "Unlock to edit" : "Lock adjustment"}
-                                    >
-                                      {changeOrderAdjustments[serviceKey]?.locked ? '🔒' : '✓'}
-                                    </button>
-                                  </div>
+                              <td style={{ padding: '14px 16px' }}>
+                                <span style={{
+                                  fontWeight: 600, fontSize: 14,
+                                  textDecoration: isDeleted ? 'line-through' : 'none',
+                                  color: isDeleted ? '#999' : '#1a1a1a'
+                                }}>{service.name}</span>
+                                {isDeleted && (
+                                  <span style={{ marginLeft: 8, fontSize: 11, padding: '2px 10px', background: '#dc3545', color: '#fff', borderRadius: 10, fontWeight: 600 }}>DELETED</span>
                                 )}
-                              </div>
-                              <div style={{ textAlign: 'right', fontWeight: 700, color: isDeleted ? '#dc3545' : '#2c5530' }}>
-                                {isDeleted ? '-' + fmt(originalCost) : fmt(newCost)}
-                              </div>
-                              <div style={{ textAlign: 'center' }}>
-                                <button
-                                  onClick={() => {
-                                    if (isDeleted) {
-                                      setChangeOrderDeletions(prev => prev.filter(id => id !== serviceKey));
-                                    } else {
-                                      setChangeOrderDeletions(prev => [...prev, serviceKey]);
-                                    }
-                                  }}
-                                  style={{
-                                    background: isDeleted ? '#28a745' : '#dc3545',
-                                    border: 'none',
-                                    color: '#fff',
-                                    padding: '6px 12px',
-                                    borderRadius: 4,
-                                    cursor: 'pointer',
-                                    fontSize: 11,
-                                    fontWeight: 600
-                                  }}
-                                >
-                                  {isDeleted ? 'Restore' : 'Delete'}
-                                </button>
-                              </div>
-                            </div>
+                                {!isDeleted && hasAdjustment && (
+                                  <span style={{ marginLeft: 8, fontSize: 11, padding: '2px 10px', background: '#1976d2', color: '#fff', borderRadius: 10, fontWeight: 600 }}>ADJUSTED</span>
+                                )}
+                              </td>
+                              <td style={{
+                                textAlign: 'right', padding: '14px 16px', fontSize: 14,
+                                color: isDeleted ? '#dc3545' : '#666',
+                                textDecoration: isDeleted ? 'line-through' : 'none'
+                              }}>
+                                {fmt(originalCost)}
+                              </td>
+                              <td style={{ textAlign: 'center', padding: '14px 16px' }} onClick={e => e.stopPropagation()}>
+                                {isDeleted ? (
+                                  <span style={{ color: '#999' }}>—</span>
+                                ) : (
+                                  <input
+                                    type="number"
+                                    placeholder="—"
+                                    style={{
+                                      width: 80, padding: '6px 8px', fontSize: 13, textAlign: 'center',
+                                      borderRadius: 6, fontWeight: hasAdjustment ? 600 : 400,
+                                      border: hasAdjustment ? '2px solid #1976d2' : '1px solid #e0e0e0',
+                                      color: hasAdjustment ? '#1976d2' : '#999',
+                                      background: hasAdjustment ? '#e3f2fd' : '#fafafa'
+                                    }}
+                                    value={changeOrderAdjustments[serviceKey]?.amount || ''}
+                                    onChange={e => {
+                                      const amount = parseFloat(e.target.value) || 0;
+                                      setChangeOrderAdjustments(prev => ({
+                                        ...prev,
+                                        [serviceKey]: { ...prev[serviceKey], amount }
+                                      }));
+                                    }}
+                                  />
+                                )}
+                              </td>
+                              <td style={{
+                                textAlign: 'right', padding: '14px 16px', fontWeight: 700, fontSize: 14,
+                                color: isDeleted ? '#dc3545' : '#1a1a1a',
+                                textDecoration: isDeleted ? 'line-through' : 'none'
+                              }}>
+                                {isDeleted ? fmt(originalCost) : fmt(newCost)}
+                              </td>
+                            </tr>
                           );
-                        })}
-                      </div>
+                        });
+                })()}
+
+                {/* Added Services rows in the same table */}
+                {(() => {
+                  const origTotalsForAdded = CalcHelpers.calculateQuoteTotals({...newQ, selectedServices: {...newQ.selectedServices}}, selCustomer, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates);
+                  return changeOrderAdditions.map(serviceKey => {
+                    const service = services[serviceKey];
+                    if (!service) return null;
+                    const serviceInTotals = origTotalsForAdded.svc.find(s => s.key === serviceKey);
+                    const cost = serviceInTotals?.cost || 0;
+                    return (
+                      <tr key={serviceKey} style={{ borderBottom: '1px solid #f0f0f0', background: '#f0fdf4' }}>
+                        <td style={{ padding: '14px 16px' }}>
+                          <span style={{ fontWeight: 600, fontSize: 14, color: '#1a1a1a' }}>{service.name}</span>
+                          <span style={{ marginLeft: 8, fontSize: 11, padding: '2px 10px', background: '#28a745', color: '#fff', borderRadius: 10, fontWeight: 600 }}>NEW</span>
+                          <button
+                            style={{ marginLeft: 8, background: 'none', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, fontWeight: 600, textDecoration: 'underline' }}
+                            onClick={() => {
+                              setChangeOrderAdditions(prev => prev.filter(id => id !== serviceKey));
+                              setNewQ(prev => ({ ...prev, selectedServices: { ...prev.selectedServices, [serviceKey]: false } }));
+                            }}
+                          >remove</button>
+                        </td>
+                        <td style={{ textAlign: 'right', padding: '14px 16px', color: '#999', fontSize: 14 }}>—</td>
+                        <td style={{ textAlign: 'center', padding: '14px 16px', color: '#28a745', fontWeight: 600, fontSize: 14 }}>+{fmt(cost)}</td>
+                        <td style={{ textAlign: 'right', padding: '14px 16px', fontWeight: 700, fontSize: 14, color: '#28a745' }}>{fmt(cost)}</td>
+                      </tr>
+                    );
+                  });
+                })()}
+                  </tbody>
+                </table>
+
+                {/* Add Service Dropdown below table */}
+                {(() => {
+                  const originalServiceKeys = Object.keys(originalQuoteForComparison.selectedServices || {}).filter(key => originalQuoteForComparison.selectedServices[key]);
+                  const availableServiceKeys = Object.keys(services).filter(key => !originalServiceKeys.includes(key) && !changeOrderAdditions.includes(key));
+                  if (availableServiceKeys.length === 0) return null;
+                  return (
+                    <div style={{ padding: '16px', borderTop: '2px solid #e0e0e0' }}>
+                      <select
+                        style={{ ...S.select, fontSize: 13, maxWidth: 300 }}
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            const serviceKey = e.target.value;
+                            setChangeOrderAdditions(prev => [...prev, serviceKey]);
+                            setNewQ(prev => ({ ...prev, selectedServices: { ...prev.selectedServices, [serviceKey]: true } }));
+                            e.target.value = '';
+                          }
+                        }}
+                      >
+                        <option value="">+ Add a service...</option>
+                        {availableServiceKeys.map(key => (
+                          <option key={key} value={key}>{services[key].name}</option>
+                        ))}
+                      </select>
                     </div>
                   );
                 })()}
+              </div>
+              </div>{/* END LEFT COLUMN */}
 
-                {/* Add New Services */}
-                <div style={{ marginBottom: 24 }}>
-                  <h3 style={{ fontSize: 16, fontWeight: 700, color: '#2c5530', marginBottom: 12 }}>Add New Services</h3>
-                  <div style={{ background: '#fff', padding: 16, borderRadius: 8 }}>
-                    {(() => {
-                      const originalServiceKeys = Object.keys(originalQuoteForComparison.selectedServices || {}).filter(key => originalQuoteForComparison.selectedServices[key]);
-                      const availableServiceKeys = Object.keys(services).filter(key => !originalServiceKeys.includes(key) && !changeOrderAdditions.includes(key));
-
-                      return (
-                        <div>
-                          {availableServiceKeys.length > 0 && (
-                            <div style={{ marginBottom: 16 }}>
-                              <label style={{ ...S.label, fontSize: 13 }}>Select Service to Add</label>
-                              <select
-                                style={{ ...S.select, fontSize: 13 }}
-                                onChange={(e) => {
-                                  if (e.target.value) {
-                                    const serviceKey = e.target.value;
-                                    setChangeOrderAdditions(prev => [...prev, serviceKey]);
-                                    setNewQ(prev => ({
-                                      ...prev,
-                                      selectedServices: {
-                                        ...prev.selectedServices,
-                                        [serviceKey]: true
-                                      }
-                                    }));
-                                    e.target.value = '';
-                                  }
-                                }}
-                              >
-                                <option value="">-- Select a service to add --</option>
-                                {availableServiceKeys.map(key => (
-                                  <option key={key} value={key}>{services[key].name}{ALLOWANCE_ITEMS.includes(key) ? ' (Allowance)' : ''}</option>
-                                ))}
-                              </select>
-                            </div>
-                          )}
-
-                          {changeOrderAdditions.length > 0 && (
-                            <div style={{ background: '#fff', padding: 12, borderRadius: 6 }}>
-                              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 8, color: '#2c5530' }}>Added Services:</div>
-                              {changeOrderAdditions.map(serviceKey => {
-                                const service = services[serviceKey];
-                                if (!service) return null;
-
-                                return (
-                                  <div key={serviceKey} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                                    <div>
-                                      <span style={{ fontWeight: 600, fontSize: 13 }}>{service.name}</span>
-                                      {ALLOWANCE_ITEMS.includes(serviceKey) && <span style={{ marginLeft: 6, fontSize: 10, padding: '1px 6px', background: '#fff3cd', color: '#856404', borderRadius: 10, fontWeight: 600 }}>Allowance</span>}
-                                      <span style={{ marginLeft: 8, fontSize: 11, color: '#28a745', fontWeight: 600 }}>NEW</span>
-                                    </div>
-                                    <button
-                                      style={{ background: '#dc3545', border: 'none', color: '#fff', padding: '4px 8px', borderRadius: 4, cursor: 'pointer', fontSize: 11 }}
-                                      onClick={() => {
-                                        setChangeOrderAdditions(prev => prev.filter(id => id !== serviceKey));
-                                        setNewQ(prev => ({
-                                          ...prev,
-                                          selectedServices: {
-                                            ...prev.selectedServices,
-                                            [serviceKey]: false
-                                          }
-                                        }));
-                                      }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </div>
-
-                {/* Change Order Summary */}
+              {/* RIGHT COLUMN - Summary Sidebar */}
+              <div style={{ width: 340, flexShrink: 0, position: 'sticky', top: 80, alignSelf: 'flex-start' }}>
                 {(() => {
                   const origTotals = CalcHelpers.calculateQuoteTotals(originalQuoteForComparison, selCustomer, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates);
+                  const addedTotals = CalcHelpers.calculateQuoteTotals({...newQ, selectedServices: {...newQ.selectedServices}}, selCustomer, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates);
 
                   const adjustmentTotal = Object.values(changeOrderAdjustments).reduce((sum, adj) => sum + (adj.amount || 0), 0);
-
                   const deletedTotal = changeOrderDeletions.reduce((sum, serviceKey) => {
-                    const serviceInTotals = origTotals.svc.find(s => s.key === serviceKey);
-                    const cost = serviceInTotals?.cost || 0;
-                    return sum + cost;
+                    const svc = origTotals.svc.find(s => s.key === serviceKey);
+                    return sum + (svc?.cost || 0);
                   }, 0);
+                  const addedTotal = changeOrderAdditions.reduce((sum, key) => {
+                    const svc = addedTotals.svc.find(s => s.key === key);
+                    return sum + (svc?.cost || 0);
+                  }, 0);
+                  const netChange = adjustmentTotal - deletedTotal + addedTotal;
 
-                  const netChange = adjustmentTotal - deletedTotal;
-                  const newTotal = origTotals.totalWithContingency + netChange;
+                  // Contingency preview — contracts: COs only affect contingency, never the contracted price
+                  const isContractCO = contracts.find(c => c.id === editingQuoteId);
+                  const currentHistory = newQ.changeOrderHistory || [];
+                  let previewContingency = origTotals.contingency || 0;
+                  currentHistory.forEach(co => { if (co.contingencyUsed) previewContingency -= co.contingencyUsed; });
+                  let previousTotal = origTotals.totalWithContingency;
+                  if (currentHistory.length > 0) previousTotal = currentHistory[currentHistory.length - 1].newTotal;
+                  // For contracts: entire netChange draws from contingency, customer total unchanged
+                  // For quotes: netChange directly affects the total
+                  const previewRemainingContingency = previewContingency - netChange;
+                  const previewNewTotal = isContractCO ? previousTotal : previousTotal + netChange;
+                  const isOverdrafted = isContractCO && previewRemainingContingency < 0;
 
                   return (
-                    <div style={{ marginTop: 24, padding: 20, background: '#2c5530', color: '#fff', borderRadius: 8 }}>
-                      <h3 style={{ marginTop: 0, fontSize: 18, fontWeight: 700 }}>Change Order Summary</h3>
+                    <div style={{ background: '#2c5530', color: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+                      <h3 style={{ margin: '0 0 20px', fontSize: 14, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}>
+                        CHANGE ORDER SUMMARY
+                      </h3>
 
                       {/* Original Total */}
-                      <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 600 }}>
-                          <div>Original Total:</div>
-                          <div>{fmt(origTotals.totalWithContingency)}</div>
-                        </div>
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>Original Total</div>
+                        <div style={{ fontSize: 24, fontWeight: 800 }}>{fmt(origTotals.totalWithContingency)}</div>
                       </div>
 
                       {/* Deleted Items */}
                       {changeOrderDeletions.length > 0 && (
-                        <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
-                          <div style={{ fontSize: 15, fontWeight: 700, color: '#ff6b6b', marginBottom: 12 }}>DELETED ITEMS:</div>
+                        <div style={{ marginBottom: 16 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: '#ff6b6b', letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Deleted Items:</div>
                           {changeOrderDeletions.map(serviceKey => {
                             const service = services[serviceKey];
-                            const serviceInTotals = origTotals.svc.find(s => s.key === serviceKey);
-                            const cost = serviceInTotals?.cost || 0;
+                            const svc = origTotals.svc.find(s => s.key === serviceKey);
                             return (
-                              <div key={serviceKey} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginLeft: 16, marginBottom: 6, opacity: 0.9 }}>
-                                <div>{service?.name || serviceKey}</div>
-                                <div style={{ color: '#ff6b6b', fontWeight: 600 }}>-{fmt(cost)}</div>
+                              <div key={serviceKey} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
+                                <div style={{ opacity: 0.9 }}>{service?.name || serviceKey}</div>
+                                <div style={{ color: '#ff6b6b', fontWeight: 700 }}>-{fmt(svc?.cost || 0)}</div>
                               </div>
                             );
                           })}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontWeight: 700, marginTop: 8, paddingTop: 8, borderTop: '1px dashed rgba(255,255,255,0.3)' }}>
-                            <div>Subtotal Deleted:</div>
-                            <div style={{ color: '#ff6b6b' }}>-{fmt(deletedTotal)}</div>
-                          </div>
                         </div>
                       )}
 
                       {/* Adjusted Items */}
                       {Object.keys(changeOrderAdjustments).filter(key => changeOrderAdjustments[key]?.amount !== 0).length > 0 && (
-                        <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
-                          <div style={{ fontSize: 15, fontWeight: 700, color: '#00bcd4', marginBottom: 12 }}>ADJUSTED ITEMS:</div>
+                        <div style={{ marginBottom: 16 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: '#ffc107', letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Adjusted Items:</div>
                           {Object.keys(changeOrderAdjustments).filter(key => changeOrderAdjustments[key]?.amount !== 0).map(key => {
-                            const adjustment = changeOrderAdjustments[key];
-                            let itemName = key;
-                            let originalCost = 0;
-
-                            if (key === 'home_base_price') {
-                              itemName = 'Home Base Price';
-                              originalCost = (parseFloat(originalQuoteForComparison.homeBasePrice) || 0) * HOME_MARKUP;
-                            } else {
-                              const service = services[key];
-                              itemName = service?.name || key;
-                              const serviceInTotals = origTotals.svc.find(s => s.key === key);
-                              originalCost = serviceInTotals?.cost || 0;
-                            }
-
-                            const newCost = originalCost + adjustment.amount;
-
+                            const adj = changeOrderAdjustments[key];
+                            let itemName = key === 'home_base_price' ? 'Home Base Price' : (services[key]?.name || key);
+                            let originalCost = key === 'home_base_price'
+                              ? (parseFloat(originalQuoteForComparison.homeBasePrice) || 0) * HOME_MARKUP
+                              : (origTotals.svc.find(s => s.key === key)?.cost || 0);
                             return (
-                              <div key={key} style={{ marginLeft: 16, marginBottom: 10 }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
-                                  <div>{itemName}</div>
-                                  <div style={{ color: adjustment.amount > 0 ? '#90ee90' : '#ff6b6b', fontWeight: 600 }}>
-                                    {adjustment.amount > 0 ? '+' : ''}{fmt(adjustment.amount)}
+                              <div key={key} style={{ marginBottom: 6 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+                                  <div style={{ opacity: 0.9 }}>{itemName}</div>
+                                  <div style={{ color: adj.amount > 0 ? '#90ee90' : '#ff6b6b', fontWeight: 700 }}>
+                                    {adj.amount > 0 ? '+' : ''}{fmt(adj.amount)}
                                   </div>
                                 </div>
-                                <div style={{ fontSize: 11, opacity: 0.8, marginLeft: 8 }}>
-                                  {fmt(originalCost)} → {fmt(newCost)}
+                                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>
+                                  {fmt(originalCost)} &rarr; {fmt(originalCost + adj.amount)}
                                 </div>
                               </div>
                             );
                           })}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontWeight: 700, marginTop: 8, paddingTop: 8, borderTop: '1px dashed rgba(255,255,255,0.3)' }}>
-                            <div>Subtotal Adjustments:</div>
-                            <div style={{ color: adjustmentTotal > 0 ? '#90ee90' : '#ff6b6b' }}>
-                              {adjustmentTotal > 0 ? '+' : ''}{fmt(adjustmentTotal)}
-                            </div>
-                          </div>
                         </div>
                       )}
 
                       {/* Added Items */}
                       {changeOrderAdditions.length > 0 && (
-                        <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
-                          <div style={{ fontSize: 15, fontWeight: 700, color: '#90ee90', marginBottom: 12 }}>ADDED ITEMS:</div>
+                        <div style={{ marginBottom: 16 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: '#90ee90', letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Added Items:</div>
                           {changeOrderAdditions.map(serviceKey => {
                             const service = services[serviceKey];
-                            const serviceInTotals = origTotals.svc.find(s => s.key === serviceKey);
-                            const cost = serviceInTotals?.cost || 0;
+                            const svc = addedTotals.svc.find(s => s.key === serviceKey);
                             return (
-                              <div key={serviceKey} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginLeft: 16, marginBottom: 6, opacity: 0.9 }}>
-                                <div>{service?.name || serviceKey}</div>
-                                <div style={{ color: '#90ee90', fontWeight: 600 }}>+{fmt(cost)}</div>
+                              <div key={serviceKey} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
+                                <div style={{ opacity: 0.9 }}>{service?.name || serviceKey}</div>
+                                <div style={{ color: '#90ee90', fontWeight: 700 }}>+{fmt(svc?.cost || 0)}</div>
                               </div>
                             );
                           })}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontWeight: 700, marginTop: 8, paddingTop: 8, borderTop: '1px dashed rgba(255,255,255,0.3)' }}>
-                            <div>Subtotal Added:</div>
-                            <div style={{ color: '#90ee90' }}>
-                              +{fmt(changeOrderAdditions.reduce((sum, key) => {
-                                const serviceInTotals = origTotals.svc.find(s => s.key === key);
-                                return sum + (serviceInTotals?.cost || 0);
-                              }, 0))}
-                            </div>
-                          </div>
                         </div>
                       )}
 
-                      {/* Net Change, Contingency Breakdown, and New Total */}
-                      {(() => {
-                        // Calculate running contingency for preview
-                        const currentHistory = newQ.changeOrderHistory || [];
-                        let previewContingency = origTotals.contingency || 0;
-                        currentHistory.forEach(co => { if (co.contingencyUsed) previewContingency -= co.contingencyUsed; });
+                      {/* Divider */}
+                      <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', margin: '16px 0' }} />
 
-                        let previousTotal = origTotals.totalWithContingency;
-                        if (currentHistory.length > 0) {
-                          previousTotal = currentHistory[currentHistory.length - 1].newTotal;
-                        }
-
-                        const previewContingencyToApply = netChange > 0 ? Math.min(netChange, Math.max(0, previewContingency)) : 0;
-                        const previewCustomerCost = netChange > 0 ? netChange - previewContingencyToApply : 0;
-                        const previewNewTotal = previousTotal + previewCustomerCost;
-                        const previewRemainingContingency = netChange < 0
-                          ? previewContingency + Math.abs(netChange)
-                          : previewContingency - previewContingencyToApply;
-
-                        return (
-                          <div style={{ marginTop: 16, paddingTop: 16, borderTop: '2px solid rgba(255,255,255,0.4)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700, marginBottom: 12 }}>
-                              <div>Change Order Cost:</div>
-                              <div style={{ fontSize: 18, fontWeight: 800, color: netChange >= 0 ? '#ff6b6b' : '#90ee90' }}>
-                                {netChange >= 0 ? '+' : ''}{fmt(netChange)}
-                              </div>
-                            </div>
-
-                            {/* Contingency Breakdown */}
-                            <div style={{ padding: 12, background: 'rgba(255,255,255,0.1)', borderRadius: 6, marginBottom: 12 }}>
-                              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: '#ffc107' }}>Contingency Fund:</div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
-                                <span>Available Contingency:</span>
-                                <span style={{ fontWeight: 600 }}>{fmt(previewContingency)}</span>
-                              </div>
-                              {netChange > 0 && previewContingencyToApply > 0 && (
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4, color: '#ffc107' }}>
-                                  <span>Drawn from Contingency:</span>
-                                  <span style={{ fontWeight: 600 }}>-{fmt(previewContingencyToApply)}</span>
-                                </div>
-                              )}
-                              {netChange < 0 && (
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4, color: '#90ee90' }}>
-                                  <span>Savings Added to Contingency:</span>
-                                  <span style={{ fontWeight: 600 }}>+{fmt(Math.abs(netChange))}</span>
-                                </div>
-                              )}
-                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, paddingTop: 4, borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-                                <span>Remaining Contingency:</span>
-                                <span style={{ fontWeight: 700, color: previewRemainingContingency > 0 ? '#90ee90' : '#ff6b6b' }}>{fmt(previewRemainingContingency)}</span>
-                              </div>
-                            </div>
-
-                            {/* Customer Cost */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700, marginBottom: 12, padding: '8px 0', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-                              <div>Customer Additional Cost:</div>
-                              <div style={{ fontSize: 18, fontWeight: 800, color: previewCustomerCost > 0 ? '#ff6b6b' : '#90ee90' }}>
-                                {previewCustomerCost > 0 ? fmt(previewCustomerCost) : '$0.00'}
-                              </div>
-                            </div>
-
-                            {/* New Customer Total */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 18, fontWeight: 800, paddingTop: 12, borderTop: '2px solid rgba(255,255,255,0.4)' }}>
-                              <div>New Customer Total:</div>
-                              <div style={{ fontSize: 24, fontWeight: 900 }}>{fmt(previewNewTotal)}</div>
-                            </div>
-                            {previewCustomerCost === 0 && netChange > 0 && (
-                              <div style={{ fontSize: 12, color: '#90ee90', textAlign: 'right', marginTop: 4 }}>
-                                Fully covered by contingency fund
-                              </div>
-                            )}
+                      {/* Contingency Fund (compact) — only shown for contracts */}
+                      {isContractCO && (
+                      <div style={{ padding: 12, background: isOverdrafted ? 'rgba(255,80,80,0.15)' : 'rgba(255,255,255,0.08)', borderRadius: 8, marginBottom: 16, fontSize: 12, border: isOverdrafted ? '1px solid rgba(255,80,80,0.4)' : 'none' }}>
+                        <div style={{ fontWeight: 600, marginBottom: 6, color: '#ffc107', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.5 }}>Contingency Fund</div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                          <span style={{ opacity: 0.8 }}>Available:</span>
+                          <span style={{ fontWeight: 600 }}>{fmt(previewContingency)}</span>
+                        </div>
+                        {netChange > 0 && (
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3, color: '#ffc107' }}>
+                            <span>Drawn:</span>
+                            <span style={{ fontWeight: 600 }}>-{fmt(netChange)}</span>
                           </div>
-                        );
-                      })()}
+                        )}
+                        {netChange < 0 && (
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3, color: '#90ee90' }}>
+                            <span>Savings added:</span>
+                            <span style={{ fontWeight: 600 }}>+{fmt(Math.abs(netChange))}</span>
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 4, borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+                          <span style={{ opacity: 0.8 }}>Remaining:</span>
+                          <span style={{ fontWeight: 700, color: previewRemainingContingency > 0 ? '#90ee90' : '#ff6b6b' }}>{fmt(previewRemainingContingency)}</span>
+                        </div>
+                        {isOverdrafted && (
+                          <div style={{ marginTop: 8, padding: '6px 8px', background: 'rgba(255,80,80,0.2)', borderRadius: 4, color: '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
+                            WARNING: Contingency overdrafted by {fmt(Math.abs(previewRemainingContingency))}
+                          </div>
+                        )}
+                      </div>
+                      )}
+
+                      {/* New Total */}
+                      <div>
+                        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
+                          {isContractCO ? 'Contracted Price' : 'New Total'}
+                        </div>
+                        <div style={{ fontSize: 32, fontWeight: 900, lineHeight: 1.2 }}>{fmt(previewNewTotal)}</div>
+                        {isContractCO && netChange !== 0 && (
+                          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
+                            Contracted price unchanged — {netChange > 0 ? 'cost' : 'savings'} applied to contingency
+                          </div>
+                        )}
+                        {!isContractCO && netChange !== 0 && (
+                          <div style={{ fontSize: 14, fontWeight: 700, marginTop: 4, color: netChange < 0 ? '#90ee90' : '#ff6b6b' }}>
+                            {netChange < 0 ? fmt(Math.abs(netChange)) + ' savings' : '+' + fmt(netChange) + ' increase'}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
                 })()}
