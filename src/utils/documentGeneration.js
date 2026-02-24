@@ -1834,6 +1834,126 @@ ${(quote.publishedServiceCrewNotes?.foundation || []).length > 0 || quote.servic
   </ul>
 </div>
 
+${(() => {
+  // --- CREW NOTE SUMMARY ---
+  const crewNotes = [];
+
+  // General project crew notes
+  const generalCrewNotes = quote.publishedGeneralCrewNotes || [];
+  if (generalCrewNotes.length > 0) crewNotes.push({ name: 'General Project Notes', notes: generalCrewNotes });
+
+  // Home selection crew notes
+  const homeCrewNotes = quote.publishedServiceCrewNotes?.home_selection || [];
+  if (homeCrewNotes.length > 0) crewNotes.push({ name: 'Home Selection', notes: homeCrewNotes });
+
+  // Foundation crew notes
+  const foundCrewNotes = quote.publishedServiceCrewNotes?.foundation || [];
+  if (foundCrewNotes.length > 0) crewNotes.push({ name: 'Foundation', notes: foundCrewNotes });
+
+  // All service arrays - crew notes
+  [installServices, professionalServices, homeSpecAdditions, otherServices].flat().forEach(svc => {
+    if (svc.publishedCrewNotes.length > 0) {
+      crewNotes.push({ name: svc.name, notes: svc.publishedCrewNotes });
+    }
+  });
+
+  const crewTotal = crewNotes.reduce((c, s) => c + s.notes.length, 0);
+
+  // --- CUSTOMER NOTE SUMMARY ---
+  const custNotes = [];
+
+  // General project customer notes
+  const generalCustNotes = quote.publishedGeneralCustomerNotes || [];
+  if (generalCustNotes.length > 0) custNotes.push({ name: 'General Project Notes', notes: generalCustNotes });
+
+  // Home selection customer notes
+  const homeCustNotes = quote.publishedServiceNotes?.home_selection || [];
+  if (homeCustNotes.length > 0) custNotes.push({ name: 'Home Selection', notes: homeCustNotes });
+
+  // Foundation customer notes
+  const foundCustNotes = quote.publishedServiceNotes?.foundation || [];
+  if (foundCustNotes.length > 0) custNotes.push({ name: 'Foundation', notes: foundCustNotes });
+
+  // All service arrays - customer notes
+  [installServices, professionalServices, homeSpecAdditions, otherServices].flat().forEach(svc => {
+    const svcCustNotes = quote.publishedServiceNotes?.[svc.key] || [];
+    if (svcCustNotes.length > 0) {
+      custNotes.push({ name: svc.name, notes: svcCustNotes });
+    }
+  });
+
+  const custTotal = custNotes.reduce((c, s) => c + s.notes.length, 0);
+
+  let html = '';
+
+  // Render Crew Note Summary
+  if (crewTotal > 0) {
+    html += `
+<!-- CREW NOTE SUMMARY -->
+<div class="collapsible-section">
+  <div class="section-header" onclick="toggleSection('crew-note-summary')" style="background:linear-gradient(135deg,#e65100 0%,#ff6b35 100%)">
+    <div class="section-header-title">
+      🔧 CREW NOTE SUMMARY (${crewTotal} Notes)
+    </div>
+    <div class="section-toggle-btn" id="toggle-crew-note-summary">+</div>
+  </div>
+  <div class="section-content" id="content-crew-note-summary">
+${crewNotes.map(svc => `
+    <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #ff6b35">
+      <div style="font-size:18px;font-weight:800;color:#2c5530;margin-bottom:12px">${svc.name}</div>
+      ${svc.notes.map(note => `
+      <div class="crew-note" style="margin-bottom:10px">
+        <div class="crew-note-title">🔧 CREW INSTRUCTIONS</div>
+        <div class="crew-note-content">${note.text}</div>
+        <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+          Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+        </div>
+      </div>
+      `).join('')}
+    </div>
+`).join('')}
+  </div>
+</div>
+`;
+  }
+
+  // Render Customer Note Summary
+  if (custTotal > 0) {
+    html += `
+<!-- CUSTOMER NOTE SUMMARY -->
+<div class="collapsible-section">
+  <div class="section-header" onclick="toggleSection('customer-note-summary')" style="background:linear-gradient(135deg,#1565c0 0%,#42a5f5 100%)">
+    <div class="section-header-title">
+      💬 CUSTOMER NOTE SUMMARY (${custTotal} Notes)
+    </div>
+    <div class="section-toggle-btn" id="toggle-customer-note-summary">+</div>
+  </div>
+  <div class="section-content" id="content-customer-note-summary">
+    <div style="background:#e3f2fd;border:2px solid #1565c0;border-radius:8px;padding:15px;margin-bottom:15px">
+      <div style="font-size:14px;color:#1565c0;font-weight:700">ℹ️ These are the notes that were shared with the customer. Review so you know exactly what was communicated.</div>
+    </div>
+${custNotes.map(svc => `
+    <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #1565c0">
+      <div style="font-size:18px;font-weight:800;color:#1565c0;margin-bottom:12px">${svc.name}</div>
+      ${svc.notes.map(note => `
+      <div class="customer-note" style="margin-bottom:10px">
+        <div class="customer-note-title">💬 Told to Customer</div>
+        <div class="customer-note-content">${note.text}</div>
+        <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+          Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+        </div>
+      </div>
+      `).join('')}
+    </div>
+`).join('')}
+  </div>
+</div>
+`;
+  }
+
+  return html;
+})()}
+
 <!-- DELIVERY & INSPECTION CHECKLIST -->
 <div class="collapsible-section delivery-section">
   <div class="section-header" onclick="toggleSection('delivery-checklist')">

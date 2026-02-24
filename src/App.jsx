@@ -62,6 +62,8 @@ const emptyQuote = () => ({
   servicePriceOverrides: {}, serviceQuantities: {}, serviceDays: {},
   serviceNotes: {}, serviceCrewNotes: {},
   publishedServiceNotes: {}, publishedServiceCrewNotes: {},
+  generalCrewNote: '', generalCustomerNote: '',
+  publishedGeneralCrewNotes: [], publishedGeneralCustomerNotes: [],
   removedMaterials: {}, removedServices: {},
   landscapingMaterialCost: '', deckMaterialCost: '',
   customServices: [{ name: '', price: '' }],
@@ -714,6 +716,38 @@ function AppInner() {
       ...prev,
       publishedServiceCrewNotes: { ...prev.publishedServiceCrewNotes, [serviceKey]: publishedNotes.filter((_, idx) => idx !== noteIndex) }
     }));
+  };
+
+  // General (non-service-specific) note handlers
+  const handlePublishGeneralCrewNote = () => {
+    const noteText = newQ.generalCrewNote;
+    if (!noteText || !noteText.trim()) return;
+    const publishedNote = { text: noteText, publishedAt: new Date().toISOString(), publishedBy: userName || 'User' };
+    setNewQ(prev => ({ ...prev, publishedGeneralCrewNotes: [...(prev.publishedGeneralCrewNotes || []), publishedNote], generalCrewNote: '' }));
+  };
+  const handlePublishGeneralCustomerNote = () => {
+    const noteText = newQ.generalCustomerNote;
+    if (!noteText || !noteText.trim()) return;
+    const publishedNote = { text: noteText, publishedAt: new Date().toISOString(), publishedBy: userName || 'User' };
+    setNewQ(prev => ({ ...prev, publishedGeneralCustomerNotes: [...(prev.publishedGeneralCustomerNotes || []), publishedNote], generalCustomerNote: '' }));
+  };
+  const handleEditGeneralCrewNote = (noteIndex) => {
+    const notes = newQ.publishedGeneralCrewNotes || [];
+    const noteToEdit = notes[noteIndex];
+    if (!noteToEdit) return;
+    setNewQ(prev => ({ ...prev, generalCrewNote: noteToEdit.text, publishedGeneralCrewNotes: notes.filter((_, idx) => idx !== noteIndex) }));
+  };
+  const handleEditGeneralCustomerNote = (noteIndex) => {
+    const notes = newQ.publishedGeneralCustomerNotes || [];
+    const noteToEdit = notes[noteIndex];
+    if (!noteToEdit) return;
+    setNewQ(prev => ({ ...prev, generalCustomerNote: noteToEdit.text, publishedGeneralCustomerNotes: notes.filter((_, idx) => idx !== noteIndex) }));
+  };
+  const handleDeleteGeneralCrewNote = (noteIndex) => {
+    setNewQ(prev => ({ ...prev, publishedGeneralCrewNotes: (prev.publishedGeneralCrewNotes || []).filter((_, idx) => idx !== noteIndex) }));
+  };
+  const handleDeleteGeneralCustomerNote = (noteIndex) => {
+    setNewQ(prev => ({ ...prev, publishedGeneralCustomerNotes: (prev.publishedGeneralCustomerNotes || []).filter((_, idx) => idx !== noteIndex) }));
   };
 
   // ======================================================================
@@ -2813,6 +2847,84 @@ function AppInner() {
                   <span>mi</span>
                 </div>
                 {mapsUrl && <a href={mapsUrl} target="_blank" style={{ ...S.btnSm, background: '#4285f4', marginTop: 8, fontSize: 11 }}>Maps</a>}
+              </div>
+            </div>
+          </div>
+
+          {/* General Project Notes */}
+          <div style={{ ...S.box, marginBottom: 24 }}>
+            <h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>General Project Notes</h2>
+            <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>Notes here are not tied to a specific service — they appear in the note summaries on the Crew Work Order</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              {/* General Crew Note */}
+              <div>
+                <div style={{ padding: '8px 12px', background: '#fff3e0', borderRadius: '4px 4px 0 0', fontWeight: 600, fontSize: 13, color: '#e65100' }}>
+                  🔧 Crew Note (staff only)
+                  {(newQ.publishedGeneralCrewNotes || []).length > 0 && ` (${newQ.publishedGeneralCrewNotes.length} published)`}
+                </div>
+                <div style={{ border: '1px solid #ffb74d', borderTop: 'none', borderRadius: '0 0 4px 4px' }}>
+                  <textarea
+                    style={{ width: '100%', minHeight: 80, padding: 12, fontSize: 14, fontFamily: 'inherit', border: 'none', borderBottom: newQ.generalCrewNote ? '1px solid #ffb74d' : 'none', resize: 'vertical' }}
+                    placeholder="Add general crew instructions..."
+                    value={newQ.generalCrewNote || ''}
+                    onChange={e => setNewQ(p => ({ ...p, generalCrewNote: e.target.value }))}
+                  />
+                  {newQ.generalCrewNote && (
+                    <div style={{ padding: '8px 12px', background: '#f5f5f5', display: 'flex', justifyContent: 'flex-end' }}>
+                      <button onClick={handlePublishGeneralCrewNote} style={{ padding: '6px 16px', background: '#e65100', color: '#fff', border: 'none', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>📤 Publish Note</button>
+                    </div>
+                  )}
+                  {(newQ.publishedGeneralCrewNotes || []).length > 0 && (
+                    <div style={{ padding: 12, background: '#f9f9f9', borderTop: '1px solid #ffb74d' }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#e65100', marginBottom: 8 }}>Published Notes:</div>
+                      {newQ.publishedGeneralCrewNotes.map((note, idx) => (
+                        <div key={idx} style={{ padding: 8, background: '#fff', borderRadius: 4, marginBottom: 6, border: '1px solid #fff3e0' }}>
+                          <div style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 4 }}>{note.text}</div>
+                          <div style={{ fontSize: 11, color: '#999', marginBottom: 6 }}>{new Date(note.publishedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })} by {note.publishedBy}</div>
+                          <div style={{ display: 'flex', gap: 8 }}>
+                            <button onClick={() => handleEditGeneralCrewNote(idx)} style={{ padding: '4px 12px', background: '#ef6c00', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>✏️ Edit</button>
+                            <button onClick={() => { if (window.confirm('Delete this published note?')) handleDeleteGeneralCrewNote(idx); }} style={{ padding: '4px 12px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>🗑️ Delete</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* General Customer Note */}
+              <div>
+                <div style={{ padding: '8px 12px', background: '#e3f2fd', borderRadius: '4px 4px 0 0', fontWeight: 600, fontSize: 13, color: '#1565c0' }}>
+                  💬 Customer Note (visible to customer)
+                  {(newQ.publishedGeneralCustomerNotes || []).length > 0 && ` (${newQ.publishedGeneralCustomerNotes.length} published)`}
+                </div>
+                <div style={{ border: '1px solid #90caf9', borderTop: 'none', borderRadius: '0 0 4px 4px' }}>
+                  <textarea
+                    style={{ width: '100%', minHeight: 80, padding: 12, fontSize: 14, fontFamily: 'inherit', border: 'none', borderBottom: newQ.generalCustomerNote ? '1px solid #90caf9' : 'none', resize: 'vertical' }}
+                    placeholder="Add general notes for the customer..."
+                    value={newQ.generalCustomerNote || ''}
+                    onChange={e => setNewQ(p => ({ ...p, generalCustomerNote: e.target.value }))}
+                  />
+                  {newQ.generalCustomerNote && (
+                    <div style={{ padding: '8px 12px', background: '#f5f5f5', display: 'flex', justifyContent: 'flex-end' }}>
+                      <button onClick={handlePublishGeneralCustomerNote} style={{ padding: '6px 16px', background: '#1565c0', color: '#fff', border: 'none', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>📤 Publish Note</button>
+                    </div>
+                  )}
+                  {(newQ.publishedGeneralCustomerNotes || []).length > 0 && (
+                    <div style={{ padding: 12, background: '#f9f9f9', borderTop: '1px solid #90caf9' }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#1565c0', marginBottom: 8 }}>Published Notes:</div>
+                      {newQ.publishedGeneralCustomerNotes.map((note, idx) => (
+                        <div key={idx} style={{ padding: 8, background: '#fff', borderRadius: 4, marginBottom: 6, border: '1px solid #e3f2fd' }}>
+                          <div style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 4 }}>{note.text}</div>
+                          <div style={{ fontSize: 11, color: '#999', marginBottom: 6 }}>{new Date(note.publishedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })} by {note.publishedBy}</div>
+                          <div style={{ display: 'flex', gap: 8 }}>
+                            <button onClick={() => handleEditGeneralCustomerNote(idx)} style={{ padding: '4px 12px', background: '#1976d2', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>✏️ Edit</button>
+                            <button onClick={() => { if (window.confirm('Delete this published note?')) handleDeleteGeneralCustomerNote(idx); }} style={{ padding: '4px 12px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>🗑️ Delete</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
