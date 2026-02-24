@@ -1539,66 +1539,39 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
     return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   };
 
-  // Get all install services (from the Install Services section)
-  const installServiceKeys = ['installation_of_home', 'axles', 'delivery_inspection', 'wrap_up'];
-  const installServices = Object.entries(quote.selectedServices || {})
-    .filter(([key, selected]) => selected && installServiceKeys.includes(key))
-    .map(([key]) => {
-      const service = services[key];
-      const svcCost = totals.svc.find(s => s.key === key);
-      return {
-        key,
-        name: service?.name || key,
-        description: service?.description || '',
-        customerNote: quote.serviceNotes?.[key] || '',
-        publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
-        publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
-        cost: svcCost?.cost || 0,
-        quantity: quote.serviceQuantities?.[key] || '',
-        days: quote.serviceDays?.[key] || ''
-      };
-    });
+  // Helper to build service data from a key
+  const buildServiceData = (key) => {
+    const service = services[key];
+    const svcCost = totals.svc.find(s => s.key === key);
+    return {
+      key,
+      name: service?.name || key,
+      description: service?.description || '',
+      customerNote: quote.serviceNotes?.[key] || '',
+      publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
+      publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
+      cost: svcCost?.cost || 0,
+      quantity: quote.serviceQuantities?.[key] || '',
+      days: quote.serviceDays?.[key] || ''
+    };
+  };
 
-  // Get all professional services (excluding HOME_OPTIONS)
-  const professionalServiceKeys = ['drywall', 'painting', 'carpet', 'siding_install', 'interior_trim_out',
-    'gutter_installation', 'septic_to_house', 'water_line_to_house', 'electric_connection', 'sand_pad',
-    'dumpster', 'plumbing', 'skirting', 'deck_install', 'gravel_driveway'];
+  // Crew work order install services: core installer obligations
+  const CREW_INSTALL_KEYS = ['installation_of_home', 'plumbing', 'gas_propane', 'electric_connection'];
+
+  const installServices = Object.entries(quote.selectedServices || {})
+    .filter(([key, selected]) => selected && CREW_INSTALL_KEYS.includes(key))
+    .map(([key]) => buildServiceData(key));
+
+  // Professional services: everything else (not install, not HOME_OPTIONS)
   const professionalServices = Object.entries(quote.selectedServices || {})
-    .filter(([key, selected]) => selected && professionalServiceKeys.includes(key))
-    .map(([key]) => {
-      const service = services[key];
-      const svcCost = totals.svc.find(s => s.key === key);
-      return {
-        key,
-        name: service?.name || key,
-        description: service?.description || '',
-        customerNote: quote.serviceNotes?.[key] || '',
-        publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
-        publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
-        cost: svcCost?.cost || 0,
-        quantity: quote.serviceQuantities?.[key] || '',
-        days: quote.serviceDays?.[key] || ''
-      };
-    });
+    .filter(([key, selected]) => selected && !CREW_INSTALL_KEYS.includes(key) && !HOME_OPTIONS.includes(key))
+    .map(([key]) => buildServiceData(key));
 
   // Get home spec additions (HOME_OPTIONS)
   const homeSpecAdditions = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && HOME_OPTIONS.includes(key))
-    .map(([key]) => {
-      const service = services[key];
-      const svcCost = totals.svc.find(s => s.key === key);
-      return {
-        key,
-        name: service?.name || key,
-        description: service?.description || '',
-        customerNote: quote.serviceNotes?.[key] || '',
-        publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
-        publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
-        cost: svcCost?.cost || 0,
-        quantity: quote.serviceQuantities?.[key] || '',
-        days: quote.serviceDays?.[key] || ''
-      };
-    });
+    .map(([key]) => buildServiceData(key));
 
   // Get other services (sewer, well, patio, landscaping, deck project)
   const otherServices = [];
@@ -1781,54 +1754,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margi
   </div>
 </div>
 
-${(quote.publishedServiceCrewNotes?.home_selection || []).length > 0 || quote.serviceNotes?.home_selection ? `
-<!-- HOME SELECTION NOTES -->
-<div class="service-card" style="border-left:5px solid #2c5530">
-  <div class="service-header" style="border-bottom:2px solid #e9ecef">
-    <div class="service-name">🏠 Home Selection Notes</div>
-  </div>
-  ${(quote.publishedServiceCrewNotes?.home_selection || []).length > 0 ? (quote.publishedServiceCrewNotes.home_selection.map(note => `
-  <div class="crew-note" style="margin-bottom:12px">
-    <div class="crew-note-title">🔧 CREW INSTRUCTIONS</div>
-    <div class="crew-note-content">${note.text}</div>
-    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
-      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
-    </div>
-  </div>
-  `).join('')) : ''}
-  ${quote.serviceNotes?.home_selection ? `
-  <div class="customer-note">
-    <div class="customer-note-title">💬 Customer Note (Reference Only)</div>
-    <div class="customer-note-content">${quote.serviceNotes.home_selection}</div>
-  </div>
-  ` : ''}
-</div>
-` : ''}
-
-${(quote.publishedServiceCrewNotes?.foundation || []).length > 0 || quote.serviceNotes?.foundation ? `
-<!-- FOUNDATION TYPE NOTES -->
-<div class="service-card" style="border-left:5px solid #dc3545">
-  <div class="service-header" style="border-bottom:2px solid #e9ecef">
-    <div class="service-name">🏗️ Foundation Type Notes</div>
-  </div>
-  ${(quote.publishedServiceCrewNotes?.foundation || []).length > 0 ? (quote.publishedServiceCrewNotes.foundation.map(note => `
-  <div class="crew-note" style="margin-bottom:12px">
-    <div class="crew-note-title">🔧 CREW INSTRUCTIONS</div>
-    <div class="crew-note-content">${note.text}</div>
-    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
-      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
-    </div>
-  </div>
-  `).join('')) : ''}
-  ${quote.serviceNotes?.foundation ? `
-  <div class="customer-note">
-    <div class="customer-note-title">💬 Customer Note (Reference Only)</div>
-    <div class="customer-note-content">${quote.serviceNotes.foundation}</div>
-  </div>
-  ` : ''}
-</div>
-` : ''}
-
 <!-- IMPORTANT NOTES -->
 <div class="important-box">
   <div class="important-title">⚠️ BEFORE STARTING WORK</div>
@@ -1896,61 +1821,41 @@ ${(() => {
   // Always render Crew Note Summary
   html += `
 <!-- CREW NOTE SUMMARY -->
-<div class="collapsible-section">
-  <div class="section-header" onclick="toggleSection('crew-note-summary')" style="background:linear-gradient(135deg,#e65100 0%,#ff6b35 100%)">
-    <div class="section-header-title">
-      🔧 CREW NOTE SUMMARY (${crewTotal} Notes)
-    </div>
-    <div class="section-toggle-btn" id="toggle-crew-note-summary">−</div>
-  </div>
-  <div class="section-content expanded" id="content-crew-note-summary">
+<div class="important-box" style="background:#fff3e0;border-color:#e65100">
+  <div class="important-title" style="color:#e65100">🔧 CREW NOTE SUMMARY (${crewTotal} Notes)</div>
 ${crewTotal > 0 ? crewNotes.map(svc => `
-    <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #ff6b35">
-      <div style="font-size:18px;font-weight:800;color:#2c5530;margin-bottom:12px">${svc.name}</div>
-      ${svc.notes.map(note => `
-      <div class="crew-note" style="margin-bottom:10px">
-        <div class="crew-note-title">🔧 CREW INSTRUCTIONS</div>
-        <div class="crew-note-content">${note.text}</div>
-        <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
-          Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
-        </div>
-      </div>
-      `).join('')}
+    <div style="margin-bottom:16px">
+      <div style="font-size:16px;font-weight:800;color:#e65100;margin-bottom:8px">${svc.name}</div>
+      <ul style="margin:0;padding-left:25px;line-height:1.8">
+        ${svc.notes.map(note => `
+        <li><strong>${note.text}</strong>
+          <span style="font-size:11px;color:#999;font-style:italic;margin-left:8px">— ${note.publishedBy}</span>
+        </li>
+        `).join('')}
+      </ul>
     </div>
-`).join('') : '<div style="padding:20px;text-align:center;color:#999;font-style:italic">No crew notes for this project</div>'}
-  </div>
+`).join('') : '<div style="padding:10px;text-align:center;color:#999;font-style:italic">No crew notes for this project</div>'}
 </div>
 `;
 
   // Always render Customer Note Summary
   html += `
 <!-- CUSTOMER NOTE SUMMARY -->
-<div class="collapsible-section">
-  <div class="section-header" onclick="toggleSection('customer-note-summary')" style="background:linear-gradient(135deg,#1565c0 0%,#42a5f5 100%)">
-    <div class="section-header-title">
-      💬 CUSTOMER NOTE SUMMARY (${custTotal} Notes)
-    </div>
-    <div class="section-toggle-btn" id="toggle-customer-note-summary">−</div>
-  </div>
-  <div class="section-content expanded" id="content-customer-note-summary">
-    <div style="background:#e3f2fd;border:2px solid #1565c0;border-radius:8px;padding:15px;margin-bottom:15px">
-      <div style="font-size:14px;color:#1565c0;font-weight:700">ℹ️ These are the notes that were shared with the customer. Review so you know exactly what was communicated.</div>
-    </div>
+<div class="important-box" style="background:#e3f2fd;border-color:#1565c0">
+  <div class="important-title" style="color:#1565c0">💬 CUSTOMER NOTE SUMMARY (${custTotal} Notes)</div>
+  <div style="font-size:13px;color:#1565c0;font-weight:600;margin-bottom:12px;font-style:italic">These are the notes that were shared with the customer. Review so you know exactly what was communicated.</div>
 ${custTotal > 0 ? custNotes.map(svc => `
-    <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #1565c0">
-      <div style="font-size:18px;font-weight:800;color:#1565c0;margin-bottom:12px">${svc.name}</div>
-      ${svc.notes.map(note => `
-      <div class="customer-note" style="margin-bottom:10px">
-        <div class="customer-note-title">💬 Told to Customer</div>
-        <div class="customer-note-content">${note.text}</div>
-        <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
-          Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
-        </div>
-      </div>
-      `).join('')}
+    <div style="margin-bottom:16px">
+      <div style="font-size:16px;font-weight:800;color:#1565c0;margin-bottom:8px">${svc.name}</div>
+      <ul style="margin:0;padding-left:25px;line-height:1.8">
+        ${svc.notes.map(note => `
+        <li><strong>${note.text}</strong>
+          <span style="font-size:11px;color:#999;font-style:italic;margin-left:8px">— ${note.publishedBy}</span>
+        </li>
+        `).join('')}
+      </ul>
     </div>
-`).join('') : '<div style="padding:20px;text-align:center;color:#999;font-style:italic">No customer notes for this project</div>'}
-  </div>
+`).join('') : '<div style="padding:10px;text-align:center;color:#999;font-style:italic">No customer notes for this project</div>'}
 </div>
 `;
 
