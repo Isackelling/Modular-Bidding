@@ -1886,9 +1886,8 @@ ${(() => {
 
   let html = '';
 
-  // Render Crew Note Summary
-  if (crewTotal > 0) {
-    html += `
+  // Always render Crew Note Summary
+  html += `
 <!-- CREW NOTE SUMMARY -->
 <div class="collapsible-section">
   <div class="section-header" onclick="toggleSection('crew-note-summary')" style="background:linear-gradient(135deg,#e65100 0%,#ff6b35 100%)">
@@ -1898,7 +1897,7 @@ ${(() => {
     <div class="section-toggle-btn" id="toggle-crew-note-summary">−</div>
   </div>
   <div class="section-content expanded" id="content-crew-note-summary">
-${crewNotes.map(svc => `
+${crewTotal > 0 ? crewNotes.map(svc => `
     <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #ff6b35">
       <div style="font-size:18px;font-weight:800;color:#2c5530;margin-bottom:12px">${svc.name}</div>
       ${svc.notes.map(note => `
@@ -1911,15 +1910,13 @@ ${crewNotes.map(svc => `
       </div>
       `).join('')}
     </div>
-`).join('')}
+`).join('') : '<div style="padding:20px;text-align:center;color:#999;font-style:italic">No crew notes for this project</div>'}
   </div>
 </div>
 `;
-  }
 
-  // Render Customer Note Summary
-  if (custTotal > 0) {
-    html += `
+  // Always render Customer Note Summary
+  html += `
 <!-- CUSTOMER NOTE SUMMARY -->
 <div class="collapsible-section">
   <div class="section-header" onclick="toggleSection('customer-note-summary')" style="background:linear-gradient(135deg,#1565c0 0%,#42a5f5 100%)">
@@ -1932,7 +1929,7 @@ ${crewNotes.map(svc => `
     <div style="background:#e3f2fd;border:2px solid #1565c0;border-radius:8px;padding:15px;margin-bottom:15px">
       <div style="font-size:14px;color:#1565c0;font-weight:700">ℹ️ These are the notes that were shared with the customer. Review so you know exactly what was communicated.</div>
     </div>
-${custNotes.map(svc => `
+${custTotal > 0 ? custNotes.map(svc => `
     <div style="margin-bottom:20px;padding:15px;background:#fafafa;border-radius:8px;border-left:5px solid #1565c0">
       <div style="font-size:18px;font-weight:800;color:#1565c0;margin-bottom:12px">${svc.name}</div>
       ${svc.notes.map(note => `
@@ -1945,11 +1942,10 @@ ${custNotes.map(svc => `
       </div>
       `).join('')}
     </div>
-`).join('')}
+`).join('') : '<div style="padding:20px;text-align:center;color:#999;font-style:italic">No customer notes for this project</div>'}
   </div>
 </div>
 `;
-  }
 
   return html;
 })()}
