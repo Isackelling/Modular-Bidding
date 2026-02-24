@@ -3189,61 +3189,70 @@ function AppInner() {
             <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
               Select installation services and edit prices as needed. Prices can be customized per quote.
             </p>
-            <div style={S.svcGrid}>{SUMMARY_SERVICES.map(k => {
-              const svc = services[k];
-              if (!svc) return null;
-              const sel = newQ.selectedServices?.[k];
-              const ovr = newQ.servicePriceOverrides?.[k];
-              const qty = newQ.serviceQuantities?.[k] || 1;
-              return <div key={k} style={{ ...S.svc, ...(sel ? S.svcActive : {}), ...(sel && ovr ? { background: '#fffbeb' } : {}), flexDirection: 'column', alignItems: 'stretch' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
-                  {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '6px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
-                  <span style={{ flex: 1, fontWeight: sel ? 600 : 400 }}>{svc.name}</span>
-                  {sel ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 11, color: '#666' }}>$</span>
-                      <input
-                        type="number"
-                        style={{ ...S.inputSm, ...(ovr ? S.override : {}), width: '100px' }}
-                        placeholder={getDefaultPrice(k) * qty}
-                        value={ovr || ''}
-                        onChange={e => updateServicePrice(k, e.target.value)}
-                        onFocus={e => e.target.select()}
+            <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden' }}>
+              {SUMMARY_SERVICES.map((k, idx) => {
+                const svc = services[k];
+                if (!svc) return null;
+                const sel = newQ.selectedServices?.[k];
+                const ovr = newQ.servicePriceOverrides?.[k];
+                const qty = newQ.serviceQuantities?.[k] || 1;
+                const hasNotes = newQ.serviceNotes?.[k] || newQ.serviceCrewNotes?.[k] || (newQ.publishedServiceNotes?.[k]?.length > 0) || (newQ.publishedServiceCrewNotes?.[k]?.length > 0);
+                return <React.Fragment key={k}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: sel ? (ovr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: idx < SUMMARY_SERVICES.length - 1 ? '1px solid #eee' : 'none' }}>
+                    <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
+                    {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
+                    <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>{svc.name}</span>
+                    {sel ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                        <input
+                          type="number"
+                          style={{ ...S.inputSm, ...(ovr ? S.override : {}), width: '90px', padding: '4px 6px' }}
+                          placeholder={getDefaultPrice(k) * qty}
+                          value={ovr || ''}
+                          onChange={e => updateServicePrice(k, e.target.value)}
+                          onFocus={e => e.target.select()}
+                        />
+                        {ovr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={() => updateServicePrice(k, '')} title="Reset to default price">↺</button>}
+                      </div>
+                    ) : <span style={{ color: '#999', fontSize: 13 }}>{svc.calc ? 'Calc' : fmt(getDefaultPrice(k))}</span>}
+                    {sel && (
+                      <button
+                        type="button"
+                        onClick={() => setExpandedServiceNotes(prev => ({ ...prev, [k]: !prev[k] }))}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, padding: '2px 4px', color: hasNotes ? '#1565c0' : '#bbb', position: 'relative' }}
+                        title={expandedServiceNotes[k] ? 'Hide notes' : 'Add/view notes'}
+                      >
+                        {expandedServiceNotes[k] ? '▼' : '📝'}
+                        {hasNotes && !expandedServiceNotes[k] && <span style={{ position: 'absolute', top: 0, right: 0, width: 6, height: 6, background: '#1565c0', borderRadius: '50%' }} />}
+                      </button>
+                    )}
+                  </div>
+                  {sel && expandedServiceNotes[k] && (
+                    <div style={{ padding: '0 12px 12px', background: '#f9fafb', borderBottom: '1px solid #e0e0e0' }}>
+                      <ExpandableNoteSection
+                        serviceKey={k}
+                        customerNote={newQ.serviceNotes?.[k]}
+                        crewNote={newQ.serviceCrewNotes?.[k]}
+                        isExpanded={expandedServiceNotes[k]}
+                        onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, [k]: !prev[k] }))}
+                        onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))}
+                        onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))}
+                        publishedCustomerNotes={newQ.publishedServiceNotes?.[k] || []}
+                        publishedCrewNotes={newQ.publishedServiceCrewNotes?.[k] || []}
+                        onPublishCustomerNote={handlePublishCustomerNote}
+                        onPublishCrewNote={handlePublishCrewNote}
+                        onEditCustomerNote={handleEditCustomerNote}
+                        onEditCrewNote={handleEditCrewNote}
+                        onDeleteCustomerNote={handleDeleteCustomerNote}
+                        onDeleteCrewNote={handleDeleteCrewNote}
+                        userName={userName}
                       />
-                      {ovr && (
-                        <button
-                          type="button"
-                          style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }}
-                          onClick={() => updateServicePrice(k, '')}
-                          title="Reset to default price"
-                        >↺</button>
-                      )}
                     </div>
-                  ) : <span style={{ color: '#666', fontSize: 13 }}>{svc.calc ? 'Calc' : fmt(getDefaultPrice(k))}</span>}
-                </div>
-                {sel && (
-                  <ExpandableNoteSection
-                    serviceKey={k}
-                    customerNote={newQ.serviceNotes?.[k]}
-                    crewNote={newQ.serviceCrewNotes?.[k]}
-                    isExpanded={expandedServiceNotes[k]}
-                    onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, [k]: !prev[k] }))}
-                    onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))}
-                    onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))}
-                    publishedCustomerNotes={newQ.publishedServiceNotes?.[k] || []}
-                    publishedCrewNotes={newQ.publishedServiceCrewNotes?.[k] || []}
-                    onPublishCustomerNote={handlePublishCustomerNote}
-                    onPublishCrewNote={handlePublishCrewNote}
-                    onEditCustomerNote={handleEditCustomerNote}
-                    onEditCrewNote={handleEditCrewNote}
-                    onDeleteCustomerNote={handleDeleteCustomerNote}
-                    onDeleteCrewNote={handleDeleteCrewNote}
-                    userName={userName}
-                  />
-                )}
-              </div>;
-            })}</div>
+                  )}
+                </React.Fragment>;
+              })}
+            </div>
 
             <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #e0e0e0' }}>
               <div style={{ maxWidth: '300px' }}>
