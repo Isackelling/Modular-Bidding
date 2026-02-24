@@ -194,7 +194,7 @@ export const DEFAULT_SERVICES = {
   transformer: { name: 'Transformer', base: 2000, addDrive: true },
   hvac: { name: 'HVAC (AC Unit)', base: 5000, addDrive: true },
   concrete_skirting: { name: 'Concrete Skirting', base: 0, calc: 'skirt' },
-  gas_propane: { name: 'Gas & Propane', base: 2500, addDrive: true },
+  gas_propane: { name: 'Gas & Propane Connection', base: 2500, addDrive: true },
   plumbing: { name: 'Plumbing Connections', base: 2500, addDrive: true },
   gravel_driveway: { name: 'Gravel Driveway', base: 4320, addDrive: true },
   sand_pad: { name: 'Sand Pad', base: 2180, addDrive: true },
