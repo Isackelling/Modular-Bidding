@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, PIER_SPECS, HOME_OPTIONS, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, MIN_MILES } from '../constants/index.js';
+import { ALLOWANCE_ITEMS, PIER_SPECS, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, MIN_MILES } from '../constants/index.js';
 import { calcIBeam, fmt } from './helpers.js';
 import { calcTotals } from './calculations.js';
 import { DocumentUtils } from './DocumentUtils.js';
@@ -1557,15 +1557,13 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
   };
 
   // Crew work order install services: core installer obligations
-  const CREW_INSTALL_KEYS = ['installation_of_home', 'plumbing', 'gas_propane', 'electric_connection'];
-
   const installServices = Object.entries(quote.selectedServices || {})
-    .filter(([key, selected]) => selected && CREW_INSTALL_KEYS.includes(key))
+    .filter(([key, selected]) => selected && LICENSED_SERVICES.includes(key))
     .map(([key]) => buildServiceData(key));
 
-  // Professional services: everything else (not install, not HOME_OPTIONS)
+  // Professional services: everything else (not licensed, not HOME_OPTIONS)
   const professionalServices = Object.entries(quote.selectedServices || {})
-    .filter(([key, selected]) => selected && !CREW_INSTALL_KEYS.includes(key) && !HOME_OPTIONS.includes(key))
+    .filter(([key, selected]) => selected && !LICENSED_SERVICES.includes(key) && !HOME_OPTIONS.includes(key))
     .map(([key]) => buildServiceData(key));
 
   // Get home spec additions (HOME_OPTIONS)
@@ -1816,17 +1814,25 @@ ${(() => {
 
   const custTotal = custNotes.reduce((c, s) => c + s.notes.length, 0);
 
-  let html = '';
+  const totalNotes = crewTotal + custTotal;
 
-  // Always render Crew Note Summary
-  html += `
-<!-- CREW NOTE SUMMARY -->
-<div class="important-box" style="background:#fff3e0;border-color:#e65100">
-  <div class="important-title" style="color:#e65100">🔧 CREW NOTE SUMMARY (${crewTotal} Notes)</div>
-${crewTotal > 0 ? crewNotes.map(svc => `
-    <div style="margin-bottom:16px">
-      <div style="font-size:16px;font-weight:800;color:#e65100;margin-bottom:8px">${svc.name}</div>
-      <ul style="margin:0;padding-left:25px;line-height:1.8">
+  let html = `
+<!-- NOTE SUMMARY -->
+<div class="collapsible-section">
+  <div class="section-header" onclick="toggleSection('note-summary')" style="background:linear-gradient(135deg,#2c5530 0%,#4a7c59 100%)">
+    <div class="section-header-title">
+      📋 NOTE SUMMARY (${totalNotes} Notes)
+    </div>
+    <div class="section-toggle-btn" id="toggle-note-summary">−</div>
+  </div>
+  <div class="section-content expanded" id="content-note-summary">
+${crewTotal > 0 ? `
+  <div style="margin-bottom:${custTotal > 0 ? '20px' : '0'}">
+    <div style="font-size:15px;font-weight:800;color:#e65100;margin-bottom:10px">🔧 Crew Notes (${crewTotal})</div>
+    ${crewNotes.map(svc => `
+    <div style="margin-bottom:12px;padding:12px;background:#fff3e0;border-left:4px solid #e65100;border-radius:4px">
+      <div style="font-size:14px;font-weight:800;color:#e65100;margin-bottom:6px">${svc.name}</div>
+      <ul style="margin:0;padding-left:20px;line-height:1.8">
         ${svc.notes.map(note => `
         <li><strong>${note.text}</strong>
           <span style="font-size:11px;color:#999;font-style:italic;margin-left:8px">— ${note.publishedBy}</span>
@@ -1834,20 +1840,17 @@ ${crewTotal > 0 ? crewNotes.map(svc => `
         `).join('')}
       </ul>
     </div>
-`).join('') : '<div style="padding:10px;text-align:center;color:#999;font-style:italic">No crew notes for this project</div>'}
-</div>
-`;
-
-  // Always render Customer Note Summary
-  html += `
-<!-- CUSTOMER NOTE SUMMARY -->
-<div class="important-box" style="background:#e3f2fd;border-color:#1565c0">
-  <div class="important-title" style="color:#1565c0">💬 CUSTOMER NOTE SUMMARY (${custTotal} Notes)</div>
-  <div style="font-size:13px;color:#1565c0;font-weight:600;margin-bottom:12px;font-style:italic">These are the notes that were shared with the customer. Review so you know exactly what was communicated.</div>
-${custTotal > 0 ? custNotes.map(svc => `
-    <div style="margin-bottom:16px">
-      <div style="font-size:16px;font-weight:800;color:#1565c0;margin-bottom:8px">${svc.name}</div>
-      <ul style="margin:0;padding-left:25px;line-height:1.8">
+    `).join('')}
+  </div>
+` : ''}
+${custTotal > 0 ? `
+  <div>
+    <div style="font-size:15px;font-weight:800;color:#1565c0;margin-bottom:4px">💬 Customer Notes (${custTotal})</div>
+    <div style="font-size:12px;color:#1565c0;font-weight:600;margin-bottom:10px;font-style:italic">Notes shared with the customer — review so you know what was communicated.</div>
+    ${custNotes.map(svc => `
+    <div style="margin-bottom:12px;padding:12px;background:#e3f2fd;border-left:4px solid #1565c0;border-radius:4px">
+      <div style="font-size:14px;font-weight:800;color:#1565c0;margin-bottom:6px">${svc.name}</div>
+      <ul style="margin:0;padding-left:20px;line-height:1.8">
         ${svc.notes.map(note => `
         <li><strong>${note.text}</strong>
           <span style="font-size:11px;color:#999;font-style:italic;margin-left:8px">— ${note.publishedBy}</span>
@@ -1855,7 +1858,11 @@ ${custTotal > 0 ? custNotes.map(svc => `
         `).join('')}
       </ul>
     </div>
-`).join('') : '<div style="padding:10px;text-align:center;color:#999;font-style:italic">No customer notes for this project</div>'}
+    `).join('')}
+  </div>
+` : ''}
+${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font-style:italic">No notes for this project</div>' : ''}
+  </div>
 </div>
 `;
 
@@ -2235,7 +2242,7 @@ ${installServices.length > 0 ? `
 <div class="collapsible-section">
   <div class="section-header" onclick="toggleSection('install-services')">
     <div class="section-header-title">
-      🏗️ Installation Services
+      🏗️ Licensed Required Services
     </div>
     <div class="section-toggle-btn" id="toggle-install-services">+</div>
   </div>
