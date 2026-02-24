@@ -3,7 +3,7 @@
 // Allowance items (items with variable costs finalized during construction)
 export const ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well', 'crane'];
 
-// Services displayed in Quote Summary (not Professional Services section)
+// Services displayed in Install Services section (not Professional Services section)
 export const SUMMARY_SERVICES = [
   'installation_of_home',
   'drywall',
@@ -11,11 +11,13 @@ export const SUMMARY_SERVICES = [
   'carpet',
   'dumpster',
   'siding_install',
-  'interior_trim_out'
+  'interior_trim_out',
+  'permits',
+  'electric_connection',
+  'concrete_skirting',
+  'plumbing',
+  'gas_propane'
 ];
-
-// Installer services (displayed in separate Installer Services section)
-export const INSTALLER_SERVICES = ['permits', 'electric_connection', 'concrete_skirting', 'plumbing', 'gas_propane'];
 
 // Additional home options (displayed in House Specs section only)
 export const HOME_OPTIONS = [

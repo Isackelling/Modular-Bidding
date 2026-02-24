@@ -13,7 +13,7 @@ import {
   DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION,
   DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION,
   MIN_MILES, HOME_MARKUP, QUOTE_TYPES, WARRANTIES, CHECKLIST, DELIVERY,
-  ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, INSTALLER_SERVICES,
+  ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS,
   INSTALLATION_COSTS, PIER_SPECS, PRICING,
 } from './constants/index.js';
 
@@ -57,7 +57,8 @@ const emptyQuote = () => ({
   iBeamHeight: '',
   selectedServices: {
     installation_of_home: true, drywall: true, painting: true,
-    carpet: true, dumpster: true, siding_install: true, interior_trim_out: true
+    carpet: true, dumpster: true, siding_install: true, interior_trim_out: true,
+    permits: true, electric_connection: true, concrete_skirting: true, plumbing: true, gas_propane: true
   },
   servicePriceOverrides: {}, serviceQuantities: {}, serviceDays: {},
   serviceNotes: {}, serviceCrewNotes: {},
@@ -3260,48 +3261,9 @@ function AppInner() {
             </div>
           </div>
 
-          <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Installer Services</h2>
-            <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>Items marked with <span style={{ background: '#fff3cd', padding: '2px 6px', borderRadius: 3, fontSize: 11 }}>ALLOWANCE</span> are estimates that may vary based on site conditions. Final costs will be confirmed upon completion of work.</p>
-            <div style={S.svcGrid}>{Object.entries(services).filter(([k]) => INSTALLER_SERVICES.includes(k)).map(([k, svc]) => {
-              const sel = newQ.selectedServices?.[k];
-              const ovr = newQ.servicePriceOverrides?.[k];
-              const qty = newQ.serviceQuantities?.[k] || 1;
-              const days = newQ.serviceDays?.[k] || 1;
-              const isAllowance = ALLOWANCE_ITEMS.includes(k);
-              return <div key={k} style={{ ...S.svc, ...(sel ? S.svcActive : {}), ...(sel && ovr ? { background: '#fffbeb' } : {}), flexDirection: 'column', alignItems: 'stretch' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
-                  {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '6px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
-                  {svc.hasDays && sel && <input type="number" min="1" style={{ width: '50px', padding: '6px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={days} onChange={e => setNewQ(p => ({ ...p, serviceDays: { ...p.serviceDays, [k]: parseInt(e.target.value) || 1 } }))} placeholder="Days" title="Number of days crew will be on site" />}
-                  <span style={{ flex: 1, fontWeight: sel ? 600 : 400 }}>{svc.name} {isAllowance && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}</span>
-                  {sel ? <input type="number" style={{ ...S.inputSm, ...(ovr ? S.override : {}) }} placeholder={fmt(getDefaultPrice(k) * qty)} value={ovr || ''} onChange={e => updateServicePrice(k, e.target.value)} /> : <span style={{ color: '#666', fontSize: 13 }}>{svc.calc ? 'Calc' : fmt(getDefaultPrice(k))}</span>}
-                </div>
-                {sel && (
-                  <ExpandableNoteSection
-                    serviceKey={k}
-                    customerNote={newQ.serviceNotes?.[k]}
-                    crewNote={newQ.serviceCrewNotes?.[k]}
-                    isExpanded={expandedServiceNotes[k]}
-                    onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, [k]: !prev[k] }))}
-                    onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))}
-                    onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))}
-                    publishedCustomerNotes={newQ.publishedServiceNotes?.[k] || []}
-                    publishedCrewNotes={newQ.publishedServiceCrewNotes?.[k] || []}
-                    onPublishCustomerNote={handlePublishCustomerNote}
-                    onPublishCrewNote={handlePublishCrewNote}
-                    onEditCustomerNote={handleEditCustomerNote}
-                    onEditCrewNote={handleEditCrewNote}
-                    onDeleteCustomerNote={handleDeleteCustomerNote}
-                    onDeleteCrewNote={handleDeleteCrewNote}
-                    userName={userName}
-                  />
-                )}
-              </div>;
-            })}</div>
-          </div>
-
           <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Professional Services</h2>
-            <div style={S.svcGrid}>{Object.entries(services).filter(([k]) => !SUMMARY_SERVICES.includes(k) && !HOME_OPTIONS.includes(k) && !INSTALLER_SERVICES.includes(k)).map(([k, svc]) => {
+            <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>Items marked with <span style={{ background: '#fff3cd', padding: '2px 6px', borderRadius: 3, fontSize: 11 }}>ALLOWANCE</span> are estimates that may vary based on site conditions. Final costs will be confirmed upon completion of work.</p>
+            <div style={S.svcGrid}>{Object.entries(services).filter(([k]) => !SUMMARY_SERVICES.includes(k) && !HOME_OPTIONS.includes(k)).map(([k, svc]) => {
               const sel = newQ.selectedServices?.[k];
               const ovr = newQ.servicePriceOverrides?.[k];
               const qty = newQ.serviceQuantities?.[k] || 1;
@@ -3771,31 +3733,14 @@ function AppInner() {
                 })()}
 
                 {(() => {
-                  // Separate installer services, allowances, and professional services
-                  const allNonSummary = totals.svc.filter(c => !SUMMARY_SERVICES.includes(c.key));
-                  const installerServices = allNonSummary.filter(c => INSTALLER_SERVICES.includes(c.key));
-                  const allowances = allNonSummary.filter(c => ALLOWANCE_ITEMS.includes(c.key) && !INSTALLER_SERVICES.includes(c.key));
-                  const professionalServices = allNonSummary.filter(c => !ALLOWANCE_ITEMS.includes(c.key) && !INSTALLER_SERVICES.includes(c.key));
-                  const installerTotal = installerServices.reduce((sum, s) => sum + s.cost, 0);
+                  // Separate allowances from other professional services
+                  const allProfessionalServices = totals.svc.filter(c => !SUMMARY_SERVICES.includes(c.key));
+                  const allowances = allProfessionalServices.filter(c => ALLOWANCE_ITEMS.includes(c.key));
+                  const professionalServices = allProfessionalServices.filter(c => !ALLOWANCE_ITEMS.includes(c.key));
                   const professionalTotal = professionalServices.reduce((sum, s) => sum + s.cost, 0);
                   const allowanceTotal = allowances.reduce((sum, s) => sum + s.cost, 0);
 
                   return <>
-                    {installerServices.length > 0 && (
-                      <>
-                        <h4 style={{ marginTop: 16 }}>Installer Services{(isAdmin || isSales) ? `: ${fmt(installerTotal)}` : ''}</h4>
-                        <table style={{ ...S.table, fontSize: 12 }}>
-                          <tbody>
-                            {installerServices.map((c, i) => (
-                              <tr key={i} style={c.isOverride || c.isCustom ? { background: '#fffbeb' } : {}}>
-                                <td>{c.item} {ALLOWANCE_ITEMS.includes(c.key) && <span style={{ fontSize: 11, color: '#856404' }}>(Allowance)</span>}</td>
-                                {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(c.cost)}</td>}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </>
-                    )}
                     {allowances.length > 0 && (
                       <>
                         <h4 style={{ marginTop: 16, color: '#856404' }}>Allowances (Estimated Costs){(isAdmin || isSales) ? `: ${fmt(allowanceTotal)}` : ''}</h4>
