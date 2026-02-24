@@ -3894,6 +3894,13 @@ function AppInner() {
               </div>
             </div>
           </div>}
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 24, paddingTop: 24, borderTop: '2px solid #e0e0e0' }}>
+            <button style={S.btn2} onClick={cancelEdit}>← Back</button>
+            <button style={{ ...S.btn, width: 'auto', fontSize: 16, padding: '12px 32px' }} onClick={saveNew}>
+              {originalQuoteForComparison ? 'Save Change Order' : editingQuoteId ? 'Update' : 'Save Quote'}
+            </button>
+          </div>
           </div>
           )}
 
