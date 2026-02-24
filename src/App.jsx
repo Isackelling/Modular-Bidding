@@ -1605,12 +1605,6 @@ function AppInner() {
                   >✉️ Email Quote</button>
                   {selContract && (
                     <button
-                      style={{ ...S.btnSm, background: '#6f42c1' }}
-                      onClick={() => generateScopeOfWorkDocument(currentItem, custForQuote, services)}
-                    >📋 Scope of Work</button>
-                  )}
-                  {selContract && (
-                    <button
                       style={{ ...S.btnSm, background: '#e65100' }}
                       onClick={() => {
                         const html = generateCrewWorkOrderDocument(currentItem, custForQuote, services);
