@@ -3185,7 +3185,7 @@ function AppInner() {
           )}
 
           <div style={S.box}>
-            <h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Install Services</h2>
+            <h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Home Installation Services</h2>
             <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
               Select installation services and edit prices as needed. Prices can be customized per quote.
             </p>
