@@ -214,6 +214,8 @@ function AppInner() {
 
   // UI state
   const [quoteTab, setQuoteTab] = useState('details');
+  const [generalNoteMode, setGeneralNoteMode] = useState(null); // 'crew' | 'customer' | null
+  const [generalNoteDraft, setGeneralNoteDraft] = useState('');
   const [crewTab, setCrewTab] = useState('jobs');
   const [pricingTab, setPricingTab] = useState('homes');
   const [pricingEditMode, setPricingEditMode] = useState(false);
@@ -1159,11 +1161,15 @@ function AppInner() {
     const inQuotes = quotes.find(q => q.id === quoteId);
     const inContracts = contracts.find(c => c.id === quoteId);
     if (inQuotes) {
-      const updated = quotes.map(q => q.id === quoteId ? { ...q, ...updatedFields } : q);
+      const updatedItem = { ...inQuotes, ...updatedFields };
+      const updated = quotes.map(q => q.id === quoteId ? updatedItem : q);
       await saveQuotes(updated);
+      if (selQuote?.id === quoteId) setSelQuote(updatedItem);
     } else if (inContracts) {
-      const updated = contracts.map(c => c.id === quoteId ? { ...c, ...updatedFields } : c);
+      const updatedItem = { ...inContracts, ...updatedFields };
+      const updated = contracts.map(c => c.id === quoteId ? updatedItem : c);
       await saveContracts(updated);
+      if (selContract?.id === quoteId) setSelContract(updatedItem);
     }
   };
 
@@ -1510,8 +1516,6 @@ function AppInner() {
             onStartChangeOrder={(item) => startChangeOrder(item)}
             onDeleteQuote={(item) => setDeleteConfirm(item)}
             onUpdateStatus={updateStatus}
-            onUpdateQuoteNotes={updateQuoteNotes}
-            userName={userName}
             emptyQuote={emptyQuote}
             styles={S}
           />
@@ -1562,8 +1566,8 @@ function AppInner() {
 
             {/* Quote/Contract tabs */}
             <div style={{ display: 'flex', gap: 4, marginBottom: 16, flexWrap: 'wrap' }}>
-              {['details', 'files', 'scrubb'].map(tab => (
-                <button key={tab} style={{ ...S.tab, ...(quoteTab === tab ? S.tabA : {}) }} onClick={() => setQuoteTab(tab)}>
+              {['details', 'files', 'scrubb', 'notes'].map(tab => (
+                <button key={tab} style={{ ...S.tab, ...(quoteTab === tab ? S.tabA : {}) }} onClick={() => { setQuoteTab(tab); if (tab !== 'notes') { setGeneralNoteMode(null); setGeneralNoteDraft(''); } }}>
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               ))}
@@ -2411,6 +2415,115 @@ function AppInner() {
                     style={{ width: '100%', height: 'calc(100vh - 200px)', border: '1px solid #e0e0e0', borderRadius: 8 }}
                     title="Scope of Work"
                   />
+                </div>
+              );
+            })()}
+
+            {/* Notes tab */}
+            {quoteTab === 'notes' && (() => {
+              const crewNotes = currentItem.publishedGeneralCrewNotes || [];
+              const custNotes = currentItem.publishedGeneralCustomerNotes || [];
+              const formatNoteDate = (iso) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+
+              const handlePublishNote = () => {
+                if (!generalNoteDraft.trim()) return;
+                const note = { text: generalNoteDraft, publishedAt: new Date().toISOString(), publishedBy: userName || 'User' };
+                const field = generalNoteMode === 'crew' ? 'publishedGeneralCrewNotes' : 'publishedGeneralCustomerNotes';
+                const existing = currentItem[field] || [];
+                updateQuoteNotes(currentItem.id, { [field]: [...existing, note] });
+                setGeneralNoteDraft('');
+                setGeneralNoteMode(null);
+              };
+
+              const handleDeleteNote = (field, noteIndex) => {
+                if (!window.confirm('Delete this note?')) return;
+                const existing = currentItem[field] || [];
+                updateQuoteNotes(currentItem.id, { [field]: existing.filter((_, idx) => idx !== noteIndex) });
+              };
+
+              return (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <h3 style={{ margin: 0, color: '#2c5530' }}>General Project Notes</h3>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={() => { setGeneralNoteMode(generalNoteMode === 'crew' ? null : 'crew'); setGeneralNoteDraft(''); }}
+                        style={{ padding: '6px 14px', background: generalNoteMode === 'crew' ? '#e65100' : '#fff3e0', color: generalNoteMode === 'crew' ? '#fff' : '#e65100', border: '2px solid #e65100', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        {generalNoteMode === 'crew' ? '✕ Cancel' : '+ Crew Note'}
+                      </button>
+                      <button
+                        onClick={() => { setGeneralNoteMode(generalNoteMode === 'customer' ? null : 'customer'); setGeneralNoteDraft(''); }}
+                        style={{ padding: '6px 14px', background: generalNoteMode === 'customer' ? '#1565c0' : '#e3f2fd', color: generalNoteMode === 'customer' ? '#fff' : '#1565c0', border: '2px solid #1565c0', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        {generalNoteMode === 'customer' ? '✕ Cancel' : '+ Customer Note'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Note input form */}
+                  {generalNoteMode && (
+                    <div style={{ padding: 16, background: generalNoteMode === 'crew' ? '#fff3e0' : '#e3f2fd', borderRadius: 8, marginBottom: 16, border: `2px solid ${generalNoteMode === 'crew' ? '#ffb74d' : '#90caf9'}` }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: generalNoteMode === 'crew' ? '#e65100' : '#1565c0', marginBottom: 10 }}>
+                        {generalNoteMode === 'crew' ? '🔧 New Crew Note (staff only)' : '💬 New Customer Note (visible to customer)'}
+                      </div>
+                      <textarea
+                        style={{ width: '100%', minHeight: 80, padding: 12, fontSize: 14, fontFamily: 'inherit', border: `1px solid ${generalNoteMode === 'crew' ? '#ffb74d' : '#90caf9'}`, borderRadius: 4, resize: 'vertical' }}
+                        placeholder={generalNoteMode === 'crew' ? 'Type crew instructions...' : 'Type customer note...'}
+                        value={generalNoteDraft}
+                        onChange={e => setGeneralNoteDraft(e.target.value)}
+                        autoFocus
+                      />
+                      {generalNoteDraft.trim() && (
+                        <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+                          <button onClick={handlePublishNote} style={{ padding: '8px 20px', background: generalNoteMode === 'crew' ? '#e65100' : '#1565c0', color: '#fff', border: 'none', borderRadius: 6, fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                            📤 Publish Note
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Empty state */}
+                  {crewNotes.length === 0 && custNotes.length === 0 && !generalNoteMode && (
+                    <p style={{ color: '#999', fontSize: 13, fontStyle: 'italic', margin: 0 }}>No general notes yet. Use the buttons above to add crew or customer notes.</p>
+                  )}
+
+                  {/* Crew notes list */}
+                  {crewNotes.length > 0 && (
+                    <div style={{ marginBottom: custNotes.length > 0 ? 16 : 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#e65100', marginBottom: 8 }}>🔧 Crew Notes ({crewNotes.length})</div>
+                      {crewNotes.map((note, idx) => (
+                        <div key={idx} style={{ padding: 10, background: '#fff', borderRadius: 4, marginBottom: 6, border: '1px solid #fff3e0', borderLeft: '4px solid #ff6b35' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: 13, lineHeight: 1.5 }}>{note.text}</div>
+                              <div style={{ fontSize: 11, color: '#999', marginTop: 4 }}>{formatNoteDate(note.publishedAt)} by {note.publishedBy}</div>
+                            </div>
+                            <button onClick={() => handleDeleteNote('publishedGeneralCrewNotes', idx)} style={{ padding: '3px 10px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer', marginLeft: 8 }}>🗑️</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Customer notes list */}
+                  {custNotes.length > 0 && (
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#1565c0', marginBottom: 8 }}>💬 Customer Notes ({custNotes.length})</div>
+                      {custNotes.map((note, idx) => (
+                        <div key={idx} style={{ padding: 10, background: '#fff', borderRadius: 4, marginBottom: 6, border: '1px solid #e3f2fd', borderLeft: '4px solid #1565c0' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: 13, lineHeight: 1.5 }}>{note.text}</div>
+                              <div style={{ fontSize: 11, color: '#999', marginTop: 4 }}>{formatNoteDate(note.publishedAt)} by {note.publishedBy}</div>
+                            </div>
+                            <button onClick={() => handleDeleteNote('publishedGeneralCustomerNotes', idx)} style={{ padding: '3px 10px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 3, fontSize: 11, fontWeight: 600, cursor: 'pointer', marginLeft: 8 }}>🗑️</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })()}
