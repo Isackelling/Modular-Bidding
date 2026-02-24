@@ -34,6 +34,7 @@ import { createFolderSavers } from './utils/folderSavers.js';
 import ErrorBoundary from './components/Shared/ErrorBoundary.jsx';
 import ExpandableNoteSection from './components/Shared/ExpandableNoteSection.jsx';
 import PierDiagram from './components/Shared/PierDiagram.jsx';
+import AIChatWidget from './components/Shared/AIChatWidget.jsx';
 
 // Auth Components
 import { LoginForm, UserSelector, CustomerPortal } from './components/Auth/index.js';
@@ -160,6 +161,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <AppInner />
+      <AIChatWidget />
     </ErrorBoundary>
   );
 }
