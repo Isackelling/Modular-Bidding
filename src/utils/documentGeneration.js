@@ -1551,6 +1551,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
         name: service?.name || key,
         description: service?.description || '',
         customerNote: quote.serviceNotes?.[key] || '',
+        publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
         publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
         cost: svcCost?.cost || 0,
         quantity: quote.serviceQuantities?.[key] || '',
@@ -1572,6 +1573,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
         name: service?.name || key,
         description: service?.description || '',
         customerNote: quote.serviceNotes?.[key] || '',
+        publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
         publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
         cost: svcCost?.cost || 0,
         quantity: quote.serviceQuantities?.[key] || '',
@@ -1590,6 +1592,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
         name: service?.name || key,
         description: service?.description || '',
         customerNote: quote.serviceNotes?.[key] || '',
+        publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
         publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
         cost: svcCost?.cost || 0,
         quantity: quote.serviceQuantities?.[key] || '',
@@ -1606,6 +1609,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
       name: 'Sewer System',
       description: quote.sewerSystem,
       customerNote: quote.serviceNotes?.sewer || '',
+      publishedCustomerNotes: quote.publishedServiceNotes?.sewer || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.sewer || [],
       cost: totals.svc.find(s => s.key === 'sewer')?.cost || 0
     });
@@ -1617,6 +1621,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
       name: 'Well System',
       description: quote.wellSystem,
       customerNote: quote.serviceNotes?.well || '',
+      publishedCustomerNotes: quote.publishedServiceNotes?.well || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.well || [],
       cost: totals.svc.find(s => s.key === 'well')?.cost || 0
     });
@@ -1628,6 +1633,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
       name: 'Patio',
       description: `${quote.patioWidth} x ${quote.patioLength}`,
       customerNote: quote.serviceNotes?.patio || '',
+      publishedCustomerNotes: quote.publishedServiceNotes?.patio || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.patio || [],
       cost: totals.svc.find(s => s.key === 'patio')?.cost || 0
     });
@@ -1639,6 +1645,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
       name: 'Landscaping',
       description: `Landscaping services`,
       customerNote: quote.serviceNotes?.landscaping || '',
+      publishedCustomerNotes: quote.publishedServiceNotes?.landscaping || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.landscaping || [],
       cost: totals.svc.find(s => s.key === 'landscaping')?.cost || 0
     });
@@ -1650,6 +1657,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
       name: 'Deck Project',
       description: `Deck construction services`,
       customerNote: quote.serviceNotes?.deck || '',
+      publishedCustomerNotes: quote.publishedServiceNotes?.deck || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.deck || [],
       cost: totals.svc.find(s => s.key === 'deck')?.cost || 0
     });
@@ -1876,9 +1884,8 @@ ${(() => {
 
   // All service arrays - customer notes
   [installServices, professionalServices, homeSpecAdditions, otherServices].flat().forEach(svc => {
-    const svcCustNotes = quote.publishedServiceNotes?.[svc.key] || [];
-    if (svcCustNotes.length > 0) {
-      custNotes.push({ name: svc.name, notes: svcCustNotes });
+    if (svc.publishedCustomerNotes && svc.publishedCustomerNotes.length > 0) {
+      custNotes.push({ name: svc.name, notes: svc.publishedCustomerNotes });
     }
   });
 
@@ -2352,9 +2359,18 @@ ${installServices.map(svc => `
     </div>
   </div>
   `).join('') : ''}
+  ${svc.publishedCustomerNotes && svc.publishedCustomerNotes.length > 0 ? svc.publishedCustomerNotes.map(note => `
+  <div class="customer-note" style="margin-bottom:10px">
+    <div class="customer-note-title">💬 Customer Note</div>
+    <div class="customer-note-content">${note.text}</div>
+    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+    </div>
+  </div>
+  `).join('') : ''}
   ${svc.customerNote ? `
-  <div class="customer-note">
-    <div class="customer-note-title">💬 Customer Note (Reference Only)</div>
+  <div class="customer-note" style="opacity:0.7">
+    <div class="customer-note-title">📝 Draft Customer Note (unpublished)</div>
     <div class="customer-note-content">${svc.customerNote}</div>
   </div>
   ` : ''}
@@ -2402,9 +2418,18 @@ ${professionalServices.map(svc => `
     </div>
   </div>
   `).join('') : ''}
+  ${svc.publishedCustomerNotes && svc.publishedCustomerNotes.length > 0 ? svc.publishedCustomerNotes.map(note => `
+  <div class="customer-note" style="margin-bottom:10px">
+    <div class="customer-note-title">💬 Customer Note</div>
+    <div class="customer-note-content">${note.text}</div>
+    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+    </div>
+  </div>
+  `).join('') : ''}
   ${svc.customerNote ? `
-  <div class="customer-note">
-    <div class="customer-note-title">💬 Customer Note (Reference Only)</div>
+  <div class="customer-note" style="opacity:0.7">
+    <div class="customer-note-title">📝 Draft Customer Note (unpublished)</div>
     <div class="customer-note-content">${svc.customerNote}</div>
   </div>
   ` : ''}
@@ -2452,9 +2477,18 @@ ${homeSpecAdditions.map(svc => `
     </div>
   </div>
   `).join('') : ''}
+  ${svc.publishedCustomerNotes && svc.publishedCustomerNotes.length > 0 ? svc.publishedCustomerNotes.map(note => `
+  <div class="customer-note" style="margin-bottom:10px">
+    <div class="customer-note-title">💬 Customer Note</div>
+    <div class="customer-note-content">${note.text}</div>
+    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+    </div>
+  </div>
+  `).join('') : ''}
   ${svc.customerNote ? `
-  <div class="customer-note">
-    <div class="customer-note-title">💬 Customer Note (Reference Only)</div>
+  <div class="customer-note" style="opacity:0.7">
+    <div class="customer-note-title">📝 Draft Customer Note (unpublished)</div>
     <div class="customer-note-content">${svc.customerNote}</div>
   </div>
   ` : ''}
@@ -2496,9 +2530,18 @@ ${otherServices.map(svc => `
     </div>
   </div>
   `).join('') : ''}
+  ${svc.publishedCustomerNotes && svc.publishedCustomerNotes.length > 0 ? svc.publishedCustomerNotes.map(note => `
+  <div class="customer-note" style="margin-bottom:10px">
+    <div class="customer-note-title">💬 Customer Note</div>
+    <div class="customer-note-content">${note.text}</div>
+    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+    </div>
+  </div>
+  `).join('') : ''}
   ${svc.customerNote ? `
-  <div class="customer-note">
-    <div class="customer-note-title">💬 Customer Note (Reference Only)</div>
+  <div class="customer-note" style="opacity:0.7">
+    <div class="customer-note-title">📝 Draft Customer Note (unpublished)</div>
     <div class="customer-note-content">${svc.customerNote}</div>
   </div>
   ` : ''}

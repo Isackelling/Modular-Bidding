@@ -1603,7 +1603,11 @@ function AppInner() {
                   {selContract && (
                     <button
                       style={{ ...S.btnSm, background: '#e65100' }}
-                      onClick={() => generateCrewWorkOrderDocument(currentItem, custForQuote, services)}
+                      onClick={() => {
+                        const html = generateCrewWorkOrderDocument(currentItem, custForQuote, services);
+                        const w = window.open('', '_blank');
+                        if (w) { w.document.write(html); w.document.close(); }
+                      }}
                     >🔧 Crew Work Order</button>
                   )}
                 </div>
