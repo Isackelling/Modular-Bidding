@@ -27,7 +27,7 @@ import { Validators } from './utils/Validators.js';
 import { CalcHelpers } from './utils/CalcHelpers.js';
 import { FolderUtils } from './utils/FolderUtils.js';
 import { calcTotals, enforceMiles, calcDefaultServicePrice, getFoundationAdjustment } from './utils/calculations.js';
-import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument } from './utils/documentGeneration.js';
+import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport } from './utils/documentGeneration.js';
 import { createFolderSavers } from './utils/folderSavers.js';
 
 // Shared Components
@@ -1612,6 +1612,21 @@ function AppInner() {
                         if (w) { w.document.write(html); w.document.close(); }
                       }}
                     >🔧 Crew Work Order</button>
+                  )}
+                  {selContract && isAdmin && (
+                    <button
+                      style={{ ...S.btnSm, background: '#6a1b9a' }}
+                      onClick={() => {
+                        const qn = DocumentUtils.getQuoteNum(currentItem);
+                        let crewChecklist = {};
+                        let crewComments = {};
+                        try { const r = localStorage.getItem('crew_checklist_' + qn); if (r) crewChecklist = JSON.parse(r); } catch(e) {}
+                        try { const r = localStorage.getItem('crew_comments_' + qn); if (r) crewComments = JSON.parse(r); } catch(e) {}
+                        const html = generateJobSummaryReport(currentItem, custForQuote, services, crewChecklist, crewComments);
+                        const w = window.open('', '_blank');
+                        if (w) { w.document.write(html); w.document.close(); }
+                      }}
+                    >📊 Job Summary</button>
                   )}
                 </div>
 
