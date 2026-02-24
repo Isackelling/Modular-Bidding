@@ -27,6 +27,9 @@ export const LICENSED_SERVICES = [
   'electric_connection', 'concrete_skirting', 'plumbing', 'gas_propane'
 ];
 
+// Common modular home needs
+export const MODULAR_HOME_NEEDS = ['basement_stairs', 'water_heater', 'updraft_furnace'];
+
 // Additional home options (displayed in House Specs section only)
 export const HOME_OPTIONS = [
   'lp_siding',

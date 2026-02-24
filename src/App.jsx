@@ -13,7 +13,7 @@ import {
   DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION,
   DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION,
   MIN_MILES, HOME_MARKUP, QUOTE_TYPES, WARRANTIES, CHECKLIST, DELIVERY,
-  ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES,
+  ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, MODULAR_HOME_NEEDS,
   INSTALLATION_COSTS, PIER_SPECS, PRICING,
 } from './constants/index.js';
 
@@ -3310,6 +3310,7 @@ function AppInner() {
                         {svc.name}
                         {isAllowance && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
                         {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
+                        {MODULAR_HOME_NEEDS.includes(k) && <span style={{ fontSize: 9, background: '#e8f5e9', color: '#2e7d32', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Common modular home need">COMMON MODULAR NEED</span>}
                       </span>
                       {sel ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
