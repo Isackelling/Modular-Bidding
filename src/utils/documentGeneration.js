@@ -2247,7 +2247,54 @@ ${installServices.length > 0 ? `
     <div class="section-toggle-btn" id="toggle-install-services">+</div>
   </div>
   <div class="section-content" id="content-install-services">
-${installServices.map(svc => `
+${installServices.map(svc => svc.key === 'plumbing' ? `
+<div class="service-card" data-task-id="install_plumbing">
+  <div class="service-header">
+    <div class="service-name">
+      <span>${svc.name}</span>
+    </div>
+  </div>
+  ${svc.description ? `<div class="service-description">${svc.description}</div>` : ''}
+  <div style="padding:10px 15px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="checkbox" class="service-checkbox task-checkbox" data-task-id="install_plumbing_water" style="width:18px;height:18px">
+      <label style="font-size:14px;font-weight:600">🚰 Water Connection</label>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="checkbox" class="service-checkbox task-checkbox" data-task-id="install_plumbing_sewer" style="width:18px;height:18px">
+      <label style="font-size:14px;font-weight:600">🚿 Sewer Connection</label>
+    </div>
+  </div>
+  ${svc.publishedCrewNotes.length > 0 ? svc.publishedCrewNotes.map(note => `
+  <div class="crew-note" style="margin-bottom:12px">
+    <div class="crew-note-title">🔧 CREW INSTRUCTIONS</div>
+    <div class="crew-note-content">${note.text}</div>
+    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+    </div>
+  </div>
+  `).join('') : ''}
+  ${svc.publishedCustomerNotes && svc.publishedCustomerNotes.length > 0 ? svc.publishedCustomerNotes.map(note => `
+  <div class="customer-note" style="margin-bottom:10px">
+    <div class="customer-note-title">💬 Customer Note</div>
+    <div class="customer-note-content">${note.text}</div>
+    <div style="font-size:11px;color:#999;margin-top:8px;font-style:italic">
+      Published: ${formatNoteDateTime(note.publishedAt)} by ${note.publishedBy}
+    </div>
+  </div>
+  `).join('') : ''}
+  ${svc.customerNote ? `
+  <div class="customer-note" style="opacity:0.7">
+    <div class="customer-note-title">📝 Draft Customer Note (unpublished)</div>
+    <div class="customer-note-content">${svc.customerNote}</div>
+  </div>
+  ` : ''}
+  <div class="crew-comment-section">
+    <div class="crew-comment-label">💭 Crew Feedback / Survey Comments:</div>
+    <textarea class="crew-comment-input task-comment" data-task-id="install_plumbing" placeholder="Add your comments, observations, issues, or suggestions about this task..."></textarea>
+  </div>
+</div>
+` : `
 <div class="service-card" data-task-id="install_${svc.key}">
   <div class="service-header">
     <div class="service-name">
