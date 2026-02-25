@@ -4117,6 +4117,7 @@ function AppInner() {
                       <tbody>
                         {totals.homePrice > 0 && (
                           <tr>
+                            {(isAdmin || isSales) && <td style={{ width: 24 }}></td>}
                             <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
                             {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
                           </tr>
