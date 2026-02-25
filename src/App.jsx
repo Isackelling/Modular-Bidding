@@ -1682,8 +1682,22 @@ function AppInner() {
 
                 <table style={S.table}>
                   <tbody>
-                    {/* Home Price */}
-                    {totals.homePrice > 0 && <tr><td style={S.td}><strong>Home</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.homePrice)}</td></tr>}
+                    {/* Home Section - model cost, foundation, patio, home options, custom options */}
+                    {(() => {
+                      const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(currentItem.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                      const homeSvc = totals.svc.filter(s => homeKeys.has(s.key));
+                      const homeSvcTotal = homeSvc.reduce((sum, s) => sum + s.cost, 0);
+                      const homeTotal = totals.homePrice + homeSvcTotal;
+                      if (homeTotal <= 0) return null;
+                      return <>
+                        <tr><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Home</td></tr>
+                        {totals.homePrice > 0 && <tr><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>{currentItem.homeModel !== 'NONE' ? currentItem.homeModel : 'Custom Home'}</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(totals.homePrice)}</td></tr>}
+                        {homeSvc.map(s => (
+                          <tr key={s.key}><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>{s.item}</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(s.cost)}</td></tr>
+                        ))}
+                        <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Home Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(homeTotal)}</td></tr>
+                      </>;
+                    })()}
 
                     {/* Materials Breakdown */}
                     {isAdmin && totals.mat.length > 0 && <>
@@ -1694,14 +1708,20 @@ function AppInner() {
                       <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Materials Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(totals.matT)}</td></tr>
                     </>}
 
-                    {/* Services Breakdown */}
-                    {totals.svc.length > 0 && <>
-                      <tr style={{ borderTop: '1px solid #ddd' }}><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Services</td></tr>
-                      {totals.svc.map(s => (
-                        <tr key={s.key}><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>{s.item}</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(s.cost)}</td></tr>
-                      ))}
-                      <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Services Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(totals.svcT)}</td></tr>
-                    </>}
+                    {/* Services Breakdown - excludes home-related items */}
+                    {(() => {
+                      const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(currentItem.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                      const serviceSvc = totals.svc.filter(s => !homeKeys.has(s.key));
+                      const serviceSvcTotal = serviceSvc.reduce((sum, s) => sum + s.cost, 0);
+                      if (serviceSvc.length === 0) return null;
+                      return <>
+                        <tr style={{ borderTop: '1px solid #ddd' }}><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Services</td></tr>
+                        {serviceSvc.map(s => (
+                          <tr key={s.key}><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>{s.item}</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(s.cost)}</td></tr>
+                        ))}
+                        <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Services Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(serviceSvcTotal)}</td></tr>
+                      </>;
+                    })()}
 
                     {/* Project Command Breakdown */}
                     <tr style={{ borderTop: '1px solid #ddd' }}><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Project Command</td></tr>
