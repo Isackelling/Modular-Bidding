@@ -3984,15 +3984,19 @@ function AppInner() {
                             {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
                           </tr>
                         )}
-                        {homeSvc.filter(s => s.cost > 0 || s.item).map((s, i) => (
+                        {homeSvc.filter(s => s.cost > 0 || s.item).map((s, i) => {
+                          const qty = newQ.serviceQuantities?.[s.key] || 1;
+                          const showQty = ['tray_ceiling', 'sets_of_drawers'].includes(s.key) && qty > 1 && !s.item.includes('×');
+                          return (
                           <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
                             {(isAdmin || isSales) && <td style={{ width: 24 }}>
                               <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
                             </td>}
-                            <td>{s.item}</td>
+                            <td>{s.item}{showQty && <span style={{ fontSize: 11, color: '#666', marginLeft: 4 }}>(x{qty})</span>}</td>
                             {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
                           </tr>
-                        ))}
+                          );
+                        })}
                       </tbody>
                     </table>
                   </>;
@@ -4153,11 +4157,14 @@ function AppInner() {
                   });
                   const professionalTotal = professionalServices.reduce((sum, s) => sum + s.cost, 0);
                   const allowanceTotal = allowances.reduce((sum, s) => sum + s.cost, 0);
+                  const installAllowances = totals.svc.filter(c => SUMMARY_SERVICES.includes(c.key) && ALLOWANCE_ITEMS.includes(c.key));
+                  const installAllowanceTotal = installAllowances.reduce((sum, s) => sum + s.cost, 0);
+                  const combinedAllowanceTotal = allowanceTotal + installAllowanceTotal;
 
                   return <>
-                    {allowances.length > 0 && (
+                    {(allowances.length > 0 || installAllowances.length > 0) && (
                       <>
-                        <h4 style={{ marginTop: 16, color: '#856404' }}>Allowances (Estimated Costs){(isAdmin || isSales) ? `: ${fmt(allowanceTotal)}` : ''}</h4>
+                        <h4 style={{ marginTop: 16, color: '#856404' }}>Allowances (Estimated Costs){(isAdmin || isSales) ? `: ${fmt(combinedAllowanceTotal)}` : ''}</h4>
                         <div style={{ background: '#fff9e6', padding: 12, borderRadius: 6, marginBottom: 8, fontSize: 12, color: '#856404', border: '1px solid #ffc107' }}>
                           <strong>What are allowances?</strong> These are estimated costs based on 49 years of experience. Actual costs may vary depending on site conditions. Savings or overages are tracked in your Contingency Fund.
                         </div>
@@ -4174,6 +4181,11 @@ function AppInner() {
                             ))}
                           </tbody>
                         </table>
+                        {installAllowances.length > 0 && (
+                          <div style={{ fontSize: 11, color: '#856404', fontStyle: 'italic', marginTop: 6 }}>
+                            {installAllowances.map(s => s.item).join(', ')} listed under Home Installation Services {installAllowances.length === 1 ? 'is' : 'are'} also {installAllowances.length === 1 ? 'an allowance' : 'allowances'} (cost included above, not counted twice).
+                          </div>
+                        )}
                       </>
                     )}
                     {professionalServices.length > 0 && (
