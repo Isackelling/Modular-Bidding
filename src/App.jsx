@@ -54,7 +54,7 @@ const emptyQuote = () => ({
   quoteType: 'modular_home',
   homeModel: 'NONE', homeBasePrice: '0',
   houseWidth: '', houseLength: '', singleDouble: 'Single', walkDoors: '2',
-  foundationType: 'slab',
+  foundationType: 'none',
   iBeamHeight: '',
   selectedServices: {
     installation_of_home: true, drywall: true, painting: true,
@@ -1635,22 +1635,87 @@ function AppInner() {
 
                 <h3>Quote Summary</h3>
                 <div style={S.row}>
-                  <div><strong>Home:</strong> {currentItem.homeModel !== 'NONE' ? currentItem.homeModel : 'Custom'}</div>
-                  <div><strong>Size:</strong> {currentItem.houseWidth}' x {currentItem.houseLength}'</div>
-                  <div><strong>Foundation:</strong> {currentItem.foundationType}</div>
                   <div><strong>Status:</strong> {currentItem.status}</div>
                 </div>
+
+                {/* Home Details Section */}
+                <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: 8, padding: 16, marginBottom: 16 }}>
+                  <h4 style={{ margin: '0 0 12px 0', color: '#2c5530', borderBottom: '2px solid #2c5530', paddingBottom: 6 }}>Home</h4>
+                  <div><strong>Model:</strong> {currentItem.homeModel !== 'NONE' ? currentItem.homeModel : 'Custom'}</div>
+                  {currentItem.patioSize && currentItem.patioSize !== 'none' && (
+                    <div style={{ marginTop: 4 }}><strong>Patio:</strong> {currentItem.patioSize}ft</div>
+                  )}
+                  <div style={{ marginTop: 4 }}><strong>Foundation:</strong> {currentItem.foundationType === 'slab' ? 'Engineered Slab' : currentItem.foundationType === 'basement' ? 'Basement' : currentItem.foundationType === 'crawlspace' ? 'Crawl Space' : 'None'}</div>
+                  {/* Selected Home Options */}
+                  {(() => {
+                    const selectedOpts = HOME_OPTIONS.filter(k => currentItem.selectedServices?.[k]);
+                    const customOpts = (currentItem.customOptions || []).filter(co => co.name && co.price);
+                    if (selectedOpts.length === 0 && customOpts.length === 0) return null;
+                    return (
+                      <div style={{ marginTop: 8 }}>
+                        <strong style={{ fontSize: 13, color: '#555' }}>Home Options:</strong>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                          {selectedOpts.map(k => {
+                            const qty = currentItem.serviceQuantities?.[k] || 1;
+                            const svc = services[k];
+                            const name = svc?.name || k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                            const hasQty = ['tray_ceiling', 'sets_of_drawers'].includes(k);
+                            return (
+                              <span key={k} style={{ background: '#e8f5e9', color: '#2c5530', padding: '4px 10px', borderRadius: 16, fontSize: 12, fontWeight: 600, border: '1px solid #a5d6a7' }}>
+                                {name}{hasQty && qty > 1 ? ` (x${qty})` : ''}
+                              </span>
+                            );
+                          })}
+                          {customOpts.map((co, i) => {
+                            const qty = parseFloat(co.quantity) || 1;
+                            return (
+                              <span key={`custom_${i}`} style={{ background: '#e3f2fd', color: '#1565c0', padding: '4px 10px', borderRadius: 16, fontSize: 12, fontWeight: 600, border: '1px solid #90caf9' }}>
+                                {co.name}{qty > 1 ? ` (x${qty})` : ''}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+
                 <table style={S.table}>
                   <tbody>
+                    {/* Home Price */}
                     {totals.homePrice > 0 && <tr><td style={S.td}><strong>Home</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.homePrice)}</td></tr>}
-                    {isAdmin && <tr><td style={S.td}><strong>Materials</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.matT)}</td></tr>}
-                    <tr><td style={S.td}><strong>Services</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.svcT)}</td></tr>
-                    {isAdmin && <tr><td style={S.td}><strong>Project Command</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.projCmd.total)}</td></tr>}
-                    {isAdmin && <tr style={{ borderTop: '1px solid #ddd' }}><td style={S.td}><strong>Subtotal</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.sub)}</td></tr>}
-                    {isAdmin && <tr><td style={S.td}>Overhead (5%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.oh)}</td></tr>}
-                    {isAdmin && <tr><td style={S.td}>Markup (10%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.mu)}</td></tr>}
+
+                    {/* Materials Breakdown */}
+                    {isAdmin && totals.mat.length > 0 && <>
+                      <tr style={{ borderTop: '1px solid #ddd' }}><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Materials</td></tr>
+                      {totals.mat.map(m => (
+                        <tr key={m.key}><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>{m.item} {m.qty > 1 ? `(x${m.qty})` : ''}</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(m.total)}</td></tr>
+                      ))}
+                      <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Materials Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(totals.matT)}</td></tr>
+                    </>}
+
+                    {/* Services Breakdown */}
+                    {totals.svc.length > 0 && <>
+                      <tr style={{ borderTop: '1px solid #ddd' }}><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Services</td></tr>
+                      {totals.svc.map(s => (
+                        <tr key={s.key}><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>{s.item}</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(s.cost)}</td></tr>
+                      ))}
+                      <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Services Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(totals.svcT)}</td></tr>
+                    </>}
+
+                    {/* Project Command Breakdown */}
+                    <tr style={{ borderTop: '1px solid #ddd' }}><td colSpan={2} style={{ ...S.td, fontWeight: 700, fontSize: 13, color: '#2c5530', paddingTop: 8 }}>Project Command</td></tr>
+                    <tr><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>Project Supervisor</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(totals.projCmd.ps)}</td></tr>
+                    <tr><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>Project Manager</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(totals.projCmd.pm)}</td></tr>
+                    <tr><td style={{ ...S.td, paddingLeft: 20, fontSize: 13, color: '#555' }}>Project Coordinator</td><td style={{ ...S.td, textAlign: 'right', fontSize: 13 }}>{fmtCurrency(totals.projCmd.pc)}</td></tr>
+                    <tr><td style={{ ...S.td, paddingLeft: 20, fontWeight: 600 }}>Project Command Total</td><td style={{ ...S.td, textAlign: 'right', fontWeight: 600 }}>{fmtCurrency(totals.projCmd.total)}</td></tr>
+
+                    {/* Totals */}
+                    <tr style={{ borderTop: '2px solid #ddd' }}><td style={S.td}><strong>Subtotal</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.sub)}</td></tr>
+                    <tr><td style={S.td}>Overhead (5%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.oh)}</td></tr>
+                    <tr><td style={S.td}>Markup (10%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.mu)}</td></tr>
                     <tr style={{ borderTop: '2px solid #2c5530' }}><td style={S.td}><strong>Total</strong></td><td style={{ ...S.td, textAlign: 'right', fontWeight: 700 }}>{fmtCurrency(totals.total)}</td></tr>
-                    <tr><td style={S.td}><strong>Contingency (2%)</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.contingency)}</td></tr>
+                    <tr><td style={S.td}><strong>Contingency</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.contingency)}</td></tr>
                     <tr><td colSpan={2} style={{ ...S.td, fontSize: 11, color: '#856404', fontStyle: 'italic', padding: '2px 12px' }}>This is the original contracted contingency amount, not a running balance. See the Contingency Fund Tracker on the Scrubb tab for the current balance.</td></tr>
                     <tr style={{ fontWeight: 700, fontSize: 18, borderTop: '3px solid #2c5530' }}><td style={S.td}><strong>Total Investment</strong></td><td style={{ ...S.td, textAlign: 'right', color: '#2c5530' }}>{fmtCurrency(totals.totalWithContingency)}</td></tr>
                   </tbody>
@@ -2032,7 +2097,7 @@ function AppInner() {
                       <div style={{ marginTop: 24, padding: 20, background: '#e3f2fd', borderRadius: 8, border: '2px solid #1565c0' }}>
                         <h3 style={{ marginTop: 0, color: '#1565c0' }}>Contingency Fund Tracker</h3>
                         <p style={{ fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 1.6 }}>
-                          <strong>Purpose:</strong> A 2% fund for change orders and allowance adjustments. When allowances come in under budget, savings are added here. When costs exceed estimates or change orders are made, funds are drawn from here first, minimizing customer out-of-pocket costs. At project completion, if there are no overages or change orders, the customer receives back the full 2% contingency amount plus any allowance savings.
+                          <strong>Purpose:</strong> A fund for change orders and allowance adjustments. When allowances come in under budget, savings are added here. When costs exceed estimates or change orders are made, funds are drawn from here first, minimizing customer out-of-pocket costs. At project completion, if there are no overages or change orders, the customer receives back the full contingency amount plus any allowance savings.
                         </p>
                         {(() => {
                           // Starting fund: original 2% BEFORE any CO additions inflated the total
@@ -3175,9 +3240,51 @@ function AppInner() {
                       );
                     })}
                   </div>
+
+                  {/* Custom Home Options */}
+                  <div style={{ marginTop: 12 }}>
+                    {(newQ.customOptions || []).map((co, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, padding: 10, background: '#fff', borderRadius: 4, border: '1px solid #dee2e6' }}>
+                        <input type="text" placeholder="Option name" value={co.name || ''} onChange={e => updateCustomOption(i, 'name', e.target.value)} style={{ flex: 1, padding: '6px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }} />
+                        <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                        <input type="number" min="0" placeholder="Price" value={co.price || ''} onChange={e => updateCustomOption(i, 'price', e.target.value)} style={{ width: 90, padding: '6px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }} />
+                        <span style={{ fontSize: 11, color: '#666' }}>Qty:</span>
+                        <input type="number" min="1" value={co.quantity || '1'} onChange={e => updateCustomOption(i, 'quantity', e.target.value)} style={{ width: 50, padding: '6px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4, textAlign: 'center' }} />
+                        <button type="button" onClick={() => removeCustomOption(i)} style={{ background: '#dc3545', color: '#fff', border: 'none', borderRadius: 4, padding: '4px 8px', cursor: 'pointer', fontSize: 13 }}>X</button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addCustomOption} style={{ ...S.btnSm, background: '#2c5530', fontSize: 12, padding: '6px 14px' }}>+ Add Custom Option</button>
+                  </div>
                 </div>
 
-                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'slab'} onChange={e => updateField('foundationType', e.target.value)}><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
+                <div style={{ marginTop: 16 }}>
+                  <label style={S.label}>Patio</label>
+                  <select style={S.select} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
+                    <option value="none">None</option>
+                    {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
+                  </select>
+                  {newQ.patioSize && newQ.patioSize !== 'none' && (
+                    <div style={{ marginTop: 8 }}>
+                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.patio ? S.override : {}), width: '100%' }}
+                        placeholder={fmt(patioPricing[newQ.patioSize])}
+                        value={newQ.servicePriceOverrides?.patio || ''}
+                        onChange={e => {
+                          const value = e.target.value;
+                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                            updateServicePrice('patio', value);
+                          }
+                        }}
+                        onFocus={e => e.target.select()}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
 
                 {(newQ.foundationType === 'basement' || newQ.foundationType === 'crawlspace') && (
                   <div style={{ marginTop: 12, padding: 12, background: '#fff3cd', borderRadius: 6, border: '1px solid #ffc107' }}>
@@ -3307,9 +3414,51 @@ function AppInner() {
                       );
                     })}
                   </div>
+
+                  {/* Custom Home Options */}
+                  <div style={{ marginTop: 12 }}>
+                    {(newQ.customOptions || []).map((co, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, padding: 10, background: '#fff', borderRadius: 4, border: '1px solid #dee2e6' }}>
+                        <input type="text" placeholder="Option name" value={co.name || ''} onChange={e => updateCustomOption(i, 'name', e.target.value)} style={{ flex: 1, padding: '6px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }} />
+                        <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                        <input type="number" min="0" placeholder="Price" value={co.price || ''} onChange={e => updateCustomOption(i, 'price', e.target.value)} style={{ width: 90, padding: '6px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }} />
+                        <span style={{ fontSize: 11, color: '#666' }}>Qty:</span>
+                        <input type="number" min="1" value={co.quantity || '1'} onChange={e => updateCustomOption(i, 'quantity', e.target.value)} style={{ width: 50, padding: '6px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4, textAlign: 'center' }} />
+                        <button type="button" onClick={() => removeCustomOption(i)} style={{ background: '#dc3545', color: '#fff', border: 'none', borderRadius: 4, padding: '4px 8px', cursor: 'pointer', fontSize: 13 }}>X</button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addCustomOption} style={{ ...S.btnSm, background: '#2c5530', fontSize: 12, padding: '6px 14px' }}>+ Add Custom Option</button>
+                  </div>
                 </div>
 
-                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'slab'} onChange={e => updateField('foundationType', e.target.value)}><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
+                <div style={{ marginTop: 16 }}>
+                  <label style={S.label}>Patio</label>
+                  <select style={S.select} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
+                    <option value="none">None</option>
+                    {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
+                  </select>
+                  {newQ.patioSize && newQ.patioSize !== 'none' && (
+                    <div style={{ marginTop: 8 }}>
+                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.patio ? S.override : {}), width: '100%' }}
+                        placeholder={fmt(patioPricing[newQ.patioSize])}
+                        value={newQ.servicePriceOverrides?.patio || ''}
+                        onChange={e => {
+                          const value = e.target.value;
+                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                            updateServicePrice('patio', value);
+                          }
+                        }}
+                        onFocus={e => e.target.select()}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
 
                 {(newQ.foundationType === 'basement' || newQ.foundationType === 'crawlspace') && (
                   <div style={{ marginTop: 12, padding: 12, background: '#fff3cd', borderRadius: 6, border: '1px solid #ffc107' }}>
@@ -3541,52 +3690,6 @@ function AppInner() {
               ))}
             </div>
             <div style={{ ...S.row, marginTop: 20 }}>
-              <div>
-                <label style={S.label}>Patio</label>
-                <select style={S.select} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
-                  <option value="none">None</option>
-                  {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
-                </select>
-                {newQ.patioSize && newQ.patioSize !== 'none' && (
-                  <>
-                    <div style={{ marginTop: 8 }}>
-                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.patio ? S.override : {}), width: '100%' }}
-                        placeholder={fmt(patioPricing[newQ.patioSize])}
-                        value={newQ.servicePriceOverrides?.patio || ''}
-                        onChange={e => {
-                          const value = e.target.value;
-                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                            updateServicePrice('patio', value);
-                          }
-                        }}
-                        onFocus={e => e.target.select()}
-                      />
-                    </div>
-                    <ExpandableNoteSection
-                      serviceKey="patio"
-                      customerNote={newQ.serviceNotes?.patio}
-                      crewNote={newQ.serviceCrewNotes?.patio}
-                      isExpanded={expandedServiceNotes.patio}
-                      onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, patio: !prev.patio }))}
-                      onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))}
-                      onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))}
-                      publishedCustomerNotes={newQ.publishedServiceNotes?.patio || []}
-                      publishedCrewNotes={newQ.publishedServiceCrewNotes?.patio || []}
-                      onPublishCustomerNote={handlePublishCustomerNote}
-                      onPublishCrewNote={handlePublishCrewNote}
-                      onEditCustomerNote={handleEditCustomerNote}
-                      onEditCrewNote={handleEditCrewNote}
-                      onDeleteCustomerNote={handleDeleteCustomerNote}
-                      onDeleteCrewNote={handleDeleteCrewNote}
-                      userName={userName}
-                    />
-                  </>
-                )}
-              </div>
               <div>
                 <label style={S.label}>Sewer <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3 }}>ALLOWANCE</span></label>
                 <select style={S.select} value={newQ.sewerType} onChange={e => updateField('sewerType', e.target.value)}>
@@ -4085,7 +4188,7 @@ function AppInner() {
                   <span>{fmt(totals.contingency)}</span>
                 </div>
                 <div style={{ fontSize: 13, color: '#666', lineHeight: 1.6 }}>
-                  <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first, minimizing out-of-pocket costs. At project completion, if there are no overages or change orders, you receive back the full 2% contingency amount plus any allowance savings.
+                  <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first, minimizing out-of-pocket costs. At project completion, if there are no overages or change orders, you receive back the full contingency amount plus any allowance savings.
                 </div>
               </div>
 
