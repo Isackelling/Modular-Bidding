@@ -99,10 +99,13 @@ export const calculateInstallationCost = (miles, singleDouble, foundationType) =
 /**
  * Calculate default service price based on service configuration
  */
-export const calcDefaultServicePrice = (key, svc, miles, w, l, driveRateService = DRIVE_RATE_SERVICE, days = 1, singleDouble = 'Single', foundationType = 'none') => {
+export const calcDefaultServicePrice = (key, svc, miles, w, l, driveRateService = DRIVE_RATE_SERVICE, days = 1, singleDouble = 'Single', foundationType = 'none', patioSize = 0) => {
   const driveCost = miles * driveRateService;
   if (svc.calc === 'pad') return (w * l * PRICING.SLAB_COST_PER_SQ_FT) + driveCost;
-  if (svc.calc === 'skirt') return ((24 * calcPerim(w, l)) + ((miles + 200) * 3)) * 1.1;
+  if (svc.calc === 'skirt') {
+    const patioExtra = patioSize > 0 ? patioSize * 2 : 0;
+    return ((24 * (calcPerim(w, l) + patioExtra)) + ((miles + 200) * 3)) * 1.1;
+  }
   if (svc.calc === 'lp_siding') {
     let basePrice = 0;
     if (l <= 52) basePrice = 6550;
@@ -220,7 +223,8 @@ export const calcSelectedServicesCost = (q, services, miles, driveCost, w, l, dr
     const override = q.servicePriceOverrides?.[k];
     const qty = svc.hasQuantity ? (q.serviceQuantities?.[k] || 1) : 1;
     const days = (q.serviceDays && q.serviceDays[k]) || 1;
-    let cost = override !== undefined && override !== '' ? parseFloat(override) : calcDefaultServicePrice(k, svc, miles, w, l, driveRateService, days, q.singleDouble, foundationType);
+    const patioFt = q.patioSize && q.patioSize !== 'none' ? parseFloat(q.patioSize) || 0 : 0;
+    let cost = override !== undefined && override !== '' ? parseFloat(override) : calcDefaultServicePrice(k, svc, miles, w, l, driveRateService, days, q.singleDouble, foundationType, patioFt);
 
     // Special calculation for installation_of_home based on single/double wide
     if (k === 'installation_of_home' && (override === undefined || override === '')) {

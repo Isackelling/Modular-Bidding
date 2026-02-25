@@ -657,7 +657,8 @@ function AppInner() {
   const getDefaultPrice = k => {
     if (!services[k]) return 0;
     const days = (newQ.serviceDays && newQ.serviceDays[k]) || 1;
-    let basePrice = calcDefaultServicePrice(k, services[k], enforceMiles(newQ.driveTime), parseFloat(newQ.houseWidth) || 0, parseFloat(newQ.houseLength) || 0, driveRates.service, days, newQ.singleDouble, newQ.foundationType);
+    const patioFt = newQ.patioSize && newQ.patioSize !== 'none' ? parseFloat(newQ.patioSize) || 0 : 0;
+    let basePrice = calcDefaultServicePrice(k, services[k], enforceMiles(newQ.driveTime), parseFloat(newQ.houseWidth) || 0, parseFloat(newQ.houseLength) || 0, driveRates.service, days, newQ.singleDouble, newQ.foundationType, patioFt);
     basePrice += getFoundationAdjustment(k, newQ.foundationType || 'none');
     return basePrice;
   };
@@ -901,7 +902,7 @@ function AppInner() {
           } else {
             const currentServicePrice = adjustedQuote.servicePriceOverrides[key] !== undefined
               ? adjustedQuote.servicePriceOverrides[key]
-              : (services[key] ? calcDefaultServicePrice(key, services[key], enforceMiles(newQ.driveTime), parseFloat(newQ.houseWidth) || 0, parseFloat(newQ.houseLength) || 0, driveRates.service, (newQ.serviceDays && newQ.serviceDays[key]) || 1, newQ.singleDouble, newQ.foundationType) : 0);
+              : (services[key] ? calcDefaultServicePrice(key, services[key], enforceMiles(newQ.driveTime), parseFloat(newQ.houseWidth) || 0, parseFloat(newQ.houseLength) || 0, driveRates.service, (newQ.serviceDays && newQ.serviceDays[key]) || 1, newQ.singleDouble, newQ.foundationType, newQ.patioSize && newQ.patioSize !== 'none' ? parseFloat(newQ.patioSize) || 0 : 0) : 0);
             adjustedQuote.servicePriceOverrides[key] = currentServicePrice + adj.amount;
           }
         }
