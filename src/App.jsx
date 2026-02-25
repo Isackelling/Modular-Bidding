@@ -3089,9 +3089,13 @@ function AppInner() {
                     <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
                     <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
                   </div>
-                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
-                    <label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label>
-                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 8, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                  <div style={{ background: '#f8f9fa', padding: 16, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <label style={{ ...S.label, color: '#666', marginBottom: 10 }}># of Pre Built Stairs</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginBottom: 12 }}>
+                      <button onClick={() => updateField('walkDoors', Math.max(0, (parseInt(newQ.walkDoors) || 0) - 1).toString())} style={{ width: 38, height: 38, border: '2px solid #2c5530', borderRadius: '8px 0 0 8px', background: '#fff', fontSize: 20, fontWeight: 700, color: '#2c5530', cursor: 'pointer', lineHeight: 1 }}>−</button>
+                      <input style={{ width: 52, height: 38, border: '2px solid #2c5530', borderLeft: 'none', borderRight: 'none', textAlign: 'center', fontSize: 20, fontWeight: 700, color: '#2c5530', background: '#fff', outline: 'none', MozAppearance: 'textfield', WebkitAppearance: 'none' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                      <button onClick={() => updateField('walkDoors', ((parseInt(newQ.walkDoors) || 0) + 1).toString())} style={{ width: 38, height: 38, border: '2px solid #2c5530', borderRadius: '0 8px 8px 0', background: '#fff', fontSize: 20, fontWeight: 700, color: '#2c5530', cursor: 'pointer', lineHeight: 1 }}>+</button>
+                    </div>
                     <p style={{ fontSize: 11, color: '#856404', background: '#fff3cd', padding: '6px 10px', borderRadius: 4, border: '1px solid #ffc107', margin: 0 }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
                   </div>
                 </div>
@@ -3217,9 +3221,13 @@ function AppInner() {
                     <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
                     <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
                   </div>
-                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
-                    <label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label>
-                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 8, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                  <div style={{ background: '#f8f9fa', padding: 16, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <label style={{ ...S.label, color: '#666', marginBottom: 10 }}># of Pre Built Stairs</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginBottom: 12 }}>
+                      <button onClick={() => updateField('walkDoors', Math.max(0, (parseInt(newQ.walkDoors) || 0) - 1).toString())} style={{ width: 38, height: 38, border: '2px solid #2c5530', borderRadius: '8px 0 0 8px', background: '#fff', fontSize: 20, fontWeight: 700, color: '#2c5530', cursor: 'pointer', lineHeight: 1 }}>−</button>
+                      <input style={{ width: 52, height: 38, border: '2px solid #2c5530', borderLeft: 'none', borderRight: 'none', textAlign: 'center', fontSize: 20, fontWeight: 700, color: '#2c5530', background: '#fff', outline: 'none', MozAppearance: 'textfield', WebkitAppearance: 'none' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                      <button onClick={() => updateField('walkDoors', ((parseInt(newQ.walkDoors) || 0) + 1).toString())} style={{ width: 38, height: 38, border: '2px solid #2c5530', borderRadius: '0 8px 8px 0', background: '#fff', fontSize: 20, fontWeight: 700, color: '#2c5530', cursor: 'pointer', lineHeight: 1 }}>+</button>
+                    </div>
                     <p style={{ fontSize: 11, color: '#856404', background: '#fff3cd', padding: '6px 10px', borderRadius: 4, border: '1px solid #ffc107', margin: 0 }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
                   </div>
                 </div>
