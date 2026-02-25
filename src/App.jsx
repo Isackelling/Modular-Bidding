@@ -3083,7 +3083,10 @@ function AppInner() {
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Length</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.houseLength}'</div></div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Type</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.singleDouble}</div></div>
                 </div>
-                <div style={S.row}><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>I-Beam</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div></div><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Pre Built Stairs</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.walkDoors || '2'}</div></div></div>
+                <div style={S.row}><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>I-Beam</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div></div><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label><input style={{ ...S.input, fontSize: 18, fontWeight: 600 }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" /></div></div>
+                <div style={{ background: '#fff3cd', padding: 12, borderRadius: 8, marginTop: 8, border: '1px solid #ffc107' }}>
+                  <p style={{ margin: 0, fontSize: 13, color: '#856404', fontWeight: 600 }}>Note: Stairs are required at every entry way of the home. If customer does not want pre-built stairs, add temporary stairs from Amazon to the materials list to send with the job.</p>
+                </div>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3185,6 +3188,9 @@ function AppInner() {
               <>
                 <div style={S.row}><div><label style={S.label}>Width</label><input style={S.input} type="number" value={newQ.houseWidth} onChange={e => updateField('houseWidth', e.target.value)} /></div><div><label style={S.label}>Length</label><input style={S.input} type="number" value={newQ.houseLength} onChange={e => updateField('houseLength', e.target.value)} /></div><div><label style={S.label}>Type</label><select style={S.select} value={newQ.singleDouble} onChange={e => updateField('singleDouble', e.target.value)}><option value="Single">Single</option><option value="Double">Double</option></select></div></div>
                 <div style={S.row}><div><label style={S.label}>I-Beam</label><input style={{ ...S.input, background: '#f8f9fa' }} value={`${newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"`} readOnly /></div><div><label style={S.label}># of Pre Built Stairs</label><input style={S.input} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" /></div></div>
+                <div style={{ background: '#fff3cd', padding: 12, borderRadius: 8, marginTop: 8, border: '1px solid #ffc107' }}>
+                  <p style={{ margin: 0, fontSize: 13, color: '#856404', fontWeight: 600 }}>Note: Stairs are required at every entry way of the home. If customer does not want pre-built stairs, add temporary stairs from Amazon to the materials list to send with the job.</p>
+                </div>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3886,7 +3892,10 @@ function AppInner() {
                           ))}
                           {summaryServices.map((s, i) => (
                             <tr key={`summary-${i}`} style={s.isOverride ? { background: '#fffbeb' } : {}}>
-                              <td>{s.item}</td>
+                              {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                                <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
+                              </td>}
+                              <td>{s.item}{ALLOWANCE_ITEMS.includes(s.key) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}{LICENSED_SERVICES.includes(s.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
                               {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
                             </tr>
                           ))}
@@ -3915,7 +3924,10 @@ function AppInner() {
                           <tbody>
                             {allowances.map((c, i) => (
                               <tr key={i} style={{ background: '#fffbeb' }}>
-                                <td>{c.item} <span style={{ fontSize: 11, color: '#856404' }}>(Allowance)</span></td>
+                                {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                                  <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
+                                </td>}
+                                <td>{c.item} <span style={{ fontSize: 11, color: '#856404' }}>(Allowance)</span>{LICENSED_SERVICES.includes(c.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
                                 {(isAdmin || isSales) && <td style={{ textAlign: 'right', fontWeight: 600 }}>{fmt(c.cost)}</td>}
                               </tr>
                             ))}
@@ -3930,7 +3942,10 @@ function AppInner() {
                           <tbody>
                             {professionalServices.map((c, i) => (
                               <tr key={i} style={c.isOverride || c.isCustom ? { background: '#fffbeb' } : {}}>
-                                <td>{c.item}</td>
+                                {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                                  <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
+                                </td>}
+                                <td>{c.item}{ALLOWANCE_ITEMS.includes(c.key) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}{LICENSED_SERVICES.includes(c.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
                                 {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(c.cost)}</td>}
                               </tr>
                             ))}
