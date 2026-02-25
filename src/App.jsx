@@ -4233,27 +4233,56 @@ function AppInner() {
               {(() => {
                 const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
                 const svcKeys = Object.keys(newQ.selectedServices || {}).filter(k => newQ.selectedServices[k]);
-                const installCount = svcKeys.filter(k => SUMMARY_SERVICES.includes(k)).length;
-                const homeCount = svcKeys.filter(k => homeKeys.has(k)).length
-                  + (newQ.patioSize && newQ.patioSize !== 'none' ? 1 : 0)
-                  + (newQ.foundationType && newQ.foundationType !== 'none' ? 1 : 0);
-                const allowanceCount = svcKeys.filter(k => ALLOWANCE_ITEMS.includes(k) && !SUMMARY_SERVICES.includes(k) && !homeKeys.has(k)).length
-                  + (newQ.sewerType && newQ.sewerType !== 'none' ? 1 : 0)
-                  + (parseFloat(newQ.wellDepth) > 0 ? 1 : 0);
-                const customCount = (newQ.customServices || []).filter(cs => cs.name && cs.price).length;
-                const proCount = svcKeys.filter(k => !SUMMARY_SERVICES.includes(k) && !homeKeys.has(k) && !ALLOWANCE_ITEMS.includes(k)).length;
-                return <>
-                  <div style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
-                    <strong>{totals.projCmd.numSvc} services:</strong>{' '}
-                    {[
-                      installCount > 0 && `${installCount} Install`,
-                      homeCount > 0 && `${homeCount} Home`,
-                      allowanceCount > 0 && `${allowanceCount} Allowance`,
-                      proCount > 0 && `${proCount} Professional`,
-                      customCount > 0 && `${customCount} Custom`,
-                    ].filter(Boolean).join(', ')}
+                const getNames = keys => keys.map(k => services[k]?.name || k.replace(/_/g, ' ')).sort();
+                const installKeys = svcKeys.filter(k => SUMMARY_SERVICES.includes(k));
+                const homeOptKeys = svcKeys.filter(k => homeKeys.has(k));
+                const homeExtras = [];
+                if (newQ.patioSize && newQ.patioSize !== 'none') homeExtras.push('Patio');
+                if (newQ.foundationType && newQ.foundationType !== 'none') homeExtras.push('Foundation');
+                const allowanceKeys = svcKeys.filter(k => ALLOWANCE_ITEMS.includes(k) && !SUMMARY_SERVICES.includes(k) && !homeKeys.has(k));
+                const allowanceExtras = [];
+                if (newQ.sewerType && newQ.sewerType !== 'none') allowanceExtras.push('Sewer');
+                if (parseFloat(newQ.wellDepth) > 0) allowanceExtras.push('Well');
+                const proKeys = svcKeys.filter(k => !SUMMARY_SERVICES.includes(k) && !homeKeys.has(k) && !ALLOWANCE_ITEMS.includes(k));
+                const customSvcs = (newQ.customServices || []).filter(cs => cs.name && cs.price);
+                const installCount = installKeys.length;
+                const homeCount = homeOptKeys.length + homeExtras.length;
+                const allowanceCount = allowanceKeys.length + allowanceExtras.length;
+                const proCount = proKeys.length;
+                const customCount = customSvcs.length;
+                const catStyle = { display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 };
+                const badgeBase = { fontSize: 11, fontWeight: 700, borderRadius: 4, padding: '1px 6px', minWidth: 18, textAlign: 'center', display: 'inline-block' };
+                const namesStyle = { fontSize: 11, color: '#555' };
+                return <div style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6 }}>{totals.projCmd.numSvc} total site visits</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 3, paddingLeft: 4 }}>
+                    {installCount > 0 && <div style={catStyle}>
+                      <span style={{ ...badgeBase, background: '#e8f5e9', color: '#2e7d32' }}>{installCount}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12 }}>Installation</span>
+                      <span style={namesStyle}>— {[...getNames(installKeys)].join(', ')}</span>
+                    </div>}
+                    {homeCount > 0 && <div style={catStyle}>
+                      <span style={{ ...badgeBase, background: '#e3f2fd', color: '#1565c0' }}>{homeCount}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12 }}>Home Options</span>
+                      <span style={namesStyle}>— {[...getNames(homeOptKeys), ...homeExtras].join(', ')}</span>
+                    </div>}
+                    {allowanceCount > 0 && <div style={catStyle}>
+                      <span style={{ ...badgeBase, background: '#fff3cd', color: '#856404' }}>{allowanceCount}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12 }}>Allowance</span>
+                      <span style={namesStyle}>— {[...getNames(allowanceKeys), ...allowanceExtras].join(', ')}</span>
+                    </div>}
+                    {proCount > 0 && <div style={catStyle}>
+                      <span style={{ ...badgeBase, background: '#f3e5f5', color: '#7b1fa2' }}>{proCount}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12 }}>Professional Services</span>
+                      <span style={namesStyle}>— {getNames(proKeys).join(', ')}</span>
+                    </div>}
+                    {customCount > 0 && <div style={catStyle}>
+                      <span style={{ ...badgeBase, background: '#fce4ec', color: '#c62828' }}>{customCount}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12 }}>Custom</span>
+                      <span style={namesStyle}>— {customSvcs.map(cs => cs.name).join(', ')}</span>
+                    </div>}
                   </div>
-                </>;
+                </div>;
               })()}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, fontSize: 13 }}>
                 <div><strong>PS</strong><div style={{ color: '#666' }}>{totals.projCmd.numSvc} svc x ${totals.projCmd.psPerService || projectCommandRates.psPerService} + ({totals.projCmd.miles} mi x ${driveRates.projectCommand} x {totals.projCmd.numSvc})</div><div style={{ fontWeight: 600 }}>{fmt(totals.projCmd.ps)}</div></div>
