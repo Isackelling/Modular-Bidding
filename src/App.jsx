@@ -3094,7 +3094,7 @@ function AppInner() {
                       <label style={{ ...S.label, color: '#856404', margin: 0, whiteSpace: 'nowrap', fontWeight: 700 }}># of Pre Built Stairs</label>
                       <input style={{ ...S.input, fontSize: 18, fontWeight: 600, width: 80, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
                     </div>
-                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, find temporary stairs on Amazon sized for the home height and add to materials.</p>
+                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
                   </div>
                 </div>
 
@@ -3224,7 +3224,7 @@ function AppInner() {
                       <label style={{ ...S.label, color: '#856404', margin: 0, whiteSpace: 'nowrap', fontWeight: 700 }}># of Pre Built Stairs</label>
                       <input style={{ ...S.input, fontSize: 18, fontWeight: 600, width: 80, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
                     </div>
-                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, find temporary stairs on Amazon sized for the home height and add to materials.</p>
+                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
                   </div>
                 </div>
 
@@ -4071,10 +4071,13 @@ function AppInner() {
               {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Markup (10%)</span><span>{fmt(totals.mu)}</span></div>}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 24, color: '#2c5530', borderTop: '2px solid #2c5530', paddingTop: 12, marginBottom: 12 }}><span>Total</span><span>{fmt(totals.total)}</span></div>
 
-              {/* 2% Contingency Allowance */}
+              {/* Contingency Allowance */}
               <div style={{ background: '#e3f2fd', padding: 16, borderRadius: 8, marginTop: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 18, color: '#1565c0', marginBottom: 8 }}>
-                  <span>2% Contingency Allowance</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 700, fontSize: 18, color: '#1565c0', marginBottom: 8 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <input type="number" min="0" max="100" step="1" value={newQ.contingencyRate || '2'} onChange={e => setNewQ(p => ({ ...p, contingencyRate: e.target.value }))} style={{ width: 55, padding: '2px 4px', fontSize: 16, fontWeight: 700, border: '1px solid #90caf9', borderRadius: 4, textAlign: 'center', color: '#1565c0', background: '#fff' }} />
+                    <span>% Contingency Allowance</span>
+                  </span>
                   <span>{fmt(totals.contingency)}</span>
                 </div>
                 <div style={{ fontSize: 13, color: '#666', lineHeight: 1.6 }}>

@@ -462,8 +462,9 @@ export const calcTotals = (q, materials, services, sewer, patio, driveRates = { 
     total = sub + oh + mu;
   }
 
-  // Calculate 2% Contingency Allowance for change orders and allowances
-  const contingency = Math.round(total * 0.02);
+  // Calculate Contingency Allowance for change orders and allowances (default 2%)
+  const contingencyRate = (parseFloat(q.contingencyRate) || 2) / 100;
+  const contingency = Math.round(total * contingencyRate);
   const totalWithContingency = total + contingency;
 
   return { mat, lab, svc, projCmd, matT, labT, svcT, homeBasePrice, homePrice, sub, oh, mu, total, contingency, totalWithContingency };
