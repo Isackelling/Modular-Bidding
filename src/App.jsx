@@ -3084,17 +3084,17 @@ function AppInner() {
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Length</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.houseLength}'</div></div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Type</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.singleDouble}</div></div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 8 }}>
-                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
-                    <label style={{ ...S.label, color: '#666' }}>I-Beam</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, marginBottom: 8 }}>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
                     <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
                   </div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
                     <label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label>
-                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 8, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                    <p style={{ fontSize: 11, color: '#856404', background: '#fff3cd', padding: '6px 10px', borderRadius: 4, border: '1px solid #ffc107', margin: 0 }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
                   </div>
                 </div>
-                <p style={{ fontSize: 12, color: '#856404', background: '#fff3cd', padding: '8px 12px', borderRadius: 6, border: '1px solid #ffc107', margin: '0 0 8px' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3212,17 +3212,17 @@ function AppInner() {
               // Admin view - full editing
               <>
                 <div style={S.row}><div><label style={S.label}>Width</label><input style={S.input} type="number" value={newQ.houseWidth} onChange={e => updateField('houseWidth', e.target.value)} /></div><div><label style={S.label}>Length</label><input style={S.input} type="number" value={newQ.houseLength} onChange={e => updateField('houseLength', e.target.value)} /></div><div><label style={S.label}>Type</label><select style={S.select} value={newQ.singleDouble} onChange={e => updateField('singleDouble', e.target.value)}><option value="Single">Single</option><option value="Double">Double</option></select></div></div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 8 }}>
-                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
-                    <label style={{ ...S.label, color: '#666' }}>I-Beam</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, marginBottom: 8 }}>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
                     <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
                   </div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
                     <label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label>
-                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 8, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                    <p style={{ fontSize: 11, color: '#856404', background: '#fff3cd', padding: '6px 10px', borderRadius: 4, border: '1px solid #ffc107', margin: 0 }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
                   </div>
                 </div>
-                <p style={{ fontSize: 12, color: '#856404', background: '#fff3cd', padding: '8px 12px', borderRadius: 6, border: '1px solid #ffc107', margin: '0 0 8px' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3949,7 +3949,7 @@ function AppInner() {
 
                   return summaryServices.length > 0 && (
                     <>
-                      <h4>Install{(isAdmin || isSales) ? `: ${fmt(installTotal)}` : ''}</h4>
+                      <h4>Home Installation Services{(isAdmin || isSales) ? `: ${fmt(installTotal)}` : ''}</h4>
                       <table style={{ ...S.table, fontSize: 12 }}>
                         <tbody>
                           {totals.lab.map((c, i) => (
