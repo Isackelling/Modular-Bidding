@@ -2977,7 +2977,7 @@ function AppInner() {
             <p style={{ fontSize: 12, color: '#666', marginBottom: 10 }}>Selecting a home will auto-fill dimensions below</p>
             <div style={S.row}>
               <div style={{ gridColumn: 'span 2' }}><label style={S.label}>Model</label><select style={S.select} value={newQ.homeModel} onChange={e => updateField('homeModel', e.target.value)}>{homeModels.map(m => <option key={m.name} value={m.name}>{m.name}{m.width > 0 ? ` (${m.width}x${m.length})` : ''} {m.price > 0 && `- ${fmt(m.price * HOME_MARKUP)}`}</option>)}</select></div>
-              <div><label style={S.label}>Price</label><input style={{ ...S.input, background: '#e8f5e9', fontWeight: 600, fontSize: 18 }} type="number" min="0" step="100" value={Math.round((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP) || ''} onChange={e => setNewQ(p => ({ ...p, homeBasePrice: String((parseFloat(e.target.value) || 0) / HOME_MARKUP) }))} />{isAdmin && <small style={{ color: '#666' }}>Base: {fmt(parseFloat(newQ.homeBasePrice) || 0)} x {HOME_MARKUP}</small>}</div>
+              <div><label style={S.label}>Home Sale Price</label><div style={{ position: 'relative' }}><span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 16, fontWeight: 600, color: '#2c5530', pointerEvents: 'none' }}>$</span><input style={{ ...S.input, background: '#e8f5e9', fontWeight: 600, fontSize: 18, paddingLeft: 24 }} type="text" inputMode="numeric" value={Math.round((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP) ? Math.round((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP).toLocaleString() : ''} onChange={e => { const num = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0; setNewQ(p => ({ ...p, homeBasePrice: String(num / HOME_MARKUP) })); }} placeholder="0" /></div>{isAdmin && <small style={{ color: '#666' }}>Base: {fmt(parseFloat(newQ.homeBasePrice) || 0)} x {HOME_MARKUP}</small>}</div>
             </div>
 
             {/* Floor Plan Section */}
@@ -3084,19 +3084,17 @@ function AppInner() {
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Length</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.houseLength}'</div></div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Type</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.singleDouble}</div></div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, marginBottom: 8 }}>
-                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 8 }}>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
+                    <label style={{ ...S.label, color: '#666' }}>I-Beam</label>
                     <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
                   </div>
-                  <div style={{ background: '#fff3cd', padding: 12, borderRadius: 6, border: '1px solid #ffc107' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-                      <label style={{ ...S.label, color: '#856404', margin: 0, whiteSpace: 'nowrap', fontWeight: 700 }}># of Pre Built Stairs</label>
-                      <input style={{ ...S.input, fontSize: 18, fontWeight: 600, width: 80, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
-                    </div>
-                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
+                    <label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label>
+                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
                   </div>
                 </div>
+                <p style={{ fontSize: 12, color: '#856404', background: '#fff3cd', padding: '8px 12px', borderRadius: 6, border: '1px solid #ffc107', margin: '0 0 8px' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
@@ -3214,19 +3212,17 @@ function AppInner() {
               // Admin view - full editing
               <>
                 <div style={S.row}><div><label style={S.label}>Width</label><input style={S.input} type="number" value={newQ.houseWidth} onChange={e => updateField('houseWidth', e.target.value)} /></div><div><label style={S.label}>Length</label><input style={S.input} type="number" value={newQ.houseLength} onChange={e => updateField('houseLength', e.target.value)} /></div><div><label style={S.label}>Type</label><select style={S.select} value={newQ.singleDouble} onChange={e => updateField('singleDouble', e.target.value)}><option value="Single">Single</option><option value="Double">Double</option></select></div></div>
-                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, marginBottom: 8 }}>
-                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 8 }}>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
+                    <label style={{ ...S.label, color: '#666' }}>I-Beam</label>
                     <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
                   </div>
-                  <div style={{ background: '#fff3cd', padding: 12, borderRadius: 6, border: '1px solid #ffc107' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-                      <label style={{ ...S.label, color: '#856404', margin: 0, whiteSpace: 'nowrap', fontWeight: 700 }}># of Pre Built Stairs</label>
-                      <input style={{ ...S.input, fontSize: 18, fontWeight: 600, width: 80, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
-                    </div>
-                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}>
+                    <label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label>
+                    <input style={{ ...S.input, fontSize: 18, fontWeight: 600, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
                   </div>
                 </div>
+                <p style={{ fontSize: 12, color: '#856404', background: '#fff3cd', padding: '8px 12px', borderRadius: 6, border: '1px solid #ffc107', margin: '0 0 8px' }}>Stairs are required at every entry way. If customer declines pre-built stairs, or custom deck, find temporary stairs on Amazon sized for the home height and add to materials.</p>
 
                 {/* Home Options */}
                 <div style={{ marginTop: 20, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
