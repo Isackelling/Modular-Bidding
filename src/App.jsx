@@ -1686,7 +1686,6 @@ function AppInner() {
                     {(() => {
                       const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(currentItem.customOptions || []).map((_, i) => `customopt_${i}`)]);
                       const homeSvc = totals.svc.filter(s => homeKeys.has(s.key));
-                      console.log('DEBUG HOME SECTION:', { homeKeys: [...homeKeys], allSvcKeys: totals.svc.map(s => s.key), homeSvcKeys: homeSvc.map(s => s.key), homePrice: totals.homePrice });
                       const homeSvcTotal = homeSvc.reduce((sum, s) => sum + s.cost, 0);
                       const homeTotal = totals.homePrice + homeSvcTotal;
                       if (homeTotal <= 0) return null;
@@ -4105,9 +4104,41 @@ function AppInner() {
                   );
                 })()}
 
+                {/* Home Section - model cost, foundation, patio, home options, custom options */}
                 {(() => {
-                  // Separate allowances from other professional services
-                  const allProfessionalServices = totals.svc.filter(c => !SUMMARY_SERVICES.includes(c.key));
+                  const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                  const homeSvc = totals.svc.filter(s => homeKeys.has(s.key));
+                  const homeSvcTotal = homeSvc.reduce((sum, s) => sum + s.cost, 0);
+                  const homeTotal = totals.homePrice + homeSvcTotal;
+                  if (homeTotal <= 0) return null;
+                  return <>
+                    <h4 style={{ marginTop: 16, color: '#2c5530' }}>Home{(isAdmin || isSales) ? `: ${fmt(homeTotal)}` : ''}</h4>
+                    <table style={{ ...S.table, fontSize: 12 }}>
+                      <tbody>
+                        {totals.homePrice > 0 && (
+                          <tr>
+                            <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
+                            {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
+                          </tr>
+                        )}
+                        {homeSvc.map((s, i) => (
+                          <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
+                            {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
+                            </td>}
+                            <td>{s.item}</td>
+                            {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </>;
+                })()}
+
+                {(() => {
+                  // Separate allowances from other professional services, excluding home items
+                  const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                  const allProfessionalServices = totals.svc.filter(c => !SUMMARY_SERVICES.includes(c.key) && !homeKeys.has(c.key));
                   const allowances = allProfessionalServices.filter(c => ALLOWANCE_ITEMS.includes(c.key)).sort((a, b) => {
                     const aLic = LICENSED_SERVICES.includes(a.key) ? 0 : 1;
                     const bLic = LICENSED_SERVICES.includes(b.key) ? 0 : 1;
@@ -4191,8 +4222,16 @@ function AppInner() {
             <div style={{ marginTop: 24, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
               {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Materials</span><span>{fmt(totals.matT)}</span></div>}
               {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Install</span><span>{fmt(totals.labT)}</span></div>}
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Services</span><span>{fmt(totals.svcT)}</span></div>}
-              {isAdmin && totals.homePrice > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Home</span><span>{fmt(totals.homePrice)}</span></div>}
+              {isAdmin && (() => {
+                const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                const homeSvcTotal = totals.svc.filter(s => homeKeys.has(s.key)).reduce((sum, s) => sum + s.cost, 0);
+                const homeTotal = totals.homePrice + homeSvcTotal;
+                const servicesOnly = totals.svcT - homeSvcTotal;
+                return <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Services</span><span>{fmt(servicesOnly)}</span></div>
+                  {homeTotal > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Home</span><span>{fmt(homeTotal)}</span></div>}
+                </>;
+              })()}
               {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Project Command</span><span>{fmt(totals.projCmd.total)}</span></div>}
               {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, borderTop: '1px solid #ddd', paddingTop: 8 }}><span>Subtotal</span><span>{fmt(totals.sub)}</span></div>}
               {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Overhead (5%)</span><span>{fmt(totals.oh)}</span></div>}
