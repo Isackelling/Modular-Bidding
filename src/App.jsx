@@ -3204,9 +3204,34 @@ function AppInner() {
                         { key: 'meter_loop', name: 'Meter Loop', price: 300, hasQty: false },
                         { key: 'drop_down_beam', name: 'Drop Down Beam', price: 500, hasQty: false },
                         { key: 'lp_trim', name: 'LP Trim', price: 2000, hasQty: false },
-                        { key: 'amp_service_200', name: '200 Amp Service', price: 400, hasQty: false }
+                        { key: 'amp_service_200', name: '200 Amp Service', price: 400, hasQty: false },
+                        { key: '_patio', name: 'Patio', isPatio: true }
                       ];
                     })().map(opt => {
+                      if (opt.isPatio) {
+                        const patioSelected = newQ.patioSize && newQ.patioSize !== 'none';
+                        const patioOvr = newQ.servicePriceOverrides?.patio;
+                        return (
+                          <div key="patio" style={{ padding: 12, background: patioSelected ? (patioOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${patioSelected ? (patioOvr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Patio</span>
+                              {patioSelected && <span style={{ fontSize: 13, fontWeight: 600, color: patioOvr ? '#856404' : '#2c5530' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing[newQ.patioSize])}</span>}
+                            </label>
+                            <select style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
+                              <option value="none">None</option>
+                              {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
+                            </select>
+                            {patioSelected && (
+                              <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Price:</label>
+                                <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                                <input type="number" min="0" style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${patioOvr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: patioOvr ? '#fffbeb' : '#fff' }} placeholder={patioPricing[newQ.patioSize]} value={patioOvr || ''} onChange={e => { const value = e.target.value; if (value === '' || /^\d*\.?\d*$/.test(value)) updateServicePrice('patio', value); }} onFocus={e => e.target.select()} />
+                                {patioOvr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={e => { e.preventDefault(); updateServicePrice('patio', ''); }} title="Reset to default price">↺</button>}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
                       const qty = newQ.serviceQuantities?.[opt.key] || 1;
                       const isSelected = newQ.selectedServices?.[opt.key] || false;
                       const ovr = newQ.servicePriceOverrides?.[opt.key];
@@ -3275,33 +3300,6 @@ function AppInner() {
                     ))}
                     <button type="button" onClick={addCustomOption} style={{ ...S.btnSm, background: '#2c5530', fontSize: 12, padding: '6px 14px' }}>+ Add Custom Option</button>
                   </div>
-                </div>
-
-                <div style={{ marginTop: 16 }}>
-                  <label style={S.label}>Patio</label>
-                  <select style={S.select} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
-                    <option value="none">None</option>
-                    {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
-                  </select>
-                  {newQ.patioSize && newQ.patioSize !== 'none' && (
-                    <div style={{ marginTop: 8 }}>
-                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.patio ? S.override : {}), width: '100%' }}
-                        placeholder={fmt(patioPricing[newQ.patioSize])}
-                        value={newQ.servicePriceOverrides?.patio || ''}
-                        onChange={e => {
-                          const value = e.target.value;
-                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                            updateServicePrice('patio', value);
-                          }
-                        }}
-                        onFocus={e => e.target.select()}
-                      />
-                    </div>
-                  )}
                 </div>
 
                 <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
@@ -3378,9 +3376,34 @@ function AppInner() {
                         { key: 'meter_loop', name: 'Meter Loop', price: 300, hasQty: false },
                         { key: 'drop_down_beam', name: 'Drop Down Beam', price: 500, hasQty: false },
                         { key: 'lp_trim', name: 'LP Trim', price: 2000, hasQty: false },
-                        { key: 'amp_service_200', name: '200 Amp Service', price: 400, hasQty: false }
+                        { key: 'amp_service_200', name: '200 Amp Service', price: 400, hasQty: false },
+                        { key: '_patio', name: 'Patio', isPatio: true }
                       ];
                     })().map(opt => {
+                      if (opt.isPatio) {
+                        const patioSelected = newQ.patioSize && newQ.patioSize !== 'none';
+                        const patioOvr = newQ.servicePriceOverrides?.patio;
+                        return (
+                          <div key="patio" style={{ padding: 12, background: patioSelected ? (patioOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${patioSelected ? (patioOvr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Patio</span>
+                              {patioSelected && <span style={{ fontSize: 13, fontWeight: 600, color: patioOvr ? '#856404' : '#2c5530' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing[newQ.patioSize])}</span>}
+                            </label>
+                            <select style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
+                              <option value="none">None</option>
+                              {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
+                            </select>
+                            {patioSelected && (
+                              <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Price:</label>
+                                <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                                <input type="number" min="0" style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${patioOvr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: patioOvr ? '#fffbeb' : '#fff' }} placeholder={patioPricing[newQ.patioSize]} value={patioOvr || ''} onChange={e => { const value = e.target.value; if (value === '' || /^\d*\.?\d*$/.test(value)) updateServicePrice('patio', value); }} onFocus={e => e.target.select()} />
+                                {patioOvr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={e => { e.preventDefault(); updateServicePrice('patio', ''); }} title="Reset to default price">↺</button>}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
                       const qty = newQ.serviceQuantities?.[opt.key] || 1;
                       const isSelected = newQ.selectedServices?.[opt.key] || false;
                       const ovr = newQ.servicePriceOverrides?.[opt.key];
@@ -3449,33 +3472,6 @@ function AppInner() {
                     ))}
                     <button type="button" onClick={addCustomOption} style={{ ...S.btnSm, background: '#2c5530', fontSize: 12, padding: '6px 14px' }}>+ Add Custom Option</button>
                   </div>
-                </div>
-
-                <div style={{ marginTop: 16 }}>
-                  <label style={S.label}>Patio</label>
-                  <select style={S.select} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
-                    <option value="none">None</option>
-                    {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
-                  </select>
-                  {newQ.patioSize && newQ.patioSize !== 'none' && (
-                    <div style={{ marginTop: 8 }}>
-                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.patio ? S.override : {}), width: '100%' }}
-                        placeholder={fmt(patioPricing[newQ.patioSize])}
-                        value={newQ.servicePriceOverrides?.patio || ''}
-                        onChange={e => {
-                          const value = e.target.value;
-                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                            updateServicePrice('patio', value);
-                          }
-                        }}
-                        onFocus={e => e.target.select()}
-                      />
-                    </div>
-                  )}
                 </div>
 
                 <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
@@ -3618,6 +3614,76 @@ function AppInner() {
             {!proSvcCollapsed && <>
             <p style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>Items marked with <span style={{ background: '#fff3cd', padding: '2px 6px', borderRadius: 3, fontSize: 11 }}>ALLOWANCE</span> are estimates that may vary based on site conditions. Final costs will be confirmed upon completion of work.</p>
             <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden' }}>
+              {/* Sewer - integrated into Pro Services */}
+              {(() => {
+                const sewerSelected = newQ.sewerType && newQ.sewerType !== 'none';
+                const sewerOvr = newQ.servicePriceOverrides?.sewer;
+                const sewerHasNotes = newQ.serviceNotes?.sewer || newQ.serviceCrewNotes?.sewer || (newQ.publishedServiceNotes?.sewer?.length > 0) || (newQ.publishedServiceCrewNotes?.sewer?.length > 0);
+                return <React.Fragment>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: sewerSelected ? (sewerOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: '1px solid #eee' }}>
+                    <select style={{ ...S.select, marginBottom: 0, width: 'auto', minWidth: 130, padding: '4px 8px', fontSize: 13 }} value={newQ.sewerType} onChange={e => updateField('sewerType', e.target.value)}>
+                      <option value="none">None</option>
+                      {Object.entries(sewerPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k.replace('_', ' ')} - {fmt(v)}</option>)}
+                    </select>
+                    <span style={{ flex: 1, fontSize: 14, fontWeight: sewerSelected ? 600 : 400, color: sewerSelected ? '#2c5530' : '#333' }}>
+                      Sewer
+                      <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>
+                    </span>
+                    {sewerSelected ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                        <input type="number" style={{ ...S.inputSm, ...(sewerOvr ? S.override : {}), width: '90px', padding: '4px 6px' }} placeholder={fmt(sewerPricing[newQ.sewerType])} value={sewerOvr || ''} onChange={e => updateServicePrice('sewer', e.target.value)} onFocus={e => e.target.select()} />
+                        {sewerOvr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={() => updateServicePrice('sewer', '')} title="Reset to default price">↺</button>}
+                      </div>
+                    ) : <span style={{ color: '#999', fontSize: 13 }}>Select type</span>}
+                    {sewerSelected && (
+                      <button type="button" onClick={() => setExpandedServiceNotes(prev => ({ ...prev, sewer: !prev.sewer }))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, padding: '2px 4px', color: sewerHasNotes ? '#1565c0' : '#bbb', position: 'relative' }} title={expandedServiceNotes.sewer ? 'Hide notes' : 'Add/view notes'}>
+                        {expandedServiceNotes.sewer ? '▼' : '📝'}
+                        {sewerHasNotes && !expandedServiceNotes.sewer && <span style={{ position: 'absolute', top: 0, right: 0, width: 6, height: 6, background: '#1565c0', borderRadius: '50%' }} />}
+                      </button>
+                    )}
+                  </div>
+                  {sewerSelected && expandedServiceNotes.sewer && (
+                    <div style={{ padding: '0 12px 12px', background: '#f9fafb', borderBottom: '1px solid #e0e0e0' }}>
+                      <ExpandableNoteSection serviceKey="sewer" customerNote={newQ.serviceNotes?.sewer} crewNote={newQ.serviceCrewNotes?.sewer} isExpanded={expandedServiceNotes.sewer} onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, sewer: !prev.sewer }))} onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))} onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))} publishedCustomerNotes={newQ.publishedServiceNotes?.sewer || []} publishedCrewNotes={newQ.publishedServiceCrewNotes?.sewer || []} onPublishCustomerNote={handlePublishCustomerNote} onPublishCrewNote={handlePublishCrewNote} onEditCustomerNote={handleEditCustomerNote} onEditCrewNote={handleEditCrewNote} onDeleteCustomerNote={handleDeleteCustomerNote} onDeleteCrewNote={handleDeleteCrewNote} userName={userName} />
+                    </div>
+                  )}
+                </React.Fragment>;
+              })()}
+              {/* Well - integrated into Pro Services */}
+              {(() => {
+                const wellSelected = parseFloat(newQ.wellDepth) > 0;
+                const wellOvr = newQ.servicePriceOverrides?.well;
+                const wellDefaultPrice = (120 * parseFloat(newQ.wellDepth || 0)) + (enforceMiles(newQ.driveTime) * DRIVE_RATE_SERVICE);
+                const wellHasNotes = newQ.serviceNotes?.well || newQ.serviceCrewNotes?.well || (newQ.publishedServiceNotes?.well?.length > 0) || (newQ.publishedServiceCrewNotes?.well?.length > 0);
+                return <React.Fragment>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: wellSelected ? (wellOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: '1px solid #eee' }}>
+                    <input type="number" min="0" style={{ width: 70, padding: '4px 8px', fontSize: 13, border: '1px solid #ddd', borderRadius: 4, textAlign: 'center' }} value={newQ.wellDepth} onChange={e => updateField('wellDepth', e.target.value)} placeholder="0" />
+                    <span style={{ flex: 1, fontSize: 14, fontWeight: wellSelected ? 600 : 400, color: wellSelected ? '#2c5530' : '#333' }}>
+                      Well (ft)
+                      <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>
+                    </span>
+                    {wellSelected ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 11, color: '#666' }}>$</span>
+                        <input type="number" style={{ ...S.inputSm, ...(wellOvr ? S.override : {}), width: '90px', padding: '4px 6px' }} placeholder={fmt(wellDefaultPrice)} value={wellOvr || ''} onChange={e => updateServicePrice('well', e.target.value)} onFocus={e => e.target.select()} />
+                        {wellOvr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={() => updateServicePrice('well', '')} title="Reset to default price">↺</button>}
+                      </div>
+                    ) : <span style={{ color: '#999', fontSize: 13 }}>Enter depth</span>}
+                    {wellSelected && (
+                      <button type="button" onClick={() => setExpandedServiceNotes(prev => ({ ...prev, well: !prev.well }))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, padding: '2px 4px', color: wellHasNotes ? '#1565c0' : '#bbb', position: 'relative' }} title={expandedServiceNotes.well ? 'Hide notes' : 'Add/view notes'}>
+                        {expandedServiceNotes.well ? '▼' : '📝'}
+                        {wellHasNotes && !expandedServiceNotes.well && <span style={{ position: 'absolute', top: 0, right: 0, width: 6, height: 6, background: '#1565c0', borderRadius: '50%' }} />}
+                      </button>
+                    )}
+                  </div>
+                  {wellSelected && expandedServiceNotes.well && (
+                    <div style={{ padding: '0 12px 12px', background: '#f9fafb', borderBottom: '1px solid #e0e0e0' }}>
+                      <ExpandableNoteSection serviceKey="well" customerNote={newQ.serviceNotes?.well} crewNote={newQ.serviceCrewNotes?.well} isExpanded={expandedServiceNotes.well} onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, well: !prev.well }))} onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))} onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))} publishedCustomerNotes={newQ.publishedServiceNotes?.well || []} publishedCrewNotes={newQ.publishedServiceCrewNotes?.well || []} onPublishCustomerNote={handlePublishCustomerNote} onPublishCrewNote={handlePublishCrewNote} onEditCustomerNote={handleEditCustomerNote} onEditCrewNote={handleEditCrewNote} onDeleteCustomerNote={handleDeleteCustomerNote} onDeleteCrewNote={handleDeleteCrewNote} userName={userName} />
+                    </div>
+                  )}
+                </React.Fragment>;
+              })()}
               {(() => {
                 const proServices = Object.entries(services).filter(([k]) => !SUMMARY_SERVICES.includes(k) && !HOME_OPTIONS.includes(k)).sort((a, b) => {
                   const aAllow = ALLOWANCE_ITEMS.includes(a[0]) ? 0 : 1;
@@ -3708,97 +3774,6 @@ function AppInner() {
                   )}
                 </div>
               ))}
-            </div>
-            <div style={{ ...S.row, marginTop: 20 }}>
-              <div>
-                <label style={S.label}>Sewer <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3 }}>ALLOWANCE</span></label>
-                <select style={S.select} value={newQ.sewerType} onChange={e => updateField('sewerType', e.target.value)}>
-                  <option value="none">None</option>
-                  {Object.entries(sewerPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k.replace('_', ' ')} - {fmt(v)}</option>)}
-                </select>
-                {newQ.sewerType && newQ.sewerType !== 'none' && (
-                  <>
-                    <div style={{ marginTop: 8 }}>
-                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.sewer ? S.override : {}), width: '100%' }}
-                        placeholder={fmt(sewerPricing[newQ.sewerType])}
-                        value={newQ.servicePriceOverrides?.sewer || ''}
-                        onChange={e => {
-                          const value = e.target.value;
-                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                            updateServicePrice('sewer', value);
-                          }
-                        }}
-                        onFocus={e => e.target.select()}
-                      />
-                    </div>
-                    <ExpandableNoteSection
-                      serviceKey="sewer"
-                      customerNote={newQ.serviceNotes?.sewer}
-                      crewNote={newQ.serviceCrewNotes?.sewer}
-                      isExpanded={expandedServiceNotes.sewer}
-                      onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, sewer: !prev.sewer }))}
-                      onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))}
-                      onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))}
-                      publishedCustomerNotes={newQ.publishedServiceNotes?.sewer || []}
-                      publishedCrewNotes={newQ.publishedServiceCrewNotes?.sewer || []}
-                      onPublishCustomerNote={handlePublishCustomerNote}
-                      onPublishCrewNote={handlePublishCrewNote}
-                      onEditCustomerNote={handleEditCustomerNote}
-                      onEditCrewNote={handleEditCrewNote}
-                      onDeleteCustomerNote={handleDeleteCustomerNote}
-                      onDeleteCrewNote={handleDeleteCrewNote}
-                      userName={userName}
-                    />
-                  </>
-                )}
-              </div>
-              <div>
-                <label style={S.label}>Well (ft) <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3 }}>ALLOWANCE</span></label>
-                <input style={S.input} type="number" value={newQ.wellDepth} onChange={e => updateField('wellDepth', e.target.value)} />
-                {parseFloat(newQ.wellDepth) > 0 && (
-                  <>
-                    <div style={{ marginTop: 8 }}>
-                      <label style={{ ...S.label, fontSize: 12 }}>Override Price (optional)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        style={{ ...S.inputSm, ...(newQ.servicePriceOverrides?.well ? S.override : {}), width: '100%' }}
-                        placeholder={fmt((120 * parseFloat(newQ.wellDepth)) + (enforceMiles(newQ.driveTime) * DRIVE_RATE_SERVICE))}
-                        value={newQ.servicePriceOverrides?.well || ''}
-                        onChange={e => {
-                          const value = e.target.value;
-                          if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                            updateServicePrice('well', value);
-                          }
-                        }}
-                        onFocus={e => e.target.select()}
-                      />
-                    </div>
-                    <ExpandableNoteSection
-                      serviceKey="well"
-                      customerNote={newQ.serviceNotes?.well}
-                      crewNote={newQ.serviceCrewNotes?.well}
-                      isExpanded={expandedServiceNotes.well}
-                      onToggleExpand={() => setExpandedServiceNotes(prev => ({ ...prev, well: !prev.well }))}
-                      onUpdateCustomerNote={(key, value) => setNewQ(p => ({ ...p, serviceNotes: { ...p.serviceNotes, [key]: value } }))}
-                      onUpdateCrewNote={(key, value) => setNewQ(p => ({ ...p, serviceCrewNotes: { ...p.serviceCrewNotes, [key]: value } }))}
-                      publishedCustomerNotes={newQ.publishedServiceNotes?.well || []}
-                      publishedCrewNotes={newQ.publishedServiceCrewNotes?.well || []}
-                      onPublishCustomerNote={handlePublishCustomerNote}
-                      onPublishCrewNote={handlePublishCrewNote}
-                      onEditCustomerNote={handleEditCustomerNote}
-                      onEditCrewNote={handleEditCrewNote}
-                      onDeleteCustomerNote={handleDeleteCustomerNote}
-                      onDeleteCrewNote={handleDeleteCrewNote}
-                      userName={userName}
-                    />
-                  </>
-                )}
-              </div>
             </div>
 
             <div style={{ marginTop: 24, padding: 16, background: '#f9f9f9', borderRadius: 8 }}>
