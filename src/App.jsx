@@ -2977,7 +2977,7 @@ function AppInner() {
             <p style={{ fontSize: 12, color: '#666', marginBottom: 10 }}>Selecting a home will auto-fill dimensions below</p>
             <div style={S.row}>
               <div style={{ gridColumn: 'span 2' }}><label style={S.label}>Model</label><select style={S.select} value={newQ.homeModel} onChange={e => updateField('homeModel', e.target.value)}>{homeModels.map(m => <option key={m.name} value={m.name}>{m.name}{m.width > 0 ? ` (${m.width}x${m.length})` : ''} {m.price > 0 && `- ${fmt(m.price * HOME_MARKUP)}`}</option>)}</select></div>
-              <div><label style={S.label}>Price</label><input style={{ ...S.input, background: '#e8f5e9', fontWeight: 600, fontSize: 18 }} value={fmt((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP)} readOnly />{isAdmin && <small style={{ color: '#666' }}>Base x 1.2</small>}</div>
+              <div><label style={S.label}>Price</label><input style={{ ...S.input, background: '#e8f5e9', fontWeight: 600, fontSize: 18 }} type="number" min="0" step="100" value={Math.round((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP) || ''} onChange={e => setNewQ(p => ({ ...p, homeBasePrice: String((parseFloat(e.target.value) || 0) / HOME_MARKUP) }))} />{isAdmin && <small style={{ color: '#666' }}>Base: {fmt(parseFloat(newQ.homeBasePrice) || 0)} x {HOME_MARKUP}</small>}</div>
             </div>
 
             {/* Floor Plan Section */}
@@ -3084,9 +3084,18 @@ function AppInner() {
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Length</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.houseLength}'</div></div>
                   <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>Type</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.singleDouble}</div></div>
                 </div>
-                <div style={S.row}><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}>I-Beam</label><div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div></div><div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6 }}><label style={{ ...S.label, color: '#666' }}># of Pre Built Stairs</label><input style={{ ...S.input, fontSize: 18, fontWeight: 600 }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" /></div></div>
-                <div style={{ background: '#fff3cd', padding: 12, borderRadius: 8, marginTop: 8, border: '1px solid #ffc107' }}>
-                  <p style={{ margin: 0, fontSize: 13, color: '#856404', fontWeight: 600 }}>Note: Stairs are required at every entry way of the home. If customer does not want pre-built stairs, add temporary stairs from Amazon to the materials list to send with the job.</p>
+                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, marginBottom: 8 }}>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
+                    <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
+                  </div>
+                  <div style={{ background: '#fff3cd', padding: 12, borderRadius: 6, border: '1px solid #ffc107' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+                      <label style={{ ...S.label, color: '#856404', margin: 0, whiteSpace: 'nowrap', fontWeight: 700 }}># of Pre Built Stairs</label>
+                      <input style={{ ...S.input, fontSize: 18, fontWeight: 600, width: 80, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                    </div>
+                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, find temporary stairs on Amazon sized for the home height and add to materials.</p>
+                  </div>
                 </div>
 
                 {/* Home Options */}
@@ -3113,10 +3122,12 @@ function AppInner() {
                     })().map(opt => {
                       const qty = newQ.serviceQuantities?.[opt.key] || 1;
                       const isSelected = newQ.selectedServices?.[opt.key] || false;
-                      const totalPrice = opt.hasQty ? opt.price * qty : opt.price;
+                      const ovr = newQ.servicePriceOverrides?.[opt.key];
+                      const defaultTotal = opt.hasQty ? opt.price * qty : opt.price;
+                      const displayTotal = ovr ? parseFloat(ovr) : defaultTotal;
 
                       return (
-                        <div key={opt.key} style={{ padding: 12, background: isSelected ? '#e8f5e9' : '#fff', borderRadius: 4, border: `1px solid ${isSelected ? '#2c5530' : '#dee2e6'}` }}>
+                        <div key={opt.key} style={{ padding: 12, background: isSelected ? (ovr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${isSelected ? (ovr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
                           <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                             <input
                               type="checkbox"
@@ -3125,22 +3136,37 @@ function AppInner() {
                               style={{ width: 16, height: 16, cursor: 'pointer' }}
                             />
                             <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>{opt.name}</span>
-                            <span style={{ fontSize: 13, fontWeight: 600, color: '#2c5530' }}>
-                              {opt.price > 0 ? (opt.hasQty ? `${fmt(opt.price)} each` : fmt(totalPrice)) : 'Enter length'}
+                            <span style={{ fontSize: 13, fontWeight: 600, color: ovr ? '#856404' : '#2c5530' }}>
+                              {opt.price > 0 ? (opt.hasQty ? `${fmt(opt.price)} each` : fmt(displayTotal)) : 'Enter length'}
                             </span>
                           </label>
-                          {isSelected && opt.hasQty && (
-                            <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Quantity:</label>
+                          {isSelected && (
+                            <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                              {opt.hasQty && <>
+                                <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Qty:</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={qty}
+                                  onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [opt.key]: parseInt(e.target.value) || 1 } }))}
+                                  style={{ width: 50, padding: '4px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }}
+                                  onClick={e => e.stopPropagation()}
+                                />
+                              </>}
+                              <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Price:</label>
+                              <span style={{ fontSize: 11, color: '#666' }}>$</span>
                               <input
                                 type="number"
-                                min="1"
-                                value={qty}
-                                onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [opt.key]: parseInt(e.target.value) || 1 } }))}
-                                style={{ width: 60, padding: '4px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }}
+                                min="0"
+                                style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${ovr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: ovr ? '#fffbeb' : '#fff' }}
+                                placeholder={defaultTotal}
+                                value={ovr || ''}
+                                onChange={e => updateServicePrice(opt.key, e.target.value)}
+                                onFocus={e => e.target.select()}
                                 onClick={e => e.stopPropagation()}
                               />
-                              <span style={{ fontSize: 13, fontWeight: 600, color: '#2c5530' }}>= {fmt(totalPrice)}</span>
+                              {ovr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={e => { e.preventDefault(); updateServicePrice(opt.key, ''); }} title="Reset to default price">↺</button>}
+                              {opt.hasQty && <span style={{ fontSize: 13, fontWeight: 600, color: '#2c5530' }}>= {fmt(displayTotal)}</span>}
                             </div>
                           )}
                         </div>
@@ -3188,9 +3214,18 @@ function AppInner() {
               // Admin view - full editing
               <>
                 <div style={S.row}><div><label style={S.label}>Width</label><input style={S.input} type="number" value={newQ.houseWidth} onChange={e => updateField('houseWidth', e.target.value)} /></div><div><label style={S.label}>Length</label><input style={S.input} type="number" value={newQ.houseLength} onChange={e => updateField('houseLength', e.target.value)} /></div><div><label style={S.label}>Type</label><select style={S.select} value={newQ.singleDouble} onChange={e => updateField('singleDouble', e.target.value)}><option value="Single">Single</option><option value="Double">Double</option></select></div></div>
-                <div style={S.row}><div><label style={S.label}>I-Beam</label><input style={{ ...S.input, background: '#f8f9fa' }} value={`${newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"`} readOnly /></div><div><label style={S.label}># of Pre Built Stairs</label><input style={S.input} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" /></div></div>
-                <div style={{ background: '#fff3cd', padding: 12, borderRadius: 8, marginTop: 8, border: '1px solid #ffc107' }}>
-                  <p style={{ margin: 0, fontSize: 13, color: '#856404', fontWeight: 600 }}>Note: Stairs are required at every entry way of the home. If customer does not want pre-built stairs, add temporary stairs from Amazon to the materials list to send with the job.</p>
+                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, marginBottom: 8 }}>
+                  <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <label style={{ ...S.label, color: '#666', fontSize: 11 }}>I-Beam</label>
+                    <div style={{ fontSize: 18, fontWeight: 600 }}>{newQ.iBeamHeight || calcIBeam(parseFloat(newQ.houseLength) || 56)}"</div>
+                  </div>
+                  <div style={{ background: '#fff3cd', padding: 12, borderRadius: 6, border: '1px solid #ffc107' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+                      <label style={{ ...S.label, color: '#856404', margin: 0, whiteSpace: 'nowrap', fontWeight: 700 }}># of Pre Built Stairs</label>
+                      <input style={{ ...S.input, fontSize: 18, fontWeight: 600, width: 80, marginBottom: 0, textAlign: 'center' }} type="number" min="0" value={newQ.walkDoors || ''} onChange={e => updateField('walkDoors', e.target.value)} placeholder="2" />
+                    </div>
+                    <p style={{ margin: 0, fontSize: 12, color: '#856404' }}>Stairs are required at every entry way. If customer declines pre-built stairs, find temporary stairs on Amazon sized for the home height and add to materials.</p>
+                  </div>
                 </div>
 
                 {/* Home Options */}
@@ -3217,10 +3252,12 @@ function AppInner() {
                     })().map(opt => {
                       const qty = newQ.serviceQuantities?.[opt.key] || 1;
                       const isSelected = newQ.selectedServices?.[opt.key] || false;
-                      const totalPrice = opt.hasQty ? opt.price * qty : opt.price;
+                      const ovr = newQ.servicePriceOverrides?.[opt.key];
+                      const defaultTotal = opt.hasQty ? opt.price * qty : opt.price;
+                      const displayTotal = ovr ? parseFloat(ovr) : defaultTotal;
 
                       return (
-                        <div key={opt.key} style={{ padding: 12, background: isSelected ? '#e8f5e9' : '#fff', borderRadius: 4, border: `1px solid ${isSelected ? '#2c5530' : '#dee2e6'}` }}>
+                        <div key={opt.key} style={{ padding: 12, background: isSelected ? (ovr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${isSelected ? (ovr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
                           <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                             <input
                               type="checkbox"
@@ -3229,22 +3266,37 @@ function AppInner() {
                               style={{ width: 16, height: 16, cursor: 'pointer' }}
                             />
                             <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>{opt.name}</span>
-                            <span style={{ fontSize: 13, fontWeight: 600, color: '#2c5530' }}>
-                              {opt.price > 0 ? (opt.hasQty ? `${fmt(opt.price)} each` : fmt(totalPrice)) : 'Enter length'}
+                            <span style={{ fontSize: 13, fontWeight: 600, color: ovr ? '#856404' : '#2c5530' }}>
+                              {opt.price > 0 ? (opt.hasQty ? `${fmt(opt.price)} each` : fmt(displayTotal)) : 'Enter length'}
                             </span>
                           </label>
-                          {isSelected && opt.hasQty && (
-                            <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Quantity:</label>
+                          {isSelected && (
+                            <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                              {opt.hasQty && <>
+                                <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Qty:</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={qty}
+                                  onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [opt.key]: parseInt(e.target.value) || 1 } }))}
+                                  style={{ width: 50, padding: '4px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }}
+                                  onClick={e => e.stopPropagation()}
+                                />
+                              </>}
+                              <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Price:</label>
+                              <span style={{ fontSize: 11, color: '#666' }}>$</span>
                               <input
                                 type="number"
-                                min="1"
-                                value={qty}
-                                onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [opt.key]: parseInt(e.target.value) || 1 } }))}
-                                style={{ width: 60, padding: '4px 8px', fontSize: 13, border: '1px solid #dee2e6', borderRadius: 4 }}
+                                min="0"
+                                style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${ovr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: ovr ? '#fffbeb' : '#fff' }}
+                                placeholder={defaultTotal}
+                                value={ovr || ''}
+                                onChange={e => updateServicePrice(opt.key, e.target.value)}
+                                onFocus={e => e.target.select()}
                                 onClick={e => e.stopPropagation()}
                               />
-                              <span style={{ fontSize: 13, fontWeight: 600, color: '#2c5530' }}>= {fmt(totalPrice)}</span>
+                              {ovr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={e => { e.preventDefault(); updateServicePrice(opt.key, ''); }} title="Reset to default price">↺</button>}
+                              {opt.hasQty && <span style={{ fontSize: 13, fontWeight: 600, color: '#2c5530' }}>= {fmt(displayTotal)}</span>}
                             </div>
                           )}
                         </div>
