@@ -3979,7 +3979,7 @@ function AppInner() {
                           <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => { setNewQ(p => ({ ...p, homeModel: 'NONE', homeBasePrice: '' })); }} title="Remove home">X</button>
                         </td>}
                         <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
-                        {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
+                        {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
                       </tr>
                     )}
                     {homeSvc.filter(s => s.cost > 0 || s.item).map((s, i) => (
@@ -3988,7 +3988,7 @@ function AppInner() {
                           <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
                         </td>}
                         <td>{s.item}</td>
-                        {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
+                        {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
                       </tr>
                     ))}
                   </tbody>
@@ -4119,7 +4119,7 @@ function AppInner() {
                           {totals.lab.map((c, i) => (
                             <tr key={i}>
                               <td>{c.item}</td>
-                              {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(c.total)}</td>}
+                              {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(c.total)}</td>}
                             </tr>
                           ))}
                           {summaryServices.map((s, i) => (
@@ -4128,7 +4128,7 @@ function AppInner() {
                                 <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
                               </td>}
                               <td>{s.item}{ALLOWANCE_ITEMS.includes(s.key) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}{LICENSED_SERVICES.includes(s.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
-                              {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
+                              {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
                             </tr>
                           ))}
                         </tbody>
@@ -4188,7 +4188,7 @@ function AppInner() {
                                   <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
                                 </td>}
                                 <td>{c.item}{ALLOWANCE_ITEMS.includes(c.key) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}{LICENSED_SERVICES.includes(c.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
-                                {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(c.cost)}</td>}
+                                {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(c.cost)}</td>}
                               </tr>
                             ))}
                           </tbody>
