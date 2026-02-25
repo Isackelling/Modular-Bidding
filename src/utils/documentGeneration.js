@@ -1,9 +1,17 @@
-import { ALLOWANCE_ITEMS, PIER_SPECS, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, MIN_MILES } from '../constants/index.js';
+import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, PIER_SPECS, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, MIN_MILES } from '../constants/index.js';
 import { calcIBeam, fmt } from './helpers.js';
 import { calcTotals } from './calculations.js';
 import { DocumentUtils } from './DocumentUtils.js';
 
 const fmtCurrency = fmt;
+
+const formatPhone = (phone) => {
+  if (!phone) return '';
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  if (digits.length === 11 && digits[0] === '1') return `(${digits.slice(1,4)}) ${digits.slice(4,7)}-${digits.slice(7)}`;
+  return phone;
+};
 
 
 // ============================================================================
@@ -12,12 +20,15 @@ const fmtCurrency = fmt;
 export const generateQuoteHtml = (quote, totals, homeModels) => {
   const services = [];
   const homeSpecAdditions = [];
-  const allowances = [];
   const selectedHome = homeModels?.find(m => m.name === quote.homeModel);
   const floorPlanUrl = selectedHome?.floorPlanUrl || '';
 
   // Get allowance costs from totals
   const allowancesWithCosts = [];
+
+  // Badge HTML helpers
+  const licenseBadge = '<span style="display:inline-block;font-size:9px;background:#e3f2fd;color:#1565c0;padding:1px 5px;border-radius:3px;margin-left:6px;font-weight:600">MN LICENSE REQ.</span>';
+  const allowanceBadge = '<span style="display:inline-block;font-size:9px;background:#fff3cd;color:#856404;padding:1px 5px;border-radius:3px;margin-left:6px;font-weight:600">ALLOWANCE</span>';
 
   Object.entries(quote.selectedServices || {}).forEach(([k, sel]) => {
     if (sel && DEFAULT_SERVICES[k]) {
@@ -28,7 +39,7 @@ export const generateQuoteHtml = (quote, totals, homeModels) => {
       } else if (HOME_OPTIONS.includes(k)) {
         homeSpecAdditions.push(name);
       } else {
-        services.push(name);
+        services.push({ name, key: k });
       }
     }
   });
@@ -41,8 +52,25 @@ export const generateQuoteHtml = (quote, totals, homeModels) => {
     const cost = totals.svc.find(s => s.key === 'well')?.cost || 0;
     allowancesWithCosts.push({ name: `Well Drilling (${quote.wellDepth} ft)`, key: 'well', cost });
   }
-  if (quote.patioSize && quote.patioSize !== 'none') services.push(`Patio (${quote.patioSize} ft)`);
-  (quote.customServices || []).forEach(cs => { if (cs.name) services.push(cs.name); });
+  if (quote.patioSize && quote.patioSize !== 'none') services.push({ name: `Patio (${quote.patioSize} ft)`, key: 'patio' });
+  (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, key: 'custom' }); });
+
+  // Group services like the quote summary: Install Services vs Professional Services
+  const sortByLicense = (a, b) => {
+    const aLic = LICENSED_SERVICES.includes(a.key) ? 0 : 1;
+    const bLic = LICENSED_SERVICES.includes(b.key) ? 0 : 1;
+    return aLic - bLic;
+  };
+  const installServices = services.filter(s => SUMMARY_SERVICES.includes(s.key)).sort(sortByLicense);
+  const professionalServices = services.filter(s => !SUMMARY_SERVICES.includes(s.key)).sort(sortByLicense);
+  allowancesWithCosts.sort(sortByLicense);
+
+  const renderServiceItem = (s) => {
+    let badges = '';
+    if (LICENSED_SERVICES.includes(s.key)) badges += licenseBadge;
+    if (ALLOWANCE_ITEMS.includes(s.key)) badges += allowanceBadge;
+    return `<li>${s.name}${badges}</li>`;
+  };
 
   const totalAllowances = allowancesWithCosts.reduce((sum, a) => sum + a.cost, 0);
 
@@ -62,10 +90,11 @@ ${DocumentUtils.getBaseStyles('850px')}
 .investment-total{font-size:32px;font-weight:800;color:#2c5530;text-align:center;padding:24px;background:#e8f5e9;border-radius:8px;border:3px solid #2c5530;margin-top:20px}
 </style></head><body>
 <div class="header"><img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" style="height:50px"><div style="float:right;text-align:right;font-size:13px;color:#666">Quote #${DocumentUtils.getQuoteNum(quote)}<br>${today}</div></div>
-<div class="section"><div class="section-title">Customer</div><strong>${quote.customerFirstName} ${quote.customerLastName}</strong><br>${quote.phone} | ${quote.email}<br>${quote.siteAddress}, ${quote.siteCity}, ${quote.siteState} ${quote.siteZip}</div>
+<div class="section"><div class="section-title">Customer</div><strong>${quote.customerFirstName} ${quote.customerLastName}</strong><br>${formatPhone(quote.phone)} | ${quote.email}<br>${quote.siteAddress}, ${quote.siteCity}, ${quote.siteState} ${quote.siteZip}</div>
 ${quote.homeModel && quote.homeModel !== 'NONE' ? `<div class="section"><div class="section-title">Home</div><strong>${quote.homeModel}</strong><br>${quote.houseWidth}' × ${quote.houseLength}' ${quote.singleDouble} Wide</div>` : ''}
 ${floorPlanUrl ? `<div class="section"><div class="section-title">Floor Plan</div><p><a href="${floorPlanUrl}" target="_blank" style="color:#1565c0">View Floor Plan on Clayton Homes Website</a></p></div>` : ''}
-${services.length > 0 ? `<div class="section"><div class="section-title">Professional Services</div><ul>${services.map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
+${installServices.length > 0 ? `<div class="section"><div class="section-title">Home Installation Services</div><ul>${installServices.map(renderServiceItem).join('')}</ul></div>` : ''}
+${professionalServices.length > 0 ? `<div class="section"><div class="section-title">Professional Services</div><ul>${professionalServices.map(renderServiceItem).join('')}</ul></div>` : ''}
 ${homeSpecAdditions.length > 0 ? `<div class="section"><div class="section-title">Home Spec Additions</div><ul>${homeSpecAdditions.map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
 <div class="total">Total Project Price: ${fmt(totals.total)}</div>
 ${allowancesWithCosts.length > 0 ? `
@@ -75,7 +104,7 @@ ${allowancesWithCosts.length > 0 ? `
 
   <div style="font-size:15px;font-weight:600;color:#856404;margin:12px 0 8px 0">Allowance Items:</div>
   <table class="allowance-table">
-    ${allowancesWithCosts.map(a => `<tr><td>${a.name}</td><td>${fmt(a.cost)}</td></tr>`).join('')}
+    ${allowancesWithCosts.map(a => `<tr><td>${a.name}${LICENSED_SERVICES.includes(a.key) ? licenseBadge : ''}${allowanceBadge}</td><td>${fmt(a.cost)}</td></tr>`).join('')}
     <tr style="border-top:2px solid #ffc107"><td style="font-weight:700">Total Allowances</td><td style="font-weight:700">${fmt(totalAllowances)}</td></tr>
   </table>
 
@@ -461,7 +490,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       </div>
       <div class="info-item">
         <div class="info-label">Phone</div>
-        <div class="info-value">${quote.phone || 'N/A'}${quote.phone2 ? ` / ${quote.phone2}` : ''}</div>
+        <div class="info-value">${formatPhone(quote.phone) || 'N/A'}${quote.phone2 ? ` / ${formatPhone(quote.phone2)}` : ''}</div>
       </div>
       <div class="info-item">
         <div class="info-label">Email</div>
@@ -528,11 +557,11 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     
     <h4 style="margin: 15px 0 10px; color: #2c5530;">Standard Installation Package:</h4>
     <ul class="services-list">
-      <li>Site preparation and foundation setup</li>
+      <li>Site prep and foundation review</li>
       <li>Home delivery coordination and inspection</li>
       <li>Professional home installation and leveling</li>
       <li>Pier and anchor system installation</li>
-      <li>Marriage line sealing (if applicable)</li>
+      <li>Marriage line connection</li>
       <li>Final inspection and walkthrough</li>
     </ul>
     
@@ -813,7 +842,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
   <div class="info-box">
     <div style="font-weight:700;margin-bottom:8px">Customer</div>
     <div>${customer.firstName} ${customer.lastName}</div>
-    <div style="font-size:13px;color:#666">${customer.phone}</div>
+    <div style="font-size:13px;color:#666">${formatPhone(customer.phone)}</div>
     <div style="font-size:13px;color:#666">${customer.email}</div>
   </div>
   <div class="info-box">
@@ -1120,7 +1149,7 @@ tr:last-child td{border-bottom:none}
   <div class="info-box">
     <div class="info-label">Customer Information</div>
     <div style="font-size:18px;font-weight:700;margin-bottom:8px">${customer.firstName} ${customer.lastName}</div>
-    <div style="font-size:14px;color:#555;margin-bottom:4px">📞 ${customer.phone}</div>
+    <div style="font-size:14px;color:#555;margin-bottom:4px">📞 ${formatPhone(customer.phone)}</div>
     <div style="font-size:14px;color:#555">✉️ ${customer.email}</div>
   </div>
   <div class="info-box">
@@ -1724,7 +1753,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margi
   <div class="info-box">
     <div class="info-label">Customer</div>
     <div class="info-value" style="font-size:17px;font-weight:700;margin-bottom:6px">${customer.firstName} ${customer.lastName}</div>
-    <div class="info-value" style="font-size:13px">📞 ${customer.phone}</div>
+    <div class="info-value" style="font-size:13px">📞 ${formatPhone(customer.phone)}</div>
     <div class="info-value" style="font-size:13px">✉️ ${customer.email}</div>
   </div>
   <div class="info-box">
@@ -1735,7 +1764,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margi
   <div class="info-box">
     <div class="info-label">Contact Person</div>
     <div class="info-value">${quote.contactPerson || 'Primary Contact'}</div>
-    <div class="info-value" style="font-size:13px">${quote.contactPhone || customer.phone}</div>
+    <div class="info-value" style="font-size:13px">${formatPhone(quote.contactPhone || customer.phone)}</div>
   </div>
 </div>
 
@@ -2858,7 +2887,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
   <div class="info-box">
     <div style="font-weight:700;margin-bottom:8px">Customer</div>
     <div>${customer.firstName} ${customer.lastName}</div>
-    <div style="font-size:13px;color:#666">${customer.phone}</div>
+    <div style="font-size:13px;color:#666">${formatPhone(customer.phone)}</div>
   </div>
   <div class="info-box">
     <div style="font-weight:700;margin-bottom:8px">Project Address</div>
@@ -3501,7 +3530,7 @@ ${!hasAnyCrewData ? `
     </div>
     <div class="info-box">
       <div class="info-label">Phone</div>
-      <div class="info-value">${customer?.phone || 'N/A'}</div>
+      <div class="info-value">${formatPhone(customer?.phone) || 'N/A'}</div>
     </div>
     <div class="info-box">
       <div class="info-label">Email</div>
@@ -3522,7 +3551,7 @@ ${!hasAnyCrewData ? `
     </div>
     <div class="info-box">
       <div class="info-label">Second Phone</div>
-      <div class="info-value">${customer.phone2 || 'N/A'}</div>
+      <div class="info-value">${formatPhone(customer.phone2) || 'N/A'}</div>
     </div>
     <div class="info-box">
       <div class="info-label">Second Email</div>
