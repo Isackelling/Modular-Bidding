@@ -4226,6 +4226,31 @@ function AppInner() {
 
             {isAdmin && <div style={S.projCmd}>
               <h4 style={{ margin: '0 0 12px', color: '#1565c0' }}>Project Command: {fmt(totals.projCmd.total)}</h4>
+              {(() => {
+                const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                const svcKeys = Object.keys(newQ.selectedServices || {}).filter(k => newQ.selectedServices[k]);
+                const installCount = svcKeys.filter(k => SUMMARY_SERVICES.includes(k)).length;
+                const homeCount = svcKeys.filter(k => homeKeys.has(k)).length
+                  + (newQ.patioSize && newQ.patioSize !== 'none' ? 1 : 0)
+                  + (newQ.foundationType && newQ.foundationType !== 'none' ? 1 : 0);
+                const allowanceCount = svcKeys.filter(k => ALLOWANCE_ITEMS.includes(k) && !SUMMARY_SERVICES.includes(k) && !homeKeys.has(k)).length
+                  + (newQ.sewerType && newQ.sewerType !== 'none' ? 1 : 0)
+                  + (parseFloat(newQ.wellDepth) > 0 ? 1 : 0);
+                const customCount = (newQ.customServices || []).filter(cs => cs.name && cs.price).length;
+                const proCount = svcKeys.filter(k => !SUMMARY_SERVICES.includes(k) && !homeKeys.has(k) && !ALLOWANCE_ITEMS.includes(k)).length;
+                return <>
+                  <div style={{ fontSize: 12, color: '#666', marginBottom: 12 }}>
+                    <strong>{totals.projCmd.numSvc} services:</strong>{' '}
+                    {[
+                      installCount > 0 && `${installCount} Install`,
+                      homeCount > 0 && `${homeCount} Home`,
+                      allowanceCount > 0 && `${allowanceCount} Allowance`,
+                      proCount > 0 && `${proCount} Professional`,
+                      customCount > 0 && `${customCount} Custom`,
+                    ].filter(Boolean).join(', ')}
+                  </div>
+                </>;
+              })()}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, fontSize: 13 }}>
                 <div><strong>PS</strong><div style={{ color: '#666' }}>{totals.projCmd.numSvc} svc x ${totals.projCmd.psPerService || projectCommandRates.psPerService} + ({totals.projCmd.miles} mi x ${driveRates.projectCommand} x {totals.projCmd.numSvc})</div><div style={{ fontWeight: 600 }}>{fmt(totals.projCmd.ps)}</div></div>
                 <div><strong>PM</strong><div style={{ color: '#666' }}>{totals.projCmd.miles} mi x ${driveRates.projectCommand} + {fmtCurrency(totals.projCmd.pmBase || projectCommandRates.pmBase)}</div><div style={{ fontWeight: 600 }}>{fmt(totals.projCmd.pm)}</div></div>
