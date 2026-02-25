@@ -228,6 +228,7 @@ function AppInner() {
   const [houseSpecsCollapsed, setHouseSpecsCollapsed] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleteCustomerConfirm, setDeleteCustomerConfirm] = useState(null);
+  const [showRestoreMaterials, setShowRestoreMaterials] = useState(false);
 
   // Scope of Work state
   const [scopeSections, setScopeSections] = useState({
@@ -3807,8 +3808,20 @@ function AppInner() {
                 </table>
                 {(isAdmin || isSales) && Object.keys(newQ.removedMaterials || {}).filter(k => newQ.removedMaterials[k]).length > 0 && (
                   <div style={{ marginTop: 8, fontSize: 11, color: '#666' }}>
-                    <strong>Removed:</strong> {Object.keys(newQ.removedMaterials).filter(k => newQ.removedMaterials[k]).map(k => materials[k]?.name || k).join(', ')}
-                    <button type="button" style={{ marginLeft: 8, background: '#6c757d', color: '#fff', border: 'none', borderRadius: 3, padding: '2px 6px', fontSize: 10, cursor: 'pointer' }} onClick={() => setNewQ(p => ({ ...p, removedMaterials: {} }))}>Restore All</button>
+                    <strong>Removed:</strong> {Object.keys(newQ.removedMaterials).filter(k => newQ.removedMaterials[k]).length} item(s)
+                    <button type="button" style={{ marginLeft: 8, background: '#6c757d', color: '#fff', border: 'none', borderRadius: 3, padding: '2px 6px', fontSize: 10, cursor: 'pointer' }} onClick={() => setShowRestoreMaterials(p => !p)}>Restore</button>
+                    {showRestoreMaterials && (
+                      <div style={{ marginTop: 8, padding: 10, background: '#f8f9fa', borderRadius: 6, border: '1px solid #dee2e6' }}>
+                        <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6, color: '#333' }}>Select items to restore:</div>
+                        {Object.keys(newQ.removedMaterials).filter(k => newQ.removedMaterials[k]).map(k => (
+                          <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '3px 0' }}>
+                            <button type="button" style={{ background: '#28a745', color: '#fff', border: 'none', borderRadius: 3, padding: '2px 8px', fontSize: 10, cursor: 'pointer' }} onClick={() => { toggleRemoveMaterial(k); const remaining = Object.keys(newQ.removedMaterials).filter(key => key !== k && newQ.removedMaterials[key]); if (remaining.length === 0) setShowRestoreMaterials(false); }}>Restore</button>
+                            <span style={{ fontSize: 12 }}>{materials[k]?.name || k}</span>
+                          </div>
+                        ))}
+                        <button type="button" style={{ marginTop: 6, background: '#6c757d', color: '#fff', border: 'none', borderRadius: 3, padding: '2px 8px', fontSize: 10, cursor: 'pointer' }} onClick={() => { setNewQ(p => ({ ...p, removedMaterials: {} })); setShowRestoreMaterials(false); }}>Restore All</button>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -3875,7 +3888,14 @@ function AppInner() {
               <div>
                 {(() => {
                   // Get install services from totals.svc that are in SUMMARY_SERVICES - ONLY show services with checkboxes
-                  const summaryServices = totals.svc.filter(c => SUMMARY_SERVICES.includes(c.key));
+                  const summaryServices = totals.svc.filter(c => SUMMARY_SERVICES.includes(c.key)).sort((a, b) => {
+                    const aLic = LICENSED_SERVICES.includes(a.key) ? 0 : 1;
+                    const bLic = LICENSED_SERVICES.includes(b.key) ? 0 : 1;
+                    if (aLic !== bLic) return aLic - bLic;
+                    const aAllow = ALLOWANCE_ITEMS.includes(a.key) ? 0 : 1;
+                    const bAllow = ALLOWANCE_ITEMS.includes(b.key) ? 0 : 1;
+                    return aAllow - bAllow;
+                  });
                   const summaryTotal = summaryServices.reduce((sum, s) => sum + s.cost, 0);
                   const installTotal = totals.labT + summaryTotal;
 
@@ -3908,8 +3928,16 @@ function AppInner() {
                 {(() => {
                   // Separate allowances from other professional services
                   const allProfessionalServices = totals.svc.filter(c => !SUMMARY_SERVICES.includes(c.key));
-                  const allowances = allProfessionalServices.filter(c => ALLOWANCE_ITEMS.includes(c.key));
-                  const professionalServices = allProfessionalServices.filter(c => !ALLOWANCE_ITEMS.includes(c.key));
+                  const allowances = allProfessionalServices.filter(c => ALLOWANCE_ITEMS.includes(c.key)).sort((a, b) => {
+                    const aLic = LICENSED_SERVICES.includes(a.key) ? 0 : 1;
+                    const bLic = LICENSED_SERVICES.includes(b.key) ? 0 : 1;
+                    return aLic - bLic;
+                  });
+                  const professionalServices = allProfessionalServices.filter(c => !ALLOWANCE_ITEMS.includes(c.key)).sort((a, b) => {
+                    const aLic = LICENSED_SERVICES.includes(a.key) ? 0 : 1;
+                    const bLic = LICENSED_SERVICES.includes(b.key) ? 0 : 1;
+                    return aLic - bLic;
+                  });
                   const professionalTotal = professionalServices.reduce((sum, s) => sum + s.cost, 0);
                   const allowanceTotal = allowances.reduce((sum, s) => sum + s.cost, 0);
 
