@@ -672,13 +672,18 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
 
   <div class="terms">
     <div class="terms-title">Terms & Conditions</div>
+    <div style="font-weight:700;margin:10px 0 8px;font-size:14px">Payment Schedule:</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600;width:60px">50%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Down payment — due at signing to schedule project</td></tr>
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">30%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due at delivery — home is manufactured complete and requires payment before delivery</td></tr>
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due after installation — licensed requirements completed</td></tr>
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due upon project completion</td></tr>
+    </table>
     <ul>
       <li>Quote valid for 30 days from date issued</li>
-      <li>50% deposit required to schedule installation</li>
-      <li>Balance due upon completion of installation</li>
       <li>Price subject to change if site conditions differ from initial assessment</li>
       <li>Allowance items are estimates and may be adjusted based on actual site conditions</li>
-      <li>All work performed in accordance with Minnesota state regulations</li>
+      <li>All work performed in accordance with both Federal and State regulations</li>
       <li>Sherman structural warranty: 30 years | Workmanship warranty: 10 years</li>
     </ul>
   </div>
