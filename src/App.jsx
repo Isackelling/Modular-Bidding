@@ -1733,7 +1733,7 @@ function AppInner() {
                     {/* Totals */}
                     <tr style={{ borderTop: '2px solid #ddd' }}><td style={S.td}><strong>Subtotal</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.sub)}</td></tr>
                     <tr><td style={S.td}>Overhead (5%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.oh)}</td></tr>
-                    <tr><td style={S.td}>Markup (10%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.mu)}</td></tr>
+                    <tr><td style={S.td}>Markup ({currentItem.markupRate !== undefined && currentItem.markupRate !== '' ? currentItem.markupRate : '10'}%)</td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.mu)}</td></tr>
                     <tr style={{ borderTop: '2px solid #2c5530' }}><td style={S.td}><strong>Total</strong></td><td style={{ ...S.td, textAlign: 'right', fontWeight: 700 }}>{fmtCurrency(totals.total)}</td></tr>
                     <tr><td style={S.td}><strong>Contingency</strong></td><td style={{ ...S.td, textAlign: 'right' }}>{fmtCurrency(totals.contingency)}</td></tr>
                     <tr><td colSpan={2} style={{ ...S.td, fontSize: 11, color: '#856404', fontStyle: 'italic', padding: '2px 12px' }}>This is the original contracted contingency amount, not a running balance. See the Contingency Fund Tracker on the Scrubb tab for the current balance.</td></tr>
@@ -1887,7 +1887,7 @@ function AppInner() {
 
                   // Overhead & Markup — fixed costs, actualCost = contractPrice
                   if (totals.oh > 0) trackingItems.push({ ...mkItem('overhead', 'Overhead (5%)', totals.oh, 'margin'), actualCost: totals.oh });
-                  if (totals.mu > 0) trackingItems.push({ ...mkItem('markup', 'Markup (10%)', totals.mu, 'margin'), actualCost: totals.mu });
+                  if (totals.mu > 0) trackingItems.push({ ...mkItem('markup', `Markup (${currentItem.markupRate !== undefined && currentItem.markupRate !== '' ? currentItem.markupRate : '10'}%)`, totals.mu, 'margin'), actualCost: totals.mu });
 
                   if (trackingItems.length === 0) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}><p>No items to track.</p></div>;
 
@@ -4271,7 +4271,7 @@ function AppInner() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Project Command</span><span>{fmt(totals.projCmd.total)}</span></div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, borderTop: '1px solid #ddd', paddingTop: 8 }}><span>Subtotal</span><span>{fmt(totals.sub)}</span></div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Overhead (5%)</span><span>{fmt(totals.oh)}</span></div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Markup (10%)</span><span>{fmt(totals.mu)}</span></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}><span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>Markup (<input type="number" min="0" max="100" step="1" value={newQ.markupRate !== undefined && newQ.markupRate !== '' ? newQ.markupRate : '10'} onChange={e => setNewQ(p => ({ ...p, markupRate: e.target.value }))} style={{ width: 45, padding: '1px 4px', fontSize: 14, border: '1px solid #ccc', borderRadius: 4, textAlign: 'center' }} />%)</span><span>{fmt(totals.mu)}</span></div>
                 </>;
               })()}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 24, color: '#2c5530', borderTop: '2px solid #2c5530', paddingTop: 12, marginBottom: 12 }}><span>Total</span><span>{fmt(totals.total)}</span></div>

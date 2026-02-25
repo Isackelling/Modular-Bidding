@@ -446,7 +446,8 @@ export const calcTotals = (q, materials, services, sewer, patio, driveRates = { 
   const homePrice = homeBasePrice * HOME_MARKUP;
   let sub = matT + labT + svcT + homePrice + projCmd.total;
   let oh = sub * 0.05;
-  let mu = (sub + oh) * 0.10;
+  const markupRate = (q.markupRate !== undefined && q.markupRate !== '' ? parseFloat(q.markupRate) : 10) / 100;
+  let mu = (sub + oh) * markupRate;
   let total = sub + oh + mu;
 
   // Handle closing costs (7% of total including closing costs itself)
@@ -458,7 +459,7 @@ export const calcTotals = (q, materials, services, sewer, patio, driveRates = { 
     svcT += closingCost;
     sub = matT + labT + svcT + homePrice + projCmd.total;
     oh = sub * 0.05;
-    mu = (sub + oh) * 0.10;
+    mu = (sub + oh) * markupRate;
     total = sub + oh + mu;
   }
 
