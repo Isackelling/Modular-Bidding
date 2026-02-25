@@ -328,7 +328,7 @@ function AppInner() {
             setServices(mergedServices);
           }
           if (p.sewer) setSewerPricing(p.sewer);
-          if (p.patio) setPatioPricing(p.patio);
+          if (p.patio) setPatioPricing({ ...p.patio, ...DEFAULT_PATIO });
           if (p.foundation) setFoundationPricing(p.foundation);
           if (p.driveRates) setDriveRates(p.driveRates);
           if (p.projectCommandRates) setProjectCommandRates(p.projectCommandRates);
@@ -1269,7 +1269,7 @@ function AppInner() {
             setServices({ ...DEFAULT_SERVICES, ...cleanedServices });
           }
           if (p.sewer) setSewerPricing(p.sewer);
-          if (p.patio) setPatioPricing(p.patio);
+          if (p.patio) setPatioPricing({ ...p.patio, ...DEFAULT_PATIO });
           if (p.foundation) setFoundationPricing(p.foundation);
           if (p.driveRates) setDriveRates(p.driveRates);
           if (p.projectCommandRates) setProjectCommandRates(p.projectCommandRates);
@@ -4203,7 +4203,7 @@ function AppInner() {
               </div>
             </div>
 
-            {isAdmin && <div style={S.projCmd}>
+            {(isAdmin || isSales) && <div style={S.projCmd}>
               <h4 style={{ margin: '0 0 12px', color: '#1565c0' }}>Project Command: {fmt(totals.projCmd.total)}</h4>
               {(() => {
                 const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
