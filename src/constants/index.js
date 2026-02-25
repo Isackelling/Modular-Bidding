@@ -251,9 +251,9 @@ export const DEFAULT_SEWER = {
 // Patio pricing by size (feet)
 export const DEFAULT_PATIO = {
   none: 0,
-  '6': 6300,
-  '8': 8300,
-  '10': 11800
+  '6': 8300,
+  '8': 10300,
+  '10': 13800
 };
 
 // Foundation pricing by type
