@@ -4223,22 +4223,21 @@ function AppInner() {
             </div>}
 
             <div style={{ marginTop: 24, padding: 16, background: '#f8f9fa', borderRadius: 8 }}>
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Materials</span><span>{fmt(totals.matT)}</span></div>}
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Install</span><span>{fmt(totals.labT)}</span></div>}
-              {isAdmin && (() => {
+              {(isAdmin || isSales) && (() => {
                 const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
                 const homeSvcTotal = totals.svc.filter(s => homeKeys.has(s.key)).reduce((sum, s) => sum + s.cost, 0);
                 const homeTotal = totals.homePrice + homeSvcTotal;
                 const servicesOnly = totals.svcT - homeSvcTotal;
                 return <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Materials</span><span>{fmt(totals.matT)}</span></div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Services</span><span>{fmt(servicesOnly)}</span></div>
                   {homeTotal > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Home</span><span>{fmt(homeTotal)}</span></div>}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Project Command</span><span>{fmt(totals.projCmd.total)}</span></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, borderTop: '1px solid #ddd', paddingTop: 8 }}><span>Subtotal</span><span>{fmt(totals.sub)}</span></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Overhead (5%)</span><span>{fmt(totals.oh)}</span></div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Markup (10%)</span><span>{fmt(totals.mu)}</span></div>
                 </>;
               })()}
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Project Command</span><span>{fmt(totals.projCmd.total)}</span></div>}
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, borderTop: '1px solid #ddd', paddingTop: 8 }}><span>Subtotal</span><span>{fmt(totals.sub)}</span></div>}
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Overhead (5%)</span><span>{fmt(totals.oh)}</span></div>}
-              {isAdmin && <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}><span>Markup (10%)</span><span>{fmt(totals.mu)}</span></div>}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 24, color: '#2c5530', borderTop: '2px solid #2c5530', paddingTop: 12, marginBottom: 12 }}><span>Total</span><span>{fmt(totals.total)}</span></div>
 
               {/* Contingency Allowance */}
