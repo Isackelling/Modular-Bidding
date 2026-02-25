@@ -223,9 +223,9 @@ function AppInner() {
   const [pricingEditMode, setPricingEditMode] = useState(false);
   const [expandedServiceNotes, setExpandedServiceNotes] = useState({});
   const [installSvcCollapsed, setInstallSvcCollapsed] = useState(true);
-  const [proSvcCollapsed, setProSvcCollapsed] = useState(true);
-  const [homeSelCollapsed, setHomeSelCollapsed] = useState(true);
-  const [houseSpecsCollapsed, setHouseSpecsCollapsed] = useState(true);
+  const [proSvcCollapsed, setProSvcCollapsed] = useState(false);
+  const [homeSelCollapsed, setHomeSelCollapsed] = useState(false);
+  const [houseSpecsCollapsed, setHouseSpecsCollapsed] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleteCustomerConfirm, setDeleteCustomerConfirm] = useState(null);
   const [showRestoreMaterials, setShowRestoreMaterials] = useState(false);
