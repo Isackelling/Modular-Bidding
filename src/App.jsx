@@ -3962,42 +3962,41 @@ function AppInner() {
           </div>
 
           {totals && <div style={S.box}><h2 style={{ marginTop: 0, borderBottom: '2px solid #2c5530', paddingBottom: 8 }}>Quote Summary</h2>
-            {/* Home Section - model cost, foundation, patio, home options, custom options */}
-            {(() => {
-              const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
-              const homeSvc = totals.svc.filter(s => homeKeys.has(s.key));
-              const homeSvcTotal = homeSvc.reduce((sum, s) => sum + s.cost, 0);
-              const homeTotal = totals.homePrice + homeSvcTotal;
-              if (homeTotal <= 0) return null;
-              return <>
-                <h4 style={{ color: '#2c5530' }}>Home{(isAdmin || isSales) ? `: ${fmt(homeTotal)}` : ''}</h4>
-                <table style={{ ...S.table, fontSize: 12, marginBottom: 16 }}>
-                  <tbody>
-                    {totals.homePrice > 0 && (
-                      <tr>
-                        {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                          <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => { setNewQ(p => ({ ...p, homeModel: 'NONE', homeBasePrice: '' })); }} title="Remove home">X</button>
-                        </td>}
-                        <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
-                        {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
-                      </tr>
-                    )}
-                    {homeSvc.filter(s => s.cost > 0 || s.item).map((s, i) => (
-                      <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
-                        {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                          <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
-                        </td>}
-                        <td>{s.item}</td>
-                        {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>;
-            })()}
-
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
               <div>
+                {/* Home Section - model cost, foundation, patio, home options, custom options */}
+                {(() => {
+                  const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(newQ.customOptions || []).map((_, i) => `customopt_${i}`)]);
+                  const homeSvc = totals.svc.filter(s => homeKeys.has(s.key));
+                  const homeSvcTotal = homeSvc.reduce((sum, s) => sum + s.cost, 0);
+                  const homeTotal = totals.homePrice + homeSvcTotal;
+                  if (homeTotal <= 0) return null;
+                  return <>
+                    <h4 style={{ color: '#2c5530' }}>Home{(isAdmin || isSales) ? `: ${fmt(homeTotal)}` : ''}</h4>
+                    <table style={{ ...S.table, fontSize: 12, marginBottom: 16 }}>
+                      <tbody>
+                        {totals.homePrice > 0 && (
+                          <tr>
+                            {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => { setNewQ(p => ({ ...p, homeModel: 'NONE', homeBasePrice: '' })); }} title="Remove home">X</button>
+                            </td>}
+                            <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
+                            {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
+                          </tr>
+                        )}
+                        {homeSvc.filter(s => s.cost > 0 || s.item).map((s, i) => (
+                          <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
+                            {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
+                            </td>}
+                            <td>{s.item}</td>
+                            {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </>;
+                })()}
                 <h4>Materials{(isAdmin || isSales) ? `: ${fmt(totals.matT)}` : ''}</h4>
                 <table style={{ ...S.table, fontSize: 12 }}>
                   <tbody>
