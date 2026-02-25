@@ -3990,7 +3990,11 @@ function AppInner() {
                           return (
                           <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
                             {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
+                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => {
+                                if (s.key === 'foundation') setNewQ(p => ({ ...p, foundationType: 'none', servicePriceOverrides: { ...p.servicePriceOverrides, foundation: undefined } }));
+                                else if (s.key === 'patio') setNewQ(p => ({ ...p, patioSize: 'none', servicePriceOverrides: { ...p.servicePriceOverrides, patio: undefined } }));
+                                else toggleSvc(s.key);
+                              }} title="Remove">X</button>
                             </td>}
                             <td>{s.item}{showQty && <span style={{ fontSize: 11, color: '#666', marginLeft: 4 }}>(x{qty})</span>}</td>
                             {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
