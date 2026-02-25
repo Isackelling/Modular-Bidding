@@ -221,7 +221,7 @@ export const createFolderSavers = ({
     }
 
     // Get foundation info
-    const foundationType = quote.foundationType || 'slab';
+    const foundationType = quote.foundationType || 'none';
     const foundationNames = {
       none: 'Not selected',
       deck: 'Deck Piers',
@@ -838,7 +838,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
         }
       });
     }
-    const foundationType = quote.foundationType || 'slab';
+    const foundationType = quote.foundationType || 'none';
     const foundationNames = { none: 'Not selected', deck: 'Deck Piers', crawl: 'Crawl Space', crawlspace: 'Crawl Space', basement: 'Basement', slab: 'Engineered Slab' };
     const iBeamHeight = CalcHelpers.getBeamHeight(quote);
 

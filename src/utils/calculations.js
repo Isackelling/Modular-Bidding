@@ -99,7 +99,7 @@ export const calculateInstallationCost = (miles, singleDouble, foundationType) =
 /**
  * Calculate default service price based on service configuration
  */
-export const calcDefaultServicePrice = (key, svc, miles, w, l, driveRateService = DRIVE_RATE_SERVICE, days = 1, singleDouble = 'Single', foundationType = 'slab') => {
+export const calcDefaultServicePrice = (key, svc, miles, w, l, driveRateService = DRIVE_RATE_SERVICE, days = 1, singleDouble = 'Single', foundationType = 'none') => {
   const driveCost = miles * driveRateService;
   if (svc.calc === 'pad') return (w * l * PRICING.SLAB_COST_PER_SQ_FT) + driveCost;
   if (svc.calc === 'skirt') return ((24 * calcPerim(w, l)) + ((miles + 200) * 3)) * 1.1;
@@ -415,7 +415,7 @@ export const calcServices = (q, services, sewer, patio, driveRateService = DRIVE
   const driveCost = miles * driveRateService;
   const w = parseFloat(q.houseWidth) || 0, l = parseFloat(q.houseLength) || 0;
   const removed = q.removedServices || {};
-  const foundationType = q.foundationType || 'slab';
+  const foundationType = q.foundationType || 'none';
 
   // Collect all costs from helper functions
   const costs = [

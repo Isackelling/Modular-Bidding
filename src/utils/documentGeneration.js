@@ -54,6 +54,7 @@ export const generateQuoteHtml = (quote, totals, homeModels) => {
   }
   if (quote.patioSize && quote.patioSize !== 'none') services.push({ name: `Patio (${quote.patioSize} ft)`, key: 'patio' });
   (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, key: 'custom' }); });
+  (quote.customOptions || []).forEach((co, i) => { if (co.name && co.price) { const qty = parseFloat(co.quantity) || 1; services.push({ name: qty > 1 ? `${co.name} (×${qty})` : co.name, key: `customopt_${i}` }); } });
 
   // Group services like the quote summary: Install Services vs Professional Services
   const sortByLicense = (a, b) => {
@@ -110,7 +111,7 @@ ${allowancesWithCosts.length > 0 ? `
 
   <div style="margin-top:16px;padding:12px;background:#e3f2fd;border-radius:6px;border-left:4px solid #1565c0">
     <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-      <span style="font-weight:600;color:#1565c0">2% Contingency Fund</span>
+      <span style="font-weight:600;color:#1565c0">Contingency Fund</span>
       <span style="font-weight:700;color:#1565c0">${fmt(totals.contingency)}</span>
     </div>
     <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:2px solid #1565c0">
@@ -124,7 +125,7 @@ ${allowancesWithCosts.length > 0 ? `
 ` : `
 <div class="contingency-box">
   <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-    <span style="font-weight:600;color:#1565c0">2% Contingency Fund</span>
+    <span style="font-weight:600;color:#1565c0">Contingency Fund</span>
     <span style="font-weight:700;color:#1565c0">${fmt(totals.contingency)}</span>
   </div>
   <p style="font-size:13px;color:#666;line-height:1.6;margin:0">A dedicated fund for change orders and project adjustments. At project completion, any unused contingency is returned to you.</p>
@@ -598,11 +599,11 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
 
     <div style="background: #e3f2fd; padding: 16px; border-radius: 8px; margin-top: 16px;">
       <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; color: #1565c0; margin-bottom: 8px;">
-        <span>2% Contingency Allowance</span>
+        <span>Contingency Allowance</span>
         <span>${fmt(totals.contingency)}</span>
       </div>
       <div style="font-size: 13px; color: #666; line-height: 1.6;">
-        <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first, minimizing out-of-pocket costs. At project completion, if there are no overages or change orders, you receive back the full 2% contingency amount plus any allowance savings.
+        <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first, minimizing out-of-pocket costs. At project completion, if there are no overages or change orders, you receive back the full contingency amount plus any allowance savings.
       </div>
     </div>
 
@@ -1099,8 +1100,8 @@ export const generateScopeOfWorkDocument = (quote, customer, services) => {
     }
   };
 
-  const foundationType = quote.foundationType || 'slab';
-  const foundation = foundationTypes[foundationType] || foundationTypes.slab;
+  const foundationType = quote.foundationType || 'none';
+  const foundation = foundationTypes[foundationType] || null;
 
   return `<!DOCTYPE html><html><head><title>Scope of Work - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
 <style>
@@ -1674,8 +1675,8 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
     crawlspace: 'Crawl Space Foundation',
     basement: 'Full Basement Foundation'
   };
-  const foundationType = quote.foundationType || 'slab';
-  const foundationName = foundationTypes[foundationType] || 'Slab';
+  const foundationType = quote.foundationType || 'none';
+  const foundationName = foundationTypes[foundationType] || 'None';
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Crew Work Order - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
 <style>
@@ -2956,7 +2957,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
 <div class="section-title">Contingency Fund Status</div>
 <div class="fund-box">
   <div class="fund-row">
-    <span>Starting Contingency Fund (2% of project):</span>
+    <span>Starting Contingency Fund:</span>
     <span style="font-weight:700">${fmt(startingContingency)}</span>
   </div>
   <div class="fund-row">
@@ -3361,7 +3362,7 @@ export const generateJobSummaryReport = (quote, customer, servicesParam, crewChe
   }
 
   const foundationTypes = { slab: 'Concrete Slab Foundation', crawlspace: 'Crawl Space Foundation', basement: 'Full Basement Foundation' };
-  const foundationName = foundationTypes[quote.foundationType] || 'Slab';
+  const foundationName = foundationTypes[quote.foundationType] || 'None';
 
   // Checklist status helpers
   const checkIcon = (taskId) => checklist[taskId] ? '<span style="color:#2e7d32;font-weight:700">&#10004;</span>' : '<span style="color:#c62828;font-weight:700">&#10008;</span>';
@@ -3649,7 +3650,7 @@ ${!hasAnyCrewData ? `
       <tr><td class="label">Overhead (5%)</td><td class="amount">${fmtCurrency(totals.oh)}</td></tr>
       <tr><td class="label">Markup (10%)</td><td class="amount">${fmtCurrency(totals.mu)}</td></tr>
       <tr style="border-top:2px solid #ddd"><td class="label">Total</td><td class="amount" style="font-weight:700">${fmtCurrency(totals.total)}</td></tr>
-      <tr><td class="label">Contingency Fund (2%)</td><td class="amount">${fmtCurrency(totals.contingency)}</td></tr>
+      <tr><td class="label">Contingency Fund</td><td class="amount">${fmtCurrency(totals.contingency)}</td></tr>
       <tr class="total-row"><td class="label">Total Investment</td><td class="amount">${fmtCurrency(totals.totalWithContingency)}</td></tr>
     </tbody>
   </table>

@@ -658,7 +658,7 @@ function AppInner() {
     if (!services[k]) return 0;
     const days = (newQ.serviceDays && newQ.serviceDays[k]) || 1;
     let basePrice = calcDefaultServicePrice(k, services[k], enforceMiles(newQ.driveTime), parseFloat(newQ.houseWidth) || 0, parseFloat(newQ.houseLength) || 0, driveRates.service, days, newQ.singleDouble, newQ.foundationType);
-    basePrice += getFoundationAdjustment(k, newQ.foundationType || 'slab');
+    basePrice += getFoundationAdjustment(k, newQ.foundationType || 'none');
     return basePrice;
   };
 
@@ -2126,7 +2126,7 @@ function AppInner() {
                           return (
                             <div>
                               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                                <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}><div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Starting Fund (2%)</div><div style={{ fontSize: 20, fontWeight: 700, color: '#1565c0' }}>{fmt(startC)}</div></div>
+                                <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}><div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Starting Fund</div><div style={{ fontSize: 20, fontWeight: 700, color: '#1565c0' }}>{fmt(startC)}</div></div>
                                 <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}><div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Current Balance</div><div style={{ fontSize: 20, fontWeight: 700, color: balance >= 0 ? '#28a745' : '#dc3545' }}>{fmt(balance)}</div></div>
                               </div>
                               {fundOverdrafted && (
@@ -2153,7 +2153,7 @@ function AppInner() {
                                 {overages > 0 && <div style={{ marginBottom: 6 }}><div style={{ fontSize: 12, color: '#666' }}>Allowance Overages (drawn from fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#dc3545' }}>-{fmt(overages)}</div></div>}
                                 {cPayments > 0 && <div style={{ marginBottom: 6 }}><div style={{ fontSize: 12, color: '#666' }}>Customer Payments (refunding fund)</div><div style={{ fontSize: 16, fontWeight: 600, color: '#28a745' }}>+{fmt(cPayments)}</div></div>}
                                 {coServiceItems.length === 0 && savings === 0 && overages === 0 && cPayments === 0 && (
-                                  <div style={{ fontSize: 13, color: '#999', textAlign: 'center', padding: 8 }}>No activity yet — the full 2% fund is available.</div>
+                                  <div style={{ fontSize: 13, color: '#999', textAlign: 'center', padding: 8 }}>No activity yet — the full fund is available.</div>
                                 )}
                               </div>
 

@@ -877,12 +877,12 @@ const ContingencyTracker = ({
     <div style={{ marginTop: 24, padding: 20, background: '#e3f2fd', borderRadius: 8, border: '2px solid #1565c0' }}>
       <h3 style={{ marginTop: 0, color: '#1565c0' }}>{'\u{1F4B0}'} Contingency Fund Tracker</h3>
       <p style={{ fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 1.6 }}>
-        <strong>Purpose:</strong> A 2% fund for change orders and allowance adjustments. When allowances come in under budget, savings are added here. When costs exceed estimates or change orders are made, funds are drawn from here first, minimizing customer out-of-pocket costs. At project completion, if there are no overages or change orders, the customer receives back the full 2% contingency amount plus any allowance savings.
+        <strong>Purpose:</strong> A fund for change orders and allowance adjustments. When allowances come in under budget, savings are added here. When costs exceed estimates or change orders are made, funds are drawn from here first, minimizing customer out-of-pocket costs. At project completion, if there are no overages or change orders, the customer receives back the full contingency amount plus any allowance savings.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
         <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}>
-          <div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Starting Fund (2%)</div>
+          <div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Starting Fund</div>
           <div style={{ fontSize: 20, fontWeight: 700, color: '#1565c0' }}>{fmt(startingContingency)}</div>
         </div>
         <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}>

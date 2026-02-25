@@ -147,7 +147,7 @@ const CustomerPortal = ({
             <span style={{ fontWeight: 700, color: '#856404' }}>{fmt(totalAllowances)}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px solid #ffe0b2' }}>
-            <span style={{ fontWeight: 600, color: '#1565c0' }}>2% Contingency</span>
+            <span style={{ fontWeight: 600, color: '#1565c0' }}>Contingency</span>
             <span style={{ fontWeight: 700, color: '#1565c0' }}>+ {fmt(contingency)}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, paddingTop: 8, borderTop: '2px solid #ffc107' }}>
