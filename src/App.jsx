@@ -1686,6 +1686,7 @@ function AppInner() {
                     {(() => {
                       const homeKeys = new Set(['foundation', 'patio', ...HOME_OPTIONS, ...(currentItem.customOptions || []).map((_, i) => `customopt_${i}`)]);
                       const homeSvc = totals.svc.filter(s => homeKeys.has(s.key));
+                      console.log('DEBUG HOME SECTION:', { homeKeys: [...homeKeys], allSvcKeys: totals.svc.map(s => s.key), homeSvcKeys: homeSvc.map(s => s.key), homePrice: totals.homePrice });
                       const homeSvcTotal = homeSvc.reduce((sum, s) => sum + s.cost, 0);
                       const homeTotal = totals.homePrice + homeSvcTotal;
                       if (homeTotal <= 0) return null;
