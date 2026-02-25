@@ -3975,12 +3975,14 @@ function AppInner() {
                   <tbody>
                     {totals.homePrice > 0 && (
                       <tr>
-                        {(isAdmin || isSales) && <td style={{ width: 24 }}></td>}
+                        {(isAdmin || isSales) && <td style={{ width: 24 }}>
+                          <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => { setNewQ(p => ({ ...p, homeModel: 'NONE', homeBasePrice: '' })); }} title="Remove home">X</button>
+                        </td>}
                         <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
                         {isAdmin && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
                       </tr>
                     )}
-                    {homeSvc.map((s, i) => (
+                    {homeSvc.filter(s => s.cost > 0 || s.item).map((s, i) => (
                       <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
                         {(isAdmin || isSales) && <td style={{ width: 24 }}>
                           <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
