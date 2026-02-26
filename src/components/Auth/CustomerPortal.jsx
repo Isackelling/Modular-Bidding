@@ -5,7 +5,8 @@
 
 import React from 'react';
 import { CalcHelpers } from '../../utils/CalcHelpers.js';
-import { fmt } from '../../utils/helpers.js';
+import { fmt, fmtDate } from '../../utils/helpers.js';
+import { S } from '../../utils/appStyles.js';
 import { ALLOWANCE_ITEMS, QUOTE_TYPES } from '../../constants/index.js';
 
 const CustomerPortal = ({
@@ -20,8 +21,6 @@ const CustomerPortal = ({
   homeModels,
   onLogout,
   onGenerateQuote,
-  fmtDate,
-  styles: S
 }) => {
   const allCustomerQuotes = quotes.filter(q => q.customerId === customerData.id);
   const activeStatuses = ['Accepted', 'Under Contract', 'Completed'];
@@ -182,7 +181,7 @@ const CustomerPortal = ({
                       <div key={idx} style={{ background: '#f8f9fa', padding: 6, borderRadius: 4, marginBottom: idx < publishedNotes.length - 1 ? 4 : 0, borderLeft: '3px solid #1565c0' }}>
                         <div style={{ fontSize: 11, color: '#333', marginBottom: 2 }}>{note.text}</div>
                         <div style={{ fontSize: 9, color: '#999' }}>
-                          {new Date(note.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} by {note.publishedBy}
+                          {fmtDate(note.publishedAt)} by {note.publishedBy}
                         </div>
                       </div>
                     ))}
@@ -260,7 +259,7 @@ const CustomerPortal = ({
             <div style={{ fontWeight: 600, color: '#2c5530', marginBottom: 4, fontSize: 13 }}>{note.serviceName}</div>
             <div style={{ color: '#333', marginBottom: 4, fontSize: 12, lineHeight: 1.5 }}>{note.text}</div>
             <div style={{ fontSize: 10, color: '#999' }}>
-              {new Date(note.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} by {note.publishedBy}
+              {fmtDate(note.publishedAt)} by {note.publishedBy}
             </div>
           </div>
         ))}
@@ -407,7 +406,7 @@ const CustomerPortal = ({
                     <div style={{ fontSize: 11, color: '#999', marginTop: 2 }}>{note.homeModel}</div>
                   </div>
                   <div style={{ fontSize: 10, color: '#999', textAlign: 'right' }}>
-                    {new Date(note.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}<br/>
+                    {fmtDate(note.publishedAt)}<br/>
                     by {note.publishedBy}
                   </div>
                 </div>

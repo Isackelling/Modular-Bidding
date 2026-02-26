@@ -1,8 +1,7 @@
 import React from 'react';
-import { fmt, genId, NotificationSystem } from '../../utils/index.js';
+import { fmt, fmtDate, genId, NotificationSystem } from '../../utils/index.js';
+import { S } from '../../utils/appStyles.js';
 import { ALLOWANCE_ITEMS } from '../../constants/index.js';
-
-const fmtDate = d => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
 // Format number string with commas as user types
 const fmtInput = (val) => {
@@ -19,7 +18,7 @@ const parseInput = (val) => parseFloat(val.replace(/,/g, '')) || 0;
  * contingency fund, permits, and payments.
  */
 const ScrubbTab = ({
-  S, currentItem, custForQuote, totals,
+  currentItem, custForQuote, totals,
   selQuote, setSelQuote,
   selContract, setSelContract,
   quotes, setQuotes,
@@ -303,7 +302,7 @@ const ScrubbTab = ({
                 style={S.btn}
                 onClick={() => {
                   if (!permitEntryName.trim()) {
-                    alert('Please enter a permit name');
+                    NotificationSystem.warning('Please enter a permit name');
                     return;
                   }
 
@@ -377,7 +376,7 @@ const ScrubbTab = ({
             <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
               <button style={{ ...S.btn2, background: '#666' }} onClick={() => { setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost(''); }}>Cancel</button>
               <button style={S.btn} onClick={() => {
-                if (!materialEntryName.trim()) { alert('Please enter a material name'); return; }
+                if (!materialEntryName.trim()) { NotificationSystem.warning('Please enter a material name'); return; }
                 const cost = parseFloat(materialEntryCost) || 0;
                 const currentEntries = currentItem.addlMaterialEntries || [];
                 let updatedEntries;
@@ -635,7 +634,7 @@ const NhlRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, setSe
           {svc.docs.length > 0 && (
             <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => {
               const docList = svc.docs.map((d, i) => `${i + 1}. ${d.name} (${fmtDate(d.addedAt)} by ${d.addedBy})`).join('\n');
-              alert(`Documents for ${svc.name}:\n\n${docList}`);
+              NotificationSystem.info(`Documents for ${svc.name}:\n\n${docList}`);
             }}>{'\u{1F4C4}'} View</button>
           )}
         </td>
@@ -703,7 +702,7 @@ const ServiceRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, s
                     setScrubbEditingService(null); setScrubbNewCost('');
                     if (isAllowanceItem) {
                       const varianceVal = cost > 0 ? svc.contractPrice - cost : 0;
-                      alert(varianceVal > 0 ? `${svc.name} came in ${fmt(varianceVal)} under budget.\nAdded to contingency fund.` : varianceVal < 0 ? `${svc.name} is ${fmt(Math.abs(varianceVal))} over budget.\nDrawn from contingency fund.` : `${svc.name} is exactly on budget.`);
+                      NotificationSystem.info(varianceVal > 0 ? `${svc.name} came in ${fmt(varianceVal)} under budget.\nAdded to contingency fund.` : varianceVal < 0 ? `${svc.name} is ${fmt(Math.abs(varianceVal))} over budget.\nDrawn from contingency fund.` : `${svc.name} is exactly on budget.`);
                     }
                   }
                   if (e.key === 'Escape') { setScrubbEditingService(null); setScrubbNewCost(''); }
@@ -833,7 +832,7 @@ const ServiceRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, s
             style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }}
             onClick={() => {
               const docList = svc.docs.map((d, i) => `${i + 1}. ${d.name} (${fmtDate(d.addedAt)} by ${d.addedBy})`).join('\n');
-              alert(`Documents for ${svc.name}:\n\n${docList}`);
+              NotificationSystem.info(`Documents for ${svc.name}:\n\n${docList}`);
             }}
           >{'\u{1F4C4}'} View</button>
         )}

@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { S } from '../../utils/appStyles.js';
 
 const LoginForm = ({
   loginU,
@@ -12,7 +13,6 @@ const LoginForm = ({
   setLoginP,
   loginError,
   onLogin,
-  styles: S
 }) => {
   return (
     <div style={S.login}>

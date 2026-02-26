@@ -130,7 +130,7 @@ export const createFolderSavers = ({
     };
 
     await autoSaveFileToFolders(file, ['change_orders'], quote, cust);
-    alert('\u2705 Quote saved to Customer Docs folder!');
+    NotificationSystem.success('Quote saved to Customer Docs folder!');
   };
 
   // ─── 2. Save Pier Layout to Crew Files folder ───
@@ -156,7 +156,7 @@ export const createFolderSavers = ({
     };
 
     await autoSaveFileToFolders(file, ['crew_files'], quote, cust);
-    alert('\u2705 Pier Layout saved to Crew Files folder!');
+    NotificationSystem.success('Pier Layout saved to Crew Files folder!');
   };
 
   // ─── 3. Save Material List (name + qty only, no prices) to Crew Files folder ───
@@ -189,7 +189,7 @@ export const createFolderSavers = ({
     };
 
     await autoSaveFileToFolders(file, ['crew_files'], quote, cust);
-    alert('\u2705 Material List saved to Crew Files folder!');
+    NotificationSystem.success('Material List saved to Crew Files folder!');
   };
 
   // ─── 4. Save Decor Checklist to Clayton Docs folder ───
@@ -451,7 +451,7 @@ ${selectedAdditionalOptions.length > 0 ? `<div class="standards"><h3 style="marg
     };
 
     await autoSaveFileToFolders(file, ['clayton_docs'], quote, cust);
-    alert('\u2705 Decor Checklist saved to Clayton Docs folder!');
+    NotificationSystem.success('Decor Checklist saved to Clayton Docs folder!');
   };
 
   // ─── 5. Save Customer Info + Map to Crew Files ───
@@ -540,7 +540,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
       addedAt: new Date().toISOString(),
     };
     await autoSaveFileToFolders(file, ['crew_files'], quote, cust);
-    alert('\u2705 Customer Info + Map saved to Crew Files!');
+    NotificationSystem.success('Customer Info + Map saved to Crew Files!');
   };
 
   // ─── 6. Save Floor Plan to Clayton Docs and Crew Files ───
@@ -564,7 +564,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     };
 
     await autoSaveFileToFolders(file, ['clayton_docs', 'crew_files'], quote, cust);
-    alert('\u2705 Floor Plan link saved!\n\n\ud83d\udca1 Tip: For direct access, download the floor plan PDF from Clayton and drag it into this folder.');
+    NotificationSystem.success('Floor Plan link saved! Tip: For direct access, download the floor plan PDF from Clayton and drag it into this folder.');
   };
 
   // ─── 7. Save Scope of Work to folders ───
@@ -646,7 +646,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
 
     // Save to customer docs folder only
     await autoSaveFileToFolders(file, ['change_orders'], quote, cust);
-    alert('\u2705 Allowance Progress Update saved!\n\nDocument saved to Customer Docs folder.\n\nYou can now share this with the customer.');
+    NotificationSystem.success('Allowance Progress Update saved! Document saved to Customer Docs folder. You can now share this with the customer.');
   };
 
   // ─── 10. Save Latest Change Order to folders ───
@@ -657,7 +657,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     const changeOrders = quotes.filter(q => q.changeOrderOf === quote.id);
 
     if (changeOrders.length === 0) {
-      alert('No change orders found for this quote.');
+      NotificationSystem.warning('No change orders found for this quote.');
       return;
     }
 
@@ -915,7 +915,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     NotificationSystem.success(`Saved ${savedCount} documents to folders!${!floorPlanUrl ? '\n\u26a0\ufe0f No floor plan URL - add one in Pricing > Homes.' : ''}`);
     } catch (error) {
       console.error('Save All Docs Error:', error);
-      alert('Error updating files: ' + error.message);
+      NotificationSystem.error('Error updating files: ' + error.message);
     }
   };
 

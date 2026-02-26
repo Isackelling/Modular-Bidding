@@ -57,3 +57,26 @@ export const fmt = (num) => {
   const n = parseFloat(num) || 0;
   return '$' + n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
+
+/** Alias for fmt — currency with no decimal places */
+export const fmtCurrency = fmt;
+
+/** Currency with two decimal places (e.g., "$12,345.67") */
+export const fmtDec = (num) => {
+  const n = parseFloat(num) || 0;
+  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+/** Format date as "Jan 1, 2025" */
+export const fmtDate = (d) =>
+  new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+/** Format date + time as "Jan 1, 2025, 02:30 PM" */
+export const fmtDateTime = (d) =>
+  new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+/** Strip all non-digit characters from a phone string */
+export const normalizePhone = (phone) => phone ? phone.replace(/\D/g, '') : '';
+
+/** Lowercase + trim an email string */
+export const normalizeEmail = (email) => email ? email.toLowerCase().trim() : '';

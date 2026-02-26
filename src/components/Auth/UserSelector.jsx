@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { S } from '../../utils/appStyles.js';
 
 const UserSelector = ({
   users,
@@ -12,7 +13,6 @@ const UserSelector = ({
   loginError,
   setLoginError,
   onSelectUser,
-  styles: S
 }) => {
   const handleSubmit = () => {
     // Special case: if no users exist, allow first admin setup

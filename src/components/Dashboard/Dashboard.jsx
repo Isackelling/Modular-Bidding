@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import { fmtDate } from '../../utils/helpers.js';
+import { S } from '../../utils/appStyles.js';
 
 const Dashboard = ({
   myCustomers,
@@ -14,11 +16,9 @@ const Dashboard = ({
   setSearchQuery,
   isAdmin,
   userName,
-  fmtDate,
   onNewCustomer,
   onSelectCustomer,
   onDeleteCustomer,
-  styles: S
 }) => {
   // Filter customers based on search query
   const filtered = myCustomers.filter(c => {

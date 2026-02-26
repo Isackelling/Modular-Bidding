@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { S } from '../../utils/appStyles.js';
 
 const CustomerForm = ({
   newCust,
@@ -15,7 +16,6 @@ const CustomerForm = ({
   setShowCustMailingAddress,
   onSave,
   onCancel,
-  styles: S
 }) => {
   return (
     <div>

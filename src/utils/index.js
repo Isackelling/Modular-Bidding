@@ -12,5 +12,4 @@ export * from './Validators.js';
 export * from './CalcHelpers.js';
 export * from './FolderUtils.js';
 export * from './TestHelpers.js';
-export * from './UIComponents.jsx';
 export * from './calculations.js';

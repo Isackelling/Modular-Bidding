@@ -5,7 +5,8 @@
 
 import React from 'react';
 import { CalcHelpers } from '../../utils/CalcHelpers.js';
-import { fmt } from '../../utils/helpers.js';
+import { fmt, fmtDate, fmtDateTime } from '../../utils/helpers.js';
+import { S } from '../../utils/appStyles.js';
 import { QUOTE_TYPES, MIN_MILES } from '../../constants/index.js';
 
 const CustomerView = ({
@@ -22,8 +23,6 @@ const CustomerView = ({
   isAdmin,
   showNewQuoteMenu,
   setShowNewQuoteMenu,
-  fmtDate,
-  fmtDateTime,
   onBack,
   onEditCustomer,
   onDeleteCustomer,
@@ -34,7 +33,6 @@ const CustomerView = ({
   onDeleteQuote,
   onUpdateStatus,
   emptyQuote,
-  styles: S
 }) => {
 
   const custQuotes = quotes.filter(q => q.customerId === selCustomer.id);

@@ -18,7 +18,8 @@ import {
 } from './constants/index.js';
 
 // Utilities
-import { genId, getGoogleMapsUrl, calcIBeam, fmt } from './utils/helpers.js';
+import { genId, getGoogleMapsUrl, calcIBeam, fmt, fmtDate, fmtCurrency, fmtDec, normalizePhone, normalizeEmail } from './utils/helpers.js';
+import { S } from './utils/appStyles.js';
 import { blobToDataUrl } from './utils/blobToDataUrl.js';
 import { createStateSaver } from './utils/createStateSaver.js';
 import { NotificationSystem } from './utils/NotificationSystem.js';
@@ -93,62 +94,8 @@ const emptyCustomer = () => ({
 });
 
 // ========================================================================
-// STYLES
-// ========================================================================
-
-const S = {
-  app: { fontFamily: "'Segoe UI',sans-serif", minHeight: '100vh', background: '#f0f2f5' },
-  login: { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,#2c5530,#1a3a1f)', padding: 20 },
-  card: { background: '#fff', padding: 32, borderRadius: 12, boxShadow: '0 10px 40px rgba(0,0,0,0.3)', width: '100%', maxWidth: 420, textAlign: 'center' },
-  input: { width: '100%', padding: '12px 14px', border: '2px solid #ddd', borderRadius: 6, fontSize: 15, marginBottom: 12, boxSizing: 'border-box' },
-  inputSm: { width: '90px', padding: '8px', border: '1px solid #ddd', borderRadius: 4, fontSize: 14, textAlign: 'right' },
-  inputEdit: { padding: '6px 10px', border: '1px solid #2c5530', borderRadius: 4, fontSize: 14, textAlign: 'right', width: '100px' },
-  btn: { padding: '14px 24px', background: '#2c5530', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16, fontWeight: 600, cursor: 'pointer', width: '100%' },
-  btn2: { padding: '10px 20px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer' },
-  btnSm: { padding: '8px 12px', background: '#2c5530', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
-  btnDanger: { padding: '10px 20px', background: '#dc3545', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer' },
-  header: { background: '#2c5530', color: '#fff', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 },
-  nav: { background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '8px 16px', borderRadius: 4, cursor: 'pointer', fontSize: 14 },
-  main: { padding: 24, maxWidth: 1200, margin: '0 auto' },
-  box: { background: '#fff', borderRadius: 8, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', marginBottom: 16 },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16 },
-  row: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 16, marginBottom: 16 },
-  label: { display: 'block', marginBottom: 6, fontWeight: 500, fontSize: 14 },
-  select: { width: '100%', padding: '12px 14px', border: '2px solid #ddd', borderRadius: 6, fontSize: 15, background: '#fff' },
-  svcGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 10 },
-  svc: { display: 'flex', alignItems: 'center', gap: 10, padding: '12px', background: '#f8f9fa', borderRadius: 6, border: '1px solid #e0e0e0' },
-  svcActive: { background: '#e8f5e9', borderColor: '#2c5530' },
-  role: { padding: 20, border: '2px solid #ddd', borderRadius: 12, textAlign: 'center', cursor: 'pointer' },
-  roleA: { borderColor: '#2c5530', background: '#f0f7f1' },
-  tab: { padding: '10px 16px', background: '#fff', border: '1px solid #ddd', borderRadius: 4, cursor: 'pointer', fontSize: 14 },
-  tabA: { borderColor: '#2c5530', background: '#f0f7f1', fontWeight: 600 },
-  badge: { display: 'inline-block', padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600 },
-  table: { width: '100%', borderCollapse: 'collapse', fontSize: 14 },
-  th: { textAlign: 'left', padding: '10px 8px', borderBottom: '2px solid #ddd', background: '#f8f9fa', fontWeight: 600 },
-  td: { padding: '8px', borderBottom: '1px solid #eee' },
-  override: { background: '#fff3cd', borderColor: '#ffc107' },
-  customSvc: { display: 'grid', gridTemplateColumns: '1fr 100px', gap: 8, padding: '10px', background: '#f0f7f1', borderRadius: 6, border: '1px dashed #2c5530', marginTop: 8 },
-  projCmd: { background: '#e3f2fd', padding: 16, borderRadius: 8, marginTop: 16 },
-  chk: { display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 0', borderBottom: '1px solid #eee' },
-};
-
-// ========================================================================
-// FORMATTERS
-// ========================================================================
-
-const currencyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-const currencyFormatterDec = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const fmtCurrency = n => currencyFormatter.format(n || 0);
-const fmtDec = n => currencyFormatterDec.format(n || 0);
-const fmtDate = d => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-const fmtDateTime = d => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-// ========================================================================
 // HELPERS
 // ========================================================================
-
-const normalizePhone = (phone) => phone ? phone.replace(/\D/g, '') : '';
-const normalizeEmail = (email) => email ? email.toLowerCase().trim() : '';
 
 const CALLER_ID_SERVER = 'https://sherman-callerid.onrender.com';
 const CALLER_ID_API_KEY = 'sherman-sync-key-2024';
@@ -470,7 +417,7 @@ function AppInner() {
 
   const saveCustomer = async () => {
     if (!newCust.firstName?.trim() || !newCust.lastName?.trim() || !newCust.siteAddress?.trim() || !newCust.phone?.trim() || !newCust.email?.trim()) {
-      alert('Please fill in required fields: Name, Site Address, Phone, and Email');
+      NotificationSystem.warning('Please fill in required fields: Name, Site Address, Phone, and Email');
       return;
     }
 
@@ -579,7 +526,7 @@ function AppInner() {
   const deleteCustomer = async (id) => {
     const custQuotes = quotes.filter(q => q.customerId === id && !q.changeOrderOf);
     if (custQuotes.length > 0) {
-      alert(`Cannot delete customer with ${custQuotes.length} quote(s). Delete quotes first.`);
+      NotificationSystem.warning(`Cannot delete customer with ${custQuotes.length} quote(s). Delete quotes first.`);
       return;
     }
     await saveCustomers(customers.filter(c => c.id !== id));
@@ -806,7 +753,7 @@ function AppInner() {
     e.stopPropagation();
     setDragOverFolder(null);
     try {
-      if (!quote) { alert('Please select a quote or contract first'); return; }
+      if (!quote) { NotificationSystem.warning('Please select a quote or contract first'); return; }
       const files = Array.from(e.dataTransfer.files);
       if (files.length === 0) return;
       const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -1033,7 +980,7 @@ function AppInner() {
       const coBalanceAfter = runningContingency - contingencyUsed;
       if (coBalanceAfter < 0) {
         setTimeout(() => {
-          alert(
+          NotificationSystem.warning(
             `⚠️ CONTINGENCY FUND OVERDRAWN ⚠️\n\n` +
             `The contingency fund is now negative by ${fmt(Math.abs(coBalanceAfter))}.\n\n` +
             `A payment must be collected from the customer before any additional work can continue.\n\n` +
@@ -1136,9 +1083,9 @@ function AppInner() {
         const customer = customers.find(c => c.id === contract.customerId);
         if (customer) {
           await folderSavers.saveScopeOfWorkToFolders(contract, customer);
-          alert('Quote accepted and converted to Contract!\n\nScope of Work document has been automatically generated and saved to Customer Docs folder.');
+          NotificationSystem.success('Quote accepted and converted to Contract!\n\nScope of Work document has been automatically generated and saved to Customer Docs folder.');
         } else {
-          alert('Quote accepted and converted to Contract!');
+          NotificationSystem.success('Quote accepted and converted to Contract!');
         }
       } catch (error) {
         console.error('Error generating Scope of Work:', error);
@@ -1244,8 +1191,8 @@ function AppInner() {
     try {
       await window.storage.set('sherman_pricing', JSON.stringify({ homeModels, materials, services, sewer: sewerPricing, patio: patioPricing, foundation: foundationPricing, driveRates, projectCommandRates }));
       setPricingEditMode(false);
-      alert('Pricing saved and locked!');
-    } catch(e) { alert('Error'); }
+      NotificationSystem.success('Pricing saved and locked!');
+    } catch(e) { NotificationSystem.error('Error saving pricing'); }
   };
 
   const cancelPricingEdit = async () => {
@@ -1297,7 +1244,7 @@ function AppInner() {
           driveRates: { install: DRIVE_RATE_INSTALL, service: DRIVE_RATE_SERVICE, projectCommand: DRIVE_RATE_PC, inspection: DRIVE_RATE_INSPECTION },
           projectCommandRates: { psPerService: 150, pmBase: 4000 }
         }));
-        alert('Pricing reset to defaults and saved!');
+        NotificationSystem.success('Pricing reset to defaults and saved!');
       } catch(e) {
         NotificationSystem.warning('Pricing reset but failed to save');
       }
@@ -1333,7 +1280,6 @@ function AppInner() {
         loginP={loginP} setLoginP={setLoginP}
         loginError={loginError}
         onLogin={login}
-        styles={S}
       />
     );
   }
@@ -1350,8 +1296,6 @@ function AppInner() {
         homeModels={homeModels}
         onLogout={logout}
         onGenerateQuote={() => {}}
-        fmtDate={fmtDate}
-        styles={S}
       />
     );
   }
@@ -1364,7 +1308,6 @@ function AppInner() {
         tempName={tempName} setTempName={setTempName}
         loginError={loginError} setLoginError={setLoginError}
         onSelectUser={handleSelectUser}
-        styles={S}
       />
     );
   }
@@ -1455,7 +1398,6 @@ function AppInner() {
             setSearchQuery={setSearchQuery}
             isAdmin={isAdmin}
             userName={userName}
-            fmtDate={fmtDate}
             onNewCustomer={() => {
               setNewCust(emptyCustomer());
               setEditingCustomerId(null);
@@ -1465,7 +1407,6 @@ function AppInner() {
             }}
             onSelectCustomer={(c) => { setSelCustomer(c); setView('viewCustomer'); }}
             onDeleteCustomer={(c) => setDeleteCustomerConfirm(c)}
-            styles={S}
           />
         )}
 
@@ -1481,7 +1422,6 @@ function AppInner() {
             setShowCustMailingAddress={setShowCustMailingAddress}
             onSave={saveCustomer}
             onCancel={() => { setNewCust(emptyCustomer()); setEditingCustomerId(null); setView('dashboard'); }}
-            styles={S}
           />
         )}
 
@@ -1501,8 +1441,6 @@ function AppInner() {
             isAdmin={isAdmin}
             showNewQuoteMenu={showNewQuoteMenu}
             setShowNewQuoteMenu={setShowNewQuoteMenu}
-            fmtDate={fmtDate}
-            fmtDateTime={fmtDateTime}
             onBack={() => { setView('dashboard'); setSelCustomer(null); }}
             onEditCustomer={() => startEditCustomer(selCustomer)}
             onDeleteCustomer={(c) => setDeleteCustomerConfirm(c)}
@@ -1523,7 +1461,6 @@ function AppInner() {
             onDeleteQuote={(item) => setDeleteConfirm(item)}
             onUpdateStatus={updateStatus}
             emptyQuote={emptyQuote}
-            styles={S}
           />
         )}
 
@@ -1933,14 +1870,14 @@ function AppInner() {
                       const cPmtsCheck = (currentItem.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
                       const balanceAfter = startC + newSavings - newOverages - cPmtsCheck - coUsedCheck;
                       if (balanceAfter < 0) {
-                        alert(
+                        NotificationSystem.warning(
                           `⚠️ CONTINGENCY FUND OVERDRAWN ⚠️\n\n` +
                           `${svc.name} is ${fmt(Math.abs(v))} over budget.\n\n` +
                           `The contingency fund is now negative by ${fmt(Math.abs(balanceAfter))}.\n\n` +
                           `A payment must be collected from the customer before any additional work can continue.`
                         );
                       } else {
-                        alert(v > 0 ? `${svc.name} came in ${fmt(v)} under budget.\nAdded to contingency fund.` : v < 0 ? `${svc.name} is ${fmt(Math.abs(v))} over budget.\nDrawn from contingency fund.` : `${svc.name} is exactly on budget.`);
+                        NotificationSystem.info(v > 0 ? `${svc.name} came in ${fmt(v)} under budget.\nAdded to contingency fund.` : v < 0 ? `${svc.name} is ${fmt(Math.abs(v))} over budget.\nDrawn from contingency fund.` : `${svc.name} is exactly on budget.`);
                       }
                     }
                   };
@@ -2046,7 +1983,7 @@ function AppInner() {
                                       saveScrubbUpdate({ ...currentItem, scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] }, updatedAt: Date.now(), updatedBy: userName });
                                     }}>+ Add Doc</button>
                                   </div></td>
-                                  <td style={S.td}>{svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => alert(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
+                                  <td style={S.td}>{svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => NotificationSystem.info(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
                                 </tr>
                                 {nhlExpanded && svc.subItems?.map((sub, idx) => (
                                   <tr key={`nhl-sub-${idx}`} style={{ background: '#f8f9fa' }}>
@@ -2090,7 +2027,7 @@ function AppInner() {
                                     }}>+ Add Doc</button>
                                   </div>}
                                 </td>
-                                <td style={S.td}>{!readOnly && svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => alert(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
+                                <td style={S.td}>{!readOnly && svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => NotificationSystem.info(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
                               </tr>
                             );
                           })}
@@ -2437,7 +2374,7 @@ function AppInner() {
                   <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
                     <button style={{ ...S.btn2, background: '#666' }} onClick={() => { setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost(''); }}>Cancel</button>
                     <button style={S.btn} onClick={() => {
-                      if (!permitEntryName.trim()) { alert('Please enter a permit name'); return; }
+                      if (!permitEntryName.trim()) { NotificationSystem.warning('Please enter a permit name'); return; }
                       const cost = parseFloat(permitEntryCost) || 0;
                       const currentEntries = currentItem.permitEntries || [];
                       let updatedEntries;
@@ -2471,7 +2408,7 @@ function AppInner() {
                   <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
                     <button style={{ ...S.btn2, background: '#666' }} onClick={() => { setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost(''); }}>Cancel</button>
                     <button style={S.btn} onClick={() => {
-                      if (!materialEntryName.trim()) { alert('Please enter a material name'); return; }
+                      if (!materialEntryName.trim()) { NotificationSystem.warning('Please enter a material name'); return; }
                       const cost = parseFloat(materialEntryCost) || 0;
                       const currentEntries = currentItem.addlMaterialEntries || [];
                       let updatedEntries;
