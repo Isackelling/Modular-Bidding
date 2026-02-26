@@ -241,13 +241,13 @@ This table maps every quote field to the documents that use it.
 | patioSize | USES | USES | N/A | N/A | USES* | USES | N/A | N/A |
 | driveTime | N/A | N/A | N/A | N/A | USES | USES | N/A | N/A |
 
-> **\*NOTE — Known Existing Bugs in Crew Work Order:**
-> The crew work order currently uses **wrong field names** for these three fields:
-> - Uses `quote.sewerSystem` → should be `quote.sewerType`
-> - Uses `quote.wellSystem` → should be `quote.wellDepth`
-> - Uses `quote.patio` → should be `quote.patioSize`
+> **\*FIXED (baseline sync check, Feb 2026):** These three fields were previously broken
+> and have been corrected in both `generateCustomerQuote` and `generateCrewWorkOrderDocument`:
+> - `quote.sewerSystem` → `quote.sewerType` ✓
+> - `quote.wellSystem` → `quote.wellDepth` ✓
+> - `quote.patio/patioWidth/patioLength` → `quote.patioSize` ✓
 >
-> The sync-check agent will flag these as BROKEN issues on its first run.
+> Also fixed: `CustomerPortal.jsx` contingency balance now subtracts `contingencyPaymentsApplied`.
 
 ### Special Features
 

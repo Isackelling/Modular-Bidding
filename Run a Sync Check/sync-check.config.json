@@ -1,7 +1,5 @@
 {
-  "diffTarget": "HEAD",
-
-  "autoApply": "prompt",
+  "description": "Reference config for sync check audits. Used by Claude Code when running a manual sync check, and by the npm run sync-check API script.",
 
   "criticalDocuments": [
     "generateQuoteHtml",
@@ -17,14 +15,21 @@
     "generateAllowanceProgressDocument"
   ],
 
+  "sourceOfTruth": "src/App.jsx",
+  "sourceFunction": "emptyQuote()",
+
   "monitoredFiles": [
     "src/App.jsx",
     "src/utils/calculations.js",
-    "src/utils/CalcHelpers.js",
     "src/constants/index.js"
   ],
 
   "outputDocumentFile": "src/utils/documentGeneration.js",
+
+  "consistencyCheckFiles": [
+    "src/components/Quotes/ScrubbTab.jsx",
+    "src/components/Auth/CustomerPortal.jsx"
+  ],
 
   "ignoreFields": [
     "id",
@@ -34,5 +39,21 @@
     "scrubbHistory",
     "changeOrderNum",
     "changeOrderVersion"
-  ]
+  ],
+
+  "consistencyChecks": [
+    "Contingency formula must be identical in ScrubbTab, generateAllowanceProgressDocument, and CustomerPortal",
+    "Grand total must be identical in generateCustomerQuote, generateQuoteHtml, ScrubbTab, and generateAllowanceProgressDocument",
+    "NHL Contract = matT + installation_of_home + painting (always grouped this way in Scrubb)",
+    "Variance sign: positive = savings (under budget), negative = overage (over budget)"
+  ],
+
+  "allowanceItems": ["permits", "gravel_driveway", "sand_pad", "sewer", "well", "crane"],
+
+  "apiScript": {
+    "note": "The npm run sync-check API script is available but Claude Code is the primary sync check method.",
+    "diffTarget": "HEAD",
+    "autoApply": "prompt",
+    "model": "claude-opus-4-6"
+  }
 }
