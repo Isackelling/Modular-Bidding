@@ -10,6 +10,9 @@
 The app has a one-directional data pipeline:
 
 ```
+spec.md (intended behavior — the contract)
+         │
+         ▼
 emptyQuote() in App.jsx          ← source of truth for all quote fields
          │
          ▼
@@ -19,17 +22,38 @@ calcTotals() in calculations.js  ← pricing engine
 8 document generators in documentGeneration.js + CustomerPortal.jsx + ScrubbTab.jsx
 ```
 
-A sync check verifies that every field, label, formula, and connection in the
-pipeline is consistent from the quote page all the way through every output.
+A sync check verifies two things:
+1. Every field/formula/connection in the pipeline is consistent end-to-end
+2. The actual code matches what `spec.md` says it should do
 
 ---
 
-## Step 1 — Files to Read First
+## Step 0 — Read spec.md FIRST
+
+**File:** `spec.md` (project root, ~69KB)
+
+This is the authoritative technical specification. It defines:
+- Every business rule and formula (contingency, variance, pricing pipeline, project command, material quantities)
+- What each of the 8 documents is supposed to contain
+- Status workflows (quote → contract → completed)
+- Role permissions matrix (who can do what)
+- The complete quote object schema (canonical field names)
+
+**When running a sync check, compare code against spec.md to catch:**
+- Formula deviations (e.g., spec says `sub × 5%` overhead — is that what calcTotals does?)
+- Missing features (spec lists a document type — does it exist in documentGeneration.js?)
+- Wrong business logic (spec says contingency draws subtract from balance — does CustomerPortal do that?)
+- Spec says 6 ALLOWANCE_ITEMS — does constants/index.js match exactly?
+
+---
+
+## Step 1 — Files to Read
 
 Always read these files at the start of a sync check:
 
 | File | What to extract |
 |------|----------------|
+| `spec.md` | **The spec** — intended formulas, document rules, business logic |
 | `src/App.jsx` lines ~52-82 | `emptyQuote()` — the complete field list (source of truth) |
 | `src/constants/index.js` | `ALLOWANCE_ITEMS`, `HOME_OPTIONS`, `LICENSED_SERVICES`, service definitions |
 | `src/utils/calculations.js` | `calcTotals()` — pricing pipeline, what totals are produced |
@@ -214,17 +238,61 @@ and Allowance Progress document.
 
 ---
 
+## Step 5b — Spec Compliance Audit
+
+After checking field-to-document mapping, check these spec-defined rules against the actual code:
+
+### Formulas to verify in `calculations.js`:
+| Spec Rule | What to Check |
+|-----------|--------------|
+| `overhead = sub × 5%` | Does calcTotals use exactly 0.05? |
+| `markup = (sub + oh) × 10%` | Is markup applied to sub+overhead (not just sub)? |
+| `contingency = total × 2%` | Applied to post-markup total? |
+| `homePrice = homeBasePrice × 1.2` | Is HOME_MARKUP = 1.2 in constants? |
+| `closing costs = total × (0.07/0.93)` | Self-referential — special formula |
+| `PS = (numServices × $150) + (miles × $15 × numServices)` | Project Supervisor formula |
+| `PM = (miles × $15) + $4,000` | Project Manager formula |
+| `PC = (PM / 2) + (miles × $15)` | Project Coordinator formula |
+| Drive minimum = 15 miles | `enforceMiles()` enforces this |
+| I-beam: `<56ft → 10"`, `≥56ft → 12"` | Check `getBeamHeight()` |
+
+### Allowance items to verify in `constants/index.js`:
+```
+ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well', 'crane']
+```
+Exactly 6. No more, no less.
+
+### Document routing to verify:
+| Document | Should save to folder |
+|----------|----------------------|
+| Customer Quote | `estimates` |
+| Crew Work Order | `crew_files` |
+| Pier Diagram | `crew_files` |
+| Scope of Work | `estimates` |
+| Change Order | `change_orders` |
+| Allowance Progress | `estimates` |
+
+### Role permissions to verify (spot check):
+- Sales role: cannot access Scrubb tab
+- Crew role: cannot create/edit quotes
+- Customer Portal: read-only, no editing
+
+---
+
 ## Step 6 — What to Flag as Broken
 
 | Pattern | Severity | Example |
 |---------|----------|---------|
 | Field name mismatch (`quote.sewerSystem` vs `quote.sewerType`) | CRITICAL | Document produces undefined/missing data |
+| Formula in code differs from spec.md | CRITICAL | Wrong price on customer quote |
 | Field exists in emptyQuote but missing from a required document | HIGH | Crew shows up not knowing about patio |
 | Contingency formula differs across the 3 locations | CRITICAL | Customer sees wrong balance |
 | Grand total differs between documents | CRITICAL | Financial inconsistency |
+| Feature described in spec.md but not implemented | HIGH | Promised functionality missing |
 | Label names inconsistent across documents | MEDIUM | "Sewer System" in one, "Sewer" in another |
 | Dead field reference (field was removed from emptyQuote) | HIGH | Always evaluates to undefined |
 | Hardcoded list of services missing a new service key | MEDIUM | New service never shows in that document |
+| Document saves to wrong folder (doesn't match spec) | MEDIUM | Files hard to find |
 
 ---
 
