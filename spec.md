@@ -19,7 +19,7 @@ It handles the full lifecycle: customer intake → quote → accepted → contra
 - **Framework:** React 18 + Vite, single-page application
 - **Persistence:** localStorage via `window.storage`
 - **No backend** — all data lives in the browser
-- **Dev server:** `localhost:5173`
+- **Dev server:** `localhost:3001`
 - **Build output:** `dist/`
 - **Auth:** Staff password (`SHERMAN` / `BIDDING`), then username selection. Customer portal: `mybid` + firstName + lastName
 
