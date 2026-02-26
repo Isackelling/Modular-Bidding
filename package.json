@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "sync-check": "node --env-file=.env \"Ai background agent/scripts/sync-check.js\""
+    "sync-check": "node --env-file=.env \"Run a Sync Check/scripts/sync-check.js\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
