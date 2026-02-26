@@ -83,12 +83,14 @@ const CustomerView = ({
         <div style={{ position: 'absolute', top: 12, right: 12, display: 'flex', gap: 8 }}>
           {isContract && item.status !== 'Cancelled' ? (
             <button
+              data-testid="start-change-order-btn"
               style={{ ...S.btnSm, background: '#0d6efd', color: '#fff', padding: '8px 16px', fontSize: 14, fontWeight: 600 }}
               onClick={() => onStartChangeOrder(item)}
               title="Create change order"
             >📝 Change Order</button>
           ) : !isContract ? (
             <button
+              data-testid="edit-quote-btn"
               style={{ ...S.btnSm, background: '#ffc107', color: '#000', padding: '8px 16px', fontSize: 14, fontWeight: 600 }}
               onClick={() => onEditQuote(item)}
               title="Edit quote"
@@ -155,6 +157,7 @@ const CustomerView = ({
                 color: ['Completed', 'Under Contract', 'Cancelled'].includes(item.status) ? '#fff' : '#000',
                 borderColor: item.status === 'Completed' ? '#146c43' : item.status === 'Under Contract' ? '#0a58ca' : item.status === 'Cancelled' ? '#b02a37' : item.status === 'Accepted' ? '#a3cfbb' : item.status === 'Draft' ? '#ffca2c' : item.status === 'Declined' ? '#f1aeb5' : '#dee2e6'
               }}
+              data-testid="quote-status-select"
               value={item.status}
               onChange={(e) => {
                 e.stopPropagation();
@@ -181,7 +184,7 @@ const CustomerView = ({
 
   return (
     <div>
-      <button style={{ ...S.btn2, marginBottom: 16 }} onClick={onBack}>← Back to Customers</button>
+      <button data-testid="back-to-dashboard-btn" style={{ ...S.btn2, marginBottom: 16 }} onClick={onBack}>← Back to Customers</button>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
@@ -190,11 +193,12 @@ const CustomerView = ({
           <p style={{ color: '#999', fontSize: 12 }}>Created by {selCustomer.createdBy} on {fmtDate(selCustomer.createdAt)}</p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <button style={{ ...S.btn, width: 'auto', background: '#ffc107', color: '#000' }} onClick={() => onEditCustomer(selCustomer)}>✏️ Edit</button>
+          <button data-testid="edit-customer-btn" style={{ ...S.btn, width: 'auto', background: '#ffc107', color: '#000' }} onClick={() => onEditCustomer(selCustomer)}>✏️ Edit</button>
 
           {/* New Quote Dropdown */}
           <div style={{ position: 'relative' }}>
             <button
+              data-testid="new-quote-btn"
               style={{ ...S.btn, width: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}
               onClick={() => setShowNewQuoteMenu(!showNewQuoteMenu)}
             >

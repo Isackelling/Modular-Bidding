@@ -603,7 +603,7 @@ const NhlRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, setSe
             <div style={{ display: 'flex', gap: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #2c5530', borderRadius: 4, padding: '0 8px' }}>
                 <span style={{ color: '#666', fontSize: 14 }}>$</span>
-                <input type="text" inputMode="decimal" style={{ ...S.inputEdit, width: 110, border: 'none', padding: '6px 4px' }} value={fmtInput(scrubbNewCost)} onChange={e => setScrubbNewCost(e.target.value.replace(/[^0-9.]/g, ''))} onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') { setScrubbEditingService(null); setScrubbNewCost(''); } }} placeholder="0.00" autoFocus />
+                <input data-testid={`scrubb-input-${svc.key}`} type="text" inputMode="decimal" style={{ ...S.inputEdit, width: 110, border: 'none', padding: '6px 4px' }} value={fmtInput(scrubbNewCost)} onChange={e => setScrubbNewCost(e.target.value.replace(/[^0-9.]/g, ''))} onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') { setScrubbEditingService(null); setScrubbNewCost(''); } }} placeholder="0.00" autoFocus />
               </div>
               <button style={{ ...S.btnSm, padding: '4px 8px', background: '#28a745' }} onClick={handleSave}>{'\u2713'}</button>
               <button style={{ ...S.btnSm, padding: '4px 8px', background: '#dc3545' }} onClick={() => { setScrubbEditingService(null); setScrubbNewCost(''); }}>{'\u2715'}</button>
@@ -669,6 +669,7 @@ const ServiceRow = ({ svc, S, currentItem, selQuote, setSelQuote, selContract, s
             <div style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #2c5530', borderRadius: 4, padding: '0 8px' }}>
               <span style={{ color: '#666', fontSize: 14 }}>$</span>
               <input
+                data-testid={`scrubb-input-${svc.key}`}
                 type="text"
                 inputMode="decimal"
                 style={{ ...S.inputEdit, width: 110, border: 'none', padding: '6px 4px' }}
@@ -887,7 +888,7 @@ const ContingencyTracker = ({
         </div>
         <div style={{ padding: 12, background: '#fff', borderRadius: 6 }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>Current Balance</div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: currentBalance > 0 ? '#28a745' : '#dc3545' }}>
+          <div data-testid="contingency-balance" style={{ fontSize: 20, fontWeight: 700, color: currentBalance > 0 ? '#28a745' : '#dc3545' }}>
             {fmt(currentBalance)}
           </div>
         </div>
@@ -1130,6 +1131,7 @@ const ContingencyTracker = ({
             {/* Add Payment Form */}
             {!showPaymentForm ? (
               <button
+                data-testid="add-payment-btn"
                 style={{ ...S.btn, width: '100%', background: '#28a745' }}
                 onClick={() => setShowPaymentForm(true)}
               >
@@ -1144,6 +1146,7 @@ const ContingencyTracker = ({
                     Payment Amount *
                   </label>
                   <input
+                    data-testid="payment-amount"
                     type="number"
                     step="0.01"
                     placeholder="0.00"
@@ -1180,6 +1183,7 @@ const ContingencyTracker = ({
                 <div style={{ marginBottom: 12, padding: 12, background: '#fff3e0', borderRadius: 4, border: '1px solid #ff9800' }}>
                   <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                     <input
+                      data-testid="payment-is-contingency"
                       type="checkbox"
                       checked={newPayment.isContingencyPayment}
                       onChange={(e) => setNewPayment(prev => ({ ...prev, isContingencyPayment: e.target.checked }))}
@@ -1196,6 +1200,7 @@ const ContingencyTracker = ({
 
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
+                    data-testid="save-payment-btn"
                     style={{ ...S.btn, flex: 1, background: '#28a745' }}
                     onClick={handleAddPayment}
                   >

@@ -198,7 +198,7 @@ const CustomerPortal = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Final Balance</div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: runningBalance >= startingBalance ? '#2e7d32' : '#d32f2f' }}>
+              <div data-testid="portal-contingency-balance" style={{ fontSize: 20, fontWeight: 700, color: runningBalance >= startingBalance ? '#2e7d32' : '#d32f2f' }}>
                 {fmt(runningBalance)}
               </div>
             </div>
@@ -253,7 +253,7 @@ const CustomerPortal = ({
     if (notes.length === 0) return null;
 
     return (
-      <div style={{ background: 'linear-gradient(135deg, #e3f2fd, #bbdefb)', border: '2px solid #1565c0', borderRadius: 8, padding: 16, marginTop: 16 }}>
+      <div data-testid="portal-project-notes" style={{ background: 'linear-gradient(135deg, #e3f2fd, #bbdefb)', border: '2px solid #1565c0', borderRadius: 8, padding: 16, marginTop: 16 }}>
         <h4 style={{ margin: '0 0 12px', color: '#1565c0', fontSize: 15 }}>📋 Important Project Information</h4>
         {notes.map((note, idx) => (
           <div key={idx} style={{ background: '#fff', padding: 10, borderRadius: 6, marginBottom: 8, borderLeft: '4px solid #1565c0' }}>

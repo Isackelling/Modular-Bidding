@@ -41,6 +41,7 @@ const UserSelector = ({
         <p style={{ color: '#666', marginBottom: 20 }}>Select your username to continue</p>
 
         <input
+          data-testid="user-selector-input"
           type="text"
           placeholder="Enter your username..."
           style={S.input}
@@ -75,6 +76,7 @@ const UserSelector = ({
                 {users.map(u => (
                   <tr
                     key={u.id}
+                    data-testid={`select-user-${u.username}`}
                     style={{
                       borderBottom: '1px solid #eee',
                       cursor: 'pointer',
@@ -108,6 +110,7 @@ const UserSelector = ({
         )}
 
         <button
+          data-testid="user-selector-continue"
           style={{ ...S.btn, opacity: !tempName ? 0.5 : 1 }}
           disabled={!tempName}
           onClick={handleSubmit}

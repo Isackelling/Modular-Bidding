@@ -26,6 +26,7 @@ const LoginForm = ({
         <p style={{ color: '#666', marginBottom: 24 }}>Manufactured Home Installation</p>
 
         <input
+          data-testid="login-username"
           type="text"
           placeholder="Username"
           style={S.input}
@@ -33,6 +34,7 @@ const LoginForm = ({
           onChange={e => setLoginU(e.target.value)}
         />
         <input
+          data-testid="login-password"
           type="password"
           placeholder="Password"
           style={S.input}
@@ -43,7 +45,7 @@ const LoginForm = ({
         {loginError && (
           <p style={{ color: '#dc3545', margin: '0 0 12px' }}>{loginError}</p>
         )}
-        <button style={S.btn} onClick={onLogin}>Sign In</button>
+        <button data-testid="login-btn" style={S.btn} onClick={onLogin}>Sign In</button>
 
         <div style={{ marginTop: 20, padding: 12, background: '#e8f5e9', borderRadius: 6, textAlign: 'left' }}>
           <p style={{ margin: 0, fontSize: 13, color: '#2c5530' }}>

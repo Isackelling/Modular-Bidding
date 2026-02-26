@@ -43,7 +43,7 @@ const Dashboard = ({
           <h1 style={{ margin: 0 }}>{isAdmin ? 'All Customers' : 'My Customers'}</h1>
           {!isAdmin && <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>Showing customers created by {userName}</p>}
         </div>
-        <button style={{ ...S.btn, width: 'auto' }} onClick={onNewCustomer}>+ New Customer</button>
+        <button data-testid="new-customer-btn" style={{ ...S.btn, width: 'auto' }} onClick={onNewCustomer}>+ New Customer</button>
       </div>
 
       {/* Stats */}
@@ -66,6 +66,7 @@ const Dashboard = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 18 }}>🔍</span>
           <input
+            data-testid="search-input"
             type="text"
             placeholder="Search by name, phone, email, address, or quote number..."
             style={{ ...S.input, marginBottom: 0, flex: 1 }}

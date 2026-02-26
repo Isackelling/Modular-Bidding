@@ -1377,6 +1377,7 @@ function AppInner() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {originalRole === 'admin' && (
             <select
+              data-testid="role-switcher"
               style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '8px 12px', borderRadius: 4, fontSize: 14, cursor: 'pointer' }}
               value={userRole}
               onChange={e => { setUserRole(e.target.value); setView('dashboard'); setSelQuote(null); setSelCustomer(null); }}
@@ -1387,7 +1388,7 @@ function AppInner() {
             </select>
           )}
           <span>{userName} {originalRole === 'admin' && <span style={{ opacity: 0.7 }}>(viewing as crew)</span>}</span>
-          <button style={S.nav} onClick={logout}>Sign Out</button>
+          <button data-testid="logout-btn" style={S.nav} onClick={logout}>Sign Out</button>
         </div>
       </header>
       <div style={S.main}>
@@ -1427,6 +1428,7 @@ function AppInner() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {originalRole === 'admin' && (
             <select
+              data-testid="role-switcher"
               style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '8px 12px', borderRadius: 4, fontSize: 14, cursor: 'pointer' }}
               value={userRole}
               onChange={e => { setUserRole(e.target.value); setView('dashboard'); setSelQuote(null); setSelCustomer(null); }}
@@ -1437,7 +1439,7 @@ function AppInner() {
             </select>
           )}
           <span>{userName} {originalRole === 'admin' && userRole !== 'admin' && <span style={{ opacity: 0.7 }}>(viewing as {userRole})</span>}</span>
-          <button style={S.nav} onClick={logout}>Sign Out</button>
+          <button data-testid="logout-btn" style={S.nav} onClick={logout}>Sign Out</button>
         </div>
       </header>
 
@@ -1529,7 +1531,7 @@ function AppInner() {
         {view === 'viewQuote' && currentItem && (
           <div style={S.box}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <button style={S.btn2} onClick={() => {
+              <button data-testid="back-to-customer-btn" style={S.btn2} onClick={() => {
                 if (selCustomer) setView('viewCustomer');
                 else setView('dashboard');
                 setSelQuote(null);
@@ -1540,6 +1542,7 @@ function AppInner() {
               </h2>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <select
+                  data-testid="quote-status-select"
                   style={{
                     fontSize: 13,
                     padding: '6px 12px',
@@ -1561,7 +1564,7 @@ function AppInner() {
                   )}
                 </select>
                 {selContract ? (
-                  <button style={{ ...S.btnSm, background: '#1565c0' }} onClick={() => startChangeOrder(currentItem)}>Change Order</button>
+                  <button data-testid="create-change-order-btn" style={{ ...S.btnSm, background: '#1565c0' }} onClick={() => startChangeOrder(currentItem)}>Change Order</button>
                 ) : (
                   <button style={S.btnSm} onClick={() => startEdit(currentItem)}>Edit</button>
                 )}
@@ -2657,7 +2660,7 @@ function AppInner() {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button style={S.btn2} onClick={cancelEdit}>← Back</button>
-              <button style={{ ...S.btn, width: 'auto' }} onClick={saveNew}>
+              <button data-testid="save-quote-btn" style={{ ...S.btn, width: 'auto' }} onClick={saveNew}>
                 {originalQuoteForComparison ? 'Save Change Order' : editingQuoteId ? 'Update' : 'Save Quote'}
               </button>
             </div>
@@ -3046,7 +3049,7 @@ function AppInner() {
               <div style={{ background: '#f8f9fa', padding: 12, borderRadius: 8, textAlign: 'center' }}>
                 <label style={{ ...S.label, marginBottom: 4 }}>Drive Distance</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <input style={{ ...S.input, width: 70, marginBottom: 0, textAlign: 'center', fontWeight: 600 }} type="number" value={newQ.driveTime} onChange={e => updateField('driveTime', e.target.value)} />
+                  <input data-testid="quote-driveTime" style={{ ...S.input, width: 70, marginBottom: 0, textAlign: 'center', fontWeight: 600 }} type="number" value={newQ.driveTime} onChange={e => updateField('driveTime', e.target.value)} />
                   <span>mi</span>
                 </div>
                 {mapsUrl && <a href={mapsUrl} target="_blank" style={{ ...S.btnSm, background: '#4285f4', marginTop: 8, fontSize: 11 }}>Maps</a>}
@@ -3062,7 +3065,7 @@ function AppInner() {
             {!homeSelCollapsed && <>
             <p style={{ fontSize: 12, color: '#666', marginBottom: 10 }}>Selecting a home will auto-fill dimensions below</p>
             <div style={S.row}>
-              <div style={{ gridColumn: 'span 2' }}><label style={S.label}>Model</label><select style={S.select} value={newQ.homeModel} onChange={e => updateField('homeModel', e.target.value)}>{homeModels.map(m => <option key={m.name} value={m.name}>{m.name}{m.width > 0 ? ` (${m.width}x${m.length})` : ''} {m.price > 0 && `- ${fmt(m.price * HOME_MARKUP)}`}</option>)}</select></div>
+              <div style={{ gridColumn: 'span 2' }}><label style={S.label}>Model</label><select data-testid="quote-homeModel" style={S.select} value={newQ.homeModel} onChange={e => updateField('homeModel', e.target.value)}>{homeModels.map(m => <option key={m.name} value={m.name}>{m.name}{m.width > 0 ? ` (${m.width}x${m.length})` : ''} {m.price > 0 && `- ${fmt(m.price * HOME_MARKUP)}`}</option>)}</select></div>
               <div><label style={S.label}>Home Sale Price</label><div style={{ position: 'relative' }}><span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 16, fontWeight: 600, color: '#2c5530', pointerEvents: 'none' }}>$</span><input style={{ ...S.input, background: '#e8f5e9', fontWeight: 600, fontSize: 18, paddingLeft: 24 }} type="text" inputMode="numeric" value={Math.round((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP) ? Math.round((parseFloat(newQ.homeBasePrice) || 0) * HOME_MARKUP).toLocaleString() : ''} onChange={e => { const num = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0; setNewQ(p => ({ ...p, homeBasePrice: String(num / HOME_MARKUP) })); }} placeholder="0" /></div>{isAdmin && <small style={{ color: '#666' }}>Base: {fmt(parseFloat(newQ.homeBasePrice) || 0)} x {HOME_MARKUP}</small>}</div>
             </div>
 
@@ -3218,7 +3221,7 @@ function AppInner() {
                               <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Patio</span>
                               {patioSelected && <span style={{ fontSize: 13, fontWeight: 600, color: patioOvr ? '#856404' : '#2c5530' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing[newQ.patioSize])}</span>}
                             </label>
-                            <select style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
+                            <select data-testid="quote-patioSize" style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
                               <option value="none">None</option>
                               {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
                             </select>
@@ -3303,7 +3306,7 @@ function AppInner() {
                   </div>
                 </div>
 
-                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
+                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select data-testid="quote-foundationType" style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
 
                 {(newQ.foundationType === 'basement' || newQ.foundationType === 'crawlspace') && (
                   <div style={{ marginTop: 12, padding: 12, background: '#fff3cd', borderRadius: 6, border: '1px solid #ffc107' }}>
@@ -3390,7 +3393,7 @@ function AppInner() {
                               <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Patio</span>
                               {patioSelected && <span style={{ fontSize: 13, fontWeight: 600, color: patioOvr ? '#856404' : '#2c5530' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing[newQ.patioSize])}</span>}
                             </label>
-                            <select style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
+                            <select data-testid="quote-patioSize" style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
                               <option value="none">None</option>
                               {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
                             </select>
@@ -3475,7 +3478,7 @@ function AppInner() {
                   </div>
                 </div>
 
-                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
+                <div style={{ marginTop: 16 }}><label style={{ ...S.label, color: '#dc3545', fontSize: 15, fontWeight: 600 }}>Foundation Type *</label><select data-testid="quote-foundationType" style={{ ...S.select, padding: '12px', fontSize: 15, fontWeight: 500 }} value={newQ.foundationType || 'none'} onChange={e => updateField('foundationType', e.target.value)}><option value="none">None</option><option value="slab">Engineered Slab</option><option value="basement">Basement</option><option value="crawlspace">Crawl Space</option></select></div>
 
                 {(newQ.foundationType === 'basement' || newQ.foundationType === 'crawlspace') && (
                   <div style={{ marginTop: 12, padding: 12, background: '#fff3cd', borderRadius: 6, border: '1px solid #ffc107' }}>
@@ -3622,7 +3625,7 @@ function AppInner() {
                 const sewerHasNotes = newQ.serviceNotes?.sewer || newQ.serviceCrewNotes?.sewer || (newQ.publishedServiceNotes?.sewer?.length > 0) || (newQ.publishedServiceCrewNotes?.sewer?.length > 0);
                 return <React.Fragment>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: sewerSelected ? (sewerOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: '1px solid #eee' }}>
-                    <select style={{ ...S.select, marginBottom: 0, width: 'auto', minWidth: 130, padding: '4px 8px', fontSize: 13 }} value={newQ.sewerType} onChange={e => updateField('sewerType', e.target.value)}>
+                    <select data-testid="quote-sewerType" style={{ ...S.select, marginBottom: 0, width: 'auto', minWidth: 130, padding: '4px 8px', fontSize: 13 }} value={newQ.sewerType} onChange={e => updateField('sewerType', e.target.value)}>
                       <option value="none">None</option>
                       {Object.entries(sewerPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k.replace('_', ' ')} - {fmt(v)}</option>)}
                     </select>
@@ -3659,7 +3662,7 @@ function AppInner() {
                 const wellHasNotes = newQ.serviceNotes?.well || newQ.serviceCrewNotes?.well || (newQ.publishedServiceNotes?.well?.length > 0) || (newQ.publishedServiceCrewNotes?.well?.length > 0);
                 return <React.Fragment>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: wellSelected ? (wellOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: '1px solid #eee' }}>
-                    <input type="number" min="0" style={{ width: 70, padding: '4px 8px', fontSize: 13, border: '1px solid #ddd', borderRadius: 4, textAlign: 'center' }} value={newQ.wellDepth} onChange={e => updateField('wellDepth', e.target.value)} placeholder="0" />
+                    <input data-testid="quote-wellDepth" type="number" min="0" style={{ width: 70, padding: '4px 8px', fontSize: 13, border: '1px solid #ddd', borderRadius: 4, textAlign: 'center' }} value={newQ.wellDepth} onChange={e => updateField('wellDepth', e.target.value)} placeholder="0" />
                     <span style={{ flex: 1, fontSize: 14, fontWeight: wellSelected ? 600 : 400, color: wellSelected ? '#2c5530' : '#333' }}>
                       Well (ft)
                       <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>
@@ -4255,7 +4258,7 @@ function AppInner() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 28, color: '#2c5530', borderTop: '3px solid #2c5530', paddingTop: 16, marginTop: 16 }}>
+              <div data-testid="grand-total" style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 28, color: '#2c5530', borderTop: '3px solid #2c5530', paddingTop: 16, marginTop: 16 }}>
                 <span>Total Investment</span>
                 <span>{fmt(totals.totalWithContingency)}</span>
               </div>
@@ -4290,7 +4293,7 @@ function AppInner() {
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 24, paddingTop: 24, borderTop: '2px solid #e0e0e0' }}>
             <button style={S.btn2} onClick={cancelEdit}>← Back</button>
-            <button style={{ ...S.btn, width: 'auto', fontSize: 16, padding: '12px 32px' }} onClick={saveNew}>
+            <button data-testid="save-quote-btn" style={{ ...S.btn, width: 'auto', fontSize: 16, padding: '12px 32px' }} onClick={saveNew}>
               {originalQuoteForComparison ? 'Save Change Order' : editingQuoteId ? 'Update' : 'Save Quote'}
             </button>
           </div>
