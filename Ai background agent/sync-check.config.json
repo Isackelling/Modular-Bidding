@@ -1,0 +1,38 @@
+{
+  "diffTarget": "HEAD",
+
+  "autoApply": "prompt",
+
+  "criticalDocuments": [
+    "generateQuoteHtml",
+    "generateCustomerQuote",
+    "generateCrewWorkOrderDocument",
+    "generateJobSummaryReport"
+  ],
+
+  "optionalDocuments": [
+    "generatePierDiagramHtml",
+    "generateScopeOfWorkDocument",
+    "generateChangeOrderDocument",
+    "generateAllowanceProgressDocument"
+  ],
+
+  "monitoredFiles": [
+    "src/App.jsx",
+    "src/utils/calculations.js",
+    "src/utils/CalcHelpers.js",
+    "src/constants/index.js"
+  ],
+
+  "outputDocumentFile": "src/utils/documentGeneration.js",
+
+  "ignoreFields": [
+    "id",
+    "customerId",
+    "status",
+    "folders",
+    "scrubbHistory",
+    "changeOrderNum",
+    "changeOrderVersion"
+  ]
+}
