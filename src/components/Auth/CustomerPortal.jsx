@@ -134,7 +134,8 @@ const CustomerPortal = ({
     const allowanceSavings = allowanceItems.filter(item => item.variance > 0).reduce((sum, item) => sum + item.variance, 0);
     const allowanceOverages = allowanceItems.filter(item => item.variance < 0).reduce((sum, item) => sum + Math.abs(item.variance), 0);
     const netVariance = allowanceSavings - allowanceOverages;
-    const runningBalance = startingBalance + netVariance;
+    const contingencyPaymentsTotal = (q.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
+    const runningBalance = startingBalance + netVariance - contingencyPaymentsTotal;
 
     return (
       <div style={{ background: 'linear-gradient(135deg, #fff9e6, #fff3e0)', border: '2px solid #ffc107', borderRadius: 8, padding: 16, marginTop: 16, marginBottom: 16 }}>
@@ -208,10 +209,18 @@ const CustomerPortal = ({
               </div>
             </div>
           </div>
+          {contingencyPaymentsTotal > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 12, color: '#e65100' }}>
+              <span>Contingency Draws Applied</span>
+              <span style={{ fontWeight: 600 }}>- {fmt(contingencyPaymentsTotal)}</span>
+            </div>
+          )}
           <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${runningBalance >= startingBalance ? '#a5d6a7' : '#ef9a9a'}`, fontSize: 11, color: '#666' }}>
-            {netVariance > 0 && `✓ Under budget - You'll receive back ${fmt(runningBalance)} at completion`}
+            {netVariance > 0 && contingencyPaymentsTotal === 0 && `✓ Under budget - You'll receive back ${fmt(runningBalance)} at completion`}
+            {netVariance > 0 && contingencyPaymentsTotal > 0 && `✓ Under budget - Estimated return at completion: ${fmt(runningBalance)}`}
             {netVariance < 0 && `⚠ Over budget - Drawing ${fmt(Math.abs(netVariance))} from contingency`}
-            {netVariance === 0 && '• Tracking in progress'}
+            {netVariance === 0 && contingencyPaymentsTotal === 0 && '• Tracking in progress'}
+            {netVariance === 0 && contingencyPaymentsTotal > 0 && `• ${fmt(contingencyPaymentsTotal)} drawn from contingency fund`}
           </div>
         </div>
       </div>

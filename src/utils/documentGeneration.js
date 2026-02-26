@@ -1609,11 +1609,11 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
   // Get other services (sewer, well, patio, landscaping, deck project)
   const otherServices = [];
 
-  if (quote.sewerSystem && quote.sewerSystem !== 'none') {
+  if (quote.sewerType && quote.sewerType !== 'none') {
     otherServices.push({
       key: 'sewer',
       name: 'Sewer System',
-      description: quote.sewerSystem,
+      description: quote.sewerType,
       customerNote: quote.serviceNotes?.sewer || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.sewer || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.sewer || [],
@@ -1621,11 +1621,11 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
     });
   }
 
-  if (quote.wellSystem && quote.wellSystem !== 'none') {
+  if (quote.wellDepth && quote.wellDepth !== '0') {
     otherServices.push({
       key: 'well',
       name: 'Well System',
-      description: quote.wellSystem,
+      description: `${quote.wellDepth} ft deep`,
       customerNote: quote.serviceNotes?.well || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.well || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.well || [],
@@ -1633,11 +1633,11 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
     });
   }
 
-  if (quote.patio) {
+  if (quote.patioSize && quote.patioSize !== 'none') {
     otherServices.push({
       key: 'patio',
       name: 'Patio',
-      description: `${quote.patioWidth} x ${quote.patioLength}`,
+      description: `${quote.patioSize} wide`,
       customerNote: quote.serviceNotes?.patio || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.patio || [],
       publishedCrewNotes: quote.publishedServiceCrewNotes?.patio || [],
@@ -1645,7 +1645,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
     });
   }
 
-  if (quote.landscaping) {
+  if (quote.hasLandscaping) {
     otherServices.push({
       key: 'landscaping',
       name: 'Landscaping',
@@ -1657,7 +1657,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
     });
   }
 
-  if (quote.deckProject) {
+  if (quote.hasDeck) {
     otherServices.push({
       key: 'deck',
       name: 'Deck Project',
@@ -3345,19 +3345,19 @@ export const generateJobSummaryReport = (quote, customer, servicesParam, crewChe
     .map(([key]) => buildServiceData(key));
 
   const otherServices = [];
-  if (quote.sewerSystem && quote.sewerSystem !== 'none') {
-    otherServices.push({ key: 'sewer', name: 'Sewer System', description: quote.sewerSystem, publishedCrewNotes: quote.publishedServiceCrewNotes?.sewer || [], publishedCustomerNotes: quote.publishedServiceNotes?.sewer || [], cost: totals.svc.find(s => s.key === 'sewer')?.cost || 0 });
+  if (quote.sewerType && quote.sewerType !== 'none') {
+    otherServices.push({ key: 'sewer', name: 'Sewer System', description: quote.sewerType, publishedCrewNotes: quote.publishedServiceCrewNotes?.sewer || [], publishedCustomerNotes: quote.publishedServiceNotes?.sewer || [], cost: totals.svc.find(s => s.key === 'sewer')?.cost || 0 });
   }
-  if (quote.wellSystem && quote.wellSystem !== 'none') {
-    otherServices.push({ key: 'well', name: 'Well System', description: quote.wellSystem, publishedCrewNotes: quote.publishedServiceCrewNotes?.well || [], publishedCustomerNotes: quote.publishedServiceNotes?.well || [], cost: totals.svc.find(s => s.key === 'well')?.cost || 0 });
+  if (quote.wellDepth && quote.wellDepth !== '0') {
+    otherServices.push({ key: 'well', name: 'Well System', description: `${quote.wellDepth} ft deep`, publishedCrewNotes: quote.publishedServiceCrewNotes?.well || [], publishedCustomerNotes: quote.publishedServiceNotes?.well || [], cost: totals.svc.find(s => s.key === 'well')?.cost || 0 });
   }
-  if (quote.patio) {
-    otherServices.push({ key: 'patio', name: 'Patio', description: `${quote.patioWidth} x ${quote.patioLength}`, publishedCrewNotes: quote.publishedServiceCrewNotes?.patio || [], publishedCustomerNotes: quote.publishedServiceNotes?.patio || [], cost: totals.svc.find(s => s.key === 'patio')?.cost || 0 });
+  if (quote.patioSize && quote.patioSize !== 'none') {
+    otherServices.push({ key: 'patio', name: 'Patio', description: `${quote.patioSize} wide`, publishedCrewNotes: quote.publishedServiceCrewNotes?.patio || [], publishedCustomerNotes: quote.publishedServiceNotes?.patio || [], cost: totals.svc.find(s => s.key === 'patio')?.cost || 0 });
   }
-  if (quote.landscaping) {
+  if (quote.hasLandscaping) {
     otherServices.push({ key: 'landscaping', name: 'Landscaping', description: 'Landscaping services', publishedCrewNotes: quote.publishedServiceCrewNotes?.landscaping || [], publishedCustomerNotes: quote.publishedServiceNotes?.landscaping || [], cost: totals.svc.find(s => s.key === 'landscaping')?.cost || 0 });
   }
-  if (quote.deckProject) {
+  if (quote.hasDeck) {
     otherServices.push({ key: 'deck', name: 'Deck Project', description: 'Deck construction services', publishedCrewNotes: quote.publishedServiceCrewNotes?.deck || [], publishedCustomerNotes: quote.publishedServiceNotes?.deck || [], cost: totals.svc.find(s => s.key === 'deck')?.cost || 0 });
   }
 
