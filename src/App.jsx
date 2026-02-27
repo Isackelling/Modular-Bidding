@@ -1789,8 +1789,30 @@ function AppInner() {
                     </div>
                     {activeFolder === folderId && (
                       <div style={{ marginTop: 8 }}>
+                        <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+                          <label style={{ ...S.btnSm, padding: '4px 10px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            📎 Upload Files
+                            <input type="file" accept="image/*,.pdf,application/pdf" multiple style={{ display: 'none' }} onChange={async (e) => {
+                              const files = Array.from(e.target.files || []);
+                              if (files.length === 0) return;
+                              const fakeEvent = { preventDefault: () => {}, stopPropagation: () => {}, dataTransfer: { files } };
+                              await handleFileDrop(fakeEvent, folderId, currentItem);
+                              e.target.value = '';
+                            }} />
+                          </label>
+                          <label style={{ ...S.btnSm, padding: '4px 10px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, background: '#1565c0' }}>
+                            📷 Camera
+                            <input type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={async (e) => {
+                              const files = Array.from(e.target.files || []);
+                              if (files.length === 0) return;
+                              const fakeEvent = { preventDefault: () => {}, stopPropagation: () => {}, dataTransfer: { files } };
+                              await handleFileDrop(fakeEvent, folderId, currentItem);
+                              e.target.value = '';
+                            }} />
+                          </label>
+                        </div>
                         {files.length === 0 ? (
-                          <p style={{ color: '#999', fontSize: 13 }}>No files yet. Drag and drop to add.</p>
+                          <p style={{ color: '#999', fontSize: 13 }}>No files yet. Drag and drop, upload, or take a photo.</p>
                         ) : (
                           files.map(file => (
                             <div key={file.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #eee' }}>
@@ -2105,6 +2127,10 @@ function AppInner() {
                                           📎 Upload
                                           <input type="file" accept="image/*,.pdf" multiple style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
                                         </label>
+                                        <label style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, background: '#1565c0' }}>
+                                          📷 Camera
+                                          <input type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
+                                        </label>
                                         <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
                                           const fileName = prompt('Document name:'); if (!fileName) return;
                                           const fileUrl = prompt('Document URL (or leave blank):');
@@ -2169,6 +2195,10 @@ function AppInner() {
                                       <label style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                                         📎 Upload
                                         <input type="file" accept="image/*,.pdf" multiple style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
+                                      </label>
+                                      <label style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, background: '#1565c0' }}>
+                                        📷 Camera
+                                        <input type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
                                       </label>
                                       <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
                                         const fileName = prompt('Document name:'); if (!fileName) return;
