@@ -13,3 +13,5 @@ export * from './CalcHelpers.js';
 export * from './FolderUtils.js';
 export * from './TestHelpers.js';
 export * from './calculations.js';
+export * from './windowUtils.js';
+export * from './labelMaps.js';

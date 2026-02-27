@@ -6,6 +6,7 @@
 import React from 'react';
 import { fmtDate } from '../../utils/helpers.js';
 import { S } from '../../utils/appStyles.js';
+import { DocumentUtils } from '../../utils/DocumentUtils.js';
 
 const Dashboard = ({
   myCustomers,
@@ -31,7 +32,7 @@ const Dashboard = ({
     const matchesEmail = (c.email || '').toLowerCase().includes(query);
     const matchesAddress = ((c.siteAddress || '') + ' ' + (c.siteCity || '') + ' ' + (c.siteState || '') + ' ' + (c.siteZip || '')).toLowerCase().includes(query);
     const matchesQuoteNumber = [...custQuotes, ...custContracts].some(q =>
-      (q.id || '').slice(-8).toUpperCase().toLowerCase().includes(query)
+      DocumentUtils.getQuoteNum(q).toLowerCase().includes(query)
     );
     return matchesName || matchesPhone || matchesEmail || matchesAddress || matchesQuoteNumber;
   });

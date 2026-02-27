@@ -36,6 +36,14 @@ import ErrorBoundary from './components/Shared/ErrorBoundary.jsx';
 import ExpandableNoteSection from './components/Shared/ExpandableNoteSection.jsx';
 import PierDiagram from './components/Shared/PierDiagram.jsx';
 import AIChatWidget from './components/Shared/AIChatWidget.jsx';
+import EntryModal from './components/Shared/EntryModal.jsx';
+
+// Hooks
+import { useScrubbState } from './hooks/useScrubbState.js';
+
+// Supplemental utilities
+import { openDocumentWindow } from './utils/windowUtils.js';
+import { FOUNDATION_LABELS, CO_STATUS_BG, CO_STATUS_TEXT, getLabel } from './utils/labelMaps.js';
 
 // Auth Components
 import { LoginForm, UserSelector, CustomerPortal } from './components/Auth/index.js';
@@ -185,20 +193,22 @@ function AppInner() {
   const [scopeEditMode, setScopeEditMode] = useState(false);
   const [scopeEditContent, setScopeEditContent] = useState(null);
 
-  // Scrubb state
-  const [scrubbEditingService, setScrubbEditingService] = useState(null);
-  const [scrubbNewCost, setScrubbNewCost] = useState('');
-  const [nhlExpanded, setNhlExpanded] = useState(false);
-  const [showPermitModal, setShowPermitModal] = useState(false);
-  const [editingPermitEntry, setEditingPermitEntry] = useState(null);
-  const [permitEntryName, setPermitEntryName] = useState('');
-  const [permitEntryCost, setPermitEntryCost] = useState('');
-  const [showAddlMaterialModal, setShowAddlMaterialModal] = useState(false);
-  const [editingMaterialEntry, setEditingMaterialEntry] = useState(null);
-  const [materialEntryName, setMaterialEntryName] = useState('');
-  const [materialEntryCost, setMaterialEntryCost] = useState('');
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [newPayment, setNewPayment] = useState({ amount: '', date: '', notes: '', isContingencyPayment: false });
+  // Scrubb state (grouped — see src/hooks/useScrubbState.js)
+  const {
+    scrubbEditingService, setScrubbEditingService,
+    scrubbNewCost, setScrubbNewCost,
+    nhlExpanded, setNhlExpanded,
+    showPermitModal, setShowPermitModal,
+    editingPermitEntry, setEditingPermitEntry,
+    permitEntryName, setPermitEntryName,
+    permitEntryCost, setPermitEntryCost,
+    showAddlMaterialModal, setShowAddlMaterialModal,
+    editingMaterialEntry, setEditingMaterialEntry,
+    materialEntryName, setMaterialEntryName,
+    materialEntryCost, setMaterialEntryCost,
+    showPaymentForm, setShowPaymentForm,
+    newPayment, setNewPayment,
+  } = useScrubbState();
 
   // Folder management
   const [activeFolder, setActiveFolder] = useState(null);
@@ -1252,6 +1262,44 @@ function AppInner() {
   };
 
   // ======================================================================
+  // SCRUBB MODAL HANDLERS
+  // ======================================================================
+
+  const handleSavePermit = () => {
+    if (!permitEntryName.trim()) { NotificationSystem.warning('Please enter a permit name'); return; }
+    const cost = parseFloat(permitEntryCost) || 0;
+    const currentEntries = currentItem?.permitEntries || [];
+    const updatedEntries = editingPermitEntry
+      ? currentEntries.map(e => e.id === editingPermitEntry.id ? { ...e, name: permitEntryName, cost } : e)
+      : [...currentEntries, { id: genId(), name: permitEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
+    const updatedItem = { ...currentItem, permitEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
+    if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
+    else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+    setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost('');
+  };
+
+  const handleClosePermitModal = () => {
+    setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost('');
+  };
+
+  const handleSaveAdditionalMaterial = () => {
+    if (!materialEntryName.trim()) { NotificationSystem.warning('Please enter a material name'); return; }
+    const cost = parseFloat(materialEntryCost) || 0;
+    const currentEntries = currentItem?.addlMaterialEntries || [];
+    const updatedEntries = editingMaterialEntry
+      ? currentEntries.map(e => e.id === editingMaterialEntry.id ? { ...e, name: materialEntryName, cost } : e)
+      : [...currentEntries, { id: genId(), name: materialEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
+    const updatedItem = { ...currentItem, addlMaterialEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
+    if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
+    else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+    setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost('');
+  };
+
+  const handleCloseAdditionalMaterialModal = () => {
+    setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost('');
+  };
+
+  // ======================================================================
   // EFFECTS
   // ======================================================================
 
@@ -1501,7 +1549,7 @@ function AppInner() {
                   )}
                 </select>
                 {selContract ? (
-                  <button data-testid="create-change-order-btn" style={{ ...S.btnSm, background: '#1565c0' }} onClick={() => startChangeOrder(currentItem)}>Change Order</button>
+                  <button data-testid="create-change-order-btn" style={S.btnBlue} onClick={() => startChangeOrder(currentItem)}>Change Order</button>
                 ) : (
                   <button style={S.btnSm} onClick={() => startEdit(currentItem)}>Edit</button>
                 )}
@@ -1528,14 +1576,14 @@ function AppInner() {
                 {/* Document Generation Buttons */}
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
                   <button
-                    style={{ ...S.btnSm, background: '#2c5530' }}
+                    style={S.btnSm}
                     onClick={() => {
                       const q = { ...currentItem, customerFirstName: custForQuote?.firstName, customerLastName: custForQuote?.lastName, phone: custForQuote?.phone, email: custForQuote?.email, siteAddress: custForQuote?.siteAddress, siteCity: custForQuote?.siteCity, siteState: custForQuote?.siteState, siteZip: custForQuote?.siteZip, person2FirstName: custForQuote?.person2FirstName, person2LastName: custForQuote?.person2LastName, phone2: custForQuote?.phone2, email2: custForQuote?.email2, mailingAddress: custForQuote?.mailingAddress, mailingCity: custForQuote?.mailingCity, mailingState: custForQuote?.mailingState, mailingZip: custForQuote?.mailingZip };
                       generateCustomerQuote(q, totals, homeModels);
                     }}
                   >📄 View Quote</button>
                   <button
-                    style={{ ...S.btnSm, background: '#1565c0' }}
+                    style={S.btnBlue}
                     onClick={() => {
                       const quoteNum = DocumentUtils.getQuoteNum(currentItem);
                       const homeDesc = currentItem.homeModel !== 'NONE' ? currentItem.homeModel : `${currentItem.houseWidth}'x${currentItem.houseLength}'`;
@@ -1549,17 +1597,16 @@ function AppInner() {
                   >✉️ Email Quote</button>
                   {selContract && (
                     <button
-                      style={{ ...S.btnSm, background: '#e65100' }}
+                      style={S.btnOrange}
                       onClick={() => {
                         const html = generateCrewWorkOrderDocument(currentItem, custForQuote, services);
-                        const w = window.open('', '_blank');
-                        if (w) { w.document.write(html); w.document.close(); }
+                        openDocumentWindow(html);
                       }}
                     >🔧 Crew Work Order</button>
                   )}
                   {selContract && isAdmin && (
                     <button
-                      style={{ ...S.btnSm, background: '#6a1b9a' }}
+                      style={S.btnPurple}
                       onClick={() => {
                         const qn = DocumentUtils.getQuoteNum(currentItem);
                         let crewChecklist = {};
@@ -1567,8 +1614,7 @@ function AppInner() {
                         try { const r = localStorage.getItem('crew_checklist_' + qn); if (r) crewChecklist = JSON.parse(r); } catch(e) {}
                         try { const r = localStorage.getItem('crew_comments_' + qn); if (r) crewComments = JSON.parse(r); } catch(e) {}
                         const html = generateJobSummaryReport(currentItem, custForQuote, services, crewChecklist, crewComments);
-                        const w = window.open('', '_blank');
-                        if (w) { w.document.write(html); w.document.close(); }
+                        openDocumentWindow(html);
                       }}
                     >📊 Job Summary</button>
                   )}
@@ -1586,7 +1632,7 @@ function AppInner() {
                   {currentItem.patioSize && currentItem.patioSize !== 'none' && (
                     <div style={{ marginTop: 4 }}><strong>Patio:</strong> {currentItem.patioSize}ft</div>
                   )}
-                  <div style={{ marginTop: 4 }}><strong>Foundation:</strong> {currentItem.foundationType === 'slab' ? 'Engineered Slab' : currentItem.foundationType === 'basement' ? 'Basement' : currentItem.foundationType === 'crawlspace' ? 'Crawl Space' : 'None'}</div>
+                  <div style={{ marginTop: 4 }}><strong>Foundation:</strong> {getLabel(FOUNDATION_LABELS, currentItem.foundationType)}</div>
                   {/* Selected Home Options */}
                   {(() => {
                     const selectedOpts = HOME_OPTIONS.filter(k => currentItem.selectedServices?.[k]);
@@ -1711,7 +1757,7 @@ function AppInner() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                   <h3 style={{ margin: 0 }}>Project Files</h3>
-                  <button style={{ ...S.btnSm, background: '#ff6f00', padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllDocsToFolders(currentItem, custForQuote)} title="Generate and save all documents - replaces outdated copies with latest versions">Update All Files</button>
+                  <button style={{ ...S.btnAmber, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllDocsToFolders(currentItem, custForQuote)} title="Generate and save all documents - replaces outdated copies with latest versions">Update All Files</button>
                 </div>
                 {Object.entries(FolderUtils.getFolders(currentItem)).map(([folderId, files]) => (
                   <div key={folderId}
@@ -2166,8 +2212,8 @@ function AppInner() {
                                             <span style={{ fontWeight: 700, fontSize: 13 }}>CO #{co.changeOrderNum}</span>
                                             <span style={{
                                               fontSize: 10, padding: '2px 6px', borderRadius: 10, fontWeight: 600,
-                                              background: co.status === 'Signed' ? '#d1e7dd' : co.status === 'Draft' ? '#fff3cd' : co.status === 'Sent' ? '#cfe2ff' : '#e2e3e5',
-                                              color: co.status === 'Signed' ? '#0f5132' : co.status === 'Draft' ? '#664d03' : co.status === 'Sent' ? '#084298' : '#41464b'
+                                              background: getLabel(CO_STATUS_BG, co.status, '#e2e3e5'),
+                                              color: getLabel(CO_STATUS_TEXT, co.status, '#41464b'),
                                             }}>
                                               {isVoided ? 'VOIDED' : co.status === 'Signed' ? '✓ Signed' : co.status}
                                             </span>
@@ -2359,73 +2405,36 @@ function AppInner() {
             )}
 
             {/* Permit Entry Modal */}
-            {showPermitModal && (
-              <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                <div style={{ background: '#fff', padding: 32, borderRadius: 8, maxWidth: 500, width: '90%', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
-                  <h3 style={{ marginTop: 0 }}>{editingPermitEntry ? 'Edit Permit' : 'Add Permit'}</h3>
-                  <div style={{ marginBottom: 16 }}>
-                    <label style={{ ...S.label, color: '#333' }}>Permit Name</label>
-                    <input type="text" style={S.input} value={permitEntryName} onChange={e => setPermitEntryName(e.target.value)} placeholder="e.g., Building Permit, Electrical Permit" autoFocus />
-                  </div>
-                  <div style={{ marginBottom: 24 }}>
-                    <label style={{ ...S.label, color: '#333' }}>Actual Cost</label>
-                    <input type="number" style={S.input} value={permitEntryCost} onChange={e => setPermitEntryCost(e.target.value)} placeholder="0.00" />
-                  </div>
-                  <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-                    <button style={{ ...S.btn2, background: '#666' }} onClick={() => { setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost(''); }}>Cancel</button>
-                    <button style={S.btn} onClick={() => {
-                      if (!permitEntryName.trim()) { NotificationSystem.warning('Please enter a permit name'); return; }
-                      const cost = parseFloat(permitEntryCost) || 0;
-                      const currentEntries = currentItem.permitEntries || [];
-                      let updatedEntries;
-                      if (editingPermitEntry) {
-                        updatedEntries = currentEntries.map(entry => entry.id === editingPermitEntry.id ? { ...entry, name: permitEntryName, cost } : entry);
-                      } else {
-                        updatedEntries = [...currentEntries, { id: genId(), name: permitEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
-                      }
-                      const updatedItem = { ...currentItem, permitEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
-                      if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
-                      else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
-                      setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost('');
-                    }}>{editingPermitEntry ? 'Update' : 'Add'} Permit</button>
-                  </div>
-                </div>
-              </div>
-            )}
+            <EntryModal
+              show={showPermitModal}
+              title={editingPermitEntry ? 'Edit Permit' : 'Add Permit'}
+              nameLabel="Permit Name"
+              namePlaceholder="e.g., Building Permit, Electrical Permit"
+              costLabel="Actual Cost"
+              saveLabel={editingPermitEntry ? 'Update Permit' : 'Add Permit'}
+              entryName={permitEntryName}
+              entryCost={permitEntryCost}
+              setEntryName={setPermitEntryName}
+              setEntryCost={setPermitEntryCost}
+              onSave={handleSavePermit}
+              onClose={handleClosePermitModal}
+            />
 
-            {showAddlMaterialModal && (
-              <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                <div style={{ background: '#fff', padding: 32, borderRadius: 8, maxWidth: 500, width: '90%', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
-                  <h3 style={{ marginTop: 0 }}>{editingMaterialEntry ? 'Edit Material' : 'Add Material'}</h3>
-                  <div style={{ marginBottom: 16 }}>
-                    <label style={{ ...S.label, color: '#333' }}>Material Name</label>
-                    <input type="text" style={S.input} value={materialEntryName} onChange={e => setMaterialEntryName(e.target.value)} placeholder="e.g., Lumber, Hardware, Fixtures" autoFocus />
-                  </div>
-                  <div style={{ marginBottom: 24 }}>
-                    <label style={{ ...S.label, color: '#333' }}>Cost</label>
-                    <input type="number" style={S.input} value={materialEntryCost} onChange={e => setMaterialEntryCost(e.target.value)} placeholder="0.00" />
-                  </div>
-                  <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-                    <button style={{ ...S.btn2, background: '#666' }} onClick={() => { setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost(''); }}>Cancel</button>
-                    <button style={S.btn} onClick={() => {
-                      if (!materialEntryName.trim()) { NotificationSystem.warning('Please enter a material name'); return; }
-                      const cost = parseFloat(materialEntryCost) || 0;
-                      const currentEntries = currentItem.addlMaterialEntries || [];
-                      let updatedEntries;
-                      if (editingMaterialEntry) {
-                        updatedEntries = currentEntries.map(entry => entry.id === editingMaterialEntry.id ? { ...entry, name: materialEntryName, cost } : entry);
-                      } else {
-                        updatedEntries = [...currentEntries, { id: genId(), name: materialEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
-                      }
-                      const updatedItem = { ...currentItem, addlMaterialEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
-                      if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
-                      else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
-                      setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost('');
-                    }}>{editingMaterialEntry ? 'Update' : 'Add'} Material</button>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Additional Materials Modal */}
+            <EntryModal
+              show={showAddlMaterialModal}
+              title={editingMaterialEntry ? 'Edit Material' : 'Add Material'}
+              nameLabel="Material Name"
+              namePlaceholder="e.g., Lumber, Hardware, Fixtures"
+              costLabel="Cost"
+              saveLabel={editingMaterialEntry ? 'Update Material' : 'Add Material'}
+              entryName={materialEntryName}
+              entryCost={materialEntryCost}
+              setEntryName={setMaterialEntryName}
+              setEntryCost={setMaterialEntryCost}
+              onSave={handleSaveAdditionalMaterial}
+              onClose={handleCloseAdditionalMaterialModal}
+            />
 
             {/* Scope of Work tab */}
             {quoteTab === 'scope' && selContract && (() => {
@@ -2435,10 +2444,7 @@ function AppInner() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                     <h3 style={{ margin: 0 }}>Scope of Work</h3>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={{ ...S.btnSm, background: '#6f42c1' }} onClick={() => {
-                        const w = window.open('', '_blank');
-                        if (w) { w.document.write(scopeHtml); w.document.close(); }
-                      }}>Open in New Tab</button>
+                      <button style={S.btnPurpleAlt} onClick={() => openDocumentWindow(scopeHtml)}>Open in New Tab</button>
                       <button style={S.btnSm} onClick={() => {
                         const blob = new Blob([scopeHtml], { type: 'text/html' });
                         const url = URL.createObjectURL(blob);

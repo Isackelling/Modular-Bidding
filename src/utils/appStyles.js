@@ -37,4 +37,14 @@ export const S = {
   customSvc: { display: 'grid', gridTemplateColumns: '1fr 100px', gap: 8, padding: '10px', background: '#f0f7f1', borderRadius: 6, border: '1px dashed #2c5530', marginTop: 8 },
   projCmd: { background: '#e3f2fd', padding: 16, borderRadius: 8, marginTop: 16 },
   chk: { display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 0', borderBottom: '1px solid #eee' },
+
+  // Named button color variants — use instead of {...S.btnSm, background: '#xxx'}
+  btnBlue:      { padding: '8px 12px', background: '#1565c0', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnOrange:    { padding: '8px 12px', background: '#e65100', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnPurple:    { padding: '8px 12px', background: '#6a1b9a', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnPurpleAlt: { padding: '8px 12px', background: '#6f42c1', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnGreen:     { padding: '8px 12px', background: '#28a745', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnRed:       { padding: '8px 12px', background: '#dc3545', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnGray:      { padding: '8px 12px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+  btnAmber:     { padding: '8px 12px', background: '#ff6f00', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
 };
