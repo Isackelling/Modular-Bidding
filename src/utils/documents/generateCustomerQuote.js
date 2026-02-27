@@ -72,7 +72,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .scope-heading { font-size: 13px; color: #2c5530; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 2px solid #e0e0e0; }
     .scope-heading.allowance { color: #856404; }
     .scope-items { columns: 2; column-gap: 24px; }
-    .scope-item { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; }
+    .scope-item { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; break-inside: avoid; }
     .scope-item::before { content: "✓ "; color: #2c5530; font-weight: 700; }
     .scope-item.allowance::before { color: #ffc107; }
     .scope-item .svc-desc { display: block; font-size: 11px; color: #555; font-style: italic; margin: 1px 0 2px 16px; }
@@ -155,8 +155,8 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   
   <div class="header">
     <div>
-      <img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" alt="SHERMAN" style="height: 50px; margin-bottom: 8px;" />
-      <div class="logo-sub">Manufactured Home Installation</div>
+      <div class="logo">SHERMAN</div>
+      <div class="logo-sub">Modular Home Installation</div>
     </div>
     <div class="company-info">
       <strong>SHERMAN</strong><br>
