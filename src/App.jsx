@@ -28,7 +28,7 @@ import { Validators } from './utils/Validators.js';
 import { CalcHelpers } from './utils/CalcHelpers.js';
 import { FolderUtils } from './utils/FolderUtils.js';
 import { calcTotals, enforceMiles, calcDefaultServicePrice, getFoundationAdjustment } from './utils/calculations.js';
-import { getServiceDescription, calcSurfacedDrivewayPrice, SURFACED_DRIVEWAY_RATES } from './utils/serviceDescriptions.js';
+import { getServiceDescription, calcSurfacedDrivewayPrice, calcSurfacedPrice, SURFACED_DRIVEWAY_RATES } from './utils/serviceDescriptions.js';
 import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport } from './utils/documents/index.js';
 import { createFolderSavers } from './utils/folderSavers.js';
 
@@ -3675,7 +3675,7 @@ function AppInner() {
                           {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
                           {MODULAR_HOME_NEEDS.includes(k) && <span style={{ fontSize: 9, background: '#e8f5e9', color: '#2e7d32', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Common modular home need">COMMON MODULAR NEED</span>}
                         </span>
-                        {sel && getServiceDescription(k, newQ) && !['gravel_driveway', 'surfaced_driveway', 'culvert'].includes(k) && (
+                        {sel && getServiceDescription(k, newQ) && !['gravel_driveway', 'surfaced_driveway', 'surfaced_sidewalks', 'culvert'].includes(k) && (
                           <span style={{ fontSize: 12, color: '#666', fontStyle: 'italic', marginTop: 2 }}>{getServiceDescription(k, newQ)}</span>
                         )}
                       </div>
@@ -3685,7 +3685,7 @@ function AppInner() {
                           <input
                             type="number"
                             style={{ ...S.inputSm, ...(ovr ? S.override : {}), width: '90px', padding: '4px 6px' }}
-                            placeholder={k === 'surfaced_driveway' && calcSurfacedDrivewayPrice(newQ) > 0 ? fmt(calcSurfacedDrivewayPrice(newQ)) : fmt(getDefaultPrice(k) * qty)}
+                            placeholder={(k === 'surfaced_driveway' || k === 'surfaced_sidewalks') && calcSurfacedPrice(newQ, k) > 0 ? fmt(calcSurfacedPrice(newQ, k)) : fmt(getDefaultPrice(k) * qty)}
                             value={ovr || ''}
                             onChange={e => updateServicePrice(k, e.target.value)}
                             onFocus={e => e.target.select()}
@@ -3742,6 +3742,30 @@ function AppInner() {
                         </select>
                         {getServiceDescription('surfaced_driveway', newQ) && (
                           <span style={{ fontSize: 12, color: '#2c5530', fontStyle: 'italic', fontWeight: 600 }}>{getServiceDescription('surfaced_driveway', newQ)}</span>
+                        )}
+                      </div>
+                    )}
+                    {/* Dimension inputs for surfaced sidewalks */}
+                    {sel && k === 'surfaced_sidewalks' && (
+                      <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_sidewalks?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_sidewalks: { ...(p.serviceDimensions?.surfaced_sidewalks || { depth: '4' }), length: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Width (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_sidewalks?.width || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_sidewalks: { ...(p.serviceDimensions?.surfaced_sidewalks || { depth: '4' }), width: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Depth</label>
+                        <select style={{ padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_sidewalks?.depth || '4'}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_sidewalks: { ...(p.serviceDimensions?.surfaced_sidewalks || {}), depth: e.target.value } } }))}>
+                          <option value="4">4" ($9.25/sqft)</option>
+                          <option value="5">5" ($10.00/sqft)</option>
+                          <option value="6">6" ($10.50/sqft)</option>
+                        </select>
+                        {getServiceDescription('surfaced_sidewalks', newQ) && (
+                          <span style={{ fontSize: 12, color: '#2c5530', fontStyle: 'italic', fontWeight: 600 }}>{getServiceDescription('surfaced_sidewalks', newQ)}</span>
                         )}
                       </div>
                     )}

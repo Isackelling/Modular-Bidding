@@ -30,6 +30,12 @@ export const getServiceDescription = (key, quote) => {
       if (dims.length && dims.width) return `${dims.length}' x ${dims.width}' x ${depth}"`;
       return '';
     }
+    case 'surfaced_sidewalks': {
+      const dims = quote.serviceDimensions?.surfaced_sidewalks || {};
+      const depth = dims.depth || '4';
+      if (dims.length && dims.width) return `${dims.length}' x ${dims.width}' x ${depth}"`;
+      return '';
+    }
     case 'culvert': {
       const dims = quote.serviceDimensions?.culvert || {};
       if (dims.length) return `${dims.length} ft`;
@@ -48,9 +54,9 @@ export const getServiceDescription = (key, quote) => {
 /** Price-per-sqft rates for surfaced driveway by depth (inches) */
 export const SURFACED_DRIVEWAY_RATES = { '4': 9.25, '5': 10.00, '6': 10.50 };
 
-/** Calculate surfaced driveway price from dimensions */
-export const calcSurfacedDrivewayPrice = (quote) => {
-  const dims = quote.serviceDimensions?.surfaced_driveway || {};
+/** Calculate surfaced price from dimensions for a given service key */
+export const calcSurfacedPrice = (quote, key) => {
+  const dims = quote.serviceDimensions?.[key] || {};
   const len = parseFloat(dims.length) || 0;
   const wid = parseFloat(dims.width) || 0;
   const depth = dims.depth || '4';
@@ -58,3 +64,6 @@ export const calcSurfacedDrivewayPrice = (quote) => {
   if (len > 0 && wid > 0) return len * wid * rate;
   return 0;
 };
+
+/** Calculate surfaced driveway price from dimensions */
+export const calcSurfacedDrivewayPrice = (quote) => calcSurfacedPrice(quote, 'surfaced_driveway');

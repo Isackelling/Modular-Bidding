@@ -232,9 +232,9 @@ export const calcSelectedServicesCost = (q, services, miles, driveCost, w, l, dr
       cost = calculateInstallationCost(miles, q.singleDouble, foundationType).total;
     }
 
-    // Auto-calculate surfaced driveway price from dimensions
-    if (k === 'surfaced_driveway' && (override === undefined || override === '')) {
-      const dims = q.serviceDimensions?.surfaced_driveway || {};
+    // Auto-calculate surfaced driveway/sidewalks price from dimensions
+    if ((k === 'surfaced_driveway' || k === 'surfaced_sidewalks') && (override === undefined || override === '')) {
+      const dims = q.serviceDimensions?.[k] || {};
       const sdLen = parseFloat(dims.length) || 0;
       const sdWid = parseFloat(dims.width) || 0;
       const sdDepth = dims.depth || '4';
