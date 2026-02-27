@@ -1,7 +1,7 @@
 // Sherman Bidding System - Constants and Default Data
 
 // Allowance items (items with variable costs finalized during construction)
-export const ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well', 'crane'];
+export const ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well'];
 
 // Services displayed in Install Services section (not Professional Services section)
 export const SUMMARY_SERVICES = [

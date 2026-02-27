@@ -279,7 +279,7 @@ function AppInner() {
           if (p.services) {
             const { landscaping, deck, ...filteredServices } = p.services;
             const cleanedServices = Object.fromEntries(
-              Object.entries(filteredServices).filter(([_, value]) => value !== undefined && value !== null)
+              Object.entries(filteredServices).filter(([k, value]) => value !== undefined && value !== null && DEFAULT_SERVICES[k])
             );
             const mergedServices = { ...DEFAULT_SERVICES, ...cleanedServices };
             setServices(mergedServices);
@@ -1236,7 +1236,7 @@ function AppInner() {
           if (p.services) {
             const { landscaping, deck, ...filteredServices } = p.services;
             const cleanedServices = Object.fromEntries(
-              Object.entries(filteredServices).filter(([_, value]) => value !== undefined && value !== null)
+              Object.entries(filteredServices).filter(([k, value]) => value !== undefined && value !== null && DEFAULT_SERVICES[k])
             );
             setServices({ ...DEFAULT_SERVICES, ...cleanedServices });
           }
