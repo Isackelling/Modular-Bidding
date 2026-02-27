@@ -326,6 +326,7 @@ export const FOLDER_TYPES = [
   'estimates',
   'permits',
   'change_orders',
+  'contracts',
 ];
 
 // Quote statuses

@@ -19,7 +19,8 @@ export const FolderUtils = {
     crew_files: [],
     estimates: [],
     permits: [],
-    change_orders: []
+    change_orders: [],
+    contracts: []
   },
 
   /**

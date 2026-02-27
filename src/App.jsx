@@ -90,7 +90,7 @@ const emptyQuote = () => ({
   driveTime: String(MIN_MILES), status: 'Draft',
   folders: {
     clayton_docs: [], crew_files: [], estimates: [],
-    permits: [], change_orders: [],
+    permits: [], change_orders: [], contracts: [],
   },
   scrubbCosts: {}, scrubbDocs: {}, scrubbHistory: [],
   permitEntries: []
