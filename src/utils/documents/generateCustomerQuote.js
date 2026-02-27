@@ -68,10 +68,10 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .info-item { }
     .info-label { font-size: 12px; color: #666; }
     .info-value { font-size: 15px; font-weight: 500; }
-    .scope-grid { columns: 2; column-gap: 24px; }
-    .scope-heading { font-size: 13px; color: #2c5530; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 14px 0 6px; padding-bottom: 4px; border-bottom: 2px solid #2c5530; break-after: avoid; }
-    .scope-heading:first-child { margin-top: 0; }
-    .scope-heading.allowance { color: #856404; border-bottom-color: #ffc107; }
+    .scope-section { margin-bottom: 16px; }
+    .scope-heading { font-size: 13px; color: #2c5530; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 2px solid #e0e0e0; }
+    .scope-heading.allowance { color: #856404; }
+    .scope-items { columns: 2; column-gap: 24px; }
     .scope-item { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; }
     .scope-item::before { content: "✓ "; color: #2c5530; font-weight: 700; }
     .scope-item.allowance::before { color: #ffc107; }
@@ -257,30 +257,44 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     <div class="section-title">Scope of Work</div>
     <p style="margin-bottom: 15px; color: #666;">This quote includes complete professional installation services:</p>
 
-    <div class="scope-grid">
-      <div class="scope-heading">Standard Installation</div>
-      <div class="scope-item">Site prep and foundation review</div>
-      <div class="scope-item">Home delivery coordination and inspection</div>
-      <div class="scope-item">Professional home installation and leveling</div>
-      <div class="scope-item">Pier and anchor system installation</div>
-      <div class="scope-item">Marriage line connection</div>
-      <div class="scope-item">Final inspection and walkthrough</div>
-
-      ${services.length > 0 ? `
-      <div class="scope-heading">Professional Services</div>
-      ${services.map(s => `<div class="scope-item">${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</div>`).join('')}
-      ` : ''}
-
-      ${homeSpecAdditions.length > 0 ? `
+    ${homeSpecAdditions.length > 0 ? `
+    <div class="scope-section">
       <div class="scope-heading">Home Spec Additions</div>
-      ${homeSpecAdditions.map(s => `<div class="scope-item">${s}</div>`).join('')}
-      ` : ''}
-
-      ${allowances.length > 0 ? `
-      <div class="scope-heading allowance">Allowances*</div>
-      ${allowances.map(a => `<div class="scope-item allowance">${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</div>`).join('')}
-      ` : ''}
+      <div class="scope-items">
+        ${homeSpecAdditions.map(s => `<div class="scope-item">${s}</div>`).join('')}
+      </div>
     </div>
+    ` : ''}
+
+    <div class="scope-section">
+      <div class="scope-heading">Standard Installation</div>
+      <div class="scope-items">
+        <div class="scope-item">Site prep and foundation review</div>
+        <div class="scope-item">Home delivery coordination and inspection</div>
+        <div class="scope-item">Professional home installation and leveling</div>
+        <div class="scope-item">Pier and anchor system installation</div>
+        <div class="scope-item">Marriage line connection</div>
+        <div class="scope-item">Final inspection and walkthrough</div>
+      </div>
+    </div>
+
+    ${services.length > 0 ? `
+    <div class="scope-section">
+      <div class="scope-heading">Professional Services</div>
+      <div class="scope-items">
+        ${services.map(s => `<div class="scope-item">${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</div>`).join('')}
+      </div>
+    </div>
+    ` : ''}
+
+    ${allowances.length > 0 ? `
+    <div class="scope-section">
+      <div class="scope-heading allowance">Allowances*</div>
+      <div class="scope-items">
+        ${allowances.map(a => `<div class="scope-item allowance">${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</div>`).join('')}
+      </div>
+    </div>
+    ` : ''}
 
     ${allowances.length > 0 ? `
     <div style="background: #fff9e6; padding: 10px 14px; border-radius: 6px; margin-top: 12px; border-left: 4px solid #ffc107;">
