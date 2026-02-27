@@ -351,7 +351,7 @@ const CustomerPortal = ({
     <div style={S.app}>
       <header style={{ ...S.header, background: '#1565c0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" alt="" style={{ height: 32 }} />
+          <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: 2, color: '#fff' }}>SHERMAN</span>
           <span style={{ fontWeight: 600 }}>Customer Portal</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

@@ -17,11 +17,7 @@ const LoginForm = ({
   return (
     <div style={S.login}>
       <div style={S.card}>
-        <img
-          src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png"
-          alt="Sherman"
-          style={{ maxWidth: 180, marginBottom: 20 }}
-        />
+        <span style={{ fontWeight: 800, fontSize: 32, letterSpacing: 3, color: '#1a237e', marginBottom: 20, display: 'block' }}>SHERMAN</span>
         <h2 style={{ margin: '0 0 8px', color: '#333' }}>Bidding System</h2>
         <p style={{ color: '#666', marginBottom: 24 }}>Manufactured Home Installation</p>
 

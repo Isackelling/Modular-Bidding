@@ -1362,7 +1362,7 @@ function AppInner() {
   if (userRole === 'crew') return (
     <div style={S.app}>
       <header style={S.header}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}><img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" alt="" style={{ height: 32 }} /><span style={{ fontWeight: 600 }}>Field Crew</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}><span style={{ fontWeight: 800, fontSize: 22, letterSpacing: 2, color: '#fff' }}>SHERMAN</span><span style={{ fontWeight: 600 }}>Field Crew</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {originalRole === 'admin' && (
             <select
@@ -1405,7 +1405,7 @@ function AppInner() {
       {/* Header */}
       <header style={S.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" alt="" style={{ height: 32 }} />
+          <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: 2, color: '#fff' }}>SHERMAN</span>
           <span style={{ fontWeight: 600 }}>Bidding System</span>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
