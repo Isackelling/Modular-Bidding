@@ -18,7 +18,7 @@ import {
 } from './constants/index.js';
 
 // Utilities
-import { genId, getGoogleMapsUrl, calcIBeam, fmt, fmtDate, fmtCurrency, fmtDec, normalizePhone, normalizeEmail } from './utils/helpers.js';
+import { genId, getGoogleMapsUrl, calcIBeam, fmt, fmtDate, fmtCurrency, fmtDec, normalizePhone, normalizeEmail, updateInArray, stampUpdate } from './utils/helpers.js';
 import { S } from './utils/appStyles.js';
 import { blobToDataUrl } from './utils/blobToDataUrl.js';
 import { createStateSaver } from './utils/createStateSaver.js';
@@ -28,7 +28,7 @@ import { Validators } from './utils/Validators.js';
 import { CalcHelpers } from './utils/CalcHelpers.js';
 import { FolderUtils } from './utils/FolderUtils.js';
 import { calcTotals, enforceMiles, calcDefaultServicePrice, getFoundationAdjustment } from './utils/calculations.js';
-import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport } from './utils/documentGeneration.js';
+import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport } from './utils/documents/index.js';
 import { createFolderSavers } from './utils/folderSavers.js';
 
 // Shared Components
@@ -40,6 +40,10 @@ import EntryModal from './components/Shared/EntryModal.jsx';
 
 // Hooks
 import { useScrubbState } from './hooks/useScrubbState.js';
+import { useAuthState } from './hooks/useAuthState.js';
+import { useQuoteEditingState } from './hooks/useQuoteEditingState.js';
+import { useUIState } from './hooks/useUIState.js';
+import { useScopeEditState } from './hooks/useScopeEditState.js';
 
 // Supplemental utilities
 import { openDocumentWindow } from './utils/windowUtils.js';
@@ -126,18 +130,14 @@ function AppInner() {
   // STATE DECLARATIONS
   // ======================================================================
 
-  // Auth state
-  const [isAuth, setIsAuth] = useState(true);
-  const [isCustomerPortal, setIsCustomerPortal] = useState(false);
-  const [customerData, setCustomerData] = useState(null);
-  const [userRole, setUserRole] = useState('sales');
-  const [originalRole, setOriginalRole] = useState('admin');
-  const [userName, setUserName] = useState('SHERMAN');
-  const [loginU, setLoginU] = useState('');
-  const [loginP, setLoginP] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [tempName, setTempName] = useState('');
-  const [tempRole, setTempRole] = useState('');
+  // Auth state (grouped — see src/hooks/useAuthState.js)
+  const {
+    isAuth, setIsAuth, isCustomerPortal, setIsCustomerPortal,
+    customerData, setCustomerData, userRole, setUserRole,
+    originalRole, setOriginalRole, userName, setUserName,
+    loginU, setLoginU, loginP, setLoginP, loginError, setLoginError,
+    tempName, setTempName, tempRole, setTempRole,
+  } = useAuthState();
 
   // Navigation
   const [view, setView] = useState('dashboard');
@@ -154,13 +154,14 @@ function AppInner() {
   const [selContract, setSelContract] = useState(null);
   const [selCustomer, setSelCustomer] = useState(null);
 
-  // Quote editing state
-  const [newQ, setNewQ] = useState(emptyQuote());
-  const [editingQuoteId, setEditingQuoteId] = useState(null);
-  const [originalQuoteForComparison, setOriginalQuoteForComparison] = useState(null);
-  const [changeOrderDeletions, setChangeOrderDeletions] = useState([]);
-  const [changeOrderAdjustments, setChangeOrderAdjustments] = useState({});
-  const [changeOrderAdditions, setChangeOrderAdditions] = useState([]);
+  // Quote editing state (grouped — see src/hooks/useQuoteEditingState.js)
+  const {
+    newQ, setNewQ, editingQuoteId, setEditingQuoteId,
+    originalQuoteForComparison, setOriginalQuoteForComparison,
+    changeOrderDeletions, setChangeOrderDeletions,
+    changeOrderAdjustments, setChangeOrderAdjustments,
+    changeOrderAdditions, setChangeOrderAdditions,
+  } = useQuoteEditingState(emptyQuote);
 
   // Customer editing state
   const [newCust, setNewCust] = useState(emptyCustomer());
@@ -169,29 +170,32 @@ function AppInner() {
   const [showCustMailingAddress, setShowCustMailingAddress] = useState(false);
   const [showNewQuoteMenu, setShowNewQuoteMenu] = useState(false);
 
-  // UI state
-  const [quoteTab, setQuoteTab] = useState('details');
-  const [generalNoteMode, setGeneralNoteMode] = useState(null); // 'crew' | 'customer' | null
-  const [generalNoteDraft, setGeneralNoteDraft] = useState('');
-  const [crewTab, setCrewTab] = useState('jobs');
-  const [pricingTab, setPricingTab] = useState('homes');
-  const [pricingEditMode, setPricingEditMode] = useState(false);
-  const [expandedServiceNotes, setExpandedServiceNotes] = useState({});
-  const [installSvcCollapsed, setInstallSvcCollapsed] = useState(true);
-  const [proSvcCollapsed, setProSvcCollapsed] = useState(false);
-  const [homeSelCollapsed, setHomeSelCollapsed] = useState(false);
-  const [houseSpecsCollapsed, setHouseSpecsCollapsed] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState(null);
-  const [deleteCustomerConfirm, setDeleteCustomerConfirm] = useState(null);
-  const [showRestoreMaterials, setShowRestoreMaterials] = useState(false);
+  // UI state (grouped — see src/hooks/useUIState.js)
+  const {
+    quoteTab, setQuoteTab, generalNoteMode, setGeneralNoteMode,
+    generalNoteDraft, setGeneralNoteDraft, crewTab, setCrewTab,
+    pricingTab, setPricingTab, pricingEditMode, setPricingEditMode,
+    expandedServiceNotes, setExpandedServiceNotes,
+    installSvcCollapsed, setInstallSvcCollapsed,
+    proSvcCollapsed, setProSvcCollapsed,
+    homeSelCollapsed, setHomeSelCollapsed,
+    houseSpecsCollapsed, setHouseSpecsCollapsed,
+    deleteConfirm, setDeleteConfirm,
+    deleteCustomerConfirm, setDeleteCustomerConfirm,
+    showRestoreMaterials, setShowRestoreMaterials,
+    isPierDiagramExpanded, setIsPierDiagramExpanded,
+    isFloorPlanExpanded, setIsFloorPlanExpanded,
+    isPierDiagramExpandedSummary, setIsPierDiagramExpandedSummary,
+    isChangeOrderHistoryExpanded, setIsChangeOrderHistoryExpanded,
+    expandedCO, setExpandedCO,
+  } = useUIState();
 
-  // Scope of Work state
-  const [scopeSections, setScopeSections] = useState({
-    overview: false, roles: false, foundation: false,
-    services: false, deliverables: false, exclusions: false, assumptions: false
-  });
-  const [scopeEditMode, setScopeEditMode] = useState(false);
-  const [scopeEditContent, setScopeEditContent] = useState(null);
+  // Scope of Work state (grouped — see src/hooks/useScopeEditState.js)
+  const {
+    scopeSections, setScopeSections,
+    scopeEditMode, setScopeEditMode,
+    scopeEditContent, setScopeEditContent,
+  } = useScopeEditState();
 
   // Scrubb state (grouped — see src/hooks/useScrubbState.js)
   const {
@@ -216,12 +220,6 @@ function AppInner() {
   const [newFile, setNewFile] = useState({ name: '', type: 'link', url: '', notes: '' });
   const [dragOverFolder, setDragOverFolder] = useState(null);
 
-  // Section collapse states
-  const [isPierDiagramExpanded, setIsPierDiagramExpanded] = useState(false);
-  const [isFloorPlanExpanded, setIsFloorPlanExpanded] = useState(false);
-  const [isPierDiagramExpandedSummary, setIsPierDiagramExpandedSummary] = useState(false);
-  const [isChangeOrderHistoryExpanded, setIsChangeOrderHistoryExpanded] = useState(true);
-  const [expandedCO, setExpandedCO] = useState({});
 
   // Pricing state
   const [homeModels, setHomeModels] = useState(DEFAULT_HOME_MODELS);
@@ -507,8 +505,8 @@ function AppInner() {
     }, {});
 
     if (editingCustomerId) {
-      const updated = { ...trimmedData, updatedAt: new Date().toISOString(), updatedBy: userName };
-      const updatedList = customers.map(c => c.id === editingCustomerId ? updated : c);
+      const updated = stampUpdate(trimmedData, {}, userName);
+      const updatedList = updateInArray(customers, editingCustomerId, updated);
       await saveCustomers(updatedList);
       setSelCustomer(updated);
       setView('viewCustomer');
@@ -706,11 +704,11 @@ function AppInner() {
     const isInQuotes = quotes.find(q => q.id === quote.id);
     const isInContracts = contracts.find(c => c.id === quote.id);
     if (isInQuotes) {
-      const updatedQuotes = quotes.map(q => q.id === quote.id ? updatedItem : q);
+      const updatedQuotes = updateInArray(quotes, quote.id, updatedItem);
       await saveQuotes(updatedQuotes);
       if (selQuote?.id === quote.id) setSelQuote(updatedItem);
     } else if (isInContracts) {
-      const updatedContracts = contracts.map(c => c.id === quote.id ? updatedItem : c);
+      const updatedContracts = updateInArray(contracts, quote.id, updatedItem);
       await saveContracts(updatedContracts);
       if (selContract?.id === quote.id) setSelContract(updatedItem);
     }
@@ -730,11 +728,11 @@ function AppInner() {
     const isInQuotes = quotes.find(q => q.id === quote.id);
     const isInContracts = contracts.find(c => c.id === quote.id);
     if (isInQuotes) {
-      const updatedQuotes = quotes.map(q => q.id === quote.id ? updatedQuote : q);
+      const updatedQuotes = updateInArray(quotes, quote.id, updatedQuote);
       await saveQuotes(updatedQuotes);
       setSelQuote(updatedQuote);
     } else if (isInContracts) {
-      const updatedContracts = contracts.map(c => c.id === quote.id ? updatedQuote : c);
+      const updatedContracts = updateInArray(contracts, quote.id, updatedQuote);
       await saveContracts(updatedContracts);
       setSelContract(updatedQuote);
     }
@@ -748,11 +746,11 @@ function AppInner() {
     const isInQuotes = quotes.find(q => q.id === quote.id);
     const isInContracts = contracts.find(c => c.id === quote.id);
     if (isInQuotes) {
-      const updatedQuotes = quotes.map(q => q.id === quote.id ? updatedQuote : q);
+      const updatedQuotes = updateInArray(quotes, quote.id, updatedQuote);
       await saveQuotes(updatedQuotes);
       setSelQuote(updatedQuote);
     } else if (isInContracts) {
-      const updatedContracts = contracts.map(c => c.id === quote.id ? updatedQuote : c);
+      const updatedContracts = updateInArray(contracts, quote.id, updatedQuote);
       await saveContracts(updatedContracts);
       setSelContract(updatedQuote);
     }
@@ -782,11 +780,11 @@ function AppInner() {
       const updatedQuote = { ...quote, folders: updatedFolders };
       const isInQuotes = quotes.find(q => q.id === quote.id);
       if (isInQuotes) {
-        const updatedQuotes = quotes.map(q => q.id === quote.id ? updatedQuote : q);
+        const updatedQuotes = updateInArray(quotes, quote.id, updatedQuote);
         await saveQuotes(updatedQuotes);
         setSelQuote(updatedQuote);
       } else {
-        const updatedContracts = contracts.map(c => c.id === quote.id ? updatedQuote : c);
+        const updatedContracts = updateInArray(contracts, quote.id, updatedQuote);
         await saveContracts(updatedContracts);
         setSelContract(updatedQuote);
       }
@@ -966,12 +964,12 @@ function AppInner() {
       const isInQuotes = quotes.find(q => q.id === editingQuoteId);
       const isInContracts = contracts.find(c => c.id === editingQuoteId);
       if (isInContracts) {
-        const updatedContracts = contracts.map(ct => ct.id === editingQuoteId ? updatedItem : ct);
+        const updatedContracts = updateInArray(contracts, editingQuoteId, updatedItem);
         await saveContracts(updatedContracts);
         setSelContract(updatedItem);
         setSelQuote(null);
       } else if (isInQuotes) {
-        const updatedQuotes = quotes.map(qt => qt.id === editingQuoteId ? updatedItem : qt);
+        const updatedQuotes = updateInArray(quotes, editingQuoteId, updatedItem);
         await saveQuotes(updatedQuotes);
         setSelQuote(updatedItem);
         setSelContract(null);
@@ -1123,12 +1121,12 @@ function AppInner() {
     const inContracts = contracts.find(c => c.id === quoteId);
     if (inQuotes) {
       const updatedItem = { ...inQuotes, ...updatedFields };
-      const updated = quotes.map(q => q.id === quoteId ? updatedItem : q);
+      const updated = updateInArray(quotes, quoteId, updatedItem);
       await saveQuotes(updated);
       if (selQuote?.id === quoteId) setSelQuote(updatedItem);
     } else if (inContracts) {
       const updatedItem = { ...inContracts, ...updatedFields };
-      const updated = contracts.map(c => c.id === quoteId ? updatedItem : c);
+      const updated = updateInArray(contracts, quoteId, updatedItem);
       await saveContracts(updated);
       if (selContract?.id === quoteId) setSelContract(updatedItem);
     }
@@ -1148,11 +1146,11 @@ function AppInner() {
     const target = selContract || selQuote;
     const updatedItem = { ...target, customScopeContent: scopeEditContent };
     if (selContract) {
-      const updatedContracts = contracts.map(c => c.id === target.id ? updatedItem : c);
+      const updatedContracts = updateInArray(contracts, target.id, updatedItem);
       await saveContracts(updatedContracts);
       setSelContract(updatedItem);
     } else {
-      const updatedQuotes = quotes.map(q => q.id === target.id ? updatedItem : q);
+      const updatedQuotes = updateInArray(quotes, target.id, updatedItem);
       await saveQuotes(updatedQuotes);
       setSelQuote(updatedItem);
     }
@@ -1272,9 +1270,9 @@ function AppInner() {
     const updatedEntries = editingPermitEntry
       ? currentEntries.map(e => e.id === editingPermitEntry.id ? { ...e, name: permitEntryName, cost } : e)
       : [...currentEntries, { id: genId(), name: permitEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
-    const updatedItem = { ...currentItem, permitEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
-    if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
-    else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+    const updatedItem = stampUpdate(currentItem, { permitEntries: updatedEntries }, userName);
+    if (selQuote?.id === currentItem.id) { saveQuotes(updateInArray(quotes, currentItem.id, updatedItem)); setSelQuote(updatedItem); }
+    else if (selContract?.id === currentItem.id) { saveContracts(updateInArray(contracts, currentItem.id, updatedItem)); setSelContract(updatedItem); }
     setShowPermitModal(false); setEditingPermitEntry(null); setPermitEntryName(''); setPermitEntryCost('');
   };
 
@@ -1289,9 +1287,9 @@ function AppInner() {
     const updatedEntries = editingMaterialEntry
       ? currentEntries.map(e => e.id === editingMaterialEntry.id ? { ...e, name: materialEntryName, cost } : e)
       : [...currentEntries, { id: genId(), name: materialEntryName, cost, addedAt: new Date().toISOString(), addedBy: userName }];
-    const updatedItem = { ...currentItem, addlMaterialEntries: updatedEntries, updatedAt: Date.now(), updatedBy: userName };
-    if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
-    else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+    const updatedItem = stampUpdate(currentItem, { addlMaterialEntries: updatedEntries }, userName);
+    if (selQuote?.id === currentItem.id) { saveQuotes(updateInArray(quotes, currentItem.id, updatedItem)); setSelQuote(updatedItem); }
+    else if (selContract?.id === currentItem.id) { saveContracts(updateInArray(contracts, currentItem.id, updatedItem)); setSelContract(updatedItem); }
     setShowAddlMaterialModal(false); setEditingMaterialEntry(null); setMaterialEntryName(''); setMaterialEntryCost('');
   };
 
@@ -1802,7 +1800,7 @@ function AppInner() {
                               >
                                 {file.type === 'link' ? '🔗' : file.type === 'image' ? '🖼️' : '📄'} {file.name}
                               </button>
-                              <button style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12 }}
+                              <button style={S.btnDeleteSmMd}
                                 onClick={() => deleteFileFromFolder(folderId, file.id, currentItem)}>Delete</button>
                             </div>
                           ))
@@ -1890,14 +1888,14 @@ function AppInner() {
                   const parseInput = (val) => parseFloat(val.replace(/,/g, '')) || 0;
 
                   const saveScrubbUpdate = (updatedItem) => {
-                    if (selQuote?.id === currentItem.id) { saveQuotes(quotes.map(q => q.id === currentItem.id ? updatedItem : q)); setSelQuote(updatedItem); }
-                    else if (selContract?.id === currentItem.id) { saveContracts(contracts.map(c => c.id === currentItem.id ? updatedItem : c)); setSelContract(updatedItem); }
+                    if (selQuote?.id === currentItem.id) { saveQuotes(updateInArray(quotes, currentItem.id, updatedItem)); setSelQuote(updatedItem); }
+                    else if (selContract?.id === currentItem.id) { saveContracts(updateInArray(contracts, currentItem.id, updatedItem)); setSelContract(updatedItem); }
                   };
 
                   const handleScrubbSave = (svc) => {
                     const cost = parseInput(scrubbNewCost);
                     const historyEntry = { id: genId(), serviceKey: svc.key, serviceName: svc.name, previousCost: svc.actualCost || 0, newCost: cost, contractPrice: svc.contractPrice, variance: cost > 0 ? svc.contractPrice - cost : 0, isAllowance: ALLOWANCE_ITEMS.includes(svc.key), updatedAt: new Date().toISOString(), updatedBy: userName };
-                    saveScrubbUpdate({ ...currentItem, scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost }, scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry], updatedAt: Date.now(), updatedBy: userName });
+                    saveScrubbUpdate(stampUpdate(currentItem, { scrubbCosts: { ...(currentItem.scrubbCosts || {}), [svc.key]: cost }, scrubbHistory: [...(currentItem.scrubbHistory || []), historyEntry] }, userName));
                     setScrubbEditingService(null); setScrubbNewCost('');
                     if (ALLOWANCE_ITEMS.includes(svc.key)) {
                       const v = cost > 0 ? svc.contractPrice - cost : 0;
@@ -1954,8 +1952,8 @@ function AppInner() {
                                         <span>{entry.name}</span>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                           <span style={{ fontWeight: 600 }}>{fmt(entry.cost)}</span>
-                                          <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 11 }} onClick={() => { setEditingPermitEntry(entry); setPermitEntryName(entry.name); setPermitEntryCost(entry.cost.toString()); setShowPermitModal(true); }}>✏️</button>
-                                          <button style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 11 }} onClick={() => { if (confirm(`Delete ${entry.name}?`)) { const updated = pe.filter((_, i) => i !== idx); saveScrubbUpdate({ ...currentItem, permitEntries: updated, updatedAt: Date.now(), updatedBy: userName }); } }}>🗑️</button>
+                                          <button style={S.btnEditSm} onClick={() => { setEditingPermitEntry(entry); setPermitEntryName(entry.name); setPermitEntryCost(entry.cost.toString()); setShowPermitModal(true); }}>✏️</button>
+                                          <button style={S.btnDeleteSm} onClick={() => { if (confirm(`Delete ${entry.name}?`)) { const updated = pe.filter((_, i) => i !== idx); saveScrubbUpdate(stampUpdate(currentItem, { permitEntries: updated }, userName)); } }}>🗑️</button>
                                         </div>
                                       </div>
                                     ))}<div style={{ borderTop: '1px solid #ddd', paddingTop: 4, marginTop: 4, fontWeight: 600, fontSize: 14 }}>Total: {fmt(totalPC)}</div></div> : <div style={{ color: '#999', marginBottom: 8 }}>No permits entered</div>}
@@ -1981,8 +1979,8 @@ function AppInner() {
                                         <span>{entry.name}</span>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                           <span style={{ fontWeight: 600 }}>{fmt(entry.cost)}</span>
-                                          <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 11 }} onClick={() => { setEditingMaterialEntry(entry); setMaterialEntryName(entry.name); setMaterialEntryCost(entry.cost.toString()); setShowAddlMaterialModal(true); }}>✏️</button>
-                                          <button style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 11 }} onClick={() => { if (confirm(`Delete ${entry.name}?`)) { const updated = me.filter((_, i) => i !== idx); saveScrubbUpdate({ ...currentItem, addlMaterialEntries: updated, updatedAt: Date.now(), updatedBy: userName }); } }}>🗑️</button>
+                                          <button style={S.btnEditSm} onClick={() => { setEditingMaterialEntry(entry); setMaterialEntryName(entry.name); setMaterialEntryCost(entry.cost.toString()); setShowAddlMaterialModal(true); }}>✏️</button>
+                                          <button style={S.btnDeleteSm} onClick={() => { if (confirm(`Delete ${entry.name}?`)) { const updated = me.filter((_, i) => i !== idx); saveScrubbUpdate(stampUpdate(currentItem, { addlMaterialEntries: updated }, userName)); } }}>🗑️</button>
                                         </div>
                                       </div>
                                     ))}<div style={{ borderTop: '1px solid #ddd', paddingTop: 4, marginTop: 4, fontWeight: 600, fontSize: 14 }}>Total: {fmt(totalMC)}</div></div> : <div style={{ color: '#999', marginBottom: 8 }}>No materials entered</div>}
@@ -2026,7 +2024,7 @@ function AppInner() {
                                       const fileName = prompt('Document name:'); if (!fileName) return;
                                       const fileUrl = prompt('Document URL (or leave blank):');
                                       const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
-                                      saveScrubbUpdate({ ...currentItem, scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] }, updatedAt: Date.now(), updatedBy: userName });
+                                      saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
                                     }}>+ Add Doc</button>
                                   </div></td>
                                   <td style={S.td}>{svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => NotificationSystem.info(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
@@ -2069,7 +2067,7 @@ function AppInner() {
                                       const fileName = prompt('Document name:'); if (!fileName) return;
                                       const fileUrl = prompt('Document URL (or leave blank):');
                                       const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
-                                      saveScrubbUpdate({ ...currentItem, scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] }, updatedAt: Date.now(), updatedBy: userName });
+                                      saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
                                     }}>+ Add Doc</button>
                                   </div>}
                                 </td>
@@ -2266,8 +2264,8 @@ function AppInner() {
                                                   style={{ ...S.btnSm, background: '#198754', fontSize: 10, padding: '3px 8px' }}
                                                   onClick={async () => {
                                                     const updated = { ...currentItem, changeOrderHistory: currentItem.changeOrderHistory.map((c, idx) => idx === i ? { ...c, status: 'Signed' } : c) };
-                                                    if (selContract) { await saveContracts(contracts.map(c => c.id === updated.id ? updated : c)); setSelContract(updated); }
-                                                    else { await saveQuotes(quotes.map(q => q.id === updated.id ? updated : q)); setSelQuote(updated); }
+                                                    if (selContract) { await saveContracts(updateInArray(contracts, updated.id, updated)); setSelContract(updated); }
+                                                    else { await saveQuotes(updateInArray(quotes, updated.id, updated)); setSelQuote(updated); }
                                                   }}
                                                 >✓ Sign</button>
                                               )}
@@ -2276,8 +2274,8 @@ function AppInner() {
                                                   style={{ ...S.btnSm, background: '#6c757d', fontSize: 10, padding: '3px 8px' }}
                                                   onClick={async () => {
                                                     const updated = { ...currentItem, changeOrderHistory: currentItem.changeOrderHistory.map((c, idx) => idx === i ? { ...c, status: 'Draft' } : c) };
-                                                    if (selContract) { await saveContracts(contracts.map(c => c.id === updated.id ? updated : c)); setSelContract(updated); }
-                                                    else { await saveQuotes(quotes.map(q => q.id === updated.id ? updated : q)); setSelQuote(updated); }
+                                                    if (selContract) { await saveContracts(updateInArray(contracts, updated.id, updated)); setSelContract(updated); }
+                                                    else { await saveQuotes(updateInArray(quotes, updated.id, updated)); setSelQuote(updated); }
                                                   }}
                                                 >Undo</button>
                                               )}
@@ -2332,7 +2330,7 @@ function AppInner() {
                                 const handleAddPmt = () => {
                                   if (!newPayment.amount || parseFloat(newPayment.amount) <= 0) { NotificationSystem.error('Please enter a valid amount'); return; }
                                   const pmt = { id: genId(), amount: parseFloat(newPayment.amount), date: newPayment.date || new Date().toISOString().split('T')[0], notes: newPayment.notes || '', isContingencyPayment: newPayment.isContingencyPayment || false, createdAt: new Date().toISOString(), createdBy: userName };
-                                  saveScrubbUpdate({ ...currentItem, scrubbPayments: [...pmts, pmt], updatedAt: Date.now(), updatedBy: userName });
+                                  saveScrubbUpdate(stampUpdate(currentItem, { scrubbPayments: [...pmts, pmt] }, userName));
                                   setNewPayment({ amount: '', date: '', notes: '', isContingencyPayment: false }); setShowPaymentForm(false);
                                   NotificationSystem.success('Payment recorded');
                                 };
@@ -3900,7 +3898,7 @@ function AppInner() {
                         {totals.homePrice > 0 && (
                           <tr>
                             {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => { setNewQ(p => ({ ...p, homeModel: 'NONE', homeBasePrice: '' })); }} title="Remove home">X</button>
+                              <button type="button" style={{ ...S.btnDeleteSmMd, padding: 0 }} onClick={() => { setNewQ(p => ({ ...p, homeModel: 'NONE', homeBasePrice: '' })); }} title="Remove home">X</button>
                             </td>}
                             <td>{newQ.homeModel !== 'NONE' ? newQ.homeModel : 'Custom Home'}</td>
                             {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(totals.homePrice)}</td>}
@@ -3912,7 +3910,7 @@ function AppInner() {
                           return (
                           <tr key={i} style={s.isOverride || s.isCustom ? { background: '#fffbeb' } : {}}>
                             {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                              <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => {
+                              <button type="button" style={{ ...S.btnDeleteSmMd, padding: 0 }} onClick={() => {
                                 if (s.key === 'foundation') setNewQ(p => ({ ...p, foundationType: 'none', servicePriceOverrides: { ...p.servicePriceOverrides, foundation: undefined } }));
                                 else if (s.key === 'patio') setNewQ(p => ({ ...p, patioSize: 'none', servicePriceOverrides: { ...p.servicePriceOverrides, patio: undefined } }));
                                 else toggleSvc(s.key);
@@ -3935,7 +3933,7 @@ function AppInner() {
                         {(isAdmin || isSales) && <td style={{ width: 24 }}>
                           <button
                             type="button"
-                            style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }}
+                            style={{ ...S.btnDeleteSmMd, padding: 0 }}
                             onClick={() => toggleRemoveMaterial(c.key)}
                             title="Remove item"
                           >X</button>
@@ -4054,7 +4052,7 @@ function AppInner() {
                           {summaryServices.map((s, i) => (
                             <tr key={`summary-${i}`} style={s.isOverride ? { background: '#fffbeb' } : {}}>
                               {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                                <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
+                                <button type="button" style={{ ...S.btnDeleteSmMd, padding: 0 }} onClick={() => toggleSvc(s.key)} title="Remove service">X</button>
                               </td>}
                               <td>{s.item}{ALLOWANCE_ITEMS.includes(s.key) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}{LICENSED_SERVICES.includes(s.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
                               {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(s.cost)}</td>}
@@ -4099,7 +4097,7 @@ function AppInner() {
                             {allowances.map((c, i) => (
                               <tr key={i} style={{ background: '#fffbeb' }}>
                                 {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                                  <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
+                                  <button type="button" style={{ ...S.btnDeleteSmMd, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
                                 </td>}
                                 <td>{c.item} <span style={{ fontSize: 11, color: '#856404' }}>(Allowance)</span>{LICENSED_SERVICES.includes(c.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
                                 {(isAdmin || isSales) && <td style={{ textAlign: 'right', fontWeight: 600 }}>{fmt(c.cost)}</td>}
@@ -4122,7 +4120,7 @@ function AppInner() {
                             {professionalServices.map((c, i) => (
                               <tr key={i} style={c.isOverride || c.isCustom ? { background: '#fffbeb' } : {}}>
                                 {(isAdmin || isSales) && <td style={{ width: 24 }}>
-                                  <button type="button" style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
+                                  <button type="button" style={{ ...S.btnDeleteSmMd, padding: 0 }} onClick={() => toggleSvc(c.key)} title="Remove service">X</button>
                                 </td>}
                                 <td>{c.item}{ALLOWANCE_ITEMS.includes(c.key) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}{LICENSED_SERVICES.includes(c.key) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600 }}>MN LICENSE REQ.</span>}</td>
                                 {(isAdmin || isSales) && <td style={{ textAlign: 'right' }}>{fmt(c.cost)}</td>}

@@ -1,6 +1,7 @@
 /**
  * General helper utilities used throughout the application
  */
+import { SHERMAN } from '../constants/index.js';
 
 /**
  * Generate unique ID using timestamp and random string
@@ -18,7 +19,7 @@ export const genId = () => Date.now().toString(36) + Math.random().toString(36).
  */
 export const getGoogleMapsUrl = (addr, city, state, zip) => {
   // SHERMAN constant will need to be imported where this is used
-  const SHERMAN_ADDRESS = '28933 County 4, Mora, MN 55051';
+  const SHERMAN_ADDRESS = SHERMAN.address;
   const dest = [addr, city, state, zip].filter(Boolean).join(', ');
   return dest.length > 3
     ? `https://www.google.com/maps/dir/${encodeURIComponent(SHERMAN_ADDRESS)}/${encodeURIComponent(dest)}`
@@ -80,3 +81,21 @@ export const normalizePhone = (phone) => phone ? phone.replace(/\D/g, '') : '';
 
 /** Lowercase + trim an email string */
 export const normalizeEmail = (email) => email ? email.toLowerCase().trim() : '';
+
+/** Format phone digits for display: (###) ###-#### */
+export const formatPhone = (phone) => {
+  if (!phone) return '';
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  if (digits.length === 11 && digits[0] === '1') return `(${digits.slice(1,4)}) ${digits.slice(4,7)}-${digits.slice(7)}`;
+  return phone;
+};
+
+/** Replace one item in an array by id */
+export const updateInArray = (arr, id, updated) =>
+  arr.map(item => item.id === id ? updated : item);
+
+/** Spread changes onto an item with updatedAt/updatedBy metadata */
+export const stampUpdate = (item, changes, userName) => ({
+  ...item, ...changes, updatedAt: new Date().toISOString(), updatedBy: userName
+});

@@ -47,4 +47,10 @@ export const S = {
   btnRed:       { padding: '8px 12px', background: '#dc3545', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
   btnGray:      { padding: '8px 12px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
   btnAmber:     { padding: '8px 12px', background: '#ff6f00', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, textDecoration: 'none', display: 'inline-block' },
+
+  // Small transparent icon-button variants (edit/delete/view in tables & lists)
+  btnEditSm:    { background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 11 },
+  btnDeleteSm:  { background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 11 },
+  btnDeleteSmMd:{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 12 },
+  btnViewSm:    { background: 'transparent', border: 'none', color: '#00897b', cursor: 'pointer', fontSize: 11 },
 };
