@@ -86,6 +86,7 @@ const CustomerPortal = ({
     siteCity: customerData.siteCity,
     siteState: customerData.siteState,
     siteZip: customerData.siteZip,
+    siteCounty: customerData.siteCounty,
     person2FirstName: customerData.person2FirstName,
     person2LastName: customerData.person2LastName,
     phone2: customerData.phone2,
@@ -128,13 +129,19 @@ const CustomerPortal = ({
     if (allowanceItems.length === 0) return null;
 
     const totalAllowances = allowanceItems.reduce((sum, item) => sum + item.contractPrice, 0);
-    const contingency = t.contingency || 0;
+    // Reconstruct original starting contingency from CO history (matches Scrubb tab formula)
+    const coHistory = q.changeOrderHistory || [];
+    const contingency = coHistory.length > 0
+      ? (coHistory[0].contingencyUsed || 0) + (coHistory[0].contingencyBalance || 0)
+      : (t.contingency || 0);
+    const totalCODraws = coHistory.reduce((sum, co) => sum + (co.contingencyUsed || 0), 0);
     const startingBalance = totalAllowances + contingency;
     const allowanceSavings = allowanceItems.filter(item => item.variance > 0).reduce((sum, item) => sum + item.variance, 0);
     const allowanceOverages = allowanceItems.filter(item => item.variance < 0).reduce((sum, item) => sum + Math.abs(item.variance), 0);
     const netVariance = allowanceSavings - allowanceOverages;
+    // Customer contingency payments REFILL the fund (add back) — matches Scrubb tab
     const contingencyPaymentsTotal = (q.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
-    const runningBalance = startingBalance + netVariance - contingencyPaymentsTotal;
+    const runningBalance = startingBalance - totalCODraws + netVariance + contingencyPaymentsTotal;
 
     return (
       <div style={{ background: 'linear-gradient(135deg, #fff9e6, #fff3e0)', border: '2px solid #ffc107', borderRadius: 8, padding: 16, marginTop: 16, marginBottom: 16 }}>
@@ -150,9 +157,15 @@ const CustomerPortal = ({
             <span style={{ fontWeight: 600, color: '#1565c0' }}>Contingency</span>
             <span style={{ fontWeight: 700, color: '#1565c0' }}>+ {fmt(contingency)}</span>
           </div>
+          {totalCODraws > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px solid #ffe0b2' }}>
+              <span style={{ fontWeight: 600, color: '#dc3545' }}>Change Order Draws</span>
+              <span style={{ fontWeight: 700, color: '#dc3545' }}>- {fmt(totalCODraws)}</span>
+            </div>
+          )}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, paddingTop: 8, borderTop: '2px solid #ffc107' }}>
             <span style={{ fontWeight: 700, color: '#2c5530' }}>Starting Balance</span>
-            <span style={{ fontWeight: 700, color: '#2c5530' }}>{fmt(startingBalance)}</span>
+            <span style={{ fontWeight: 700, color: '#2c5530' }}>{fmt(startingBalance - totalCODraws)}</span>
           </div>
         </div>
 

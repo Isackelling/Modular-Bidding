@@ -1576,7 +1576,7 @@ function AppInner() {
                   <button
                     style={S.btnSm}
                     onClick={() => {
-                      const q = { ...currentItem, customerFirstName: custForQuote?.firstName, customerLastName: custForQuote?.lastName, phone: custForQuote?.phone, email: custForQuote?.email, siteAddress: custForQuote?.siteAddress, siteCity: custForQuote?.siteCity, siteState: custForQuote?.siteState, siteZip: custForQuote?.siteZip, person2FirstName: custForQuote?.person2FirstName, person2LastName: custForQuote?.person2LastName, phone2: custForQuote?.phone2, email2: custForQuote?.email2, mailingAddress: custForQuote?.mailingAddress, mailingCity: custForQuote?.mailingCity, mailingState: custForQuote?.mailingState, mailingZip: custForQuote?.mailingZip };
+                      const q = { ...currentItem, customerFirstName: custForQuote?.firstName, customerLastName: custForQuote?.lastName, phone: custForQuote?.phone, email: custForQuote?.email, siteAddress: custForQuote?.siteAddress, siteCity: custForQuote?.siteCity, siteState: custForQuote?.siteState, siteZip: custForQuote?.siteZip, siteCounty: custForQuote?.siteCounty, person2FirstName: custForQuote?.person2FirstName, person2LastName: custForQuote?.person2LastName, phone2: custForQuote?.phone2, email2: custForQuote?.email2, mailingAddress: custForQuote?.mailingAddress, mailingCity: custForQuote?.mailingCity, mailingState: custForQuote?.mailingState, mailingZip: custForQuote?.mailingZip };
                       generateCustomerQuote(q, totals, homeModels);
                     }}
                   >📄 View Quote</button>

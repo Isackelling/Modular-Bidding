@@ -31,16 +31,24 @@ export const generateAllowanceProgressDocument = (quote, customer, totals, servi
   const completedItems = allowanceItems.filter(item => item.hasActual).length;
   const totalItems = allowanceItems.length;
 
-  // Contingency fund calculations
-  const startingContingency = totals.contingency;
+  // Contingency fund calculations — must match Scrubb tab (App.jsx) and CustomerPortal.jsx
+  // Use CO history to reconstruct original starting contingency (before COs inflated the total)
+  const coHistory = quote.changeOrderHistory || [];
+  const startingContingency = coHistory.length > 0
+    ? (coHistory[0].contingencyUsed || 0) + (coHistory[0].contingencyBalance || 0)
+    : totals.contingency;
+
+  // CO draws: total amount drawn from contingency for change orders
+  const totalCODraws = coHistory.reduce((sum, co) => sum + (co.contingencyUsed || 0), 0);
+
   const allowanceSavings = allowanceItems.filter(item => item.variance > 0).reduce((sum, item) => sum + item.variance, 0);
   const allowanceOverages = allowanceItems.filter(item => item.variance < 0).reduce((sum, item) => sum + Math.abs(item.variance), 0);
 
-  // Calculate payments to subtract from balance
+  // Customer contingency payments REFILL the fund (add back)
   const allPayments = quote.scrubbPayments || [];
   const contingencyPaymentsTotal = allPayments.filter(p => p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
 
-  const currentBalance = startingContingency + allowanceSavings - allowanceOverages - contingencyPaymentsTotal;
+  const currentBalance = startingContingency - totalCODraws + allowanceSavings - allowanceOverages + contingencyPaymentsTotal;
 
   return `<!DOCTYPE html><html><head><title>Allowance Progress Update - ${customer.firstName} ${customer.lastName}</title>
 <style>
@@ -147,6 +155,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
     <span>Starting Contingency Fund:</span>
     <span style="font-weight:700">${fmt(startingContingency)}</span>
   </div>
+  ${totalCODraws > 0 ? `<div class="fund-row">
+    <span>Change Order Draws:</span>
+    <span style="font-weight:700;color:#dc3545">-${fmt(totalCODraws)}</span>
+  </div>` : ''}
   <div class="fund-row">
     <span>Allowance Savings (added to fund):</span>
     <span style="font-weight:700;color:#28a745">+${fmt(allowanceSavings)}</span>
@@ -155,6 +167,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
     <span>Allowance Overages (drawn from fund):</span>
     <span style="font-weight:700;color:#dc3545">-${fmt(allowanceOverages)}</span>
   </div>
+  ${contingencyPaymentsTotal > 0 ? `<div class="fund-row">
+    <span>Customer Payments (refunding fund):</span>
+    <span style="font-weight:700;color:#28a745">+${fmt(contingencyPaymentsTotal)}</span>
+  </div>` : ''}
   <div class="fund-row fund-total">
     <span>Current Contingency Balance:</span>
     <span style="color:${currentBalance > 0 ? '#28a745' : '#dc3545'}">${fmt(currentBalance)}</span>

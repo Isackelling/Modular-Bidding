@@ -355,7 +355,7 @@ ${!hasAnyCrewData ? `
       <tr><td class="label">Project Command</td><td class="amount">${fmtCurrency(totals.projCmd?.total || 0)}</td></tr>
       <tr style="border-top:2px solid #ddd"><td class="label">Subtotal</td><td class="amount">${fmtCurrency(totals.sub)}</td></tr>
       <tr><td class="label">Overhead (5%)</td><td class="amount">${fmtCurrency(totals.oh)}</td></tr>
-      <tr><td class="label">Markup (10%)</td><td class="amount">${fmtCurrency(totals.mu)}</td></tr>
+      <tr><td class="label">Markup (${quote.markupRate !== undefined && quote.markupRate !== '' ? quote.markupRate : '10'}%)</td><td class="amount">${fmtCurrency(totals.mu)}</td></tr>
       <tr style="border-top:2px solid #ddd"><td class="label">Total</td><td class="amount" style="font-weight:700">${fmtCurrency(totals.total)}</td></tr>
       <tr><td class="label">Contingency Fund</td><td class="amount">${fmtCurrency(totals.contingency)}</td></tr>
       <tr class="total-row"><td class="label">Total Investment</td><td class="amount">${fmtCurrency(totals.totalWithContingency)}</td></tr>

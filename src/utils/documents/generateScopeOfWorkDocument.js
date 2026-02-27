@@ -122,9 +122,29 @@ export const generateScopeOfWorkDocument = (quote, customer, services) => {
   };
 
   const foundationType = quote.foundationType || 'none';
-  const foundation = foundationTypes[foundationType] || null;
+  const foundation = foundationTypes[foundationType] || {
+    name: 'Pier Foundation (Standard)',
+    description: 'Standard pier and beam foundation system per manufacturer specifications',
+    specifications: [
+      'Steel piers sized per I-beam height (20" or 22")',
+      'Piers spaced per manufacturer installation instructions',
+      'Anchor system with tie-down straps (single-wide)',
+      'Marriage line piers for double-wide homes'
+    ],
+    workIncluded: [
+      'Layout and placement of piers per manufacturer specs',
+      'Leveling and shimming to manufacturer tolerances',
+      'Installation of anchor systems',
+      'Final leveling check after home is set'
+    ],
+    excluded: [
+      'Excavation for basement or crawlspace',
+      'Concrete work beyond pier pads',
+      'Grading or site preparation beyond pier locations'
+    ]
+  };
 
-  return `<!DOCTYPE html><html><head><title>Scope of Work - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Scope of Work - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
 <style>
 body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:1000px;margin:0 auto;color:#222;line-height:1.7}
 .header{border-bottom:5px solid #2c5530;padding-bottom:24px;margin-bottom:40px;background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);padding:30px;border-radius:8px}
@@ -141,10 +161,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:1000px;margi
 .specs-title{font-weight:700;color:#495057;margin-bottom:10px;font-size:16px}
 .included-list{list-style:none;padding:0;margin:16px 0}
 .included-list li{padding:10px 0 10px 32px;position:relative;font-size:15px;line-height:1.6}
-.included-list li:before{content:'✓';position:absolute;left:0;color:#28a745;font-weight:900;font-size:20px}
+.included-list li:before{content:'\\2713';position:absolute;left:0;color:#28a745;font-weight:900;font-size:20px}
 .excluded-list{list-style:none;padding:0;margin:16px 0}
 .excluded-list li{padding:10px 0 10px 32px;position:relative;font-size:15px;line-height:1.6;color:#666}
-.excluded-list li:before{content:'✗';position:absolute;left:0;color:#dc3545;font-weight:900;font-size:20px}
+.excluded-list li:before{content:'\\2717';position:absolute;left:0;color:#dc3545;font-weight:900;font-size:20px}
 .highlight-box{background:#e7f5ff;border:3px solid #1565c0;padding:24px;border-radius:10px;margin:32px 0}
 .warning-box{background:#fff3cd;border:3px solid #ffc107;padding:24px;border-radius:10px;margin:32px 0}
 .success-box{background:#d4edda;border:3px solid #28a745;padding:24px;border-radius:10px;margin:32px 0}
@@ -176,8 +196,8 @@ tr:last-child td{border-bottom:none}
   <div class="info-box">
     <div class="info-label">Customer Information</div>
     <div style="font-size:18px;font-weight:700;margin-bottom:8px">${customer.firstName} ${customer.lastName}</div>
-    <div style="font-size:14px;color:#555;margin-bottom:4px">📞 ${formatPhone(customer.phone)}</div>
-    <div style="font-size:14px;color:#555">✉️ ${customer.email}</div>
+    <div style="font-size:14px;color:#555;margin-bottom:4px">Phone: ${formatPhone(customer.phone)}</div>
+    <div style="font-size:14px;color:#555">Email: ${customer.email}</div>
   </div>
   <div class="info-box">
     <div class="info-label">Project Location</div>
@@ -224,36 +244,36 @@ tr:last-child td{border-bottom:none}
     <tr>
       <td style="font-weight:700;color:#2c5530">Sherman Pole Buildings</td>
       <td>
-        • Provide all labor, materials, and equipment for contracted work<br>
-        • Coordinate with home manufacturer for delivery schedule<br>
-        • Ensure all work meets local building codes and manufacturer specs<br>
-        • Manage subcontractors and ensure quality workmanship<br>
-        • Coordinate inspections with local authorities<br>
-        • Communicate progress and any issues to customer promptly<br>
-        • Clean work site upon completion
+        &bull;Provide all labor, materials, and equipment for contracted work<br>
+        &bull;Coordinate with home manufacturer for delivery schedule<br>
+        &bull;Ensure all work meets local building codes and manufacturer specs<br>
+        &bull;Manage subcontractors and ensure quality workmanship<br>
+        &bull;Coordinate inspections with local authorities<br>
+        &bull;Communicate progress and any issues to customer promptly<br>
+        &bull;Clean work site upon completion
       </td>
     </tr>
     <tr>
       <td style="font-weight:700;color:#2c5530">Customer</td>
       <td>
-        • Provide clear, legal access to work site for all vehicles and equipment<br>
-        • Obtain necessary permits (unless included in contract)<br>
-        • Ensure utilities are available at property line prior to installation<br>
-        • Remove any obstacles that would interfere with construction<br>
-        • Make timely payments per contract terms<br>
-        • Communicate any concerns or questions promptly<br>
-        • Be available for walkthroughs and sign-offs<br>
-        • Provide adequate space for material storage during construction
+        &bull;Provide clear, legal access to work site for all vehicles and equipment<br>
+        &bull;Obtain necessary permits (unless included in contract)<br>
+        &bull;Ensure utilities are available at property line prior to installation<br>
+        &bull;Remove any obstacles that would interfere with construction<br>
+        &bull;Make timely payments per contract terms<br>
+        &bull;Communicate any concerns or questions promptly<br>
+        &bull;Be available for walkthroughs and sign-offs<br>
+        &bull;Provide adequate space for material storage during construction
       </td>
     </tr>
     <tr>
       <td style="font-weight:700;color:#2c5530">Home Manufacturer</td>
       <td>
-        • Manufacture home to specifications and quality standards<br>
-        • Deliver home sections to site on agreed schedule<br>
-        • Provide installation instructions and specifications<br>
-        • Honor manufacturer's warranty on home components<br>
-        • Provide technical support during installation if needed
+        &bull;Manufacture home to specifications and quality standards<br>
+        &bull;Deliver home sections to site on agreed schedule<br>
+        &bull;Provide installation instructions and specifications<br>
+        &bull;Honor manufacturer's warranty on home components<br>
+        &bull;Provide technical support during installation if needed
       </td>
     </tr>
   </tbody>
