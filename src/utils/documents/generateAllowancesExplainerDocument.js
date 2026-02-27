@@ -1,10 +1,10 @@
-import { ALLOWANCE_ITEMS, fmt, DocumentUtils } from './shared.js';
+import { ALLOWANCE_ITEMS, fmt, DocumentUtils, COMPANY, collectOtherServices } from './shared.js';
 
 export const generateAllowancesExplainerDocument = (quote, customer, totals, services) => {
   const today = DocumentUtils.formatDate();
   const quoteNum = DocumentUtils.getQuoteNum(quote);
 
-  // Get all allowance items from the quote
+  // Get allowance items from selectedServices
   const allowanceItems = [];
 
   Object.entries(quote.selectedServices || {}).forEach(([key, selected]) => {
@@ -19,25 +19,20 @@ export const generateAllowancesExplainerDocument = (quote, customer, totals, ser
     }
   });
 
-  // Add sewer if selected
-  if (quote.sewerType && quote.sewerType !== 'none') {
-    const cost = totals.svc.find(s => s.key === 'sewer')?.cost || 0;
-    allowanceItems.push({
-      name: `Sewer System (${quote.sewerType.replace('_', ' ')})`,
-      estimatedCost: cost,
-      description: 'Final cost depends on distance to connection point, soil conditions, and inspection requirements.'
+  // Add sewer/well from collectOtherServices
+  const sewerWellDescriptions = {
+    sewer: 'Final cost depends on distance to connection point, soil conditions, and inspection requirements.',
+    well: 'Actual depth and cost will be determined by driller based on water table and geological conditions.',
+  };
+  collectOtherServices(quote, totals)
+    .filter(o => o.key === 'sewer' || o.key === 'well')
+    .forEach(o => {
+      allowanceItems.push({
+        name: o.key === 'well' ? `Well Drilling (${quote.wellDepth} ft estimated)` : o.nameWithDetail,
+        estimatedCost: o.cost,
+        description: sewerWellDescriptions[o.key],
+      });
     });
-  }
-
-  // Add well if selected
-  if (parseFloat(quote.wellDepth) > 0) {
-    const cost = totals.svc.find(s => s.key === 'well')?.cost || 0;
-    allowanceItems.push({
-      name: `Well Drilling (${quote.wellDepth} ft estimated)`,
-      estimatedCost: cost,
-      description: 'Actual depth and cost will be determined by driller based on water table and geological conditions.'
-    });
-  }
 
   const totalAllowances = allowanceItems.reduce((sum, item) => sum + item.estimatedCost, 0);
   const contingency = totals.contingency || 0;
@@ -198,9 +193,9 @@ ${contingency > 0 ? `
   <p style="margin:0 0 16px;font-size:15px;color:#666">
     We understand that allowances and contingencies can seem complex. We're happy to discuss any questions or concerns you have about your quote.
   </p>
-  <div style="font-size:18px;font-weight:700;color:#2c5530;margin-bottom:8px">SHERMAN</div>
-  <div style="font-size:16px">📞 (320) 679-3438</div>
-  <div style="font-size:14px;color:#666;margin-top:4px">2244 Hwy 65, Mora, MN 55051</div>
+  <div style="font-size:18px;font-weight:700;color:#2c5530;margin-bottom:8px">${COMPANY.name}</div>
+  <div style="font-size:16px">📞 ${COMPANY.phone}</div>
+  <div style="font-size:14px;color:#666;margin-top:4px">${COMPANY.address}</div>
 </div>
 
 </body></html>`;

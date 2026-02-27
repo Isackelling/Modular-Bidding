@@ -1,6 +1,6 @@
 /**
  * Document generation utilities for consistent formatting across all generated documents
- * Centralizes date formatting, quote numbers, home descriptions, and service filtering
+ * Centralizes date formatting, quote numbers, home descriptions, and base styles
  */
 
 /**
@@ -48,29 +48,4 @@ export const DocumentUtils = {
     th{background:#2c5530;color:white;font-weight:600}
     tr:hover{background:#f5f5f5}
   `,
-
-  /**
-   * Filter and map selected services from quote
-   * @param {Object} quote - Quote object with selectedServices
-   * @param {string[]} serviceKeys - Array of service keys to filter
-   * @param {Object} totals - Calculated totals object
-   * @param {Object} services - Services catalog
-   * @returns {Array} Filtered and mapped service objects with name, cost, etc.
-   */
-  filterServices: (quote, serviceKeys, totals, services) => {
-    return Object.entries(quote?.selectedServices || {})
-      .filter(([key, selected]) => selected && serviceKeys.includes(key))
-      .map(([key]) => {
-        const service = services[key];
-        const svcCost = totals?.svc?.find(s => s.key === key);
-        return {
-          key,
-          name: service?.name || key,
-          description: service?.description || '',
-          cost: svcCost?.cost || 0,
-          quantity: quote?.serviceQuantities?.[key] || '',
-          days: quote?.serviceDays?.[key] || ''
-        };
-      });
-  }
 };

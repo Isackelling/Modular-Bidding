@@ -1,4 +1,4 @@
-import { formatPhone, DocumentUtils } from './shared.js';
+import { formatPhone, DocumentUtils, COMPANY } from './shared.js';
 
 export const generateScopeOfWorkDocument = (quote, customer, services) => {
   const today = DocumentUtils.formatDate();
@@ -242,7 +242,7 @@ tr:last-child td{border-bottom:none}
   </thead>
   <tbody>
     <tr>
-      <td style="font-weight:700;color:#2c5530">SHERMAN</td>
+      <td style="font-weight:700;color:#2c5530">${COMPANY.name}</td>
       <td>
         &bull;Provide all labor, materials, and equipment for contracted work<br>
         &bull;Coordinate with home manufacturer for delivery schedule<br>
@@ -470,7 +470,7 @@ ${selectedServices.filter(s => !['installation_of_home'].includes(s.key)).map(se
     <li>Detailed description of the work to be added, removed, or modified</li>
     <li>Cost impact (additional charges or credits)</li>
     <li>Schedule impact (if any)</li>
-    <li>Signatures from both SHERMAN and Customer</li>
+    <li>Signatures from both ${COMPANY.name} and Customer</li>
     <li>Change Order number and date</li>
   </ul>
   <p style="margin:16px 0 0;line-height:1.8;font-size:15px;font-weight:600">
@@ -565,7 +565,7 @@ ${selectedServices.filter(s => !['installation_of_home'].includes(s.key)).map(se
   </div>
 
   <div style="margin-top:60px">
-    <div style="font-weight:700;margin-bottom:12px;font-size:16px">SHERMAN Representative:</div>
+    <div style="font-weight:700;margin-bottom:12px;font-size:16px">${COMPANY.name} Representative:</div>
     <div class="sig-line"></div>
     <div style="display:flex;justify-content:space-between;font-size:14px;color:#666">
       <span><strong>Print Name:</strong> _______________</span>
@@ -576,10 +576,10 @@ ${selectedServices.filter(s => !['installation_of_home'].includes(s.key)).map(se
 
 <!-- FOOTER -->
 <div style="margin-top:80px;padding:28px;background:linear-gradient(135deg,#2c5530 0%,#1a3320 100%);color:#fff;border-radius:10px;text-align:center">
-  <div style="font-size:22px;font-weight:800;margin-bottom:8px">SHERMAN</div>
-  <div style="font-size:15px;margin-bottom:12px">Professional Modular Home Installation & Foundation Services</div>
-  <div style="font-size:14px;margin-bottom:4px">2244 Highway 65, Mora, MN 55051</div>
-  <div style="font-size:14px;margin-bottom:4px">Phone: (320) 679-3438</div>
+  <div style="font-size:22px;font-weight:800;margin-bottom:8px">${COMPANY.name}</div>
+  <div style="font-size:15px;margin-bottom:12px">${COMPANY.tagline}</div>
+  <div style="font-size:14px;margin-bottom:4px">${COMPANY.addressFull}</div>
+  <div style="font-size:14px;margin-bottom:4px">Phone: ${COMPANY.phone}</div>
   <div style="font-size:12px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.3);font-style:italic">
     This Scope of Work document is valid for 30 days from ${today}
   </div>

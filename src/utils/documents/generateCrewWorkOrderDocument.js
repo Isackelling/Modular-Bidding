@@ -1,132 +1,27 @@
-import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, formatPhone, calcTotals, DocumentUtils } from './shared.js';
+import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, formatPhone, DocumentUtils, COMPANY, calcTotalsWithDefaults, formatNoteDateTime, buildServiceData as _buildSvcData, collectOtherServices, getFoundationName } from './shared.js';
 
 export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) => {
-  // Use provided services or fallback to DEFAULT_SERVICES
   const services = servicesParam || DEFAULT_SERVICES;
-
   const today = DocumentUtils.formatDate();
   const quoteNum = DocumentUtils.getQuoteNum(quote);
+  const totals = calcTotalsWithDefaults(quote, services);
 
-  // Calculate totals with all required parameters
-  const totals = calcTotals(
-    quote,
-    DEFAULT_MATERIALS,
-    services,
-    DEFAULT_SEWER,
-    DEFAULT_PATIO,
-    { install: DRIVE_RATE_INSTALL, service: DRIVE_RATE_SERVICE, projectCommand: DRIVE_RATE_PC, inspection: DRIVE_RATE_INSPECTION },
-    DEFAULT_FOUNDATION
-  );
+  const bsd = (key) => _buildSvcData(key, quote, services, totals);
 
-  // Helper function to format published note dates
-  const formatNoteDateTime = (isoString) => {
-    const date = new Date(isoString);
-    return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
-  };
-
-  // Helper to build service data from a key
-  const buildServiceData = (key) => {
-    const service = services[key];
-    const svcCost = totals.svc.find(s => s.key === key);
-    return {
-      key,
-      name: service?.name || key,
-      description: service?.description || '',
-      customerNote: quote.serviceNotes?.[key] || '',
-      publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
-      cost: svcCost?.cost || 0,
-      quantity: quote.serviceQuantities?.[key] || '',
-      days: quote.serviceDays?.[key] || ''
-    };
-  };
-
-  // Crew work order install services: core installer obligations
   const installServices = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && LICENSED_SERVICES.includes(key))
-    .map(([key]) => buildServiceData(key));
+    .map(([key]) => bsd(key));
 
-  // Professional services: everything else (not licensed, not HOME_OPTIONS)
   const professionalServices = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && !LICENSED_SERVICES.includes(key) && !HOME_OPTIONS.includes(key))
-    .map(([key]) => buildServiceData(key));
+    .map(([key]) => bsd(key));
 
-  // Get home spec additions (HOME_OPTIONS)
   const homeSpecAdditions = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && HOME_OPTIONS.includes(key))
-    .map(([key]) => buildServiceData(key));
+    .map(([key]) => bsd(key));
 
-  // Get other services (sewer, well, patio, landscaping, deck project)
-  const otherServices = [];
-
-  if (quote.sewerType && quote.sewerType !== 'none') {
-    otherServices.push({
-      key: 'sewer',
-      name: 'Sewer System',
-      description: quote.sewerType,
-      customerNote: quote.serviceNotes?.sewer || '',
-      publishedCustomerNotes: quote.publishedServiceNotes?.sewer || [],
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.sewer || [],
-      cost: totals.svc.find(s => s.key === 'sewer')?.cost || 0
-    });
-  }
-
-  if (quote.wellDepth && quote.wellDepth !== '0') {
-    otherServices.push({
-      key: 'well',
-      name: 'Well System',
-      description: `${quote.wellDepth} ft deep`,
-      customerNote: quote.serviceNotes?.well || '',
-      publishedCustomerNotes: quote.publishedServiceNotes?.well || [],
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.well || [],
-      cost: totals.svc.find(s => s.key === 'well')?.cost || 0
-    });
-  }
-
-  if (quote.patioSize && quote.patioSize !== 'none') {
-    otherServices.push({
-      key: 'patio',
-      name: 'Patio',
-      description: `${quote.patioSize} wide`,
-      customerNote: quote.serviceNotes?.patio || '',
-      publishedCustomerNotes: quote.publishedServiceNotes?.patio || [],
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.patio || [],
-      cost: totals.svc.find(s => s.key === 'patio')?.cost || 0
-    });
-  }
-
-  if (quote.hasLandscaping) {
-    otherServices.push({
-      key: 'landscaping',
-      name: 'Landscaping',
-      description: `Landscaping services`,
-      customerNote: quote.serviceNotes?.landscaping || '',
-      publishedCustomerNotes: quote.publishedServiceNotes?.landscaping || [],
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.landscaping || [],
-      cost: totals.svc.find(s => s.key === 'landscaping')?.cost || 0
-    });
-  }
-
-  if (quote.hasDeck) {
-    otherServices.push({
-      key: 'deck',
-      name: 'Deck Project',
-      description: `Deck construction services`,
-      customerNote: quote.serviceNotes?.deck || '',
-      publishedCustomerNotes: quote.publishedServiceNotes?.deck || [],
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.deck || [],
-      cost: totals.svc.find(s => s.key === 'deck')?.cost || 0
-    });
-  }
-
-  // Foundation info
-  const foundationTypes = {
-    slab: 'Concrete Slab Foundation',
-    crawlspace: 'Crawl Space Foundation',
-    basement: 'Full Basement Foundation'
-  };
-  const foundationType = quote.foundationType || 'none';
-  const foundationName = foundationTypes[foundationType] || 'None';
+  const otherServices = collectOtherServices(quote, totals);
+  const foundationName = getFoundationName(quote.foundationType);
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Crew Work Order - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
 <style>
@@ -1097,9 +992,9 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
 </div>
 
 <div style="margin-top:40px;padding-top:30px;border-top:3px solid #dee2e6;text-align:center;color:#666">
-  <div style="font-size:18px;font-weight:700;margin-bottom:8px">SHERMAN</div>
-  <div style="font-size:14px">2244 Hwy 65, Mora, MN 55051</div>
-  <div style="font-size:14px">Phone: (320) 679-3438</div>
+  <div style="font-size:18px;font-weight:700;margin-bottom:8px">${COMPANY.name}</div>
+  <div style="font-size:14px">${COMPANY.address}</div>
+  <div style="font-size:14px">Phone: ${COMPANY.phone}</div>
   <div style="font-size:12px;margin-top:15px;font-style:italic">This is an internal crew document - Not for customer distribution</div>
 </div>
 

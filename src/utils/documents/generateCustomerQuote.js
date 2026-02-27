@@ -1,4 +1,5 @@
-import { ALLOWANCE_ITEMS, HOME_OPTIONS, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription } from './shared.js';
+import { ALLOWANCE_ITEMS, HOME_OPTIONS, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription, COMPANY, collectOtherServices } from './shared.js';
+import { openDocumentWindow } from '../windowUtils.js';
 
 export const generateCustomerQuote = (quote, totals, homeModels) => {
   const services = [];
@@ -24,21 +25,18 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     }
   });
 
-  // Sewer, Well are allowances
-  if (quote.sewerType && quote.sewerType !== 'none') {
-    allowances.push({ name: `Sewer System (${quote.sewerType.replace('_', ' ')})`, key: 'sewer' });
-  }
-  if (parseFloat(quote.wellDepth) > 0) {
-    allowances.push({ name: `Well Drilling (${quote.wellDepth} ft)`, key: 'well' });
-  }
-
-  // Patio and custom services are not allowances
-  if (quote.patioSize && quote.patioSize !== 'none') services.push({ name: `Patio (${quote.patioSize} ft)`, description: '' });
+  // Sewer/Well → allowances; Patio/Landscaping/Deck → services
+  const others = collectOtherServices(quote, totals);
+  others.forEach(o => {
+    if (o.key === 'sewer' || o.key === 'well') {
+      allowances.push({ name: o.nameWithDetail, key: o.key });
+    } else if (o.key === 'landscaping' || o.key === 'deck') {
+      services.push({ name: o.nameWithDetail, description: getServiceDescription(o.key, quote) });
+    } else {
+      services.push({ name: o.nameWithDetail, description: '' });
+    }
+  });
   (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, description: '' }); });
-
-  // Landscaping and deck
-  if (quote.hasLandscaping) services.push({ name: 'Landscaping', description: getServiceDescription('landscaping', quote) });
-  if (quote.hasDeck) services.push({ name: 'Deck', description: getServiceDescription('deck', quote) });
 
   const today = DocumentUtils.formatDate();
   const validUntil = DocumentUtils.formatDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
@@ -114,10 +112,10 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       const total = '${fmt(totals.total)}';
       const homeModel = '${DocumentUtils.getHomeDesc(quote).replace(/'/g, "\\'")}';
 
-      const subject = encodeURIComponent('SHERMAN - Your Project Quote #' + quoteNum);
+      const subject = encodeURIComponent('${COMPANY.name} - Your Project Quote #' + quoteNum);
       const body = encodeURIComponent(
         'Dear ' + customerName + ',\\n\\n' +
-        'Thank you for your interest in SHERMAN! Please find your project quote details below:\\n\\n' +
+        'Thank you for your interest in ${COMPANY.name}! Please find your project quote details below:\\n\\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n' +
         'QUOTE SUMMARY\\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n' +
@@ -135,11 +133,11 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n\\n' +
         'This quote is valid for 30 days. A 50% deposit is required to schedule installation.\\n\\n' +
         'If you have any questions, please don\\'t hesitate to reach out:\\n' +
-        '📞 (320) 679-3438\\n' +
-        '📍 2244 Hwy 65, Mora, MN 55051\\n\\n' +
+        '📞 ${COMPANY.phone}\\n' +
+        '📍 ${COMPANY.address}\\n\\n' +
         'We look forward to working with you!\\n\\n' +
         'Best regards,\\n' +
-        'SHERMAN\\n' +
+        '${COMPANY.name}\\n' +
         'Quality Erections Since 1976'
       );
 
@@ -155,14 +153,13 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   
   <div class="header">
     <div>
-      <div class="logo">SHERMAN</div>
+      <div class="logo">${COMPANY.name}</div>
       <div class="logo-sub">Modular Home Installation</div>
     </div>
     <div class="company-info">
-      <strong>SHERMAN</strong><br>
-      2244 Hwy 65<br>
-      Mora, MN 55051<br>
-      (320) 679-3438
+      <strong>${COMPANY.name}</strong><br>
+      ${COMPANY.address}<br>
+      ${COMPANY.phone}
     </div>
   </div>
   
@@ -417,30 +414,12 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   </div>
   
   <div class="footer">
-    <strong>SHERMAN</strong> | 2244 Hwy 65, Mora, MN 55051 | (320) 679-3438<br>
-    Thank you for choosing Sherman for your modular home installation!
+    <strong>${COMPANY.name}</strong> | ${COMPANY.address} | ${COMPANY.phone}<br>
+    Thank you for choosing ${COMPANY.name} for your modular home installation!
   </div>
 </body>
 </html>
   `;
   
-  // Open quote in new window using document.write for better reliability
-  const newWindow = window.open('', '_blank');
-
-  if (newWindow) {
-    newWindow.document.write(html);
-    newWindow.document.close();
-  } else {
-    // If popup blocked, create a download link
-    const blob = new Blob([html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Sherman-Quote-${quote.customerLastName}-${quote.id?.slice(-8) || 'draft'}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-    alert('Quote downloaded as HTML file. Open it in your browser to view and print.');
-  }
+  openDocumentWindow(html, `Sherman-Quote-${quote.customerLastName}-${quote.id?.slice(-8) || 'draft'}.html`);
 };

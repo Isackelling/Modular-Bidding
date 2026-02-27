@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription } from './shared.js';
+import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription, COMPANY, collectOtherServices } from './shared.js';
 
 export const generateQuoteHtml = (quote, totals, homeModels) => {
   const services = [];
@@ -27,19 +27,17 @@ export const generateQuoteHtml = (quote, totals, homeModels) => {
     }
   });
 
-  if (quote.sewerType && quote.sewerType !== 'none') {
-    const cost = totals.svc.find(s => s.key === 'sewer')?.cost || 0;
-    allowancesWithCosts.push({ name: `Sewer System (${quote.sewerType.replace('_', ' ')})`, key: 'sewer', cost });
-  }
-  if (parseFloat(quote.wellDepth) > 0) {
-    const cost = totals.svc.find(s => s.key === 'well')?.cost || 0;
-    allowancesWithCosts.push({ name: `Well Drilling (${quote.wellDepth} ft)`, key: 'well', cost });
-  }
-  if (quote.patioSize && quote.patioSize !== 'none') services.push({ name: `Patio (${quote.patioSize} ft)`, key: 'patio' });
+  // Sewer/Well → allowances; Patio/Landscaping/Deck → services
+  const others = collectOtherServices(quote, totals);
+  others.forEach(o => {
+    if (o.key === 'sewer' || o.key === 'well') {
+      allowancesWithCosts.push({ name: o.nameWithDetail, key: o.key, cost: o.cost });
+    } else {
+      services.push({ name: o.nameWithDetail, key: o.key });
+    }
+  });
   (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, key: 'custom' }); });
   (quote.customOptions || []).forEach((co, i) => { if (co.name && co.price) { const qty = parseFloat(co.quantity) || 1; services.push({ name: qty > 1 ? `${co.name} (×${qty})` : co.name, key: `customopt_${i}` }); } });
-  if (quote.hasLandscaping) services.push({ name: 'Landscaping', key: 'landscaping' });
-  if (quote.hasDeck) services.push({ name: 'Deck', key: 'deck' });
 
   // Group services like the quote summary: Install Services vs Professional Services
   const sortByLicense = (a, b) => {
@@ -76,7 +74,7 @@ ${DocumentUtils.getBaseStyles('850px')}
 .contingency-title{font-size:20px;font-weight:700;color:#1565c0;margin-bottom:10px;display:flex;justify-content:space-between}
 .investment-total{font-size:32px;font-weight:800;color:#2c5530;text-align:center;padding:24px;background:#e8f5e9;border-radius:8px;border:3px solid #2c5530;margin-top:20px}
 </style></head><body>
-<div class="header"><img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" style="height:50px"><div style="float:right;text-align:right;font-size:13px;color:#666">Quote #${DocumentUtils.getQuoteNum(quote)}<br>${today}</div></div>
+<div class="header"><img src="${COMPANY.logoUrl}" style="height:50px"><div style="float:right;text-align:right;font-size:13px;color:#666">Quote #${DocumentUtils.getQuoteNum(quote)}<br>${today}</div></div>
 <div class="section"><div class="section-title">Customer</div><strong>${quote.customerFirstName} ${quote.customerLastName}</strong><br>${formatPhone(quote.phone)} | ${quote.email}<br>${quote.siteAddress}, ${quote.siteCity}, ${quote.siteState} ${quote.siteZip}</div>
 ${quote.homeModel && quote.homeModel !== 'NONE' ? `<div class="section"><div class="section-title">Home</div><strong>${quote.homeModel}</strong><br>${quote.houseWidth}' × ${quote.houseLength}' ${quote.singleDouble} Wide</div>` : ''}
 ${floorPlanUrl ? `<div class="section"><div class="section-title">Floor Plan</div><p><a href="${floorPlanUrl}" target="_blank" style="color:#1565c0">View Floor Plan on Clayton Homes Website</a></p></div>` : ''}

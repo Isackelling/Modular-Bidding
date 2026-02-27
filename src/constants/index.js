@@ -43,9 +43,15 @@ export const HOME_OPTIONS = [
 ];
 
 // Sherman company information
-export const SHERMAN = {
-  address: '2244 Hwy 65, Mora, MN 55051'
+export const COMPANY = {
+  name: 'SHERMAN',
+  address: '2244 Hwy 65, Mora, MN 55051',
+  addressFull: '2244 Highway 65, Mora, MN 55051',
+  phone: '(320) 679-3438',
+  tagline: 'Professional Modular Home Installation & Foundation Services',
+  logoUrl: 'https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png',
 };
+export const SHERMAN = COMPANY;
 
 // Drive time and pricing constants
 export const MIN_MILES = 15;

@@ -1,4 +1,4 @@
-import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, fmtCurrency, formatPhone, calcTotals, DocumentUtils } from './shared.js';
+import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmtCurrency, formatPhone, DocumentUtils, COMPANY, calcTotalsWithDefaults, formatNoteDateTime, buildServiceData as _buildSvcData, collectOtherServices, getFoundationName } from './shared.js';
 
 export const generateJobSummaryReport = (quote, customer, servicesParam, crewChecklistData, crewCommentsData) => {
   const services = servicesParam || DEFAULT_SERVICES;
@@ -8,68 +8,24 @@ export const generateJobSummaryReport = (quote, customer, servicesParam, crewChe
   const comments = crewCommentsData || {};
   const hasAnyCrewData = Object.keys(checklist).length > 0 || Object.keys(comments).length > 0;
 
-  const totals = calcTotals(
-    quote,
-    DEFAULT_MATERIALS,
-    services,
-    DEFAULT_SEWER,
-    DEFAULT_PATIO,
-    { install: DRIVE_RATE_INSTALL, service: DRIVE_RATE_SERVICE, projectCommand: DRIVE_RATE_PC, inspection: DRIVE_RATE_INSPECTION },
-    DEFAULT_FOUNDATION
-  );
+  const totals = calcTotalsWithDefaults(quote, services);
 
-  const formatNoteDateTime = (isoString) => {
-    const date = new Date(isoString);
-    return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
-  };
+  const bsd = (key) => _buildSvcData(key, quote, services, totals);
 
-  const buildServiceData = (key) => {
-    const service = services[key];
-    const svcCost = totals.svc.find(s => s.key === key);
-    return {
-      key,
-      name: service?.name || key,
-      description: service?.description || '',
-      publishedCrewNotes: quote.publishedServiceCrewNotes?.[key] || [],
-      publishedCustomerNotes: quote.publishedServiceNotes?.[key] || [],
-      cost: svcCost?.cost || 0,
-      quantity: quote.serviceQuantities?.[key] || '',
-      days: quote.serviceDays?.[key] || ''
-    };
-  };
-
-  // Service categorization (same as crew work order)
   const installServices = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && LICENSED_SERVICES.includes(key))
-    .map(([key]) => buildServiceData(key));
+    .map(([key]) => bsd(key));
 
   const professionalServices = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && !LICENSED_SERVICES.includes(key) && !HOME_OPTIONS.includes(key))
-    .map(([key]) => buildServiceData(key));
+    .map(([key]) => bsd(key));
 
   const homeSpecAdditions = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && HOME_OPTIONS.includes(key))
-    .map(([key]) => buildServiceData(key));
+    .map(([key]) => bsd(key));
 
-  const otherServices = [];
-  if (quote.sewerType && quote.sewerType !== 'none') {
-    otherServices.push({ key: 'sewer', name: 'Sewer System', description: quote.sewerType, publishedCrewNotes: quote.publishedServiceCrewNotes?.sewer || [], publishedCustomerNotes: quote.publishedServiceNotes?.sewer || [], cost: totals.svc.find(s => s.key === 'sewer')?.cost || 0 });
-  }
-  if (quote.wellDepth && quote.wellDepth !== '0') {
-    otherServices.push({ key: 'well', name: 'Well System', description: `${quote.wellDepth} ft deep`, publishedCrewNotes: quote.publishedServiceCrewNotes?.well || [], publishedCustomerNotes: quote.publishedServiceNotes?.well || [], cost: totals.svc.find(s => s.key === 'well')?.cost || 0 });
-  }
-  if (quote.patioSize && quote.patioSize !== 'none') {
-    otherServices.push({ key: 'patio', name: 'Patio', description: `${quote.patioSize} wide`, publishedCrewNotes: quote.publishedServiceCrewNotes?.patio || [], publishedCustomerNotes: quote.publishedServiceNotes?.patio || [], cost: totals.svc.find(s => s.key === 'patio')?.cost || 0 });
-  }
-  if (quote.hasLandscaping) {
-    otherServices.push({ key: 'landscaping', name: 'Landscaping', description: 'Landscaping services', publishedCrewNotes: quote.publishedServiceCrewNotes?.landscaping || [], publishedCustomerNotes: quote.publishedServiceNotes?.landscaping || [], cost: totals.svc.find(s => s.key === 'landscaping')?.cost || 0 });
-  }
-  if (quote.hasDeck) {
-    otherServices.push({ key: 'deck', name: 'Deck Project', description: 'Deck construction services', publishedCrewNotes: quote.publishedServiceCrewNotes?.deck || [], publishedCustomerNotes: quote.publishedServiceNotes?.deck || [], cost: totals.svc.find(s => s.key === 'deck')?.cost || 0 });
-  }
-
-  const foundationTypes = { slab: 'Concrete Slab Foundation', crawlspace: 'Crawl Space Foundation', basement: 'Full Basement Foundation' };
-  const foundationName = foundationTypes[quote.foundationType] || 'None';
+  const otherServices = collectOtherServices(quote, totals);
+  const foundationName = getFoundationName(quote.foundationType);
 
   // Checklist status helpers
   const checkIcon = (taskId) => checklist[taskId] ? '<span style="color:#2e7d32;font-weight:700">&#10004;</span>' : '<span style="color:#c62828;font-weight:700">&#10008;</span>';
@@ -213,7 +169,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1000px;margi
 
 <div class="header">
   <div class="header-left">
-    <img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" style="height:45px" alt="Sherman Logo">
+    <img src="${COMPANY.logoUrl}" style="height:45px" alt="${COMPANY.name} Logo">
     <div>
       <div class="title">JOB SUMMARY REPORT</div>
       <div class="subtitle">Complete Project Overview — Internal Document</div>
@@ -399,9 +355,9 @@ ${nonReversalCOs.length > 0 ? `
 </div>
 
 <div style="margin-top:40px;padding-top:30px;border-top:3px solid #dee2e6;text-align:center;color:#666">
-  <div style="font-size:18px;font-weight:700;margin-bottom:8px">SHERMAN</div>
-  <div style="font-size:14px">2244 Hwy 65, Mora, MN 55051</div>
-  <div style="font-size:14px">Phone: (320) 679-3438</div>
+  <div style="font-size:18px;font-weight:700;margin-bottom:8px">${COMPANY.name}</div>
+  <div style="font-size:14px">${COMPANY.address}</div>
+  <div style="font-size:14px">Phone: ${COMPANY.phone}</div>
   <div style="font-size:12px;margin-top:15px;font-style:italic">CONFIDENTIAL — Internal Job Summary Report</div>
 </div>
 
