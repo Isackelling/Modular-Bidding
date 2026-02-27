@@ -25,7 +25,7 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Crew Work Order - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
 <style>
-body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margin:0 auto;color:#222;line-height:1.6}
+body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margin:0 auto;color:#222;line-height:1.6}
 .header{background:linear-gradient(135deg,#ff6b35 0%,#f7931e 100%);color:#fff;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .title{font-size:38px;font-weight:900;margin:0;letter-spacing:-0.5px}
 .subtitle{font-size:16px;margin-top:8px;opacity:0.95;font-weight:500}
@@ -64,12 +64,16 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margi
 .checklist-checkbox{width:20px;height:20px;cursor:pointer;margin-top:2px;accent-color:#2e7d32;flex-shrink:0}
 .checklist-label{flex-grow:1;cursor:pointer;user-select:none}
 .checklist-item.checked .checklist-label{text-decoration:line-through;opacity:0.6}
-.crew-comment-section{margin-top:12px;padding:12px;background:#f8f9fa;border-radius:6px;border-left:3px solid #2e7d32}
-.crew-comment-label{font-size:12px;font-weight:700;color:#2e7d32;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.crew-comment-input{width:100%;padding:8px;border:2px solid #dee2e6;border-radius:4px;font-size:13px;font-family:inherit;resize:vertical;min-height:60px;transition:border-color 0.2s}
-.crew-comment-input:focus{outline:none;border-color:#2e7d32}
-.crew-comment-input::placeholder{color:#999;font-style:italic}
-.checklist-item-wrapper{display:flex;flex-direction:column;width:100%}
+.crew-comment-section{margin-top:8px;padding:8px 12px;background:#f8f9fa;border-radius:6px;border-left:3px solid #2e7d32}
+.crew-comment-label{font-size:11px;font-weight:700;color:#2e7d32;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.crew-comment-input{width:100%;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;font-family:inherit;resize:none;height:28px;overflow:hidden;transition:all 0.25s ease;box-sizing:border-box;background:#fafafa}
+.crew-comment-input:focus{outline:none;border-color:#2e7d32;border-width:2px;height:70px;padding:8px;background:#fff;box-shadow:0 2px 8px rgba(46,125,50,0.15)}
+.crew-comment-input.has-content{height:44px;padding:6px 8px;background:#fff;border-color:#66bb6a}
+.crew-comment-input::placeholder{color:#bbb;font-style:italic;font-size:12px}
+.checklist-item-wrapper{display:flex;flex-direction:column;width:100%;break-inside:avoid}
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.service-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.service-grid .service-card{margin-bottom:0}
 .collapsible-section{margin-bottom:30px}
 .section-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:15px 20px;background:linear-gradient(135deg,#ff6b35 0%,#f7931e 100%);border-radius:8px;margin-bottom:0;transition:all 0.3s ease}
 .section-header:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,107,53,0.3)}
@@ -82,7 +86,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margi
 .delivery-section .section-header:hover{box-shadow:0 4px 12px rgba(21,101,192,0.3)}
 .completion-section .section-header{background:linear-gradient(135deg,#2e7d32 0%,#66bb6a 100%)}
 .completion-section .section-header:hover{box-shadow:0 4px 12px rgba(46,125,50,0.3)}
-@media print{body{padding:15px;font-size:12px}.service-card{page-break-inside:avoid}.progress-bar-container{display:none}.crew-comment-input{border:1px solid #999;min-height:40px}.section-content{max-height:none!important;padding:20px 0!important}.section-toggle-btn{display:none}}
+@media(max-width:1024px){body{padding:20px;max-width:100%}.info-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr}.title{font-size:28px}.section-header-title{font-size:18px}}
+@media(max-width:768px){body{padding:12px}.info-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}.title{font-size:24px}.section-header-title{font-size:16px}.section-header{padding:12px 16px}.service-name{font-size:16px}.info-box{padding:12px}.header{padding:20px}.crew-comment-input:focus{height:60px}}
+@media print{body{padding:15px;font-size:12px;max-width:100%}.service-card{page-break-inside:avoid}.progress-bar-container{display:none}.crew-comment-input{border:1px solid #999;height:36px!important}.section-content{max-height:none!important;padding:20px 0!important}.section-toggle-btn{display:none}.checklist-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}}
 </style></head><body>
 
 <div class="header">
@@ -262,14 +268,15 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
 <div style="background:#e3f2fd;border:2px solid #1565c0;border-radius:8px;padding:20px;margin-bottom:30px">
 
   <!-- Documentation and Compliance -->
-  <div style="font-size:20px;font-weight:800;color:#1565c0;margin-bottom:15px;border-bottom:2px solid #1565c0;padding-bottom:8px">📄 Documentation and Compliance</div>
+  <div style="font-size:18px;font-weight:800;color:#1565c0;margin-bottom:10px;border-bottom:2px solid #1565c0;padding-bottom:6px">📄 Documentation and Compliance</div>
+  <div class="checklist-grid">
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_hud_data_plate">
       <label class="checklist-label">Verify the HUD data plate is present</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_hud_data_plate" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_hud_data_plate" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -277,17 +284,17 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_hud_cert">
       <label class="checklist-label">Confirm the HUD certification label</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_hud_cert" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_hud_cert" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_manufacturer_install">
-      <label class="checklist-label">Check for manufacturer's installation instructions</label>
+      <label class="checklist-label">Manufacturer's install instructions</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_manufacturer_install" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_manufacturer_install" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -295,8 +302,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_warranties">
       <label class="checklist-label">Review warranties, manuals for appliances</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_warranties" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_warranties" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -304,173 +311,181 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_rivet_badge">
       <label class="checklist-label">Rivet Install Badge and White # on home</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_rivet_badge" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_rivet_badge" placeholder="Comments..."></textarea>
     </div>
+  </div>
   </div>
 
   <!-- Exterior Inspection -->
-  <div style="font-size:20px;font-weight:800;color:#1565c0;margin:25px 0 15px;border-bottom:2px solid #1565c0;padding-bottom:8px">🏠 Exterior Inspection</div>
+  <div style="font-size:18px;font-weight:800;color:#1565c0;margin:20px 0 10px;border-bottom:2px solid #1565c0;padding-bottom:6px">🏠 Exterior Inspection</div>
+  <div class="checklist-grid">
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_siding">
-      <label class="checklist-label">Examine siding for breaks, dents, damage</label>
+      <label class="checklist-label">Siding — breaks, dents, damage</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_siding" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_siding" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_roof">
-      <label class="checklist-label">Inspect the roof for leaks, missing shingles, damage</label>
+      <label class="checklist-label">Roof — leaks, missing shingles, damage</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_roof" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_roof" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_windows">
-      <label class="checklist-label">Check windows for breaks, proper operation</label>
+      <label class="checklist-label">Windows — breaks, proper operation</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_windows" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_windows" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_trim">
-      <label class="checklist-label">Inspect trim, porches, decks, and exterior fixtures</label>
+      <label class="checklist-label">Trim, porches, decks, exterior fixtures</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_trim" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_trim" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_transit_damage">
-      <label class="checklist-label">Check for transit damage (e.g., scratches, dents)</label>
+      <label class="checklist-label">Transit damage (scratches, dents)</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_transit_damage" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_transit_damage" placeholder="Comments..."></textarea>
     </div>
   </div>
-  <div class="checklist-item-wrapper">
+  ${quote.selectedServices?.gas_propane ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_gas_line">
       <label class="checklist-label">Gas Line Location</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_gas_line" placeholder="Location details..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_gas_line" placeholder="Location details..."></textarea>
     </div>
-  </div>
-  <div class="checklist-item-wrapper">
+  </div>` : ''}
+  ${quote.selectedServices?.electric_connection ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_electric_stub">
-      <label class="checklist-label">Electric stub - How many Ft.</label>
+      <label class="checklist-label">Electric stub — How many Ft.</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_electric_stub" placeholder="Measurement in feet..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_electric_stub" placeholder="Feet..."></textarea>
     </div>
-  </div>
-  <div class="checklist-item-wrapper">
+  </div>` : ''}
+  ${quote.selectedServices?.plumbing ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_water_line">
-      <label class="checklist-label">Water Line - How many ft for hookup</label>
+      <label class="checklist-label">Water Line — How many ft for hookup</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_water_line" placeholder="Measurement in feet..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_water_line" placeholder="Feet..."></textarea>
     </div>
-  </div>
-  <div class="checklist-item-wrapper">
+  </div>` : ''}
+  ${quote.sewerType && quote.sewerType !== 'none' ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_sewer_line">
-      <label class="checklist-label">Sewer line location - How many Ft.</label>
+      <label class="checklist-label">Sewer line — How many Ft.</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_sewer_line" placeholder="Measurement in feet..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_sewer_line" placeholder="Feet..."></textarea>
     </div>
+  </div>` : ''}
   </div>
 
   <!-- Interior Inspection -->
-  <div style="font-size:20px;font-weight:800;color:#1565c0;margin:25px 0 15px;border-bottom:2px solid #1565c0;padding-bottom:8px">🔍 Interior Inspection</div>
+  <div style="font-size:18px;font-weight:800;color:#1565c0;margin:20px 0 10px;border-bottom:2px solid #1565c0;padding-bottom:6px">🔍 Interior Inspection</div>
+  <div class="checklist-grid">
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_drywall">
-      <label class="checklist-label">Check drywall/walls for excessive damage</label>
+      <label class="checklist-label">Drywall/walls — excessive damage</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_drywall" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_drywall" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_ceilings">
-      <label class="checklist-label">Inspect ceilings for sags, stains, or damage</label>
+      <label class="checklist-label">Ceilings — sags, stains, damage</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_ceilings" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_ceilings" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_floors">
-      <label class="checklist-label">Examine floors for levelness, soft spots</label>
+      <label class="checklist-label">Floors — levelness, soft spots</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_floors" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_floors" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_cabinets">
-      <label class="checklist-label">Verify cabinets, countertops, and fixtures</label>
+      <label class="checklist-label">Cabinets, countertops, fixtures</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_cabinets" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_cabinets" placeholder="Comments..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_insulation">
-      <label class="checklist-label">Check insulation in walls, floors, ceilings</label>
+      <label class="checklist-label">Insulation — walls, floors, ceilings</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_insulation" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_insulation" placeholder="Comments..."></textarea>
     </div>
+  </div>
   </div>
 
   <!-- Appliances and Equipment -->
-  <div style="font-size:20px;font-weight:800;color:#1565c0;margin:25px 0 15px;border-bottom:2px solid #1565c0;padding-bottom:8px">🔌 Appliances and Equipment</div>
+  <div style="font-size:18px;font-weight:800;color:#1565c0;margin:20px 0 10px;border-bottom:2px solid #1565c0;padding-bottom:6px">🔌 Appliances and Equipment</div>
+  <div class="checklist-grid">
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_appliances">
-      <label class="checklist-label">Check appliances (e.g., fridge, stove, dishwasher)</label>
+      <label class="checklist-label">Appliances (fridge, stove, dishwasher)</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_appliances" placeholder="List appliances and condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_appliances" placeholder="List and condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_equipment">
-      <label class="checklist-label">Ensure all installed equipment (e.g., HVAC) is functional</label>
+      <label class="checklist-label">Installed equipment (HVAC) functional</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_equipment" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_equipment" placeholder="Comments..."></textarea>
     </div>
+  </div>
   </div>
 
   <!-- Verify Material List -->
-  <div style="font-size:20px;font-weight:800;color:#1565c0;margin:25px 0 15px;border-bottom:2px solid #1565c0;padding-bottom:8px">📋 Verify Material List</div>
+  <div style="font-size:18px;font-weight:800;color:#1565c0;margin:20px 0 10px;border-bottom:2px solid #1565c0;padding-bottom:6px">📋 Verify Material List</div>
+  <div class="checklist-grid">
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_door_jam">
       <label class="checklist-label">Door Jam Board</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_door_jam" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_door_jam" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -478,8 +493,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_door_casement">
       <label class="checklist-label">Door Casement</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_door_casement" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_door_casement" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -487,8 +502,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_door_stops">
       <label class="checklist-label">Door Stops</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_door_stops" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_door_stops" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -496,44 +511,44 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_screen_door">
       <label class="checklist-label">Screen Door</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_screen_door" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_screen_door" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_vinyl_floor">
-      <label class="checklist-label">Vinyl Floor Coverings - Enough for project?</label>
+      <label class="checklist-label">Vinyl Floor Coverings</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_vinyl_floor" placeholder="Quantity/sq ft..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_vinyl_floor" placeholder="Enough? Sq ft..."></textarea>
     </div>
   </div>
-  <div class="checklist-item-wrapper">
+  ${quote.sewerType && quote.sewerType !== 'none' ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_sewer_pipe">
-      <label class="checklist-label">How many ft of Sewer Pipe</label>
+      <label class="checklist-label">Sewer Pipe — ft</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_sewer_pipe" placeholder="Measurement in feet..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_sewer_pipe" placeholder="Feet..."></textarea>
     </div>
-  </div>
+  </div>` : ''}
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_beam_trim">
       <label class="checklist-label">Beam Trim</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_beam_trim" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_beam_trim" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
-  <div class="checklist-item-wrapper">
+  ${quote.selectedServices?.siding_install ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_siding_material">
       <label class="checklist-label">Siding</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_siding_material" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_siding_material" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -541,8 +556,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_siding_starter">
       <label class="checklist-label">Siding Starter</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_siding_starter" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_siding_starter" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -550,8 +565,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_facia">
       <label class="checklist-label">Facia</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_facia" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_facia" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -559,8 +574,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_roof_facia">
       <label class="checklist-label">Roof Facia</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_roof_facia" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_roof_facia" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -568,8 +583,8 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_soffits">
       <label class="checklist-label">Soffits</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_soffits" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_soffits" placeholder="Qty/condition..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
@@ -577,39 +592,42 @@ ${totalNotes === 0 ? '<div style="padding:10px;text-align:center;color:#999;font
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_j_channel">
       <label class="checklist-label">J-channel</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_j_channel" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_j_channel" placeholder="Qty/condition..."></textarea>
     </div>
-  </div>
-  <div class="checklist-item-wrapper">
+  </div>` : ''}
+  ${quote.selectedServices?.painting ? `<div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_paint">
       <label class="checklist-label">Paint</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_paint" placeholder="Quantity/condition..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_paint" placeholder="Qty/condition..."></textarea>
     </div>
+  </div>` : ''}
   </div>
 
   <!-- Final Steps -->
-  <div style="font-size:20px;font-weight:800;color:#1565c0;margin:25px 0 15px;border-bottom:2px solid #1565c0;padding-bottom:8px">📸 Final Steps</div>
+  <div style="font-size:18px;font-weight:800;color:#1565c0;margin:20px 0 10px;border-bottom:2px solid #1565c0;padding-bottom:6px">📸 Final Steps</div>
+  <div class="checklist-grid">
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_pictures">
-      <label class="checklist-label">Take many Pictures and attach to this Document</label>
+      <label class="checklist-label">Take photos and attach to document</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_pictures" placeholder="Number of photos taken, what was documented..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_pictures" placeholder="# of photos, what was documented..."></textarea>
     </div>
   </div>
   <div class="checklist-item-wrapper">
     <div class="checklist-item">
       <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="delivery_clean_floors">
-      <label class="checklist-label">Clean all floors and lay floor coverings to protect</label>
+      <label class="checklist-label">Clean floors, lay floor coverings</label>
     </div>
-    <div style="margin-left:30px;margin-top:8px">
-      <textarea class="crew-comment-input task-comment" data-task-id="delivery_clean_floors" placeholder="Comments..." style="min-height:50px"></textarea>
+    <div style="margin-left:30px;margin-top:4px">
+      <textarea class="crew-comment-input task-comment" data-task-id="delivery_clean_floors" placeholder="Comments..."></textarea>
     </div>
+  </div>
   </div>
 
 </div>
@@ -627,6 +645,7 @@ ${installServices.length > 0 ? `
     <div class="section-toggle-btn" id="toggle-install-services">+</div>
   </div>
   <div class="section-content" id="content-install-services">
+<div class="service-grid">
 ${installServices.map(svc => svc.key === 'plumbing' ? `
 <div class="service-card" data-task-id="install_plumbing">
   <div class="service-header">
@@ -719,6 +738,7 @@ ${installServices.map(svc => svc.key === 'plumbing' ? `
   </div>
 </div>
 `).join('')}
+</div>
   </div>
 </div>
 ` : ''}
@@ -733,6 +753,7 @@ ${professionalServices.length > 0 ? `
     <div class="section-toggle-btn" id="toggle-professional-services">+</div>
   </div>
   <div class="section-content" id="content-professional-services">
+<div class="service-grid">
 ${professionalServices.map(svc => `
 <div class="service-card" data-task-id="professional_${svc.key}">
   <div class="service-header">
@@ -778,6 +799,7 @@ ${professionalServices.map(svc => `
   </div>
 </div>
 `).join('')}
+</div>
   </div>
 </div>
 ` : ''}
@@ -792,6 +814,7 @@ ${homeSpecAdditions.length > 0 ? `
     <div class="section-toggle-btn" id="toggle-homespec-services">+</div>
   </div>
   <div class="section-content" id="content-homespec-services">
+<div class="service-grid">
 ${homeSpecAdditions.map(svc => `
 <div class="service-card" data-task-id="homespec_${svc.key}">
   <div class="service-header">
@@ -837,6 +860,7 @@ ${homeSpecAdditions.map(svc => `
   </div>
 </div>
 `).join('')}
+</div>
   </div>
 </div>
 ` : ''}
@@ -851,6 +875,7 @@ ${otherServices.length > 0 ? `
     <div class="section-toggle-btn" id="toggle-other-services">+</div>
   </div>
   <div class="section-content" id="content-other-services">
+<div class="service-grid">
 ${otherServices.map(svc => `
 <div class="service-card" data-task-id="other_${svc.key}">
   <div class="service-header">
@@ -890,6 +915,7 @@ ${otherServices.map(svc => `
   </div>
 </div>
 `).join('')}
+</div>
   </div>
 </div>
 ` : ''}
@@ -912,23 +938,23 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
   <div class="section-content" id="content-completion-checklist">
 
 <div class="important-box" style="background:#e8f5e9;border-color:#2e7d32">
-  <div style="margin:10px 0">
+  <div class="checklist-grid" style="margin:10px 0">
     <div class="checklist-item-wrapper">
       <div class="checklist-item">
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_services_complete">
-        <label class="checklist-label">All services listed above completed per specifications</label>
+        <label class="checklist-label">All services completed per specs</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_services_complete" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_services_complete" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
       <div class="checklist-item">
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_site_cleaned">
-        <label class="checklist-label">Site cleaned and debris removed</label>
+        <label class="checklist-label">Site cleaned, debris removed</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_site_cleaned" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_site_cleaned" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
@@ -936,17 +962,17 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_walkthrough">
         <label class="checklist-label">Customer walkthrough completed</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_walkthrough" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_walkthrough" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
       <div class="checklist-item">
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_issues_documented">
-        <label class="checklist-label">Any issues or concerns documented</label>
+        <label class="checklist-label">Issues or concerns documented</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_issues_documented" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_issues_documented" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
@@ -954,17 +980,17 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_photos">
         <label class="checklist-label">Photos taken of completed work</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_photos" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_photos" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
       <div class="checklist-item">
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_signature">
-        <label class="checklist-label">Customer signature obtained (if required)</label>
+        <label class="checklist-label">Customer signature obtained</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_signature" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_signature" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
@@ -972,8 +998,8 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_materials">
         <label class="checklist-label">Materials inventory updated</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_materials" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_materials" placeholder="Notes..."></textarea>
       </div>
     </div>
     <div class="checklist-item-wrapper">
@@ -981,8 +1007,8 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
         <input type="checkbox" class="checklist-checkbox task-checkbox" data-task-id="checklist_timesheets">
         <label class="checklist-label">Time sheets submitted</label>
       </div>
-      <div style="margin-left:30px;margin-top:8px">
-        <textarea class="crew-comment-input task-comment" data-task-id="checklist_timesheets" placeholder="Comments or notes..." style="min-height:50px"></textarea>
+      <div style="margin-left:30px;margin-top:4px">
+        <textarea class="crew-comment-input task-comment" data-task-id="checklist_timesheets" placeholder="Notes..."></textarea>
       </div>
     </div>
   </div>
@@ -1108,21 +1134,36 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
       });
     });
 
-    // Restore saved comments
+    // Restore saved comments and set up auto-expand/collapse
     allComments.forEach(commentField => {
       const taskId = commentField.dataset.taskId;
       if (commentsState[taskId]) {
         commentField.value = commentsState[taskId];
+        commentField.classList.add('has-content');
       }
 
-      // Add input event listener to save comments as they type
-      commentField.addEventListener('input', function() {
-        commentsState[this.dataset.taskId] = this.value;
-        saveCommentsState(commentsState);
+      // Expand on focus
+      commentField.addEventListener('focus', function() {
+        this.style.height = '70px';
+        this.style.resize = 'vertical';
       });
 
-      // Also save on blur (when they click away)
+      // Collapse on blur if empty
       commentField.addEventListener('blur', function() {
+        commentsState[this.dataset.taskId] = this.value;
+        saveCommentsState(commentsState);
+        this.style.resize = 'none';
+        if (this.value.trim()) {
+          this.classList.add('has-content');
+          this.style.height = '44px';
+        } else {
+          this.classList.remove('has-content');
+          this.style.height = '28px';
+        }
+      });
+
+      // Save as they type
+      commentField.addEventListener('input', function() {
         commentsState[this.dataset.taskId] = this.value;
         saveCommentsState(commentsState);
       });
