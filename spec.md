@@ -306,21 +306,27 @@ ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well', 'c
 ## Contingency Fund
 
 **Three locations must produce identical results:**
-1. `src/components/Quotes/ScrubbTab.jsx` — Contingency Fund Tracker
-2. `src/utils/documentGeneration.js` → `generateAllowanceProgressDocument`
+1. `src/App.jsx` (inline Scrubb tab) — Contingency Fund Tracker
+2. `src/utils/documents/generateAllowanceProgressDocument.js`
 3. `src/components/Auth/CustomerPortal.jsx` → `renderBudgetTracker`
+
+Note: `src/components/Quotes/ScrubbTab.jsx` is dead code (not imported). The Scrubb tab is inline in App.jsx.
 
 **Formula:**
 ```
 startingContingency = total × contingencyRate  (default 2%)
+                      (or reconstructed from CO history: coHistory[0].contingencyUsed + contingencyBalance)
+
+totalCODraws        = sum of contingencyUsed from changeOrderHistory
 
 allowanceSavings    = sum of variance > 0 for ALLOWANCE_ITEMS
 allowanceOverages   = sum of abs(variance) where variance < 0 for ALLOWANCE_ITEMS
 
 contingencyPayments = scrubbPayments.filter(p => p.isContingencyPayment)
                                     .reduce(sum of p.amount)
+                      NOTE: These are customer REFILLS to the fund (added back)
 
-currentBalance = startingContingency + allowanceSavings - allowanceOverages - contingencyPayments
+currentBalance = startingContingency - totalCODraws + allowanceSavings - allowanceOverages + contingencyPayments
 ```
 
 **Variance sign convention:**

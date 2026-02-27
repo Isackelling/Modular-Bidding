@@ -1928,7 +1928,7 @@ function AppInner() {
                       });
                       const coUsedCheck = (currentItem.changeOrderHistory || []).reduce((s, co) => s + (co.contingencyUsed || 0), 0);
                       const cPmtsCheck = (currentItem.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
-                      const balanceAfter = startC + newSavings - newOverages - cPmtsCheck - coUsedCheck;
+                      const balanceAfter = startC + newSavings - newOverages + cPmtsCheck - coUsedCheck;
                       if (balanceAfter < 0) {
                         NotificationSystem.warning(
                           `⚠️ CONTINGENCY FUND OVERDRAWN ⚠️\n\n` +

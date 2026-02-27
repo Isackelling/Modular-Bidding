@@ -5,25 +5,25 @@ export const generateAllowanceProgressDocument = (quote, customer, totals, servi
   const quoteNum = DocumentUtils.getQuoteNum(quote);
 
   // Get all allowance items from the quote
+  const mkAllowanceItem = (key, name) => {
+    const contractPrice = totals.svc.find(s => s.key === key)?.cost || 0;
+    const actualCost = quote.scrubbCosts?.[key] || 0;
+    const variance = actualCost > 0 ? contractPrice - actualCost : 0;
+    const status = actualCost === 0 ? 'Pending' : variance > 0 ? 'Under Budget' : variance < 0 ? 'Over Budget' : 'On Budget';
+    return { key, name, contractPrice, actualCost, variance, status, hasActual: actualCost > 0 };
+  };
+
   const allowanceItems = Object.entries(quote.selectedServices || {})
     .filter(([key, selected]) => selected && ALLOWANCE_ITEMS.includes(key))
-    .map(([key]) => {
-      const service = services[key];
-      const contractPrice = totals.svc.find(s => s.key === key)?.cost || 0;
-      const actualCost = quote.scrubbCosts?.[key] || 0;
-      const variance = actualCost > 0 ? contractPrice - actualCost : 0;
-      const status = actualCost === 0 ? 'Pending' : variance > 0 ? 'Under Budget' : variance < 0 ? 'Over Budget' : 'On Budget';
+    .map(([key]) => mkAllowanceItem(key, services[key]?.name || key));
 
-      return {
-        key,
-        name: service?.name || key,
-        contractPrice,
-        actualCost,
-        variance,
-        status,
-        hasActual: actualCost > 0
-      };
-    });
+  // Sewer and well are controlled by sewerType/wellDepth, not selectedServices — add them manually
+  if (quote.sewerType && quote.sewerType !== 'none') {
+    allowanceItems.push(mkAllowanceItem('sewer', `Sewer System (${quote.sewerType.replace('_', ' ')})`));
+  }
+  if (parseFloat(quote.wellDepth) > 0) {
+    allowanceItems.push(mkAllowanceItem('well', `Well Drilling (${quote.wellDepth} ft)`));
+  }
 
   // Calculate totals
   const totalEstimated = allowanceItems.reduce((sum, item) => sum + item.contractPrice, 0);

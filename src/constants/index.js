@@ -1,7 +1,7 @@
 // Sherman Bidding System - Constants and Default Data
 
 // Allowance items (items with variable costs finalized during construction)
-export const ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well'];
+export const ALLOWANCE_ITEMS = ['permits', 'gravel_driveway', 'sand_pad', 'sewer', 'well', 'crane'];
 
 // Services displayed in Install Services section (not Professional Services section)
 export const SUMMARY_SERVICES = [
@@ -319,16 +319,13 @@ export const DELIVERY = {
   ],
 };
 
-// Folder types for file organization
+// Folder types for file organization (must match emptyQuote().folders keys)
 export const FOLDER_TYPES = [
-  'customer_docs',
+  'clayton_docs',
   'crew_files',
+  'estimates',
   'permits',
-  'photos',
   'change_orders',
-  'warranty',
-  'inspections',
-  'clayton_docs'
 ];
 
 // Quote statuses

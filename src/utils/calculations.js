@@ -187,7 +187,7 @@ export const calcMaterials = (q, M) => {
   const pier = iBeam >= 11 ? M.steel_pier_20 : M.steel_pier_22;
   const pierKey = iBeam >= 11 ? 'steel_pier_20' : 'steel_pier_22';
   addItem(pierKey, pier.name, pierQty, pier.price);
-  addItem('steel_pier_32', M.steel_pier_32.name, Math.ceil(l / 12), M.steel_pier_32.price);
+  if (q.singleDouble?.toLowerCase() === 'double') addItem('steel_pier_32', M.steel_pier_32.name, Math.ceil(l / 12), M.steel_pier_32.price);
   if (q.singleDouble?.toLowerCase() === 'single') addItem('tie_down_straps', M.tie_down_straps.name, 4, M.tie_down_straps.price);
   addItem('coil_nails', M.coil_nails.name, 1, M.coil_nails.price);
   addItem('asphalt_silicon', M.asphalt_silicon.name, 2, M.asphalt_silicon.price);

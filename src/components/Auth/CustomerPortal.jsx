@@ -222,9 +222,9 @@ const CustomerPortal = ({
             </div>
           </div>
           {contingencyPaymentsTotal > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 12, color: '#e65100' }}>
-              <span>Contingency Draws Applied</span>
-              <span style={{ fontWeight: 600 }}>- {fmt(contingencyPaymentsTotal)}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 12, color: '#28a745' }}>
+              <span>Customer Payments (refunding fund)</span>
+              <span style={{ fontWeight: 600 }}>+ {fmt(contingencyPaymentsTotal)}</span>
             </div>
           )}
           <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${runningBalance >= startingBalance ? '#a5d6a7' : '#ef9a9a'}`, fontSize: 11, color: '#666' }}>
@@ -232,7 +232,7 @@ const CustomerPortal = ({
             {netVariance > 0 && contingencyPaymentsTotal > 0 && `✓ Under budget - Estimated return at completion: ${fmt(runningBalance)}`}
             {netVariance < 0 && `⚠ Over budget - Drawing ${fmt(Math.abs(netVariance))} from contingency`}
             {netVariance === 0 && contingencyPaymentsTotal === 0 && '• Tracking in progress'}
-            {netVariance === 0 && contingencyPaymentsTotal > 0 && `• ${fmt(contingencyPaymentsTotal)} drawn from contingency fund`}
+            {netVariance === 0 && contingencyPaymentsTotal > 0 && `• ${fmt(contingencyPaymentsTotal)} added back to contingency fund`}
           </div>
         </div>
       </div>
