@@ -70,6 +70,31 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margi
 .crew-comment-input:focus{outline:none;border-color:#2e7d32;border-width:2px;height:70px;padding:8px;background:#fff;box-shadow:0 2px 8px rgba(46,125,50,0.15)}
 .crew-comment-input.has-content{height:44px;padding:6px 8px;background:#fff;border-color:#66bb6a}
 .crew-comment-input::placeholder{color:#bbb;font-style:italic;font-size:12px}
+.comment-row{display:flex;gap:6px;align-items:flex-start}
+.comment-row .crew-comment-input{flex:1}
+.publish-btn{background:#2e7d32;color:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;height:28px;transition:all 0.2s ease;letter-spacing:0.3px}
+.publish-btn:hover{background:#1b5e20;transform:scale(1.05)}
+.publish-btn:active{transform:scale(0.97)}
+.published-notes-list{margin-top:6px}
+.published-note-item{background:#e8f5e9;border-left:3px solid #2e7d32;padding:6px 10px;border-radius:4px;margin-top:4px;font-size:12px;line-height:1.5;position:relative}
+.published-note-item .note-text{color:#333;white-space:pre-wrap}
+.published-note-item .note-timestamp{font-size:10px;color:#666;margin-top:3px;font-style:italic}
+.published-note-item .delete-note-btn{position:absolute;top:4px;right:6px;background:none;border:none;color:#c62828;cursor:pointer;font-size:14px;line-height:1;padding:2px 4px;opacity:0.5;transition:opacity 0.2s}
+.published-note-item .delete-note-btn:hover{opacity:1}
+.camera-btn{background:#1565c0;color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:15px;cursor:pointer;height:28px;width:32px;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;flex-shrink:0}
+.camera-btn:hover{background:#0d47a1;transform:scale(1.05)}
+.camera-btn:active{transform:scale(0.97)}
+.image-staging{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.image-staging:empty{display:none}
+.staged-thumb{position:relative;width:60px;height:60px;border-radius:4px;overflow:hidden;border:2px solid #1565c0;cursor:pointer}
+.staged-thumb img{width:100%;height:100%;object-fit:cover}
+.staged-thumb .remove-staged{position:absolute;top:-2px;right:-2px;background:#c62828;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.published-note-images{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.published-note-images img{width:56px;height:56px;object-fit:cover;border-radius:3px;border:1px solid #ccc;cursor:pointer;transition:transform 0.2s}
+.published-note-images img:hover{transform:scale(1.1);border-color:#2e7d32}
+.crew-comment-input.dragover{border-color:#1565c0!important;border-width:2px!important;background:#e3f2fd!important;box-shadow:0 0 8px rgba(21,101,192,0.3)!important}
+.lightbox-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:pointer}
+.lightbox-overlay img{max-width:90%;max-height:90%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
 .checklist-item-wrapper{display:flex;flex-direction:column;width:100%;break-inside:avoid}
 .checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
 .service-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -87,8 +112,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margi
 .completion-section .section-header{background:linear-gradient(135deg,#2e7d32 0%,#66bb6a 100%)}
 .completion-section .section-header:hover{box-shadow:0 4px 12px rgba(46,125,50,0.3)}
 @media(max-width:1024px){body{padding:20px;max-width:100%}.info-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr}.title{font-size:28px}.section-header-title{font-size:18px}}
-@media(max-width:768px){body{padding:12px}.info-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}.title{font-size:24px}.section-header-title{font-size:16px}.section-header{padding:12px 16px}.service-name{font-size:16px}.info-box{padding:12px}.header{padding:20px}.crew-comment-input:focus{height:60px}}
-@media print{body{padding:15px;font-size:12px;max-width:100%}.service-card{page-break-inside:avoid}.progress-bar-container{display:none}.crew-comment-input{border:1px solid #999;height:36px!important}.section-content{max-height:none!important;padding:20px 0!important}.section-toggle-btn{display:none}.checklist-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){body{padding:12px}.info-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}.title{font-size:24px}.section-header-title{font-size:16px}.section-header{padding:12px 16px}.service-name{font-size:16px}.info-box{padding:12px}.header{padding:20px}.crew-comment-input:focus{height:60px}.publish-btn{padding:4px 8px;font-size:10px}.staged-thumb{width:50px;height:50px}.published-note-images img{width:48px;height:48px}}
+@media print{body{padding:15px;font-size:12px;max-width:100%}.service-card{page-break-inside:avoid}.progress-bar-container{display:none}.crew-comment-input{border:1px solid #999;height:36px!important}.section-content{max-height:none!important;padding:20px 0!important}.section-toggle-btn{display:none}.checklist-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}.publish-btn{display:none}.delete-note-btn{display:none}.camera-btn{display:none}.image-staging{display:none}.remove-staged{display:none}.published-note-item{border-left:2px solid #2e7d32}.published-note-images img{width:80px;height:80px}}
 </style></head><body>
 
 <div class="header">
@@ -1030,6 +1055,7 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
   const quoteId = '${quoteNum}';
   const storageKey = 'crew_checklist_' + quoteId;
   const commentsKey = 'crew_comments_' + quoteId;
+  const publishedKey = 'crew_published_' + quoteId;
 
   // Toggle section expand/collapse
   window.toggleSection = function(sectionId) {
@@ -1066,6 +1092,94 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
   function saveCommentsState(commentsState) {
     localStorage.setItem(commentsKey, JSON.stringify(commentsState));
   }
+
+  // Load published notes from localStorage
+  function loadPublishedNotes() {
+    const saved = localStorage.getItem(publishedKey);
+    return saved ? JSON.parse(saved) : {};
+  }
+
+  // Save published notes to localStorage
+  function savePublishedNotes(publishedNotes) {
+    localStorage.setItem(publishedKey, JSON.stringify(publishedNotes));
+  }
+
+  // Format a timestamp for display
+  function formatTimestamp(isoString) {
+    const d = new Date(isoString);
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+    var year = d.getFullYear();
+    var hours = d.getHours();
+    var minutes = d.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    if (hours === 0) hours = 12;
+    var minStr = minutes < 10 ? '0' + minutes : '' + minutes;
+    return month + '/' + day + '/' + year + ' at ' + hours + ':' + minStr + ' ' + ampm;
+  }
+
+  // Render published notes for a task into its container
+  function renderPublishedNotes(taskId, publishedNotes) {
+    var container = document.querySelector('.published-notes-list[data-task-id="' + taskId + '"]');
+    if (!container) return;
+    var notes = publishedNotes[taskId] || [];
+    if (notes.length === 0) { container.innerHTML = ''; return; }
+    container.innerHTML = notes.map(function(note, idx) {
+      var imagesHtml = '';
+      if (note.images && note.images.length > 0) {
+        imagesHtml = '<div class="published-note-images">' +
+          note.images.map(function(src) {
+            return '<img src="' + src + '" onclick="showLightbox(this.src)" title="Click to enlarge">';
+          }).join('') + '</div>';
+      }
+      var textHtml = note.text ? '<div class="note-text">' + note.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>' : '';
+      return '<div class="published-note-item">' +
+        textHtml + imagesHtml +
+        '<div class="note-timestamp">Published: ' + formatTimestamp(note.publishedAt) + '</div>' +
+        '<button class="delete-note-btn" data-task-id="' + taskId + '" data-note-idx="' + idx + '" title="Delete note">&times;</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Compress and resize an image file, returns a promise with base64 data URL
+  function compressImage(file, maxDim, quality) {
+    maxDim = maxDim || 800;
+    quality = quality || 0.6;
+    return new Promise(function(resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Lightbox for full-size image viewing
+  window.showLightbox = function(src) {
+    var overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.innerHTML = '<img src="' + src + '">';
+    overlay.addEventListener('click', function() { overlay.remove(); });
+    document.body.appendChild(overlay);
+  };
+
+  // Staged images per task (not yet published)
+  var stagedImages = {};
 
   // Update progress bar based on completion percentage
   function updateProgressBar() {
@@ -1112,6 +1226,7 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
   function init() {
     const checklistState = loadChecklistState();
     const commentsState = loadCommentsState();
+    const publishedNotes = loadPublishedNotes();
     const allCheckboxes = document.querySelectorAll('.task-checkbox');
     const allComments = document.querySelectorAll('.task-comment');
 
@@ -1134,9 +1249,113 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
       });
     });
 
-    // Restore saved comments and set up auto-expand/collapse
+    // Wrap each textarea with publish button and published notes container
     allComments.forEach(commentField => {
       const taskId = commentField.dataset.taskId;
+      const parent = commentField.parentNode;
+
+      // Create comment-row wrapper
+      var row = document.createElement('div');
+      row.className = 'comment-row';
+      parent.insertBefore(row, commentField);
+      row.appendChild(commentField);
+
+      // Add camera button (opens camera on mobile, file picker on desktop)
+      var cameraBtn = document.createElement('button');
+      cameraBtn.className = 'camera-btn';
+      cameraBtn.setAttribute('title', 'Take photo or upload image');
+      cameraBtn.innerHTML = '&#128247;';
+      row.appendChild(cameraBtn);
+
+      // Hidden file input - accepts images, capture opens camera on mobile
+      var fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.setAttribute('capture', 'environment');
+      fileInput.multiple = true;
+      fileInput.style.display = 'none';
+      row.appendChild(fileInput);
+
+      // Add publish button
+      var publishBtn = document.createElement('button');
+      publishBtn.className = 'publish-btn';
+      publishBtn.setAttribute('data-task-id', taskId);
+      publishBtn.textContent = 'Publish';
+      row.appendChild(publishBtn);
+
+      // Image staging area (thumbnails before publishing)
+      var stagingArea = document.createElement('div');
+      stagingArea.className = 'image-staging';
+      stagingArea.setAttribute('data-task-id', taskId);
+
+      // Add published notes container after the row
+      var notesContainer = document.createElement('div');
+      notesContainer.className = 'published-notes-list';
+      notesContainer.setAttribute('data-task-id', taskId);
+      // Insert staging then notes after the row
+      row.parentNode.insertBefore(stagingArea, row.nextSibling);
+      row.parentNode.insertBefore(notesContainer, stagingArea.nextSibling);
+
+      // Initialize staged images array for this task
+      if (!stagedImages[taskId]) stagedImages[taskId] = [];
+
+      // Helper: render staged thumbnails
+      function renderStaged() {
+        stagingArea.innerHTML = stagedImages[taskId].map(function(src, i) {
+          return '<div class="staged-thumb">' +
+            '<img src="' + src + '" onclick="showLightbox(this.src)">' +
+            '<button class="remove-staged" data-task-id="' + taskId + '" data-idx="' + i + '">&times;</button>' +
+          '</div>';
+        }).join('');
+      }
+
+      // Helper: process files (compress and stage)
+      function processFiles(files) {
+        Array.from(files).forEach(function(file) {
+          if (!file.type.startsWith('image/')) return;
+          compressImage(file, 800, 0.6).then(function(dataUrl) {
+            stagedImages[taskId].push(dataUrl);
+            renderStaged();
+          });
+        });
+      }
+
+      // Camera button click → trigger file input
+      cameraBtn.addEventListener('click', function() { fileInput.click(); });
+
+      // File input change
+      fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) processFiles(this.files);
+        this.value = '';
+      });
+
+      // Drag and drop on textarea
+      commentField.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+      });
+      commentField.addEventListener('dragleave', function() {
+        this.classList.remove('dragover');
+      });
+      commentField.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) processFiles(e.dataTransfer.files);
+      });
+
+      // Remove staged image (delegated from staging area)
+      stagingArea.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-staged')) {
+          var idx = parseInt(e.target.getAttribute('data-idx'), 10);
+          stagedImages[taskId].splice(idx, 1);
+          renderStaged();
+        }
+      });
+
+      // Render existing published notes
+      renderPublishedNotes(taskId, publishedNotes);
+
+      // Restore saved draft comment
       if (commentsState[taskId]) {
         commentField.value = commentsState[taskId];
         commentField.classList.add('has-content');
@@ -1167,6 +1386,43 @@ ${installServices.length === 0 && professionalServices.length === 0 && homeSpecA
         commentsState[this.dataset.taskId] = this.value;
         saveCommentsState(commentsState);
       });
+
+      // Publish button click
+      publishBtn.addEventListener('click', function() {
+        var textarea = row.querySelector('.task-comment');
+        var text = textarea.value.trim();
+        var images = stagedImages[taskId] || [];
+        if (!text && images.length === 0) return;
+        if (!publishedNotes[taskId]) publishedNotes[taskId] = [];
+        publishedNotes[taskId].push({
+          text: text,
+          images: images.length > 0 ? images.slice() : [],
+          publishedAt: new Date().toISOString()
+        });
+        savePublishedNotes(publishedNotes);
+        renderPublishedNotes(taskId, publishedNotes);
+        // Clear the textarea and staged images after publishing
+        textarea.value = '';
+        textarea.classList.remove('has-content');
+        textarea.style.height = '28px';
+        commentsState[taskId] = '';
+        saveCommentsState(commentsState);
+        stagedImages[taskId] = [];
+        renderStaged();
+      });
+    });
+
+    // Delete published note handler (delegated)
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('delete-note-btn')) {
+        var taskId = e.target.getAttribute('data-task-id');
+        var idx = parseInt(e.target.getAttribute('data-note-idx'), 10);
+        if (publishedNotes[taskId] && publishedNotes[taskId][idx] !== undefined) {
+          publishedNotes[taskId].splice(idx, 1);
+          savePublishedNotes(publishedNotes);
+          renderPublishedNotes(taskId, publishedNotes);
+        }
+      }
     });
 
     // Make checklist labels clickable
