@@ -376,6 +376,9 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due after installation — licensed requirements completed</td></tr>
       <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due upon project completion</td></tr>
     </table>
+    <div style="background:#e8f5e9;border-left:4px solid #2c5530;padding:10px 14px;border-radius:4px;margin-bottom:14px;font-size:13px;color:#333">
+      <strong>Note:</strong> Any remaining contingency allowance balance will be subtracted from your final payment. If allowances come in under budget and no change orders are made, your final amount owed may be significantly less than the scheduled payment above.
+    </div>
     <ul>
       <li>Quote valid for 30 days from date issued</li>
       <li>Price subject to change if site conditions differ from initial assessment</li>
