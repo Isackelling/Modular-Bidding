@@ -567,20 +567,31 @@ function AppInner() {
       }
       if (f === 'foundationType') {
         u.selectedServices = { ...p.selectedServices };
+        const prev = p.foundationType;
+        // Services auto-selected by each foundation type
+        const basementOnly = ['basement_stairs', 'water_heater', 'updraft_furnace'];
+        const basementAndCrawl = ['gravel_driveway', 'sand_pad', 'crane'];
+        const basementExtras = ['plumbing', 'electric_connection'];
+        // Deselect services that were auto-added by the previous foundation type
+        if (prev === 'basement') {
+          [...basementOnly, ...basementAndCrawl, ...basementExtras].forEach(k => {
+            if (v !== 'crawlspace' || !basementAndCrawl.includes(k)) {
+              u.selectedServices[k] = false;
+            }
+          });
+        } else if (prev === 'crawlspace') {
+          basementAndCrawl.forEach(k => {
+            if (v !== 'basement') {
+              u.selectedServices[k] = false;
+            }
+          });
+        }
+        // Auto-select services for the new foundation type
         if (v === 'basement') {
-          u.selectedServices.basement_stairs = true;
-          u.selectedServices.water_heater = true;
-          u.selectedServices.updraft_furnace = true;
-          u.selectedServices.gravel_driveway = true;
-          u.selectedServices.sand_pad = true;
-          u.selectedServices.plumbing = true;
-          u.selectedServices.electric_connection = true;
-          u.selectedServices.crane = true;
+          [...basementOnly, ...basementAndCrawl, ...basementExtras].forEach(k => { u.selectedServices[k] = true; });
         }
         if (v === 'crawlspace') {
-          u.selectedServices.gravel_driveway = true;
-          u.selectedServices.sand_pad = true;
-          u.selectedServices.crane = true;
+          basementAndCrawl.forEach(k => { u.selectedServices[k] = true; });
         }
       }
       return u;
