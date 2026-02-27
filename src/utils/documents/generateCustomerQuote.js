@@ -68,9 +68,17 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .info-item { }
     .info-label { font-size: 12px; color: #666; }
     .info-value { font-size: 15px; font-weight: 500; }
-    .services-list { list-style: none; }
-    .services-list li { padding: 10px 15px; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px; border-left: 4px solid #2c5530; }
-    .services-list li .svc-desc { display: block; font-size: 12px; color: #555; font-style: italic; margin-top: 2px; }
+    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .scope-card { background: #f8f9fa; border-radius: 8px; padding: 14px 16px; border-top: 3px solid #2c5530; }
+    .scope-card.allowance { border-top-color: #ffc107; }
+    .scope-card h4 { font-size: 13px; color: #2c5530; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .scope-card.allowance h4 { color: #856404; }
+    .scope-card ul { list-style: none; margin: 0; padding: 0; }
+    .scope-card ul li { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; }
+    .scope-card ul li:last-child { border-bottom: none; }
+    .scope-card ul li::before { content: "✓ "; color: #2c5530; font-weight: 700; }
+    .scope-card.allowance ul li::before { color: #ffc107; }
+    .scope-card ul li .svc-desc { display: block; font-size: 11px; color: #555; font-style: italic; margin: 1px 0 2px 16px; }
     .home-box { background: linear-gradient(135deg, #2c5530, #1a3a1f); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
     .home-model { font-size: 20px; font-weight: 600; }
     .home-specs { opacity: 0.9; margin-top: 5px; }
@@ -251,39 +259,52 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   <div class="section">
     <div class="section-title">Scope of Work</div>
     <p style="margin-bottom: 15px; color: #666;">This quote includes complete professional installation services:</p>
-    
-    <h4 style="margin: 15px 0 10px; color: #2c5530;">Standard Installation Package:</h4>
-    <ul class="services-list">
-      <li>Site prep and foundation review</li>
-      <li>Home delivery coordination and inspection</li>
-      <li>Professional home installation and leveling</li>
-      <li>Pier and anchor system installation</li>
-      <li>Marriage line connection</li>
-      <li>Final inspection and walkthrough</li>
-    </ul>
-    
-    ${services.length > 0 ? `
-    <h4 style="margin: 20px 0 10px; color: #2c5530;">Professional Services:</h4>
-    <ul class="services-list">
-      ${services.map(s => `<li>${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</li>`).join('')}
-    </ul>
-    ` : ''}
 
-    ${homeSpecAdditions.length > 0 ? `
-    <h4 style="margin: 20px 0 10px; color: #2c5530;">Home Spec Additions:</h4>
-    <ul class="services-list">
-      ${homeSpecAdditions.map(s => `<li>${s}</li>`).join('')}
-    </ul>
-    ` : ''}
+    <div class="scope-grid">
+      <div class="scope-card">
+        <h4>Standard Installation</h4>
+        <ul>
+          <li>Site prep and foundation review</li>
+          <li>Home delivery coordination and inspection</li>
+          <li>Professional home installation and leveling</li>
+          <li>Pier and anchor system installation</li>
+          <li>Marriage line connection</li>
+          <li>Final inspection and walkthrough</li>
+        </ul>
+      </div>
+
+      ${services.length > 0 ? `
+      <div class="scope-card">
+        <h4>Professional Services</h4>
+        <ul>
+          ${services.map(s => `<li>${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+
+      ${homeSpecAdditions.length > 0 ? `
+      <div class="scope-card">
+        <h4>Home Spec Additions</h4>
+        <ul>
+          ${homeSpecAdditions.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+
+      ${allowances.length > 0 ? `
+      <div class="scope-card allowance">
+        <h4>Allowances*</h4>
+        <ul>
+          ${allowances.map(a => `<li>${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+    </div>
 
     ${allowances.length > 0 ? `
-    <h4 style="margin: 20px 0 10px; color: #2c5530;">Services Included as Allowances*:</h4>
-    <ul class="services-list" style="border-left-color: #ffc107;">
-      ${allowances.map(a => `<li>${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</li>`).join('')}
-    </ul>
-    <div style="background: #fff9e6; padding: 12px 16px; border-radius: 6px; margin-top: 15px; border-left: 4px solid #ffc107;">
-      <p style="margin: 0; font-size: 13px; color: #856404;">
-        <strong>*Allowances Explained:</strong> Allowance items are estimated costs based on 49 years of experience with custom home construction and development. These figures represent our best professional estimate; however, actual costs may vary up or down depending on specific site conditions, location factors, and unforeseen circumstances unique to each project. Final costs will be confirmed upon site evaluation.
+    <div style="background: #fff9e6; padding: 10px 14px; border-radius: 6px; margin-top: 12px; border-left: 4px solid #ffc107;">
+      <p style="margin: 0; font-size: 12px; color: #856404;">
+        <strong>*Allowances:</strong> Estimated costs based on 49 years of experience. Actual costs may vary depending on site conditions and location factors. Final costs confirmed upon site evaluation.
       </p>
     </div>
     ` : ''}
