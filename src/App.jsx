@@ -212,6 +212,8 @@ function AppInner() {
     editingMaterialEntry, setEditingMaterialEntry,
     materialEntryName, setMaterialEntryName,
     materialEntryCost, setMaterialEntryCost,
+    scrubbDragOverService, setScrubbDragOverService,
+    scrubbUploadingService, setScrubbUploadingService,
     showPaymentForm, setShowPaymentForm,
     newPayment, setNewPayment,
   } = useScrubbState();
@@ -1908,6 +1910,62 @@ function AppInner() {
                     else if (selContract?.id === currentItem.id) { saveContracts(updateInArray(contracts, currentItem.id, updatedItem)); setSelContract(updatedItem); }
                   };
 
+                  const handleScrubbFileDrop = async (e, serviceKey) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setScrubbDragOverService(null);
+                    try {
+                      const files = Array.from(e.dataTransfer?.files || e.target?.files || []);
+                      if (files.length === 0) return;
+                      const MAX_FILE_SIZE = 50 * 1024 * 1024;
+                      const validFiles = [];
+                      for (const file of files) {
+                        if (file.size > MAX_FILE_SIZE) { NotificationSystem.error(`File "${file.name}" is too large (max 50MB)`); continue; }
+                        if (!file.type.startsWith('image/') && file.type !== 'application/pdf') { NotificationSystem.warning(`"${file.name}" skipped — only images and PDFs are supported`); continue; }
+                        validFiles.push(file);
+                      }
+                      if (validFiles.length === 0) return;
+                      setScrubbUploadingService(serviceKey);
+                      const newDocs = [];
+                      for (const file of validFiles) {
+                        const dataUrl = await blobToDataUrl(file, file.name);
+                        newDocs.push({ id: genId(), name: file.name, url: dataUrl, type: file.type === 'application/pdf' ? 'pdf' : 'image', addedAt: new Date().toISOString(), addedBy: userName });
+                      }
+                      saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [serviceKey]: [...(currentItem.scrubbDocs?.[serviceKey] || []), ...newDocs] } }, userName));
+                      NotificationSystem.success(`${validFiles.length} file${validFiles.length > 1 ? 's' : ''} added`);
+                      setScrubbUploadingService(null);
+                    } catch (error) {
+                      console.error('Error uploading scrubb files:', error);
+                      NotificationSystem.error(`Upload failed: ${error.message}`);
+                      setScrubbUploadingService(null);
+                    }
+                  };
+
+                  const handleScrubbFileInput = (e, serviceKey) => {
+                    const files = e.target.files;
+                    if (!files || files.length === 0) return;
+                    handleScrubbFileDrop({ preventDefault: () => {}, stopPropagation: () => {}, dataTransfer: { files } }, serviceKey);
+                    e.target.value = '';
+                  };
+
+                  const handleScrubbDocDelete = (serviceKey, docId) => {
+                    if (!confirm('Delete this file?')) return;
+                    const updatedDocs = (currentItem.scrubbDocs?.[serviceKey] || []).filter(d => d.id !== docId);
+                    saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [serviceKey]: updatedDocs } }, userName));
+                  };
+
+                  const openScrubbDoc = (doc) => {
+                    if (doc.url?.startsWith('data:image/')) {
+                      const w = window.open('', '_blank');
+                      if (w) { w.document.write(`<html><head><title>${doc.name}</title><style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#111}</style></head><body><img src="${doc.url}" style="max-width:100%;max-height:100vh;object-fit:contain" /></body></html>`); w.document.close(); }
+                    } else if (doc.url?.startsWith('data:application/pdf')) {
+                      const w = window.open('', '_blank');
+                      if (w) { w.document.write(`<html><head><title>${doc.name}</title></head><body style="margin:0"><iframe src="${doc.url}" style="width:100%;height:100vh;border:none"></iframe></body></html>`); w.document.close(); }
+                    } else if (doc.url) {
+                      window.open(doc.url, '_blank');
+                    }
+                  };
+
                   const handleScrubbSave = (svc) => {
                     const cost = parseInput(scrubbNewCost);
                     const historyEntry = { id: genId(), serviceKey: svc.key, serviceName: svc.name, previousCost: svc.actualCost || 0, newCost: cost, contractPrice: svc.contractPrice, variance: cost > 0 ? svc.contractPrice - cost : 0, isAllowance: ALLOWANCE_ITEMS.includes(svc.key), updatedAt: new Date().toISOString(), updatedBy: userName };
@@ -2034,16 +2092,39 @@ function AppInner() {
                                     )}
                                   </td>
                                   <td style={S.td}>{svc.actualCost > 0 ? <span style={{ color: svc.variance > 0 ? '#28a745' : svc.variance < 0 ? '#dc3545' : '#666', fontWeight: 600 }}>{svc.variance >= 0 ? '+' : ''}{fmt(svc.variance)} ({svc.variancePct}%)</span> : '-'}</td>
-                                  <td style={S.td}><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                    <span style={{ fontSize: 12, color: '#666' }}>{svc.docs.length} file{svc.docs.length !== 1 ? 's' : ''}</span>
-                                    <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
-                                      const fileName = prompt('Document name:'); if (!fileName) return;
-                                      const fileUrl = prompt('Document URL (or leave blank):');
-                                      const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
-                                      saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
-                                    }}>+ Add Doc</button>
-                                  </div></td>
-                                  <td style={S.td}>{svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => NotificationSystem.info(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
+                                  <td style={S.td}>
+                                    <div
+                                      onDragOver={e => { e.preventDefault(); setScrubbDragOverService(svc.key); }}
+                                      onDragLeave={() => setScrubbDragOverService(null)}
+                                      onDrop={e => handleScrubbFileDrop(e, svc.key)}
+                                      style={{ padding: 6, borderRadius: 6, border: scrubbDragOverService === svc.key ? '2px dashed #2c5530' : '2px dashed transparent', background: scrubbDragOverService === svc.key ? '#e8f5e9' : 'transparent', transition: 'all 0.2s' }}
+                                    >
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                                        <span style={{ fontSize: 12, color: '#666' }}>{svc.docs.length} file{svc.docs.length !== 1 ? 's' : ''}</span>
+                                        <label style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                                          📎 Upload
+                                          <input type="file" accept="image/*,.pdf" multiple style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
+                                        </label>
+                                        <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
+                                          const fileName = prompt('Document name:'); if (!fileName) return;
+                                          const fileUrl = prompt('Document URL (or leave blank):');
+                                          const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
+                                          saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
+                                        }}>+ Link</button>
+                                      </div>
+                                      {scrubbUploadingService === svc.key && <div style={{ fontSize: 11, color: '#1565c0', marginTop: 4 }}>Uploading...</div>}
+                                      {scrubbDragOverService === svc.key && <div style={{ fontSize: 11, color: '#2c5530', marginTop: 4, textAlign: 'center' }}>Drop images or PDFs here</div>}
+                                    </div>
+                                  </td>
+                                  <td style={S.td}>{svc.docs.length > 0 && <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                    {svc.docs.map(doc => (
+                                      <div key={doc.id} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+                                        {doc.type === 'image' ? <span style={{ cursor: 'pointer' }} onClick={() => openScrubbDoc(doc)} title="Click to view">🖼️</span> : doc.type === 'pdf' ? <span style={{ cursor: 'pointer' }} onClick={() => openScrubbDoc(doc)} title="Click to view">📄</span> : <span>🔗</span>}
+                                        <span style={{ cursor: doc.url ? 'pointer' : 'default', color: doc.url ? '#1565c0' : '#333', textDecoration: doc.url ? 'underline' : 'none', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} onClick={() => doc.url && openScrubbDoc(doc)} title={doc.name}>{doc.name}</span>
+                                        <button style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 10, padding: 0 }} onClick={() => handleScrubbDocDelete(svc.key, doc.id)} title="Delete">✕</button>
+                                      </div>
+                                    ))}
+                                  </div>}</td>
                                 </tr>
                                 {nhlExpanded && svc.subItems?.map((sub, idx) => (
                                   <tr key={`nhl-sub-${idx}`} style={{ background: '#f8f9fa' }}>
@@ -2077,17 +2158,38 @@ function AppInner() {
                                 </td>
                                 <td style={S.td}>{readOnly ? <span style={{ color: '#666' }}>-</span> : svc.actualCost > 0 ? <span style={{ color: svc.variance > 0 ? '#28a745' : svc.variance < 0 ? '#dc3545' : '#666', fontWeight: 600 }}>{svc.variance >= 0 ? '+' : ''}{fmt(svc.variance)} ({svc.variancePct}%)</span> : '-'}</td>
                                 <td style={S.td}>
-                                  {readOnly ? null : <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                    <span style={{ fontSize: 12, color: '#666' }}>{svc.docs.length} file{svc.docs.length !== 1 ? 's' : ''}</span>
-                                    <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
-                                      const fileName = prompt('Document name:'); if (!fileName) return;
-                                      const fileUrl = prompt('Document URL (or leave blank):');
-                                      const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
-                                      saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
-                                    }}>+ Add Doc</button>
+                                  {readOnly ? null : <div
+                                    onDragOver={e => { e.preventDefault(); setScrubbDragOverService(svc.key); }}
+                                    onDragLeave={() => setScrubbDragOverService(null)}
+                                    onDrop={e => handleScrubbFileDrop(e, svc.key)}
+                                    style={{ padding: 6, borderRadius: 6, border: scrubbDragOverService === svc.key ? '2px dashed #2c5530' : '2px dashed transparent', background: scrubbDragOverService === svc.key ? '#e8f5e9' : 'transparent', transition: 'all 0.2s' }}
+                                  >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                                      <span style={{ fontSize: 12, color: '#666' }}>{svc.docs.length} file{svc.docs.length !== 1 ? 's' : ''}</span>
+                                      <label style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                                        📎 Upload
+                                        <input type="file" accept="image/*,.pdf" multiple style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
+                                      </label>
+                                      <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
+                                        const fileName = prompt('Document name:'); if (!fileName) return;
+                                        const fileUrl = prompt('Document URL (or leave blank):');
+                                        const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
+                                        saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
+                                      }}>+ Link</button>
+                                    </div>
+                                    {scrubbUploadingService === svc.key && <div style={{ fontSize: 11, color: '#1565c0', marginTop: 4 }}>Uploading...</div>}
+                                    {scrubbDragOverService === svc.key && <div style={{ fontSize: 11, color: '#2c5530', marginTop: 4, textAlign: 'center' }}>Drop images or PDFs here</div>}
                                   </div>}
                                 </td>
-                                <td style={S.td}>{!readOnly && svc.docs.length > 0 && <button style={{ background: 'transparent', border: 'none', color: '#1565c0', cursor: 'pointer', fontSize: 12 }} onClick={() => NotificationSystem.info(`Documents for ${svc.name}:\n\n${svc.docs.map((d, i) => `${i + 1}. ${d.name}`).join('\n')}`)}>View</button>}</td>
+                                <td style={S.td}>{!readOnly && svc.docs.length > 0 && <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                  {svc.docs.map(doc => (
+                                    <div key={doc.id} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+                                      {doc.type === 'image' ? <span style={{ cursor: 'pointer' }} onClick={() => openScrubbDoc(doc)} title="Click to view">🖼️</span> : doc.type === 'pdf' ? <span style={{ cursor: 'pointer' }} onClick={() => openScrubbDoc(doc)} title="Click to view">📄</span> : <span>🔗</span>}
+                                      <span style={{ cursor: doc.url ? 'pointer' : 'default', color: doc.url ? '#1565c0' : '#333', textDecoration: doc.url ? 'underline' : 'none', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} onClick={() => doc.url && openScrubbDoc(doc)} title={doc.name}>{doc.name}</span>
+                                      <button style={{ background: 'transparent', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: 10, padding: 0 }} onClick={() => handleScrubbDocDelete(svc.key, doc.id)} title="Delete">✕</button>
+                                    </div>
+                                  ))}
+                                </div>}</td>
                               </tr>
                             );
                           })}

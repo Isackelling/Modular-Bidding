@@ -25,6 +25,10 @@ export const useScrubbState = () => {
   const [materialEntryName, setMaterialEntryName]             = useState('');
   const [materialEntryCost, setMaterialEntryCost]             = useState('');
 
+  // Drag-and-drop file upload
+  const [scrubbDragOverService, setScrubbDragOverService] = useState(null);
+  const [scrubbUploadingService, setScrubbUploadingService] = useState(null);
+
   // Payment form
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [newPayment, setNewPayment]           = useState({ amount: '', date: '', notes: '', isContingencyPayment: false });
@@ -41,6 +45,8 @@ export const useScrubbState = () => {
     editingMaterialEntry, setEditingMaterialEntry,
     materialEntryName, setMaterialEntryName,
     materialEntryCost, setMaterialEntryCost,
+    scrubbDragOverService, setScrubbDragOverService,
+    scrubbUploadingService, setScrubbUploadingService,
     showPaymentForm, setShowPaymentForm,
     newPayment, setNewPayment,
   };
