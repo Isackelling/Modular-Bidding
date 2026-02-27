@@ -16,7 +16,7 @@ export const useUIState = () => {
 
   // Collapse/expand state
   const [installSvcCollapsed, setInstallSvcCollapsed] = useState(true);
-  const [proSvcCollapsed, setProSvcCollapsed]         = useState(false);
+  const [proSvcCollapsed, setProSvcCollapsed]         = useState(true);
   const [homeSelCollapsed, setHomeSelCollapsed]       = useState(false);
   const [houseSpecsCollapsed, setHouseSpecsCollapsed] = useState(false);
 

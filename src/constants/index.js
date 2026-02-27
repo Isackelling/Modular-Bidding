@@ -28,7 +28,7 @@ export const LICENSED_SERVICES = [
 ];
 
 // Common modular home needs
-export const MODULAR_HOME_NEEDS = ['basement_stairs', 'water_heater', 'updraft_furnace'];
+export const MODULAR_HOME_NEEDS = ['basement_stairs', 'water_heater', 'updraft_furnace', 'crane'];
 
 // Additional home options (displayed in House Specs section only)
 export const HOME_OPTIONS = [

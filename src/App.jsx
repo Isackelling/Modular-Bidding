@@ -3708,14 +3708,14 @@ function AppInner() {
                     {/* Dimension inputs for gravel driveway */}
                     {sel && k === 'gravel_driveway' && (
                       <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center' }}>
-                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
-                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
-                          value={newQ.serviceDimensions?.gravel_driveway?.length || ''}
-                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, gravel_driveway: { ...(p.serviceDimensions?.gravel_driveway || {}), length: e.target.value } } }))} />
                         <label style={{ fontSize: 12, color: '#555' }}>Width (ft)</label>
                         <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
                           value={newQ.serviceDimensions?.gravel_driveway?.width || ''}
                           onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, gravel_driveway: { ...(p.serviceDimensions?.gravel_driveway || {}), width: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.gravel_driveway?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, gravel_driveway: { ...(p.serviceDimensions?.gravel_driveway || {}), length: e.target.value } } }))} />
                         {getServiceDescription('gravel_driveway', newQ) && (
                           <span style={{ fontSize: 12, color: '#2c5530', fontStyle: 'italic', fontWeight: 600 }}>{getServiceDescription('gravel_driveway', newQ)}</span>
                         )}
@@ -3724,14 +3724,14 @@ function AppInner() {
                     {/* Dimension inputs for surfaced driveway */}
                     {sel && k === 'surfaced_driveway' && (
                       <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
-                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
-                          value={newQ.serviceDimensions?.surfaced_driveway?.length || ''}
-                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_driveway: { ...(p.serviceDimensions?.surfaced_driveway || { depth: '4' }), length: e.target.value } } }))} />
                         <label style={{ fontSize: 12, color: '#555' }}>Width (ft)</label>
                         <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
                           value={newQ.serviceDimensions?.surfaced_driveway?.width || ''}
                           onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_driveway: { ...(p.serviceDimensions?.surfaced_driveway || { depth: '4' }), width: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_driveway?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_driveway: { ...(p.serviceDimensions?.surfaced_driveway || { depth: '4' }), length: e.target.value } } }))} />
                         <label style={{ fontSize: 12, color: '#555' }}>Depth</label>
                         <select style={{ padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
                           value={newQ.serviceDimensions?.surfaced_driveway?.depth || '4'}
@@ -3748,14 +3748,14 @@ function AppInner() {
                     {/* Dimension inputs for surfaced sidewalks */}
                     {sel && k === 'surfaced_sidewalks' && (
                       <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
-                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
-                          value={newQ.serviceDimensions?.surfaced_sidewalks?.length || ''}
-                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_sidewalks: { ...(p.serviceDimensions?.surfaced_sidewalks || { depth: '4' }), length: e.target.value } } }))} />
                         <label style={{ fontSize: 12, color: '#555' }}>Width (ft)</label>
                         <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
                           value={newQ.serviceDimensions?.surfaced_sidewalks?.width || ''}
                           onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_sidewalks: { ...(p.serviceDimensions?.surfaced_sidewalks || { depth: '4' }), width: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_sidewalks?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_sidewalks: { ...(p.serviceDimensions?.surfaced_sidewalks || { depth: '4' }), length: e.target.value } } }))} />
                         <label style={{ fontSize: 12, color: '#555' }}>Depth</label>
                         <select style={{ padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
                           value={newQ.serviceDimensions?.surfaced_sidewalks?.depth || '4'}

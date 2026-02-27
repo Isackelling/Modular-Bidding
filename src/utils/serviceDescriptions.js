@@ -17,7 +17,7 @@ export const getServiceDescription = (key, quote) => {
 
     case 'gravel_driveway': {
       const dims = quote.serviceDimensions?.gravel_driveway || {};
-      if (dims.length && dims.width) return `${dims.length}' x ${dims.width}'`;
+      if (dims.length && dims.width) return `${dims.width}' x ${dims.length}'`;
       return '';
     }
     case 'sand_pad': {
@@ -27,13 +27,13 @@ export const getServiceDescription = (key, quote) => {
     case 'surfaced_driveway': {
       const dims = quote.serviceDimensions?.surfaced_driveway || {};
       const depth = dims.depth || '4';
-      if (dims.length && dims.width) return `${dims.length}' x ${dims.width}' x ${depth}"`;
+      if (dims.length && dims.width) return `${dims.width}' x ${dims.length}' x ${depth}"`;
       return '';
     }
     case 'surfaced_sidewalks': {
       const dims = quote.serviceDimensions?.surfaced_sidewalks || {};
       const depth = dims.depth || '4';
-      if (dims.length && dims.width) return `${dims.length}' x ${dims.width}' x ${depth}"`;
+      if (dims.length && dims.width) return `${dims.width}' x ${dims.length}' x ${depth}"`;
       return '';
     }
     case 'culvert': {
