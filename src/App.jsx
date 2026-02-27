@@ -28,6 +28,7 @@ import { Validators } from './utils/Validators.js';
 import { CalcHelpers } from './utils/CalcHelpers.js';
 import { FolderUtils } from './utils/FolderUtils.js';
 import { calcTotals, enforceMiles, calcDefaultServicePrice, getFoundationAdjustment } from './utils/calculations.js';
+import { getServiceDescription, calcSurfacedDrivewayPrice, SURFACED_DRIVEWAY_RATES } from './utils/serviceDescriptions.js';
 import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport } from './utils/documents/index.js';
 import { createFolderSavers } from './utils/folderSavers.js';
 
@@ -75,6 +76,7 @@ const emptyQuote = () => ({
     permits: true, electric_connection: true, concrete_skirting: true, plumbing: true, gas_propane: true
   },
   servicePriceOverrides: {}, serviceQuantities: {}, serviceDays: {},
+  serviceDimensions: {}, serviceDescriptions: {},
   serviceNotes: {}, serviceCrewNotes: {},
   publishedServiceNotes: {}, publishedServiceCrewNotes: {},
   generalCrewNote: '', generalCustomerNote: '',
@@ -588,8 +590,11 @@ function AppInner() {
   // Service handlers
   const toggleSvc = k => setNewQ(p => {
     const sel = { ...p.selectedServices, [k]: !p.selectedServices[k] };
-    const ovr = { ...p.servicePriceOverrides }; if (!sel[k]) delete ovr[k];
-    return { ...p, selectedServices: sel, servicePriceOverrides: ovr };
+    const ovr = { ...p.servicePriceOverrides };
+    const dims = { ...p.serviceDimensions };
+    const descs = { ...p.serviceDescriptions };
+    if (!sel[k]) { delete ovr[k]; delete dims[k]; delete descs[k]; }
+    return { ...p, selectedServices: sel, servicePriceOverrides: ovr, serviceDimensions: dims, serviceDescriptions: descs };
   });
 
   const updateServicePrice = (k, v) => setNewQ(p => ({ ...p, servicePriceOverrides: { ...p.servicePriceOverrides, [k]: v } }));
@@ -3492,11 +3497,16 @@ function AppInner() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: sel ? (ovr ? '#fffbeb' : '#e8f5e9') : '#fff', borderBottom: idx < SUMMARY_SERVICES.length - 1 ? '1px solid #eee' : 'none' }}>
                     <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
                     {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
-                    <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
-                      {svc.name}
-                      {ALLOWANCE_ITEMS.includes(k) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
-                      {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
-                    </span>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
+                        {svc.name}
+                        {ALLOWANCE_ITEMS.includes(k) && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
+                        {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
+                      </span>
+                      {sel && getServiceDescription(k, newQ) && (
+                        <span style={{ fontSize: 12, color: '#666', fontStyle: 'italic', marginTop: 2 }}>{getServiceDescription(k, newQ)}</span>
+                      )}
+                    </div>
                     {sel ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ fontSize: 11, color: '#666' }}>$</span>
@@ -3647,19 +3657,24 @@ function AppInner() {
                       <input type="checkbox" checked={sel || false} onChange={() => toggleSvc(k)} />
                       {svc.hasQuantity && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={qty} onChange={e => setNewQ(p => ({ ...p, serviceQuantities: { ...p.serviceQuantities, [k]: parseInt(e.target.value) || 1 } }))} />}
                       {svc.hasDays && sel && <input type="number" min="1" style={{ width: '50px', padding: '4px', border: '1px solid #ddd', borderRadius: 4, fontSize: 13, textAlign: 'center' }} value={days} onChange={e => setNewQ(p => ({ ...p, serviceDays: { ...p.serviceDays, [k]: parseInt(e.target.value) || 1 } }))} placeholder="Days" title="Number of days crew will be on site" />}
-                      <span style={{ flex: 1, fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
-                        {svc.name}
-                        {isAllowance && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
-                        {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
-                        {MODULAR_HOME_NEEDS.includes(k) && <span style={{ fontSize: 9, background: '#e8f5e9', color: '#2e7d32', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Common modular home need">COMMON MODULAR NEED</span>}
-                      </span>
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontSize: 14, fontWeight: sel ? 600 : 400, color: sel ? '#2c5530' : '#333' }}>
+                          {svc.name}
+                          {isAllowance && <span style={{ fontSize: 9, background: '#fff3cd', padding: '1px 4px', borderRadius: 3, marginLeft: 4 }}>ALLOWANCE</span>}
+                          {LICENSED_SERVICES.includes(k) && <span style={{ fontSize: 9, background: '#e3f2fd', color: '#1565c0', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Installer's license required per MN State Statute">MN LICENSE REQ.</span>}
+                          {MODULAR_HOME_NEEDS.includes(k) && <span style={{ fontSize: 9, background: '#e8f5e9', color: '#2e7d32', padding: '1px 5px', borderRadius: 3, marginLeft: 6, fontWeight: 600, cursor: 'help' }} title="Common modular home need">COMMON MODULAR NEED</span>}
+                        </span>
+                        {sel && getServiceDescription(k, newQ) && !['gravel_driveway', 'surfaced_driveway', 'culvert'].includes(k) && (
+                          <span style={{ fontSize: 12, color: '#666', fontStyle: 'italic', marginTop: 2 }}>{getServiceDescription(k, newQ)}</span>
+                        )}
+                      </div>
                       {sel ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                           <span style={{ fontSize: 11, color: '#666' }}>$</span>
                           <input
                             type="number"
                             style={{ ...S.inputSm, ...(ovr ? S.override : {}), width: '90px', padding: '4px 6px' }}
-                            placeholder={fmt(getDefaultPrice(k) * qty)}
+                            placeholder={k === 'surfaced_driveway' && calcSurfacedDrivewayPrice(newQ) > 0 ? fmt(calcSurfacedDrivewayPrice(newQ)) : fmt(getDefaultPrice(k) * qty)}
                             value={ovr || ''}
                             onChange={e => updateServicePrice(k, e.target.value)}
                             onFocus={e => e.target.select()}
@@ -3679,6 +3694,58 @@ function AppInner() {
                         </button>
                       )}
                     </div>
+                    {/* Dimension inputs for gravel driveway */}
+                    {sel && k === 'gravel_driveway' && (
+                      <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center' }}>
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.gravel_driveway?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, gravel_driveway: { ...(p.serviceDimensions?.gravel_driveway || {}), length: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Width (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.gravel_driveway?.width || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, gravel_driveway: { ...(p.serviceDimensions?.gravel_driveway || {}), width: e.target.value } } }))} />
+                        {getServiceDescription('gravel_driveway', newQ) && (
+                          <span style={{ fontSize: 12, color: '#2c5530', fontStyle: 'italic', fontWeight: 600 }}>{getServiceDescription('gravel_driveway', newQ)}</span>
+                        )}
+                      </div>
+                    )}
+                    {/* Dimension inputs for surfaced driveway */}
+                    {sel && k === 'surfaced_driveway' && (
+                      <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_driveway?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_driveway: { ...(p.serviceDimensions?.surfaced_driveway || { depth: '4' }), length: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Width (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_driveway?.width || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_driveway: { ...(p.serviceDimensions?.surfaced_driveway || { depth: '4' }), width: e.target.value } } }))} />
+                        <label style={{ fontSize: 12, color: '#555' }}>Depth</label>
+                        <select style={{ padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.surfaced_driveway?.depth || '4'}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, surfaced_driveway: { ...(p.serviceDimensions?.surfaced_driveway || {}), depth: e.target.value } } }))}>
+                          <option value="4">4" ($9.25/sqft)</option>
+                          <option value="5">5" ($10.00/sqft)</option>
+                          <option value="6">6" ($10.50/sqft)</option>
+                        </select>
+                        {getServiceDescription('surfaced_driveway', newQ) && (
+                          <span style={{ fontSize: 12, color: '#2c5530', fontStyle: 'italic', fontWeight: 600 }}>{getServiceDescription('surfaced_driveway', newQ)}</span>
+                        )}
+                      </div>
+                    )}
+                    {/* Length input for culvert */}
+                    {sel && k === 'culvert' && (
+                      <div style={{ padding: '6px 12px 10px', background: '#f0f8ff', borderBottom: '1px solid #e0e0e0', display: 'flex', gap: 10, alignItems: 'center' }}>
+                        <label style={{ fontSize: 12, color: '#555' }}>Length (ft)</label>
+                        <input type="number" min="0" style={{ width: 70, padding: '3px 6px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4 }}
+                          value={newQ.serviceDimensions?.culvert?.length || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDimensions: { ...p.serviceDimensions, culvert: { length: e.target.value } } }))} />
+                        {getServiceDescription('culvert', newQ) && (
+                          <span style={{ fontSize: 12, color: '#2c5530', fontStyle: 'italic', fontWeight: 600 }}>{getServiceDescription('culvert', newQ)}</span>
+                        )}
+                      </div>
+                    )}
                     {sel && expandedServiceNotes[k] && (
                       <div style={{ padding: '0 12px 12px', background: '#f9fafb', borderBottom: '1px solid #e0e0e0' }}>
                         <ExpandableNoteSection
@@ -3729,7 +3796,7 @@ function AppInner() {
                     <input
                       type="checkbox"
                       checked={newQ.hasLandscaping || false}
-                      onChange={e => setNewQ(p => ({ ...p, hasLandscaping: e.target.checked }))}
+                      onChange={e => setNewQ(p => ({ ...p, hasLandscaping: e.target.checked, serviceDescriptions: e.target.checked ? p.serviceDescriptions : { ...p.serviceDescriptions, landscaping: '' } }))}
                       style={{ width: 20, height: 20 }}
                     />
                     <label style={{ ...S.label, margin: 0, fontWeight: 600 }}>Landscaping</label>
@@ -3738,6 +3805,16 @@ function AppInner() {
                     <>
                       <div style={{ marginBottom: 8, fontSize: 12, color: '#666' }}>
                         Labor: $1,200 (2-man crew) | Drive cost calculated per day
+                      </div>
+                      <div style={{ marginBottom: 8 }}>
+                        <label style={{ ...S.label, fontSize: 12 }}>Description (shown on quote)</label>
+                        <input
+                          type="text"
+                          style={{ ...S.input, marginBottom: 0 }}
+                          placeholder="e.g., Seed front yard and sod around deck area"
+                          value={newQ.serviceDescriptions?.landscaping || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDescriptions: { ...p.serviceDescriptions, landscaping: e.target.value } }))}
+                        />
                       </div>
                       <div style={{ marginBottom: 8 }}>
                         <label style={{ ...S.label, fontSize: 12 }}>Material Cost ($)</label>
@@ -3805,7 +3882,7 @@ function AppInner() {
                     <input
                       type="checkbox"
                       checked={newQ.hasDeck || false}
-                      onChange={e => setNewQ(p => ({ ...p, hasDeck: e.target.checked }))}
+                      onChange={e => setNewQ(p => ({ ...p, hasDeck: e.target.checked, serviceDescriptions: e.target.checked ? p.serviceDescriptions : { ...p.serviceDescriptions, deck: '' } }))}
                       style={{ width: 20, height: 20 }}
                     />
                     <label style={{ ...S.label, margin: 0, fontWeight: 600 }}>Deck</label>
@@ -3814,6 +3891,16 @@ function AppInner() {
                     <>
                       <div style={{ marginBottom: 8, fontSize: 12, color: '#666' }}>
                         Labor: $1,200 (2-man crew) | Drive cost calculated per day
+                      </div>
+                      <div style={{ marginBottom: 8 }}>
+                        <label style={{ ...S.label, fontSize: 12 }}>Description (shown on quote)</label>
+                        <input
+                          type="text"
+                          style={{ ...S.input, marginBottom: 0 }}
+                          placeholder="e.g., 12x16 composite decking with railing"
+                          value={newQ.serviceDescriptions?.deck || ''}
+                          onChange={e => setNewQ(p => ({ ...p, serviceDescriptions: { ...p.serviceDescriptions, deck: e.target.value } }))}
+                        />
                       </div>
                       <div style={{ marginBottom: 8 }}>
                         <label style={{ ...S.label, fontSize: 12 }}>Material Cost ($)</label>

@@ -204,7 +204,7 @@ export const DEFAULT_SERVICES = {
   permits: { name: 'Permits', base: 5500, addDrive: true },
   drywall: { name: 'Drywall', base: 2500, addDrive: true },
   surfaced_driveway: { name: 'Surfaced Driveway', base: 4320, addDrive: true },
-  concrete_garage: { name: 'Concrete Garage Floor', base: 5616, addDrive: true },
+
   surfaced_sidewalks: { name: 'Surfaced Sidewalks', base: 720, addDrive: true },
   professional_cleaning: { name: 'Professional Cleaning', base: 1000, addDrive: true },
   electric_connection: { name: 'Electric Connection', base: 5000, addDrive: true },

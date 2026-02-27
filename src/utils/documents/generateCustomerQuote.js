@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, HOME_OPTIONS, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils } from './shared.js';
+import { ALLOWANCE_ITEMS, HOME_OPTIONS, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription } from './shared.js';
 
 export const generateCustomerQuote = (quote, totals, homeModels) => {
   const services = [];
@@ -13,16 +13,17 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   Object.entries(quote.selectedServices || {}).forEach(([k, sel]) => {
     if (sel && DEFAULT_SERVICES[k]) {
       const name = DEFAULT_SERVICES[k].name;
+      const description = getServiceDescription(k, quote);
       if (ALLOWANCE_ITEMS.includes(k)) {
-        allowances.push({ name, key: k });
+        allowances.push({ name, key: k, description });
       } else if (HOME_OPTIONS.includes(k)) {
         homeSpecAdditions.push(name);
       } else {
-        services.push(name);
+        services.push({ name, description });
       }
     }
   });
-  
+
   // Sewer, Well are allowances
   if (quote.sewerType && quote.sewerType !== 'none') {
     allowances.push({ name: `Sewer System (${quote.sewerType.replace('_', ' ')})`, key: 'sewer' });
@@ -32,8 +33,12 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   }
 
   // Patio and custom services are not allowances
-  if (quote.patioSize && quote.patioSize !== 'none') services.push(`Patio (${quote.patioSize} ft)`);
-  (quote.customServices || []).forEach(cs => { if (cs.name) services.push(cs.name); });
+  if (quote.patioSize && quote.patioSize !== 'none') services.push({ name: `Patio (${quote.patioSize} ft)`, description: '' });
+  (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, description: '' }); });
+
+  // Landscaping and deck
+  if (quote.hasLandscaping) services.push({ name: 'Landscaping', description: getServiceDescription('landscaping', quote) });
+  if (quote.hasDeck) services.push({ name: 'Deck', description: getServiceDescription('deck', quote) });
 
   const today = DocumentUtils.formatDate();
   const validUntil = DocumentUtils.formatDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
@@ -65,6 +70,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .info-value { font-size: 15px; font-weight: 500; }
     .services-list { list-style: none; }
     .services-list li { padding: 10px 15px; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px; border-left: 4px solid #2c5530; }
+    .services-list li .svc-desc { display: block; font-size: 12px; color: #555; font-style: italic; margin-top: 2px; }
     .home-box { background: linear-gradient(135deg, #2c5530, #1a3a1f); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
     .home-model { font-size: 20px; font-weight: 600; }
     .home-specs { opacity: 0.9; margin-top: 5px; }
@@ -259,7 +265,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     ${services.length > 0 ? `
     <h4 style="margin: 20px 0 10px; color: #2c5530;">Professional Services:</h4>
     <ul class="services-list">
-      ${services.map(s => `<li>${s}</li>`).join('')}
+      ${services.map(s => `<li>${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</li>`).join('')}
     </ul>
     ` : ''}
 
@@ -273,7 +279,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     ${allowances.length > 0 ? `
     <h4 style="margin: 20px 0 10px; color: #2c5530;">Services Included as Allowances*:</h4>
     <ul class="services-list" style="border-left-color: #ffc107;">
-      ${allowances.map(a => `<li>${a.name}</li>`).join('')}
+      ${allowances.map(a => `<li>${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</li>`).join('')}
     </ul>
     <div style="background: #fff9e6; padding: 12px 16px; border-radius: 6px; margin-top: 15px; border-left: 4px solid #ffc107;">
       <p style="margin: 0; font-size: 13px; color: #856404;">

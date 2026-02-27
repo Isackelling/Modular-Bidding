@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils } from './shared.js';
+import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription } from './shared.js';
 
 export const generateQuoteHtml = (quote, totals, homeModels) => {
   const services = [];
@@ -38,6 +38,8 @@ export const generateQuoteHtml = (quote, totals, homeModels) => {
   if (quote.patioSize && quote.patioSize !== 'none') services.push({ name: `Patio (${quote.patioSize} ft)`, key: 'patio' });
   (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, key: 'custom' }); });
   (quote.customOptions || []).forEach((co, i) => { if (co.name && co.price) { const qty = parseFloat(co.quantity) || 1; services.push({ name: qty > 1 ? `${co.name} (×${qty})` : co.name, key: `customopt_${i}` }); } });
+  if (quote.hasLandscaping) services.push({ name: 'Landscaping', key: 'landscaping' });
+  if (quote.hasDeck) services.push({ name: 'Deck', key: 'deck' });
 
   // Group services like the quote summary: Install Services vs Professional Services
   const sortByLicense = (a, b) => {
@@ -53,7 +55,8 @@ export const generateQuoteHtml = (quote, totals, homeModels) => {
     let badges = '';
     if (LICENSED_SERVICES.includes(s.key)) badges += licenseBadge;
     if (ALLOWANCE_ITEMS.includes(s.key)) badges += allowanceBadge;
-    return `<li>${s.name}${badges}</li>`;
+    const desc = getServiceDescription(s.key, quote);
+    return `<li>${s.name}${badges}${desc ? `<div style="font-size:12px;color:#555;font-style:italic;margin-top:2px">${desc}</div>` : ''}</li>`;
   };
 
   const totalAllowances = allowancesWithCosts.reduce((sum, a) => sum + a.cost, 0);
@@ -88,7 +91,7 @@ ${allowancesWithCosts.length > 0 ? `
 
   <div style="font-size:15px;font-weight:600;color:#856404;margin:12px 0 8px 0">Allowance Items:</div>
   <table class="allowance-table">
-    ${allowancesWithCosts.map(a => `<tr><td>${a.name}${LICENSED_SERVICES.includes(a.key) ? licenseBadge : ''}${allowanceBadge}</td><td>${fmt(a.cost)}</td></tr>`).join('')}
+    ${allowancesWithCosts.map(a => { const desc = getServiceDescription(a.key, quote); return `<tr><td>${a.name}${LICENSED_SERVICES.includes(a.key) ? licenseBadge : ''}${allowanceBadge}${desc ? `<div style="font-size:12px;color:#555;font-style:italic;margin-top:2px">${desc}</div>` : ''}</td><td>${fmt(a.cost)}</td></tr>`; }).join('')}
     <tr style="border-top:2px solid #ffc107"><td style="font-weight:700">Total Allowances</td><td style="font-weight:700">${fmt(totalAllowances)}</td></tr>
   </table>
 

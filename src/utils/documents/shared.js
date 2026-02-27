@@ -3,3 +3,4 @@ export { ALLOWANCE_ITEMS, SUMMARY_SERVICES, PIER_SPECS, HOME_OPTIONS, LICENSED_S
 export { calcIBeam, fmt, fmtCurrency, formatPhone } from '../helpers.js';
 export { calcTotals } from '../calculations.js';
 export { DocumentUtils } from '../DocumentUtils.js';
+export { getServiceDescription } from '../serviceDescriptions.js';

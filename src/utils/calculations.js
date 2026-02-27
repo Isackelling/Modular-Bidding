@@ -13,6 +13,7 @@ import {
   DEFAULT_FOUNDATION
 } from '../constants/index.js';
 import { calcIBeam, calcPerim, fmt } from './helpers.js';
+import { SURFACED_DRIVEWAY_RATES } from './serviceDescriptions.js';
 
 /**
  * Calculate floor coverings quantity needed
@@ -229,6 +230,18 @@ export const calcSelectedServicesCost = (q, services, miles, driveCost, w, l, dr
     // Special calculation for installation_of_home based on single/double wide
     if (k === 'installation_of_home' && (override === undefined || override === '')) {
       cost = calculateInstallationCost(miles, q.singleDouble, foundationType).total;
+    }
+
+    // Auto-calculate surfaced driveway price from dimensions
+    if (k === 'surfaced_driveway' && (override === undefined || override === '')) {
+      const dims = q.serviceDimensions?.surfaced_driveway || {};
+      const sdLen = parseFloat(dims.length) || 0;
+      const sdWid = parseFloat(dims.width) || 0;
+      const sdDepth = dims.depth || '4';
+      const rate = SURFACED_DRIVEWAY_RATES[sdDepth] || 9.25;
+      if (sdLen > 0 && sdWid > 0) {
+        cost = sdLen * sdWid * rate;
+      }
     }
 
     // Add foundation-based adjustment if not overridden
