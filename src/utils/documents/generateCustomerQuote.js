@@ -388,7 +388,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     <div style="font-weight:700;margin:10px 0 8px;font-size:14px">Payment Schedule:</div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
       <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600;width:60px">50%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Down payment — due at signing to schedule project</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.5)}</td></tr>
-      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">30%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due at delivery — home is manufactured complete and requires payment before delivery</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.3)}</td></tr>
+      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">30%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due at delivery — home is modular complete and requires payment before delivery</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.3)}</td></tr>
       <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due after installation — licensed requirements completed</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.1)}</td></tr>
       <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due upon project completion</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.1)}</td></tr>
     </table>
@@ -418,7 +418,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   
   <div class="footer">
     <strong>SHERMAN</strong> | 2244 Hwy 65, Mora, MN 55051 | (320) 679-3438<br>
-    Thank you for choosing Sherman for your manufactured home installation!
+    Thank you for choosing Sherman for your modular home installation!
   </div>
 </body>
 </html>
