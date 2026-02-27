@@ -68,8 +68,8 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .info-item { }
     .info-label { font-size: 12px; color: #666; }
     .info-value { font-size: 15px; font-weight: 500; }
-    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .scope-card { background: #f8f9fa; border-radius: 8px; padding: 14px 16px; border-top: 3px solid #2c5530; }
+    .scope-grid { columns: 2; column-gap: 16px; }
+    .scope-card { background: #f8f9fa; border-radius: 8px; padding: 14px 16px; border-top: 3px solid #2c5530; break-inside: avoid; margin-bottom: 16px; }
     .scope-card.allowance { border-top-color: #ffc107; }
     .scope-card h4 { font-size: 13px; color: #2c5530; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
     .scope-card.allowance h4 { color: #856404; }
