@@ -471,7 +471,7 @@ const CustomerPortal = ({
         <div style={{ ...S.box, marginTop: 24, background: '#f0f7f1', textAlign: 'center' }}>
           <h3 style={{ margin: '0 0 8px', color: '#2c5530' }}>Questions about your {hasActiveJobs ? 'project' : 'quote'}?</h3>
           <p style={{ margin: 0, color: '#666' }}>
-            Contact Sherman Pole Buildings at <strong>(320) 679-3438</strong> or visit us at <strong>2244 Hwy 65, Mora, MN 55051</strong>
+            Contact SHERMAN at <strong>(320) 679-3438</strong> or visit us at <strong>2244 Hwy 65, Mora, MN 55051</strong>
           </p>
         </div>
       </div>

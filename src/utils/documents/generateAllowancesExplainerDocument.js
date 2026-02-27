@@ -198,7 +198,7 @@ ${contingency > 0 ? `
   <p style="margin:0 0 16px;font-size:15px;color:#666">
     We understand that allowances and contingencies can seem complex. We're happy to discuss any questions or concerns you have about your quote.
   </p>
-  <div style="font-size:18px;font-weight:700;color:#2c5530;margin-bottom:8px">Sherman Pole Buildings</div>
+  <div style="font-size:18px;font-weight:700;color:#2c5530;margin-bottom:8px">SHERMAN</div>
   <div style="font-size:16px">📞 (320) 679-3438</div>
   <div style="font-size:14px;color:#666;margin-top:4px">2244 Hwy 65, Mora, MN 55051</div>
 </div>

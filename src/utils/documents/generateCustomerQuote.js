@@ -109,10 +109,10 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       const total = '${fmt(totals.total)}';
       const homeModel = '${DocumentUtils.getHomeDesc(quote).replace(/'/g, "\\'")}';
 
-      const subject = encodeURIComponent('Sherman Buildings - Your Project Quote #' + quoteNum);
+      const subject = encodeURIComponent('SHERMAN - Your Project Quote #' + quoteNum);
       const body = encodeURIComponent(
         'Dear ' + customerName + ',\\n\\n' +
-        'Thank you for your interest in Sherman Buildings! Please find your project quote details below:\\n\\n' +
+        'Thank you for your interest in SHERMAN! Please find your project quote details below:\\n\\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n' +
         'QUOTE SUMMARY\\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n' +
@@ -134,7 +134,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
         '📍 2244 Hwy 65, Mora, MN 55051\\n\\n' +
         'We look forward to working with you!\\n\\n' +
         'Best regards,\\n' +
-        'Sherman Pole Buildings\\n' +
+        'SHERMAN\\n' +
         'Quality Erections Since 1976'
       );
 
@@ -150,11 +150,11 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   
   <div class="header">
     <div>
-      <img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" alt="Sherman Buildings" style="height: 50px; margin-bottom: 8px;" />
+      <img src="https://shermanpolebuildings.com/wp-content/uploads/2021/07/SB-Logo-wide-144x61-1.png" alt="SHERMAN" style="height: 50px; margin-bottom: 8px;" />
       <div class="logo-sub">Manufactured Home Installation</div>
     </div>
     <div class="company-info">
-      <strong>Sherman Pole Buildings</strong><br>
+      <strong>SHERMAN</strong><br>
       2244 Hwy 65<br>
       Mora, MN 55051<br>
       (320) 679-3438
@@ -399,7 +399,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   </div>
   
   <div class="footer">
-    <strong>Sherman Pole Buildings</strong> | 2244 Hwy 65, Mora, MN 55051 | (320) 679-3438<br>
+    <strong>SHERMAN</strong> | 2244 Hwy 65, Mora, MN 55051 | (320) 679-3438<br>
     Thank you for choosing Sherman for your manufactured home installation!
   </div>
 </body>

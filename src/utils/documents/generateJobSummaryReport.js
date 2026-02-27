@@ -399,7 +399,7 @@ ${nonReversalCOs.length > 0 ? `
 </div>
 
 <div style="margin-top:40px;padding-top:30px;border-top:3px solid #dee2e6;text-align:center;color:#666">
-  <div style="font-size:18px;font-weight:700;margin-bottom:8px">Sherman Pole Buildings</div>
+  <div style="font-size:18px;font-weight:700;margin-bottom:8px">SHERMAN</div>
   <div style="font-size:14px">2244 Hwy 65, Mora, MN 55051</div>
   <div style="font-size:14px">Phone: (320) 679-3438</div>
   <div style="font-size:12px;margin-top:15px;font-style:italic">CONFIDENTIAL — Internal Job Summary Report</div>

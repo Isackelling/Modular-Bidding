@@ -104,7 +104,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
     <div class="co-number">#${changeOrder.changeOrderNum}${changeOrder.changeOrderVersion || ''}</div>
   </div>
   <div style="text-align:right">
-    <div style="font-size:18px;font-weight:700;color:#2c5530">Sherman Pole Buildings</div>
+    <div style="font-size:18px;font-weight:700;color:#2c5530">SHERMAN</div>
     <div style="font-size:13px;color:#666">${today}</div>
     <div style="font-size:13px;color:#666">Quote #${DocumentUtils.getQuoteNum(originalQuote)}</div>
   </div>
@@ -220,7 +220,7 @@ ${changes.added.length === 0 && changes.modified.length === 0 && changes.removed
   </div>
 
   <div>
-    <div style="font-weight:700;margin-bottom:8px">Sherman Pole Buildings Representative:</div>
+    <div style="font-weight:700;margin-bottom:8px">SHERMAN Representative:</div>
     <div class="sig-line"></div>
     <div style="display:flex;justify-content:space-between;font-size:13px;color:#666">
       <span>Print Name: _______________</span>

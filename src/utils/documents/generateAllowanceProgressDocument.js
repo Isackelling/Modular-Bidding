@@ -79,7 +79,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
     <div style="font-size:16px;color:#666;margin-top:8px">Quote #${quoteNum}</div>
   </div>
   <div style="text-align:right">
-    <div style="font-size:18px;font-weight:700;color:#2c5530">Sherman Pole Buildings</div>
+    <div style="font-size:18px;font-weight:700;color:#2c5530">SHERMAN</div>
     <div style="font-size:13px;color:#666">${today}</div>
   </div>
 </div>
@@ -277,7 +277,7 @@ ${(() => {
 
 <div style="margin-top:40px;padding:20px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#666">
   <p style="margin-bottom:8px"><strong>Questions or Concerns?</strong></p>
-  <p style="margin:0">Please contact Sherman Pole Buildings at (320) 679-3438 if you have any questions about this update or your project's progress.</p>
+  <p style="margin:0">Please contact SHERMAN at (320) 679-3438 if you have any questions about this update or your project's progress.</p>
 </div>
 
 </body></html>`;
