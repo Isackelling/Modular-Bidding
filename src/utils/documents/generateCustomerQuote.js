@@ -68,17 +68,14 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .info-item { }
     .info-label { font-size: 12px; color: #666; }
     .info-value { font-size: 15px; font-weight: 500; }
-    .scope-grid { columns: 2; column-gap: 16px; }
-    .scope-card { background: #f8f9fa; border-radius: 8px; padding: 14px 16px; border-top: 3px solid #2c5530; break-inside: avoid; margin-bottom: 16px; }
-    .scope-card.allowance { border-top-color: #ffc107; }
-    .scope-card h4 { font-size: 13px; color: #2c5530; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .scope-card.allowance h4 { color: #856404; }
-    .scope-card ul { list-style: none; margin: 0; padding: 0; }
-    .scope-card ul li { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; }
-    .scope-card ul li:last-child { border-bottom: none; }
-    .scope-card ul li::before { content: "✓ "; color: #2c5530; font-weight: 700; }
-    .scope-card.allowance ul li::before { color: #ffc107; }
-    .scope-card ul li .svc-desc { display: block; font-size: 11px; color: #555; font-style: italic; margin: 1px 0 2px 16px; }
+    .scope-grid { columns: 2; column-gap: 24px; }
+    .scope-heading { font-size: 13px; color: #2c5530; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 14px 0 6px; padding-bottom: 4px; border-bottom: 2px solid #2c5530; break-after: avoid; }
+    .scope-heading:first-child { margin-top: 0; }
+    .scope-heading.allowance { color: #856404; border-bottom-color: #ffc107; }
+    .scope-item { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; }
+    .scope-item::before { content: "✓ "; color: #2c5530; font-weight: 700; }
+    .scope-item.allowance::before { color: #ffc107; }
+    .scope-item .svc-desc { display: block; font-size: 11px; color: #555; font-style: italic; margin: 1px 0 2px 16px; }
     .home-box { background: linear-gradient(135deg, #2c5530, #1a3a1f); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
     .home-model { font-size: 20px; font-weight: 600; }
     .home-specs { opacity: 0.9; margin-top: 5px; }
@@ -261,43 +258,27 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     <p style="margin-bottom: 15px; color: #666;">This quote includes complete professional installation services:</p>
 
     <div class="scope-grid">
-      <div class="scope-card">
-        <h4>Standard Installation</h4>
-        <ul>
-          <li>Site prep and foundation review</li>
-          <li>Home delivery coordination and inspection</li>
-          <li>Professional home installation and leveling</li>
-          <li>Pier and anchor system installation</li>
-          <li>Marriage line connection</li>
-          <li>Final inspection and walkthrough</li>
-        </ul>
-      </div>
+      <div class="scope-heading">Standard Installation</div>
+      <div class="scope-item">Site prep and foundation review</div>
+      <div class="scope-item">Home delivery coordination and inspection</div>
+      <div class="scope-item">Professional home installation and leveling</div>
+      <div class="scope-item">Pier and anchor system installation</div>
+      <div class="scope-item">Marriage line connection</div>
+      <div class="scope-item">Final inspection and walkthrough</div>
 
       ${services.length > 0 ? `
-      <div class="scope-card">
-        <h4>Professional Services</h4>
-        <ul>
-          ${services.map(s => `<li>${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</li>`).join('')}
-        </ul>
-      </div>
+      <div class="scope-heading">Professional Services</div>
+      ${services.map(s => `<div class="scope-item">${s.name}${s.description ? `<span class="svc-desc">${s.description}</span>` : ''}</div>`).join('')}
       ` : ''}
 
       ${homeSpecAdditions.length > 0 ? `
-      <div class="scope-card">
-        <h4>Home Spec Additions</h4>
-        <ul>
-          ${homeSpecAdditions.map(s => `<li>${s}</li>`).join('')}
-        </ul>
-      </div>
+      <div class="scope-heading">Home Spec Additions</div>
+      ${homeSpecAdditions.map(s => `<div class="scope-item">${s}</div>`).join('')}
       ` : ''}
 
       ${allowances.length > 0 ? `
-      <div class="scope-card allowance">
-        <h4>Allowances*</h4>
-        <ul>
-          ${allowances.map(a => `<li>${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</li>`).join('')}
-        </ul>
-      </div>
+      <div class="scope-heading allowance">Allowances*</div>
+      ${allowances.map(a => `<div class="scope-item allowance">${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</div>`).join('')}
       ` : ''}
     </div>
 
