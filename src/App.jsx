@@ -2127,9 +2127,10 @@ function AppInner() {
                             ? (coHistory[0].contingencyUsed || 0) + (coHistory[0].contingencyBalance || 0)
                             : (totals.contingency || 0);
 
-                          // CO service costs: full contract price of each CO-added service draws from fund
+                          // CO draws: sum of contingencyUsed from change order history (matches doc generator & portal)
+                          const totalCODraws = coHistory.reduce((s, co) => s + (co.contingencyUsed || 0), 0);
+                          // CO service items kept for line-item breakdown display
                           const coServiceItems = trackingItems.filter(i => i.isChangeOrderAddition);
-                          const coServiceCosts = coServiceItems.reduce((s, i) => s + i.contractPrice, 0);
 
                           // Allowance variances (only items with actual costs entered)
                           const allowanceItemsWithCosts = trackingItems.filter(i => ALLOWANCE_ITEMS.includes(i.key) && i.actualCost > 0);
@@ -2140,8 +2141,8 @@ function AppInner() {
                           const payments = currentItem.scrubbPayments || [];
                           const cPayments = payments.filter(p => p.isContingencyPayment).reduce((s, p) => s + parseFloat(p.amount || 0), 0);
 
-                          // Running balance
-                          const balance = startC - coServiceCosts + savings - overages + cPayments;
+                          // Running balance (matches spec.md, generateAllowanceProgressDocument, CustomerPortal)
+                          const balance = startC - totalCODraws + savings - overages + cPayments;
                           const fundOverdrafted = balance < 0;
                           const overdraftAmount = Math.abs(Math.min(0, balance));
                           return (
@@ -2156,7 +2157,7 @@ function AppInner() {
                                   <div style={{ fontSize: 14, color: '#721c24', marginBottom: 8 }}>The contingency fund is negative by <strong>{fmt(overdraftAmount)}</strong>.</div>
                                   <div style={{ fontSize: 13, color: '#721c24' }}>The customer must pay <strong>{fmt(overdraftAmount)}</strong> to cover the deficit. The contract amount does not change.</div>
                                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginTop: 12 }}>
-                                    <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Total Draws</div><div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(coServiceCosts + overages)}</div></div>
+                                    <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Total Draws</div><div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(totalCODraws + overages)}</div></div>
                                     <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Fund + Savings</div><div style={{ fontSize: 16, fontWeight: 700, color: '#28a745' }}>{fmt(startC + savings + cPayments)}</div></div>
                                     <div style={{ padding: 10, background: '#fff', borderRadius: 4, textAlign: 'center' }}><div style={{ fontSize: 11, color: '#666' }}>Customer Owes</div><div style={{ fontSize: 16, fontWeight: 700, color: '#dc3545' }}>{fmt(overdraftAmount)}</div></div>
                                   </div>

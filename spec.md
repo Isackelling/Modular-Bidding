@@ -44,16 +44,16 @@ Canonical definitions for every domain term used in this spec. All sections must
 
 **Deprecated terms — do not use:**
 
-| Deprecated | Replacement | Reason |
-|-----------|-------------|--------|
-| ~~sewerSystem~~ | `sewerType` | Field was never a "system"; it selects a sewer bed size |
-| ~~wellSystem~~ | `wellDepth` | Field stores depth in feet, not a system type |
-| ~~patio~~ | `patioSize` | Field is a size selector ('none', '6', '8', '10'), not a boolean |
-| ~~patioWidth / patioLength~~ | `patioSize` | Patio is selected by pre-set size, not custom dimensions |
-| ~~landscaping~~ | `hasLandscaping` | Boolean toggle, requires the `has` prefix |
-| ~~deckProject~~ | `hasDeck` | Boolean toggle, requires the `has` prefix |
-| ~~hasGarage~~ | (none) | Garages are not part of this system |
-| ~~manufactured~~ | **modular** | Company rebranding — use "modular home" everywhere in UI and documents |
+| Deprecated | Replacement | Reason | Revision |
+|-----------|-------------|--------|----------|
+| ~~sewerSystem~~ | `sewerType` | Field was never a "system"; it selects a sewer bed size | Rev 1, Jan 2026 |
+| ~~wellSystem~~ | `wellDepth` | Field stores depth in feet, not a system type | Rev 1, Jan 2026 |
+| ~~patio~~ | `patioSize` | Field is a size selector ('none', '6', '8', '10'), not a boolean | Rev 1, Jan 2026 |
+| ~~patioWidth / patioLength~~ | `patioSize` | Patio is selected by pre-set size, not custom dimensions | Rev 1, Jan 2026 |
+| ~~landscaping~~ | `hasLandscaping` | Boolean toggle, requires the `has` prefix | Rev 1, Jan 2026 |
+| ~~deckProject~~ | `hasDeck` | Boolean toggle, requires the `has` prefix | Rev 1, Jan 2026 |
+| ~~hasGarage~~ | (none) | Garages are not part of this system | Rev 1, Jan 2026 |
+| ~~manufactured~~ | **modular** | Company rebranding — use "modular home" everywhere in UI and documents | Rev 2, Feb 2026 |
 
 ---
 
