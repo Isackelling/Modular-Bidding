@@ -405,7 +405,6 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       <li>Price subject to change if site conditions differ from initial assessment</li>
       <li>Allowance items are estimates and may be adjusted based on actual site conditions</li>
       <li>All work performed in accordance with both Federal and State regulations</li>
-      <li>Sherman structural warranty: 30 years | Workmanship warranty: 10 years</li>
     </ul>
   </div>
   
