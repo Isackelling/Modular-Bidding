@@ -49,48 +49,50 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6; padding: 40px; max-width: 850px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #2c5530; padding-bottom: 20px; margin-bottom: 30px; }
-    .logo { font-size: 28px; font-weight: bold; color: #2c5530; }
-    .logo-sub { font-size: 14px; color: #666; }
-    .company-info { text-align: right; font-size: 13px; color: #666; }
-    .quote-title { background: #2c5530; color: white; padding: 15px 25px; font-size: 24px; font-weight: bold; margin-bottom: 25px; }
-    .quote-meta { display: flex; justify-content: space-between; margin-bottom: 30px; }
-    .meta-box { background: #f8f9fa; padding: 15px 20px; border-radius: 8px; flex: 1; margin: 0 10px; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #2c5530; padding-bottom: 14px; margin-bottom: 18px; }
+    .logo { font-size: 24px; font-weight: bold; color: #2c5530; }
+    .logo-sub { font-size: 13px; color: #666; }
+    .company-info { text-align: right; font-size: 12px; color: #666; }
+    .quote-title { background: #2c5530; color: white; padding: 11px 20px; font-size: 21px; font-weight: bold; margin-bottom: 18px; }
+    .quote-meta { display: flex; justify-content: space-between; margin-bottom: 20px; }
+    .meta-box { background: #f8f9fa; padding: 10px 14px; border-radius: 8px; flex: 1; margin: 0 8px; }
     .meta-box:first-child { margin-left: 0; }
     .meta-box:last-child { margin-right: 0; }
-    .meta-label { font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 5px; }
-    .meta-value { font-size: 16px; font-weight: 600; }
-    .section { margin-bottom: 30px; }
-    .section-title { font-size: 18px; font-weight: 600; color: #2c5530; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 15px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .meta-label { font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 3px; }
+    .meta-value { font-size: 15px; font-weight: 600; }
+    .section { margin-bottom: 22px; }
+    .section-title { font-size: 17px; font-weight: 600; color: #2c5530; border-bottom: 2px solid #e0e0e0; padding-bottom: 6px; margin-bottom: 12px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .info-item { }
-    .info-label { font-size: 12px; color: #666; }
-    .info-value { font-size: 15px; font-weight: 500; }
-    .scope-section { margin-bottom: 16px; }
-    .scope-heading { font-size: 13px; color: #2c5530; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 2px solid #e0e0e0; }
+    .info-label { font-size: 11px; color: #666; }
+    .info-value { font-size: 14px; font-weight: 500; }
+    .scope-section { margin-bottom: 12px; }
+    .scope-heading { font-size: 12px; color: #2c5530; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; padding-bottom: 5px; margin-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
     .scope-heading.allowance { color: #856404; }
-    .scope-items { columns: 2; column-gap: 24px; }
-    .scope-item { padding: 4px 0; font-size: 13px; border-bottom: 1px solid #e9ecef; break-inside: avoid; }
+    .scope-items { columns: 2; column-gap: 20px; }
+    .scope-item { padding: 3px 0; font-size: 12px; border-bottom: 1px solid #e9ecef; break-inside: avoid; }
     .scope-item::before { content: "✓ "; color: #2c5530; font-weight: 700; }
     .scope-item.allowance::before { color: #ffc107; }
     .scope-item .svc-desc { display: block; font-size: 11px; color: #555; font-style: italic; margin: 1px 0 2px 16px; }
-    .home-box { background: linear-gradient(135deg, #2c5530, #1a3a1f); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-    .home-model { font-size: 20px; font-weight: 600; }
-    .home-specs { opacity: 0.9; margin-top: 5px; }
-    .total-section { background: #f8f9fa; border: 2px solid #2c5530; border-radius: 8px; padding: 25px; margin-top: 30px; }
-    .total-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
+    .home-box { background: linear-gradient(135deg, #2c5530, #1a3a1f); color: white; padding: 14px 18px; border-radius: 8px; margin-bottom: 14px; }
+    .home-model { font-size: 18px; font-weight: 600; }
+    .home-specs { opacity: 0.9; margin-top: 4px; font-size: 14px; }
+    .total-section { background: #f8f9fa; border: 2px solid #2c5530; border-radius: 8px; padding: 20px; margin-top: 0; }
+    .total-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #e0e0e0; }
     .total-row:last-child { border-bottom: none; }
-    .total-row.grand { font-size: 24px; font-weight: 700; color: #2c5530; border-top: 2px solid #2c5530; margin-top: 10px; padding-top: 15px; }
-    .terms { margin-top: 40px; padding: 20px; background: #fff9e6; border-radius: 8px; font-size: 13px; }
-    .terms-title { font-weight: 600; margin-bottom: 10px; }
-    .terms ul { margin-left: 20px; }
-    .signature-section { margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
-    .signature-box { border-top: 2px solid #333; padding-top: 10px; }
+    .total-row.grand { font-size: 22px; font-weight: 700; color: #2c5530; border-top: 2px solid #2c5530; margin-top: 8px; padding-top: 12px; }
+    .terms { margin-top: 24px; padding: 16px; background: #fff9e6; border-radius: 8px; font-size: 12px; }
+    .terms-title { font-weight: 600; margin-bottom: 8px; }
+    .terms ul { margin-left: 18px; }
+    .signature-section { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .signature-box { border-top: 2px solid #333; padding-top: 8px; }
     .signature-label { font-size: 12px; color: #666; }
-    .footer { margin-top: 50px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #e0e0e0; padding-top: 20px; }
-    @media print { 
-      body { padding: 20px; } 
+    .footer { margin-top: 24px; text-align: center; font-size: 11px; color: #666; border-top: 1px solid #e0e0e0; padding-top: 14px; }
+    @media print {
+      body { padding: 14px; }
       .no-print { display: none; }
+      .page-break-before { break-before: page; page-break-before: always; }
+      .avoid-break { break-inside: avoid; page-break-inside: avoid; }
     }
     .btn-group { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; }
     .close-btn { background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px; }
@@ -254,7 +256,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   </div>
   `}
   
-  <div class="section">
+  <div class="section page-break-before">
     <div class="section-title">Scope of Work</div>
     <p style="margin-bottom: 15px; color: #666;">This quote includes complete professional installation services:</p>
 
@@ -306,21 +308,21 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     ` : ''}
   </div>
   
-  <div class="total-section">
-    <div class="section-title" style="border: none; margin-bottom: 20px;">Investment Summary</div>
+  <div class="total-section avoid-break page-break-before">
+    <div class="section-title" style="border: none; margin-bottom: 16px;">Investment Summary</div>
     <div class="total-row grand"><span>Total</span><span>${fmt(totals.total)}</span></div>
 
-    <div style="background: #e3f2fd; padding: 16px; border-radius: 8px; margin-top: 16px;">
-      <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; color: #1565c0; margin-bottom: 8px;">
+    <div style="background: #e3f2fd; padding: 12px 14px; border-radius: 8px; margin-top: 12px;">
+      <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 17px; color: #1565c0; margin-bottom: 6px;">
         <span>Contingency Allowance</span>
         <span>${fmt(totals.contingency)}</span>
       </div>
-      <div style="font-size: 13px; color: #666; line-height: 1.6;">
-        <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first, minimizing out-of-pocket costs. At project completion, if there are no overages or change orders, you receive back the full contingency amount plus any allowance savings.
+      <div style="font-size: 12px; color: #666; line-height: 1.5;">
+        <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first. At project completion, if there are no overages or change orders, you receive back the full contingency amount plus any allowance savings.
       </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 28px; color: #2c5530; border-top: 3px solid #2c5530; padding-top: 16px; margin-top: 16px;">
+    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 24px; color: #2c5530; border-top: 3px solid #2c5530; padding-top: 12px; margin-top: 12px;">
       <span>Total Investment</span>
       <span>${fmt(totals.totalWithContingency)}</span>
     </div>
@@ -394,7 +396,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     `;
   })()}
 
-  <div class="terms">
+  <div class="terms avoid-break">
     <div class="terms-title">Terms & Conditions</div>
     <div style="font-weight:700;margin:10px 0 8px;font-size:14px">Payment Schedule:</div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
@@ -414,7 +416,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     </ul>
   </div>
   
-  <div class="signature-section">
+  <div class="signature-section avoid-break">
     <div>
       <div class="signature-box">
         <div class="signature-label">Customer Signature / Date</div>
