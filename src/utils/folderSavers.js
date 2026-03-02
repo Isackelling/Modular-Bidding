@@ -15,6 +15,7 @@ import { FolderUtils } from './FolderUtils.js';
 import { NotificationSystem } from './NotificationSystem.js';
 import { genId, fmt } from './helpers.js';
 import { calcMaterials } from './calculations.js';
+import { generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './documents/generateManufacturedHomeDocuments.js';
 
 /**
  * Create all folder saver functions with the given dependencies.
@@ -919,6 +920,42 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     }
   };
 
+  // ─── 12. Save a Manufactured Home document to the Contracts folder ───
+  const saveManufacturedHomeDocToContracts = async (docKey, quote, customer) => {
+    const cust = customer || selCustomer;
+    const ownerName = cust ? `${cust.firstName || ''} ${cust.lastName || ''}`.trim() : '';
+
+    const generators = {
+      contract: { fn: generateManufacturedHomeContract, name: 'MH Purchase & Installation Contract' },
+      formaldehyde: { fn: generateFormaldehydeDisclosure, name: 'MH Formaldehyde Disclosure' },
+      guide: { fn: generateHomeownerGuide, name: "MH Homeowner's Guide" },
+      warranty: { fn: generateWarrantyStatement, name: 'MH Warranty Statement' },
+    };
+
+    const gen = generators[docKey];
+    if (!gen) {
+      NotificationSystem.error('Unknown document type: ' + docKey);
+      return;
+    }
+
+    const totals = CalcHelpers.calculateQuoteTotals(quote, cust, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing);
+    const html = gen.fn(quote, cust, totals);
+    const blob = new Blob([html], { type: 'text/html' });
+    const dataUrl = await blobToDataUrl(blob, gen.name);
+
+    const file = {
+      name: `${gen.name}${ownerName ? ' - ' + ownerName : ''}`,
+      type: 'pdf',
+      url: dataUrl,
+      notes: `Generated ${new Date().toLocaleDateString()}`,
+      addedBy: userName,
+      addedAt: new Date().toISOString(),
+    };
+
+    await autoSaveFileToFolders(file, ['contracts'], quote, cust);
+    NotificationSystem.success(`${gen.name} saved to Contracts folder!`);
+  };
+
   // Return all saver functions
   return {
     autoSaveFileToFolders,
@@ -933,5 +970,6 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     saveAllowanceProgressToFolders,
     saveLatestChangeOrderToFolders,
     saveAllDocsToFolders,
+    saveManufacturedHomeDocToContracts,
   };
 };

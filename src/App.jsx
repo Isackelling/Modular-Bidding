@@ -1789,6 +1789,25 @@ function AppInner() {
                     </div>
                     {activeFolder === folderId && (
                       <div style={{ marginTop: 8 }}>
+                        {folderId === 'contracts' && (
+                          <div style={{ marginBottom: 12, padding: '10px 12px', background: '#f5f9f5', border: '1px solid #c8e6c9', borderRadius: 6 }}>
+                            <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 700, color: '#2c5530', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Manufactured Home Documents</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                              {[
+                                { key: 'contract', label: 'Purchase & Installation Contract' },
+                                { key: 'formaldehyde', label: 'Formaldehyde Disclosure' },
+                                { key: 'guide', label: "Homeowner's Guide" },
+                                { key: 'warranty', label: 'Warranty Statement' },
+                              ].map(({ key, label }) => (
+                                <button key={key} style={{ ...S.btnSm, padding: '5px 12px', fontSize: 12, background: '#2c5530', color: '#fff' }}
+                                  onClick={() => folderSavers.saveManufacturedHomeDocToContracts(key, currentItem, custForQuote)}
+                                  title={`Generate and save ${label} to Contracts folder`}>
+                                  📄 {label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                         <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
                           <label style={{ ...S.btnSm, padding: '4px 10px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                             📎 Upload Files
