@@ -956,6 +956,55 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     NotificationSystem.success(`${gen.name} saved to Contracts folder!`);
   };
 
+  // ─── 13. Generate all 4 Manufactured Home contract docs at once ───
+  const saveAllContractDocs = async (quote, customer) => {
+    try {
+      const cust = customer || selCustomer;
+      const ownerName = cust ? `${cust.firstName || ''} ${cust.lastName || ''}`.trim() : '';
+      const totals = CalcHelpers.calculateQuoteTotals(quote, cust, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing);
+
+      const generators = [
+        { fn: generateManufacturedHomeContract, name: 'MH Purchase & Installation Contract' },
+        { fn: generateFormaldehydeDisclosure, name: 'MH Formaldehyde Disclosure' },
+        { fn: generateHomeownerGuide, name: "MH Homeowner's Guide" },
+        { fn: generateWarrantyStatement, name: 'MH Warranty Statement' },
+      ];
+
+      let updatedFolders = FolderUtils.getFolders(quote);
+
+      for (const gen of generators) {
+        const html = gen.fn(quote, cust, totals);
+        const blob = new Blob([html], { type: 'text/html' });
+        const dataUrl = await blobToDataUrl(blob, gen.name);
+        const file = FolderUtils.createFileObject(
+          `${gen.name}${ownerName ? ' - ' + ownerName : ''}`,
+          'pdf',
+          dataUrl,
+          `Generated ${new Date().toLocaleDateString()}`,
+          userName
+        );
+        updatedFolders.contracts = [...(updatedFolders.contracts || []).filter(f => !f.name.startsWith(gen.name)), file];
+      }
+
+      const updatedItem = { ...quote, folders: updatedFolders };
+      const isInQuotes = quotes.find(q => q.id === quote.id);
+      const isInContracts = contracts.find(c => c.id === quote.id);
+
+      if (isInQuotes) {
+        await saveQuotes(quotes.map(q => q.id === quote.id ? updatedItem : q));
+        if (selQuote?.id === quote.id) setSelQuote(updatedItem);
+      } else if (isInContracts) {
+        await saveContracts(contracts.map(c => c.id === quote.id ? updatedItem : c));
+        if (selContract?.id === quote.id) setSelContract(updatedItem);
+      }
+
+      NotificationSystem.success('Saved 4 contract documents to Contracts folder!');
+    } catch (error) {
+      console.error('Generate Contracts Error:', error);
+      NotificationSystem.error('Error generating contracts: ' + error.message);
+    }
+  };
+
   // Return all saver functions
   return {
     autoSaveFileToFolders,
@@ -971,5 +1020,6 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     saveLatestChangeOrderToFolders,
     saveAllDocsToFolders,
     saveManufacturedHomeDocToContracts,
+    saveAllContractDocs,
   };
 };

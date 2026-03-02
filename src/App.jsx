@@ -1773,7 +1773,10 @@ function AppInner() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                   <h3 style={{ margin: 0 }}>Project Files</h3>
-                  <button style={{ ...S.btnAmber, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllDocsToFolders(currentItem, custForQuote)} title="Generate and save all documents - replaces outdated copies with latest versions">Update All Files</button>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button style={{ ...S.btnGreen, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllContractDocs(currentItem, custForQuote)} title="Generate all 4 Manufactured Home contract documents into the Contracts folder">Generate Contracts</button>
+                    <button style={{ ...S.btnAmber, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllDocsToFolders(currentItem, custForQuote)} title="Generate and save all documents - replaces outdated copies with latest versions">Update All Files</button>
+                  </div>
                 </div>
                 {Object.entries(FolderUtils.getFolders(currentItem)).map(([folderId, files]) => (
                   <div key={folderId}
