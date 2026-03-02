@@ -90,6 +90,7 @@ export const collectOtherServices = (quote, totals) => {
     items.push({
       key: 'landscaping', name: 'Landscaping', nameWithDetail: 'Landscaping',
       description: 'Landscaping services',
+      days: quote.landscapingDays || null,
       cost: totals?.svc?.find(s => s.key === 'landscaping')?.cost || 0,
       customerNote: quote.serviceNotes?.landscaping || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.landscaping || [],
@@ -100,6 +101,7 @@ export const collectOtherServices = (quote, totals) => {
     items.push({
       key: 'deck', name: 'Deck Project', nameWithDetail: 'Deck',
       description: 'Deck construction services',
+      days: quote.deckDays || null,
       cost: totals?.svc?.find(s => s.key === 'deck')?.cost || 0,
       customerNote: quote.serviceNotes?.deck || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.deck || [],

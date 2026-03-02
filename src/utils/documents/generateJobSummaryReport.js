@@ -235,7 +235,7 @@ ${!hasAnyCrewData ? `
   <div class="info-grid">
     <div class="info-box">
       <div class="info-label">Home Type</div>
-      <div class="info-value">${quote.singleDouble === 'double' ? 'Double-Wide' : 'Single-Wide'}</div>
+      <div class="info-value">${quote.singleDouble === 'Double' ? 'Double-Wide' : 'Single-Wide'}</div>
     </div>
     <div class="info-box">
       <div class="info-label">Model</div>

@@ -145,8 +145,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margi
   </div>
   <div class="info-box">
     <div class="info-label">Contact Person</div>
-    <div class="info-value">${quote.contactPerson || 'Primary Contact'}</div>
-    <div class="info-value" style="font-size:13px">${formatPhone(quote.contactPhone || customer.phone)}</div>
+    <div class="info-value">${customer.firstName} ${customer.lastName}</div>
+    <div class="info-value" style="font-size:13px">${formatPhone(customer.phone)}</div>
   </div>
 </div>
 
@@ -154,11 +154,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margi
 <div class="project-summary">
   <div class="summary-title">📋 Project Overview</div>
   <div class="summary-grid">
-    <div class="summary-item"><span class="summary-label">Home Type:</span> ${quote.singleDouble === 'double' ? 'Double-Wide' : 'Single-Wide'}</div>
+    <div class="summary-item"><span class="summary-label">Home Type:</span> ${quote.singleDouble === 'Double' ? 'Double-Wide' : 'Single-Wide'}</div>
     <div class="summary-item"><span class="summary-label">Model:</span> ${quote.homeModel !== 'NONE' ? quote.homeModel : 'Custom'}</div>
     <div class="summary-item"><span class="summary-label">Dimensions:</span> ${quote.houseWidth}' × ${quote.houseLength}'</div>
     <div class="summary-item"><span class="summary-label">Foundation:</span> ${foundationName}</div>
     <div class="summary-item"><span class="summary-label">Drive Time:</span> ${quote.driveTime} miles (${(parseFloat(quote.driveTime) * 2).toFixed(0)} miles round trip)</div>
+    <div class="summary-item"><span class="summary-label">Walk Doors:</span> ${quote.walkDoors || 'N/A'}</div>
+    <div class="summary-item"><span class="summary-label">I-Beam Height:</span> ${quote.iBeamHeight || 'N/A'}"</div>
     <div class="summary-item"><span class="summary-label">Total Services:</span> ${installServices.length + professionalServices.length + homeSpecAdditions.length + otherServices.length}</div>
   </div>
 </div>
@@ -910,6 +912,7 @@ ${otherServices.map(svc => `
     </div>
   </div>
   ${svc.description ? `<div class="service-description">${svc.description}</div>` : ''}
+  ${svc.days ? `<div style="display:inline-block;background:#e8eaf6;padding:4px 10px;border-radius:4px;font-size:13px;margin-bottom:8px"><strong>Days:</strong> ${svc.days}</div>` : ''}
   ${svc.publishedCrewNotes.length > 0 ? svc.publishedCrewNotes.map(note => `
   <div class="crew-note" style="margin-bottom:12px">
     <div class="crew-note-title">🔧 CREW INSTRUCTIONS</div>

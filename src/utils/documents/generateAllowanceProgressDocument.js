@@ -149,6 +149,36 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
   </tbody>
 </table>
 
+${(() => {
+  const permitEntries = quote.permitEntries || [];
+  if (permitEntries.length === 0) return '';
+  const total = permitEntries.reduce((sum, e) => sum + parseFloat(e.cost || 0), 0);
+  return `
+<div class="section-title">Permit Entries Detail</div>
+<div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin:20px 0">
+  <table style="width:100%;border-collapse:collapse">
+    <thead>
+      <tr style="background:#2c5530;color:#fff">
+        <th style="padding:10px 14px;text-align:left;font-size:13px">Description</th>
+        <th style="padding:10px 14px;text-align:right;font-size:13px">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${permitEntries.map(e => `
+      <tr>
+        <td style="padding:10px 14px;border-bottom:1px solid #e0e0e0;font-size:14px">${e.name || e.description || 'Permit'}</td>
+        <td style="padding:10px 14px;border-bottom:1px solid #e0e0e0;font-size:14px;text-align:right;font-weight:600">${fmt(e.cost)}</td>
+      </tr>`).join('')}
+      <tr style="background:#f8f9fa">
+        <td style="padding:10px 14px;font-weight:700">Total Permits</td>
+        <td style="padding:10px 14px;text-align:right;font-weight:800;font-size:16px">${fmt(total)}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;
+})()}
+
 <div class="section-title">Contingency Fund Status</div>
 <div class="fund-box">
   <div class="fund-row">

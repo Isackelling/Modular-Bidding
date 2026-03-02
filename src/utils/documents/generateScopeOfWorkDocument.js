@@ -6,7 +6,7 @@ export const generateScopeOfWorkDocument = (quote, customer, services) => {
 
   // Get all selected services with details
   const selectedServices = Object.entries(quote.selectedServices || {})
-    .filter(([key, selected]) => selected)
+    .filter(([, selected]) => selected)
     .map(([key]) => {
       const service = services[key];
       return {
@@ -15,6 +15,28 @@ export const generateScopeOfWorkDocument = (quote, customer, services) => {
         description: service?.description || ''
       };
     });
+
+  // Additional services from quote-level fields (sewer, well, patio, landscaping, deck, custom)
+  const extraServices = [];
+  if (quote.sewerType && quote.sewerType !== 'none') {
+    const sewerLabels = { '1_bed': '1 Bedroom System', '2_bed': '2 Bedroom System', '3_bed': '3 Bedroom System' };
+    extraServices.push({ key: 'sewer', name: `Sewer System — ${sewerLabels[quote.sewerType] || quote.sewerType}` });
+  }
+  if (parseFloat(quote.wellDepth) > 0) {
+    extraServices.push({ key: 'well', name: `Well Drilling — ${quote.wellDepth} ft` });
+  }
+  if (quote.patioSize && quote.patioSize !== 'none') {
+    extraServices.push({ key: 'patio', name: `Concrete Patio — ${quote.patioSize} ft` });
+  }
+  if (quote.hasLandscaping) {
+    extraServices.push({ key: 'landscaping', name: 'Landscaping' });
+  }
+  if (quote.hasDeck) {
+    extraServices.push({ key: 'deck', name: 'Deck Construction' });
+  }
+  (quote.customServices || []).forEach(cs => {
+    if (cs.name) extraServices.push({ key: `custom_${cs.name}`, name: cs.name });
+  });
 
   // Foundation type descriptions with detailed specs
   const foundationTypes = {
@@ -209,7 +231,7 @@ tr:last-child td{border-bottom:none}
 <div class="highlight-box">
   <div style="font-weight:800;font-size:20px;color:#1565c0;margin-bottom:12px">Project Description</div>
   <div style="font-size:17px;margin-bottom:8px">
-    <strong>Installation of ${quote.singleDouble === 'double' ? 'Double-Wide' : 'Single-Wide'} Modular Home</strong>
+    <strong>Installation of ${quote.singleDouble === 'Double' ? 'Double-Wide' : 'Single-Wide'} Modular Home</strong>
     ${quote.homeModel !== 'NONE' ? ` - Model: <strong>${quote.homeModel}</strong>` : ''}
   </div>
   <div style="font-size:15px;color:#555;margin-top:12px">
@@ -374,19 +396,23 @@ ${selectedServices.filter(s => s.key === 'installation_of_home').length > 0 ? `
 </div>
 ` : ''}
 
-${selectedServices.filter(s => !['installation_of_home'].includes(s.key)).length > 0 ? `
+${(() => {
+  const additionalServices = [...selectedServices.filter(s => !['installation_of_home'].includes(s.key)), ...extraServices];
+  if (additionalServices.length === 0) return '';
+  const phaseNum = selectedServices.some(s => s.key === 'installation_of_home') ? '4' : '3';
+  return `
 <div class="phase-box">
-  <div class="phase-title">Phase ${selectedServices.filter(s => s.key === 'installation_of_home').length > 0 ? '4' : '3'}: Additional Services & Site Completion</div>
+  <div class="phase-title">Phase ${phaseNum}: Additional Services & Site Completion</div>
   <div style="font-size:14px;color:#666;margin-top:4px">Services performed as needed throughout or after main installation</div>
 </div>
 
-${selectedServices.filter(s => !['installation_of_home'].includes(s.key)).map(service => `
+${additionalServices.map(service => `
 <div class="service-box">
   <div class="service-name">${service.name}</div>
   <div style="font-size:14px;color:#666;margin-top:8px">Service will be completed per industry standards and local code requirements</div>
 </div>
-`).join('')}
-` : ''}
+`).join('')}`;
+})()}
 
 <!-- SECTION 4: SITE REQUIREMENTS & CONDITIONS -->
 <div class="section-title page-break">4. Site Requirements & Customer Obligations</div>

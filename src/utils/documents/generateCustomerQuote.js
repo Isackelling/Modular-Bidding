@@ -362,6 +362,16 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       });
     }
 
+    // Add general customer notes (not tied to a specific service)
+    (quote.publishedGeneralCustomerNotes || []).forEach(note => {
+      allNotes.push({
+        serviceName: 'General Project Note',
+        text: note.text,
+        publishedAt: note.publishedAt,
+        publishedBy: note.publishedBy
+      });
+    });
+
     if (allNotes.length === 0) return '';
 
     return `

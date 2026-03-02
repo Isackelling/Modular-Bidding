@@ -131,31 +131,31 @@ const CustomerPortal = ({
     const totalAllowances = allowanceItems.reduce((sum, item) => sum + item.contractPrice, 0);
     // Reconstruct original starting contingency from CO history (matches Scrubb tab formula)
     const coHistory = q.changeOrderHistory || [];
-    const contingency = coHistory.length > 0
+    const startingContingency = coHistory.length > 0
       ? (coHistory[0].contingencyUsed || 0) + (coHistory[0].contingencyBalance || 0)
       : (t.contingency || 0);
     const totalCODraws = coHistory.reduce((sum, co) => sum + (co.contingencyUsed || 0), 0);
-    const startingBalance = totalAllowances + contingency;
     const allowanceSavings = allowanceItems.filter(item => item.variance > 0).reduce((sum, item) => sum + item.variance, 0);
     const allowanceOverages = allowanceItems.filter(item => item.variance < 0).reduce((sum, item) => sum + Math.abs(item.variance), 0);
     const netVariance = allowanceSavings - allowanceOverages;
     // Customer contingency payments REFILL the fund (add back) — matches Scrubb tab
     const contingencyPaymentsTotal = (q.scrubbPayments || []).filter(p => p.isContingencyPayment).reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
-    const runningBalance = startingBalance - totalCODraws + netVariance + contingencyPaymentsTotal;
+    // Contingency balance formula — must match Scrubb tab (App.jsx) and generateAllowanceProgressDocument
+    const contingencyBalance = startingContingency - totalCODraws + allowanceSavings - allowanceOverages + contingencyPaymentsTotal;
 
     return (
       <div style={{ background: 'linear-gradient(135deg, #fff9e6, #fff3e0)', border: '2px solid #ffc107', borderRadius: 8, padding: 16, marginTop: 16, marginBottom: 16 }}>
         <h4 style={{ margin: '0 0 12px', color: '#856404', fontSize: 15 }}>💰 Live Budget Tracker</h4>
 
-        {/* Starting Balance */}
+        {/* Contingency Fund Summary */}
         <div style={{ background: '#fff', padding: 12, borderRadius: 6, marginBottom: 12, fontSize: 13 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontWeight: 600, color: '#856404' }}>Starting Allowances</span>
+            <span style={{ fontWeight: 600, color: '#856404' }}>Allowance Budget (info only)</span>
             <span style={{ fontWeight: 700, color: '#856404' }}>{fmt(totalAllowances)}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px solid #ffe0b2' }}>
-            <span style={{ fontWeight: 600, color: '#1565c0' }}>Contingency</span>
-            <span style={{ fontWeight: 700, color: '#1565c0' }}>+ {fmt(contingency)}</span>
+            <span style={{ fontWeight: 600, color: '#1565c0' }}>Starting Contingency Fund</span>
+            <span style={{ fontWeight: 700, color: '#1565c0' }}>{fmt(startingContingency)}</span>
           </div>
           {totalCODraws > 0 && (
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px solid #ffe0b2' }}>
@@ -164,8 +164,8 @@ const CustomerPortal = ({
             </div>
           )}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, paddingTop: 8, borderTop: '2px solid #ffc107' }}>
-            <span style={{ fontWeight: 700, color: '#2c5530' }}>Starting Balance</span>
-            <span style={{ fontWeight: 700, color: '#2c5530' }}>{fmt(startingBalance - totalCODraws)}</span>
+            <span style={{ fontWeight: 700, color: '#2c5530' }}>Contingency After COs</span>
+            <span style={{ fontWeight: 700, color: '#2c5530' }}>{fmt(startingContingency - totalCODraws)}</span>
           </div>
         </div>
 
@@ -205,17 +205,17 @@ const CustomerPortal = ({
           })}
         </div>
 
-        {/* Final Running Balance */}
-        <div style={{ background: runningBalance >= startingBalance ? '#e8f5e9' : '#ffebee', padding: 14, borderRadius: 6, border: `2px solid ${runningBalance >= startingBalance ? '#2e7d32' : '#d32f2f'}` }}>
+        {/* Contingency Fund Balance */}
+        <div style={{ background: contingencyBalance >= 0 ? '#e8f5e9' : '#ffebee', padding: 14, borderRadius: 6, border: `2px solid ${contingencyBalance >= 0 ? '#2e7d32' : '#d32f2f'}` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Final Balance</div>
-              <div data-testid="portal-contingency-balance" style={{ fontSize: 20, fontWeight: 700, color: runningBalance >= startingBalance ? '#2e7d32' : '#d32f2f' }}>
-                {fmt(runningBalance)}
+              <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Contingency Fund Balance</div>
+              <div data-testid="portal-contingency-balance" style={{ fontSize: 20, fontWeight: 700, color: contingencyBalance >= 0 ? '#2e7d32' : '#d32f2f' }}>
+                {fmt(contingencyBalance)}
               </div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Net Change</div>
+              <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Net Allowance Change</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: netVariance >= 0 ? '#2e7d32' : '#d32f2f' }}>
                 {netVariance > 0 ? '+' : ''}{fmt(netVariance)}
               </div>
@@ -227,10 +227,11 @@ const CustomerPortal = ({
               <span style={{ fontWeight: 600 }}>+ {fmt(contingencyPaymentsTotal)}</span>
             </div>
           )}
-          <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${runningBalance >= startingBalance ? '#a5d6a7' : '#ef9a9a'}`, fontSize: 11, color: '#666' }}>
-            {netVariance > 0 && contingencyPaymentsTotal === 0 && `✓ Under budget - You'll receive back ${fmt(runningBalance)} at completion`}
-            {netVariance > 0 && contingencyPaymentsTotal > 0 && `✓ Under budget - Estimated return at completion: ${fmt(runningBalance)}`}
-            {netVariance < 0 && `⚠ Over budget - Drawing ${fmt(Math.abs(netVariance))} from contingency`}
+          <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${contingencyBalance >= 0 ? '#a5d6a7' : '#ef9a9a'}`, fontSize: 11, color: '#666' }}>
+            {netVariance > 0 && contingencyPaymentsTotal === 0 && `✓ Under budget - Estimated contingency return: ${fmt(contingencyBalance)}`}
+            {netVariance > 0 && contingencyPaymentsTotal > 0 && `✓ Under budget - Estimated return at completion: ${fmt(contingencyBalance)}`}
+            {netVariance < 0 && contingencyBalance >= 0 && `⚠ Over budget - Drawing ${fmt(Math.abs(netVariance))} from contingency`}
+            {contingencyBalance < 0 && `⚠ Contingency exhausted - ${fmt(Math.abs(contingencyBalance))} owed`}
             {netVariance === 0 && contingencyPaymentsTotal === 0 && '• Tracking in progress'}
             {netVariance === 0 && contingencyPaymentsTotal > 0 && `• ${fmt(contingencyPaymentsTotal)} added back to contingency fund`}
           </div>
