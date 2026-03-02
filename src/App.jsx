@@ -1579,11 +1579,6 @@ function AppInner() {
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               ))}
-              {selContract && (
-                <button style={{ ...S.tab, ...(quoteTab === 'scope' ? S.tabA : {}) }} onClick={() => setQuoteTab('scope')}>
-                  Scope of Work
-                </button>
-              )}
             </div>
 
             {/* Details tab - Show quote/contract summary */}
@@ -1598,19 +1593,6 @@ function AppInner() {
                       generateCustomerQuote(q, totals, homeModels);
                     }}
                   >📄 View Quote</button>
-                  <button
-                    style={S.btnBlue}
-                    onClick={() => {
-                      const quoteNum = DocumentUtils.getQuoteNum(currentItem);
-                      const homeDesc = currentItem.homeModel !== 'NONE' ? currentItem.homeModel : `${currentItem.houseWidth}'x${currentItem.houseLength}'`;
-                      const totalStr = fmtCurrency(totals.totalWithContingency);
-                      const custName = `${custForQuote?.firstName || ''} ${custForQuote?.lastName || ''}`;
-                      const loginName = (custForQuote?.firstName + custForQuote?.lastName).replace(/\s+/g, '');
-                      const subject = encodeURIComponent(`Sherman Lumber - Quote #${quoteNum} for ${custName}`);
-                      const body = encodeURIComponent(`Hi ${custForQuote?.firstName || 'there'},\n\nThank you for choosing Sherman Lumber! Here are your quote details:\n\nQuote #: ${quoteNum}\nHome: ${homeDesc}\nTotal Investment: ${totalStr}\n\nTo view your full quote online:\n- Username: ${loginName}\n- Password: mybid\n\nPlease don't hesitate to reach out with any questions.\n\nBest regards,\n${userName}\nSherman Lumber Inc.`);
-                      window.location.href = `mailto:${custForQuote?.email || ''}?subject=${subject}&body=${body}`;
-                    }}
-                  >✉️ Email Quote</button>
                   {selContract && (
                     <button
                       style={S.btnOrange}
@@ -1619,6 +1601,15 @@ function AppInner() {
                         openDocumentWindow(html);
                       }}
                     >🔧 Crew Work Order</button>
+                  )}
+                  {selContract && (
+                    <button
+                      style={S.btnGreen}
+                      onClick={() => {
+                        const html = generateScopeOfWorkDocument(currentItem, custForQuote, services);
+                        openDocumentWindow(html);
+                      }}
+                    >📋 Scope of Work</button>
                   )}
                   {selContract && isAdmin && (
                     <button
@@ -1774,11 +1765,10 @@ function AppInner() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                   <h3 style={{ margin: 0 }}>Project Files</h3>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <button style={{ ...S.btnGreen, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllContractDocs(currentItem, custForQuote)} title="Generate all 4 Manufactured Home contract documents into the Contracts folder">Generate Contracts</button>
-                    <button style={{ ...S.btnAmber, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllDocsToFolders(currentItem, custForQuote)} title="Generate and save all documents - replaces outdated copies with latest versions">Update All Files</button>
+<button style={{ ...S.btnAmber, padding: '8px 20px', fontSize: 14 }} onClick={() => folderSavers.saveAllDocsToFolders(currentItem, custForQuote)} title="Generate and save all documents - replaces outdated copies with latest versions">Update All Files</button>
                   </div>
                 </div>
-                {Object.entries(FolderUtils.getFolders(currentItem)).map(([folderId, files]) => (
+                {Object.entries(FolderUtils.getFolders(currentItem)).filter(([folderId]) => !['change_orders', 'permits'].includes(folderId)).map(([folderId, files]) => (
                   <div key={folderId}
                     style={{ ...S.box, padding: 12, border: dragOverFolder === folderId ? '2px dashed #2c5530' : '1px solid #eee' }}
                     onDragOver={(e) => { e.preventDefault(); setDragOverFolder(folderId); }}
@@ -2608,34 +2598,7 @@ function AppInner() {
               onClose={handleCloseAdditionalMaterialModal}
             />
 
-            {/* Scope of Work tab */}
-            {quoteTab === 'scope' && selContract && (() => {
-              const scopeHtml = generateScopeOfWorkDocument(currentItem, custForQuote, services);
-              return (
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                    <h3 style={{ margin: 0 }}>Scope of Work</h3>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <button style={S.btnPurpleAlt} onClick={() => openDocumentWindow(scopeHtml)}>Open in New Tab</button>
-                      <button style={S.btnSm} onClick={() => {
-                        const blob = new Blob([scopeHtml], { type: 'text/html' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url; a.download = `Scope_of_Work_${DocumentUtils.getQuoteNum(currentItem)}.html`;
-                        a.click(); URL.revokeObjectURL(url);
-                      }}>Download</button>
-                    </div>
-                  </div>
-                  <iframe
-                    srcDoc={scopeHtml}
-                    style={{ width: '100%', height: 'calc(100vh - 200px)', border: '1px solid #e0e0e0', borderRadius: 8 }}
-                    title="Scope of Work"
-                  />
-                </div>
-              );
-            })()}
-
-            {/* Notes tab */}
+{/* Notes tab */}
             {quoteTab === 'notes' && (() => {
               const crewNotes = currentItem.publishedGeneralCrewNotes || [];
               const custNotes = currentItem.publishedGeneralCustomerNotes || [];
