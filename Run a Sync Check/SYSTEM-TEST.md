@@ -632,6 +632,82 @@ These values must be IDENTICAL across all documents that show them:
 
 ---
 
+## AA. Modular Home Contracts — Manufactured Home Documents
+
+**Files:** `src/utils/documents/generateManufacturedHomeDocuments.js`, `src/utils/folderSavers.js` (function `saveManufacturedHomeDocToContracts`), `src/App.jsx` — project files section (line ~1792)
+
+### AA-1. UI Trigger
+- [ ] In project files view, opening the `contracts` folder shows a "Manufactured Home Documents" sub-section
+- [ ] Four buttons present: "Purchase & Installation Contract", "Formaldehyde Disclosure", "Homeowner's Guide", "Warranty Statement"
+- [ ] Each button calls `folderSavers.saveManufacturedHomeDocToContracts(key, currentItem, custForQuote)` with keys: `contract`, `formaldehyde`, `guide`, `warranty`
+- [ ] Section only appears when `folderId === 'contracts'` — does NOT appear in other folders
+
+### AA-2. Save Function (`saveManufacturedHomeDocToContracts`)
+- [ ] Receives `(docKey, quote, customer)` — falls back to `selCustomer` if `customer` not passed
+- [ ] Calls `CalcHelpers.calculateQuoteTotals(quote, cust, ...)` to compute totals before generating
+- [ ] Dispatches to the correct generator based on `docKey`
+- [ ] Unknown `docKey` → `NotificationSystem.error(...)`, returns early (no crash)
+- [ ] Generated HTML → `Blob` → `blobToDataUrl()` → saved as data URL
+- [ ] File object: `{ name: "MH [Doc Name] - [Owner Name]", type: 'pdf', url: dataUrl, notes: "Generated [date]", addedBy: userName, addedAt: ISO string }`
+- [ ] File saved to `contracts` folder via `autoSaveFileToFolders(file, ['contracts'], quote, cust)`
+- [ ] Success toast: `NotificationSystem.success("[Doc Name] saved to Contracts folder!")`
+- [ ] `contracts` folder exists in `quote.folders` — verify `emptyQuote()` includes `contracts: []` and `FolderUtils.getFolders()` includes `contracts: []`
+
+### AA-3. `prep()` — Shared Data Extraction
+- [ ] `prep(quote, customer, totals)` is called by all 4 generators
+- [ ] `ownerName` = `customer.firstName + ' ' + customer.lastName`
+- [ ] `owner2Name` = `customer.person2FirstName + ' ' + customer.person2LastName` (second owner, if present)
+- [ ] `address` = `customer.siteAddress`
+- [ ] `cityStateZip` = `customer.siteCity + ', ' + customer.siteState + ', ' + customer.siteZip`
+- [ ] `phoneEmail` = `customer.phone` + `customer.email` combined
+- [ ] `homeModel` = `quote.homeModel` (skipped if `'NONE'`)
+- [ ] `contractPrice` / `contractFmt` = `totals.totalWithContingency` formatted as currency
+- [ ] `quoteNum` = `DocumentUtils.getQuoteNum(quote)`
+- [ ] Graceful if any field is missing (uses empty string, not crash)
+
+### AA-4. `generateManufacturedHomeContract`
+- [ ] Receives `(quote, customer, totals)` — calls `prep()` internally
+- [ ] Fills: Agreement Date, Owner Name, Address, City/State/Zip, Phone & Email
+- [ ] Fills: Home Model, Contract Price
+- [ ] Contractor section shows Sherman Builders hardcoded info (not from quote data)
+- [ ] Manufacturer section is blank (never filled from system — by design)
+- [ ] Signature lines present for Owner and Contractor
+- [ ] Document title includes owner name and quote number
+
+### AA-5. `generateFormaldehydeDisclosure`
+- [ ] Receives `(quote, customer, totals)` — calls `prep()` internally
+- [ ] Fills owner name and address from customer data
+- [ ] Formaldehyde disclosure language is static/legal boilerplate
+- [ ] Signature/initials section present
+
+### AA-6. `generateHomeownerGuide`
+- [ ] Receives `(quote, customer, totals)` — calls `prep()` internally
+- [ ] Fills owner-relevant fields (name, home model, address) where applicable
+- [ ] Guide content is static/informational boilerplate
+- [ ] Does NOT add fields beyond the original document layout (per file header comment)
+
+### AA-7. `generateWarrantyStatement`
+- [ ] Receives `(quote, customer, totals)` — calls `prep()` internally
+- [ ] Fills owner name and home model
+- [ ] Warranty terms are static boilerplate
+- [ ] Signature block present
+
+### AA-8. `contracts` Folder Integrity
+- [ ] `emptyQuote()` in `App.jsx` contains `contracts: []` in `folders` object
+- [ ] `FolderUtils.getFolders()` in `src/utils/FolderUtils.js` includes `contracts: []`
+- [ ] `FolderUtils.getFolders(quote)` merges existing `contracts` files (does not overwrite)
+- [ ] Folder visible in project files UI for admin and sales roles
+- [ ] Files saved to `contracts` persist through `saveQuotes()` / `saveContracts()` calls
+
+### AA-9. Cross-Checks
+- [ ] `totals.totalWithContingency` used for contract price (NOT `totals.total` — this is the full amount including contingency)
+- [ ] Same `CalcHelpers.calculateQuoteTotals()` call as other document generators — no independent recalculation
+- [ ] `DocumentUtils.formatDate()` used for date (consistent with other documents)
+- [ ] `DocumentUtils.getQuoteNum(quote)` used for quote number (consistent with other documents)
+- [ ] All 4 generators import from `./shared.js` (`COMPANY`, `DocumentUtils`, `fmt`)
+
+---
+
 ## Test Results Template
 
 When reporting findings, use this format:
