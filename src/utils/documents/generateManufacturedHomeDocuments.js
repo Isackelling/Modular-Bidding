@@ -33,7 +33,14 @@ const STYLES = `
   .checklist-table td:first-child { width: 85%; }
   .checklist-table td:last-child { width: 15%; text-align: center; font-size: 18px; }
   .generated-note { margin-top: 40px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 11px; color: #999; }
-  @media print { body { margin: 16px; } .header-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+  .editable { cursor: text; background: transparent; transition: background 0.15s; min-height: 1.1em; }
+  .editable:hover { background: #fffde7; border-radius: 3px; }
+  .editable:focus { outline: 2px solid #2c5530; background: #f0fff0; border-radius: 3px; }
+  .print-bar { position: fixed; top: 14px; right: 18px; z-index: 999; display: flex; align-items: center; gap: 10px; }
+  .print-bar button { background: #2c5530; color: #fff; border: none; padding: 9px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+  .print-bar button:hover { background: #1b3a20; }
+  .print-bar .hint { font-size: 12px; color: #444; background: #fff; padding: 5px 10px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  @media print { body { margin: 16px; } .header-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .print-bar { display: none !important; } }
 `;
 
 // If a value is present → show it bold; otherwise show a blank underline with dim placeholder text
@@ -42,8 +49,11 @@ const field = (val, placeholder = '') =>
     ? `<span class="filled">${val}</span>`
     : `<span class="blank">${placeholder || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span>`;
 
-// Always-blank underline (signature area, manufacturer fields, etc.)
-const blank = (width = 220) => `<span class="blank" style="min-width:${width}px">&nbsp;</span>`;
+// Always-blank underline — editable in the browser before printing
+const blank = (width = 220) => `<span class="blank editable" contenteditable="true" spellcheck="false" style="min-width:${width}px">&nbsp;</span>`;
+
+// Fixed print button + edit hint shown at top-right of every document (hidden when printing)
+const printBar = `<div class="print-bar"><button onclick="window.print()">🖨 Print / Save PDF</button><span class="hint">Click any underlined field to edit</span></div>`;
 
 // Derive common values from quote + customer + totals
 const prep = (quote, customer, totals) => {
@@ -75,6 +85,7 @@ export const generateManufacturedHomeContract = (quote, customer, totals) => {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Purchase &amp; Installation Agreement — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
+${printBar}
 <div class="header-bar">
   <h1>Fixed Contract Amount</h1>
   <p class="sub">Modular / Manufactured Home Purchase &amp; Installation Agreement &mdash; ${COMPANY.name} &mdash; Lic. # BC532878${d.quoteNum ? ` &mdash; #${d.quoteNum}` : ''}</p>
@@ -277,6 +288,7 @@ export const generateFormaldehydeDisclosure = (quote, customer, totals) => {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Formaldehyde Disclosure — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
+${printBar}
 <div class="header-bar">
   <h1>Formaldehyde Disclosure</h1>
   <p class="sub">Modular / Manufactured Home &mdash; ${COMPANY.name} &mdash; Lic. # BC532878${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''}</p>
@@ -357,6 +369,7 @@ export const generateHomeownerGuide = (quote, customer, totals) => {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Homeowner's Guide — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
+${printBar}
 <div class="header-bar">
   <h1>Homeowner's Guide to Selections, Purchases &amp; Key Milestones</h1>
   <p class="sub">Modular / Manufactured Home &mdash; ${COMPANY.name} &mdash; Lic. # BC532878${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''}</p>
@@ -555,6 +568,7 @@ export const generateWarrantyStatement = (quote, customer, totals) => {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Warranty Statement — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
+${printBar}
 <div class="header-bar">
   <h1>Warranty Statement</h1>
   <p class="sub">Sherman Homes | License # BC532878 | Modular / Manufactured Home${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''}</p>
