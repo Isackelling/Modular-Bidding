@@ -39,7 +39,7 @@ export const generateJobSummaryReport = (quote, customer, servicesParam, crewChe
     if (svcList.length === 0) return '';
     return `
     <div style="margin-bottom:30px">
-      <div style="font-size:18px;font-weight:800;color:#283593;margin-bottom:12px;border-bottom:2px solid #c5cae9;padding-bottom:6px">${title}</div>
+      <div style="font-size:14px;font-weight:800;color:#283593;margin-bottom:8px;border-bottom:2px solid #c5cae9;padding-bottom:4px">${title}</div>
       ${svcList.map(svc => `
       <div style="background:#fff;border:2px solid #dee2e6;border-radius:8px;padding:16px;margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -141,30 +141,30 @@ export const generateJobSummaryReport = (quote, customer, servicesParam, crewChe
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Job Summary - ${customer?.firstName || 'Customer'} ${customer?.lastName || ''} - #${quoteNum}</title>
 <style>
-body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1000px;margin:0 auto;color:#222;line-height:1.6;background:#fafafa}
-.header{background:linear-gradient(135deg,#283593 0%,#3949ab 100%);color:#fff;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:flex;justify-content:space-between;align-items:center}
-.header-left{display:flex;align-items:center;gap:20px}
-.title{font-size:32px;font-weight:900;letter-spacing:-0.5px}
-.subtitle{font-size:14px;margin-top:4px;opacity:0.9}
-.header-right{text-align:right;font-size:14px;opacity:0.9}
-.section{background:#fff;border-radius:8px;padding:24px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
-.section-title{font-size:20px;font-weight:800;color:#283593;margin:0 0 16px;border-bottom:3px solid #c5cae9;padding-bottom:8px}
-.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.info-box{background:#e8eaf6;padding:14px;border-radius:6px;border-left:4px solid #283593}
-.info-label{font-weight:700;color:#283593;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.info-value{font-size:14px;color:#333}
+body{font-family:'Segoe UI',Arial,sans-serif;padding:18px;max-width:1000px;margin:0 auto;color:#222;line-height:1.45;background:#fafafa;font-size:13px}
+.header{background:linear-gradient(135deg,#283593 0%,#3949ab 100%);color:#fff;padding:14px 18px;border-radius:8px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.12);display:flex;justify-content:space-between;align-items:center}
+.header-left{display:flex;align-items:center;gap:12px}
+.title{font-size:22px;font-weight:900;letter-spacing:-0.5px}
+.subtitle{font-size:12px;margin-top:2px;opacity:0.9}
+.header-right{text-align:right;font-size:12px;opacity:0.9}
+.section{background:#fff;border-radius:6px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.section-title{font-size:15px;font-weight:800;color:#283593;margin:0 0 10px;border-bottom:2px solid #c5cae9;padding-bottom:5px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.info-box{background:#e8eaf6;padding:10px 12px;border-radius:5px;border-left:4px solid #283593}
+.info-label{font-weight:700;color:#283593;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+.info-value{font-size:12px;color:#333}
 .cost-table{width:100%;border-collapse:collapse}
-.cost-table td{padding:10px 14px;font-size:14px}
+.cost-table td{padding:6px 10px;font-size:12px}
 .cost-table tr{border-bottom:1px solid #eee}
 .cost-table .label{font-weight:600;color:#333}
 .cost-table .amount{text-align:right;font-weight:600}
 .cost-table .total-row{border-top:3px solid #283593}
-.cost-table .total-row td{font-size:18px;font-weight:800;color:#283593;padding-top:14px}
-.checklist-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:4px;margin-bottom:4px}
+.cost-table .total-row td{font-size:14px;font-weight:800;color:#283593;padding-top:8px}
+.checklist-row{display:flex;align-items:flex-start;gap:8px;padding:5px 8px;border-radius:4px;margin-bottom:2px}
 .checklist-row:nth-child(odd){background:#f5f5f5}
-.no-data-notice{background:#fff3cd;border:2px solid #ffc107;border-radius:8px;padding:20px;text-align:center;margin-bottom:20px}
-.co-card{background:#fff;border:2px solid #ff6b35;border-radius:8px;padding:16px;margin-bottom:12px}
-@media print{body{padding:15px;background:#fff}.section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}.header{box-shadow:none}.print-bar{display:none!important}}
+.no-data-notice{background:#fff3cd;border:2px solid #ffc107;border-radius:6px;padding:12px;text-align:center;margin-bottom:12px}
+.co-card{background:#fff;border:2px solid #ff6b35;border-radius:6px;padding:10px 12px;margin-bottom:8px}
+@media print{body{padding:10px;background:#fff;font-size:11px}.section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}.header{box-shadow:none}.print-bar{display:none!important}}
 ${PRINT_STYLES}
 </style></head><body>
 ${PRINT_BAR}
@@ -356,11 +356,10 @@ ${nonReversalCOs.length > 0 ? `
   </div>
 </div>
 
-<div style="margin-top:40px;padding-top:30px;border-top:3px solid #dee2e6;text-align:center;color:#666">
-  <div style="font-size:18px;font-weight:700;margin-bottom:8px">${COMPANY.name}</div>
-  <div style="font-size:14px">${COMPANY.address}</div>
-  <div style="font-size:14px">Phone: ${COMPANY.phone}</div>
-  <div style="font-size:12px;margin-top:15px;font-style:italic">CONFIDENTIAL — Internal Job Summary Report</div>
+<div style="margin-top:16px;padding-top:12px;border-top:2px solid #dee2e6;text-align:center;color:#666;font-size:12px">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px">${COMPANY.name}</div>
+  <div>${COMPANY.address} &nbsp;|&nbsp; ${COMPANY.phone}</div>
+  <div style="margin-top:8px;font-style:italic">CONFIDENTIAL — Internal Job Summary Report</div>
 </div>
 
 </body></html>`;

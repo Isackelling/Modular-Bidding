@@ -52,25 +52,25 @@ export const generateAllowanceProgressDocument = (quote, customer, totals, servi
 
   return `<!DOCTYPE html><html><head><title>Allowance Progress Update - ${customer.firstName} ${customer.lastName}</title>
 <style>
-body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin:0 auto;color:#333;line-height:1.6}
-.header{border-bottom:4px solid #1565c0;padding-bottom:20px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:flex-start}
-.title{font-size:32px;font-weight:800;color:#1565c0;margin:0}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:30px}
-.info-box{background:#f8f9fa;padding:15px;border-radius:8px}
-.progress-bar{background:#e0e0e0;height:30px;border-radius:15px;overflow:hidden;margin:20px 0}
-.progress-fill{background:linear-gradient(90deg,#1565c0,#42a5f5);height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px}
-.section-title{font-size:20px;font-weight:700;color:#2c5530;margin:30px 0 15px;border-bottom:2px solid#2c5530;padding-bottom:8px}
-.allowance-table{width:100%;border-collapse:collapse;margin:20px 0}
-.allowance-table th{background:#2c5530;color:#fff;padding:12px;text-align:left;font-size:13px}
-.allowance-table td{padding:12px;border-bottom:1px solid #e0e0e0;font-size:14px}
-.status-badge{padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;text-transform:uppercase}
+body{font-family:'Segoe UI',Arial,sans-serif;padding:24px;max-width:900px;margin:0 auto;color:#333;line-height:1.45;font-size:13px}
+.header{border-bottom:3px solid #1565c0;padding-bottom:14px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start}
+.title{font-size:22px;font-weight:800;color:#1565c0;margin:0}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.info-box{background:#f8f9fa;padding:10px 12px;border-radius:6px}
+.progress-bar{background:#e0e0e0;height:22px;border-radius:11px;overflow:hidden;margin:12px 0}
+.progress-fill{background:linear-gradient(90deg,#1565c0,#42a5f5);height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
+.section-title{font-size:15px;font-weight:700;color:#2c5530;margin:18px 0 10px;border-bottom:2px solid #2c5530;padding-bottom:5px}
+.allowance-table{width:100%;border-collapse:collapse;margin:10px 0}
+.allowance-table th{background:#2c5530;color:#fff;padding:7px 10px;text-align:left;font-size:12px}
+.allowance-table td{padding:7px 10px;border-bottom:1px solid #e0e0e0;font-size:12px}
+.status-badge{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase}
 .status-pending{background:#e0e0e0;color:#666}
 .status-under{background:#d1e7dd;color:#0a5a2a}
 .status-over{background:#f8d7da;color:#721c24}
 .status-on{background:#cfe2ff;color:#084298}
-.fund-box{background:#e3f2fd;padding:20px;border-radius:8px;border:2px solid #1565c0;margin:20px 0}
-.fund-row{display:flex;justify-content:space-between;padding:8px 0;font-size:16px}
-.fund-total{font-size:24px;font-weight:800;border-top:3px solid #1565c0;margin-top:12px;padding-top:12px}
+.fund-box{background:#e3f2fd;padding:14px;border-radius:6px;border:2px solid #1565c0;margin:12px 0}
+.fund-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+.fund-total{font-size:18px;font-weight:800;border-top:3px solid #1565c0;margin-top:8px;padding-top:8px}
 ${PRINT_STYLES}
 </style></head><body>
 ${PRINT_BAR}
@@ -81,8 +81,8 @@ ${PRINT_BAR}
     <div style="font-size:16px;color:#666;margin-top:8px">Quote #${quoteNum}</div>
   </div>
   <div style="text-align:right">
-    <div style="font-size:18px;font-weight:700;color:#2c5530">${COMPANY.name}</div>
-    <div style="font-size:13px;color:#666">${today}</div>
+    <div style="font-size:14px;font-weight:700;color:#2c5530">${COMPANY.name}</div>
+    <div style="font-size:12px;color:#666">${today}</div>
   </div>
 </div>
 
@@ -101,9 +101,9 @@ ${PRINT_BAR}
 
 <div class="section-title">Project Progress</div>
 <div style="background:#fff;padding:20px;border-radius:8px;border:1px solid #e0e0e0">
-  <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-    <span style="font-size:14px;color:#666">Allowance Items Completed</span>
-    <span style="font-size:18px;font-weight:700;color:#1565c0">${completedItems} of ${totalItems}</span>
+  <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+    <span style="font-size:13px;color:#666">Allowance Items Completed</span>
+    <span style="font-size:15px;font-weight:700;color:#1565c0">${completedItems} of ${totalItems}</span>
   </div>
   <div class="progress-bar">
     <div class="progress-fill" style="width:${totalItems > 0 ? (completedItems / totalItems * 100).toFixed(0) : 0}%">
@@ -307,9 +307,8 @@ ${(() => {
   </ul>
 </div>
 
-<div style="margin-top:40px;padding:20px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#666">
-  <p style="margin-bottom:8px"><strong>Questions or Concerns?</strong></p>
-  <p style="margin:0">Please contact ${COMPANY.name} at ${COMPANY.phone} if you have any questions about this update or your project's progress.</p>
+<div style="margin-top:16px;padding:10px 14px;background:#f8f9fa;border-radius:6px;font-size:12px;color:#666">
+  <strong>Questions or Concerns?</strong> Contact ${COMPANY.name} at ${COMPANY.phone}.
 </div>
 
 </body></html>`;

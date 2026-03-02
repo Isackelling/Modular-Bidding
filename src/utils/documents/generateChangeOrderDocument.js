@@ -79,23 +79,23 @@ export const generateChangeOrderDocument = (changeOrder, originalQuote, customer
 
   return `<!DOCTYPE html><html><head><title>Change Order #${changeOrder.changeOrderNum}${changeOrder.changeOrderVersion || ''} - ${customer.firstName} ${customer.lastName}</title>
 <style>
-body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin:0 auto;color:#333;line-height:1.6}
-.header{border-bottom:4px solid #ffc107;padding-bottom:20px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:flex-start}
-.co-title{font-size:32px;font-weight:800;color:#ffc107;margin:0}
-.co-number{font-size:48px;font-weight:900;color:#ffc107}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:30px}
-.info-box{background:#f8f9fa;padding:15px;border-radius:8px}
-.section-title{font-size:20px;font-weight:700;color:#2c5530;margin:30px 0 15px;border-bottom:2px solid #2c5530;padding-bottom:8px}
-.change-item{display:flex;justify-content:space-between;padding:12px;margin:8px 0;border-radius:6px}
+body{font-family:'Segoe UI',Arial,sans-serif;padding:24px;max-width:900px;margin:0 auto;color:#333;line-height:1.45;font-size:13px}
+.header{border-bottom:3px solid #ffc107;padding-bottom:14px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start}
+.co-title{font-size:22px;font-weight:800;color:#ffc107;margin:0}
+.co-number{font-size:32px;font-weight:900;color:#ffc107}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.info-box{background:#f8f9fa;padding:10px 12px;border-radius:6px}
+.section-title{font-size:15px;font-weight:700;color:#2c5530;margin:18px 0 10px;border-bottom:2px solid #2c5530;padding-bottom:5px}
+.change-item{display:flex;justify-content:space-between;padding:8px 10px;margin:5px 0;border-radius:5px}
 .change-added{background:#d1e7dd;border-left:4px solid #28a745}
 .change-modified{background:#cfe2ff;border-left:4px solid #0d6efd}
 .change-removed{background:#f8d7da;border-left:4px solid #dc3545}
-.financial{background:#e3f2fd;padding:20px;border-radius:8px;border:2px solid #1565c0;margin:30px 0}
-.financial-row{display:flex;justify-content:space-between;padding:8px 0;font-size:16px}
-.financial-total{font-size:24px;font-weight:800;border-top:3px solid #1565c0;margin-top:12px;padding-top:12px}
-.signature-box{margin-top:40px;border:2px solid #333;padding:20px;border-radius:8px}
-.sig-line{border-bottom:2px solid #333;margin:30px 0 10px;min-height:40px}
-.warning{background:#fff3cd;border:2px solid #ffc107;padding:15px;border-radius:8px;margin:20px 0}
+.financial{background:#e3f2fd;padding:14px;border-radius:8px;border:2px solid #1565c0;margin:16px 0}
+.financial-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+.financial-total{font-size:18px;font-weight:800;border-top:3px solid #1565c0;margin-top:8px;padding-top:8px}
+.signature-box{margin-top:24px;border:2px solid #333;padding:14px;border-radius:8px}
+.sig-line{border-bottom:2px solid #333;margin:20px 0 8px;min-height:30px}
+.warning{background:#fff3cd;border:2px solid #ffc107;padding:10px 12px;border-radius:6px;margin:12px 0}
 ${PRINT_STYLES}
 </style></head><body>
 ${PRINT_BAR_EDITABLE}
@@ -131,9 +131,9 @@ ${PRINT_BAR_EDITABLE}
 </div>
 
 <div class="section-title">ORIGINAL QUOTE TOTAL</div>
-<div style="font-size:24px;font-weight:700;color:#2c5530;padding:15px;background:#e8f5e9;border-radius:8px">
+<div style="font-size:18px;font-weight:700;color:#2c5530;padding:10px 12px;background:#e8f5e9;border-radius:6px">
   ${fmt(originalTotals.totalWithContingency)}
-  <div style="font-size:13px;font-weight:400;color:#666;margin-top:4px">Contingency Fund Available: ${fmt(contingencyAvailable)}</div>
+  <div style="font-size:12px;font-weight:400;color:#666;margin-top:2px">Contingency Fund Available: ${fmt(contingencyAvailable)}</div>
 </div>
 
 <div class="section-title">CHANGES MADE</div>
@@ -197,9 +197,9 @@ ${changes.added.length === 0 && changes.modified.length === 0 && changes.removed
     <span>New Total:</span>
     <span style="color:#2c5530">${fmt(changeOrderTotals.totalWithContingency)}</span>
   </div>
-  <div class="financial-row" style="border-top:2px solid #1565c0;margin-top:12px;padding-top:12px">
-    <span style="font-size:20px;font-weight:800">Customer Additional Cost:</span>
-    <span style="font-size:20px;font-weight:800;color:${customerCost > 0 ? '#dc3545' : '#28a745'}">${fmt(customerCost)}</span>
+  <div class="financial-row" style="border-top:2px solid #1565c0;margin-top:8px;padding-top:8px">
+    <span style="font-size:15px;font-weight:800">Customer Additional Cost:</span>
+    <span style="font-size:15px;font-weight:800;color:${customerCost > 0 ? '#dc3545' : '#28a745'}">${fmt(customerCost)}</span>
   </div>
   <div style="font-size:13px;color:#666;margin-top:12px;font-style:italic">
     ${contingencyApplied > 0 ? `${fmt(contingencyApplied)} paid from contingency fund` : ''}
@@ -231,7 +231,7 @@ ${changes.added.length === 0 && changes.modified.length === 0 && changes.removed
   </div>
 </div>
 
-<div style="margin-top:40px;padding:20px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#666">
+<div style="margin-top:20px;padding:12px 14px;background:#f8f9fa;border-radius:6px;font-size:12px;color:#666">
   <p style="margin-bottom:8px"><strong>Terms & Conditions:</strong></p>
   <ul style="margin-left:20px">
     <li>This change order is valid for 30 days from the date above</li>

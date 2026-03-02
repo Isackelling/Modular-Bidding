@@ -25,36 +25,36 @@ export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) =>
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Crew Work Order - ${customer.firstName || 'Customer'} ${customer.lastName || ''}</title>
 <style>
-body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margin:0 auto;color:#222;line-height:1.6}
-.header{background:linear-gradient(135deg,#ff6b35 0%,#f7931e 100%);color:#fff;padding:30px;border-radius:10px;margin-bottom:30px;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-.title{font-size:38px;font-weight:900;margin:0;letter-spacing:-0.5px}
-.subtitle{font-size:16px;margin-top:8px;opacity:0.95;font-weight:500}
-.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:30px}
-.info-box{background:#f8f9fa;padding:18px;border-radius:8px;border-left:4px solid #ff6b35}
-.info-label{font-weight:700;margin-bottom:8px;color:#ff6b35;font-size:13px;text-transform:uppercase;letter-spacing:0.5px}
-.info-value{font-size:15px;color:#333}
-.section-title{font-size:24px;font-weight:800;color:#ff6b35;margin:40px 0 20px;border-bottom:3px solid #ff6b35;padding-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
-.service-card{background:#fff;border:2px solid #dee2e6;border-radius:8px;padding:20px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.08);transition:all 0.3s ease}
+body{font-family:'Segoe UI',Arial,sans-serif;padding:18px;max-width:1400px;margin:0 auto;color:#222;line-height:1.5}
+.header{background:linear-gradient(135deg,#ff6b35 0%,#f7931e 100%);color:#fff;padding:18px 20px;border-radius:8px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+.title{font-size:26px;font-weight:900;margin:0;letter-spacing:-0.5px}
+.subtitle{font-size:13px;margin-top:4px;opacity:0.95;font-weight:500}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.info-box{background:#f8f9fa;padding:12px;border-radius:6px;border-left:4px solid #ff6b35}
+.info-label{font-weight:700;margin-bottom:5px;color:#ff6b35;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
+.info-value{font-size:13px;color:#333}
+.section-title{font-size:18px;font-weight:800;color:#ff6b35;margin:24px 0 12px;border-bottom:3px solid #ff6b35;padding-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.service-card{background:#fff;border:2px solid #dee2e6;border-radius:6px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);transition:all 0.3s ease}
 .service-card.completed{background:#f1f8f4;border-color:#2e7d32;opacity:0.7}
-.service-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:12px;border-bottom:2px solid #e9ecef}
-.service-name{font-size:20px;font-weight:800;color:#2c5530;display:flex;align-items:center;gap:12px}
-.service-checkbox{width:24px;height:24px;cursor:pointer;accent-color:#2e7d32}
-.service-cost{font-size:18px;font-weight:700;color:#ff6b35}
-.service-description{font-size:14px;color:#666;margin-bottom:12px;font-style:italic}
-.service-details{display:flex;gap:20px;margin-bottom:15px;font-size:14px}
-.service-detail-item{background:#f1f3f5;padding:8px 12px;border-radius:4px;font-weight:600}
-.crew-note{background:#fff3e0;border-left:4px solid #ff6b35;padding:15px;border-radius:4px;margin-top:12px}
-.crew-note-title{font-weight:700;color:#e65100;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:8px}
-.crew-note-content{font-size:14px;line-height:1.6;white-space:pre-wrap;color:#333}
-.customer-note{background:#e3f2fd;border-left:4px solid #1565c0;padding:15px;border-radius:4px;margin-top:12px}
-.customer-note-title{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:8px}
-.customer-note-content{font-size:14px;line-height:1.6;white-space:pre-wrap;color:#333}
-.important-box{background:#ffebee;border:3px solid #c62828;padding:20px;border-radius:8px;margin:25px 0}
-.important-title{font-weight:800;color:#c62828;font-size:18px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.project-summary{background:#e8f5e9;border:2px solid #2e7d32;padding:20px;border-radius:8px;margin-bottom:30px}
-.summary-title{font-weight:800;color:#2e7d32;font-size:18px;margin-bottom:15px}
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.summary-item{font-size:15px;padding:8px 0}
+.service-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #e9ecef}
+.service-name{font-size:16px;font-weight:800;color:#2c5530;display:flex;align-items:center;gap:10px}
+.service-checkbox{width:22px;height:22px;cursor:pointer;accent-color:#2e7d32}
+.service-cost{font-size:14px;font-weight:700;color:#ff6b35}
+.service-description{font-size:13px;color:#666;margin-bottom:8px;font-style:italic}
+.service-details{display:flex;gap:12px;margin-bottom:10px;font-size:13px}
+.service-detail-item{background:#f1f3f5;padding:5px 10px;border-radius:4px;font-weight:600}
+.crew-note{background:#fff3e0;border-left:4px solid #ff6b35;padding:10px;border-radius:4px;margin-top:8px}
+.crew-note-title{font-weight:700;color:#e65100;margin-bottom:5px;font-size:13px;display:flex;align-items:center;gap:6px}
+.crew-note-content{font-size:13px;line-height:1.5;white-space:pre-wrap;color:#333}
+.customer-note{background:#e3f2fd;border-left:4px solid #1565c0;padding:10px;border-radius:4px;margin-top:8px}
+.customer-note-title{font-weight:700;color:#1565c0;margin-bottom:5px;font-size:13px;display:flex;align-items:center;gap:6px}
+.customer-note-content{font-size:13px;line-height:1.5;white-space:pre-wrap;color:#333}
+.important-box{background:#ffebee;border:3px solid #c62828;padding:14px;border-radius:6px;margin:16px 0}
+.important-title{font-weight:800;color:#c62828;font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.project-summary{background:#e8f5e9;border:2px solid #2e7d32;padding:14px;border-radius:6px;margin-bottom:16px}
+.summary-title{font-weight:800;color:#2e7d32;font-size:14px;margin-bottom:10px}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary-item{font-size:13px;padding:5px 0}
 .summary-label{font-weight:700;color:#2e7d32}
 .no-services{background:#f8f9fa;padding:30px;text-align:center;color:#666;border-radius:8px;font-style:italic}
 .progress-bar-container{background:#e0e0e0;border-radius:10px;height:30px;margin:20px 0;overflow:hidden;position:relative}
@@ -100,10 +100,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margi
 .service-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .service-grid .service-card{margin-bottom:0}
 .collapsible-section{margin-bottom:30px}
-.section-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:15px 20px;background:linear-gradient(135deg,#ff6b35 0%,#f7931e 100%);border-radius:8px;margin-bottom:0;transition:all 0.3s ease}
-.section-header:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,107,53,0.3)}
-.section-header-title{font-size:24px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:10px}
-.section-toggle-btn{background:rgba(255,255,255,0.2);border:2px solid #fff;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;transition:all 0.3s ease;cursor:pointer}
+.section-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:10px 16px;background:linear-gradient(135deg,#ff6b35 0%,#f7931e 100%);border-radius:6px;margin-bottom:0;transition:all 0.3s ease}
+.section-header:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(255,107,53,0.3)}
+.section-header-title{font-size:18px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:8px}
+.section-toggle-btn{background:rgba(255,255,255,0.2);border:2px solid #fff;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;transition:all 0.3s ease;cursor:pointer}
 .section-toggle-btn:hover{background:rgba(255,255,255,0.4);transform:scale(1.1)}
 .section-content{max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0}
 .section-content.expanded{max-height:50000px;padding:20px 0}

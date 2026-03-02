@@ -6,33 +6,34 @@
 import { COMPANY, DocumentUtils, fmt } from './shared.js';
 
 const STYLES = `
-  body { font-family: Arial, sans-serif; max-width: 850px; margin: 40px auto; padding: 20px 28px; color: #222; line-height: 1.6; }
-  h1 { color: #2c5530; border-bottom: 3px solid #2c5530; padding-bottom: 8px; margin-bottom: 4px; }
-  h2 { color: #2c5530; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 28px; }
-  h3 { color: #2c5530; margin-top: 18px; margin-bottom: 6px; }
+  body { font-family: Arial, sans-serif; max-width: 850px; margin: 20px auto; padding: 16px 24px; color: #222; line-height: 1.5; font-size: 13px; }
+  h1 { color: #2c5530; border-bottom: 3px solid #2c5530; padding-bottom: 6px; margin-bottom: 4px; }
+  h2 { color: #2c5530; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 18px; margin-bottom: 4px; }
+  h3 { color: #2c5530; margin-top: 12px; margin-bottom: 4px; }
   .blank { border-bottom: 1px solid #aaa; display: inline-block; min-width: 180px; color: #999; font-style: italic; font-size: 12px; }
   .filled { font-weight: 700; }
-  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-  th { background: #2c5530; color: #fff; padding: 8px 12px; text-align: left; font-size: 13px; }
-  td { padding: 7px 12px; border-bottom: 1px solid #ddd; font-size: 13px; }
-  blockquote { background: #fff8e1; border-left: 4px solid #f57f17; padding: 10px 14px; margin: 14px 0; font-size: 13px; }
-  ul, ol { margin: 8px 0 8px 24px; padding: 0; }
-  li { margin-bottom: 4px; }
-  .sig-section { margin-top: 32px; border-top: 2px solid #2c5530; padding-top: 20px; }
-  .sig-block { margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  th { background: #2c5530; color: #fff; padding: 6px 10px; text-align: left; font-size: 12px; }
+  td { padding: 5px 10px; border-bottom: 1px solid #ddd; font-size: 12px; }
+  blockquote { background: #fff8e1; border-left: 4px solid #f57f17; padding: 8px 12px; margin: 10px 0; font-size: 13px; }
+  ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+  li { margin-bottom: 3px; }
+  .sig-section { margin-top: 22px; border-top: 2px solid #2c5530; padding-top: 14px; }
+  .sig-block { margin-bottom: 12px; }
   .sig-line { display: inline-block; border-bottom: 1px solid #333; min-width: 280px; margin-bottom: 2px; }
   .sig-prefilled { font-weight: 600; font-size: 13px; }
   .sig-label { font-size: 12px; color: #555; }
-  .initial-row { margin: 10px 0; }
+  .initial-row { margin: 8px 0; }
   .initial-box { display: inline-block; border-bottom: 1px solid #333; width: 60px; margin-right: 8px; }
-  .header-bar { background: #2c5530; color: #fff; padding: 10px 16px; margin: -20px -28px 24px; }
-  .header-bar h1 { color: #fff; border: none; margin: 0; padding: 0; font-size: 20px; }
-  .header-bar .sub { color: #c8e6c9; font-size: 13px; margin: 2px 0 0; }
-  .notice-box { background: #fff3e0; border: 1px solid #ff9800; border-radius: 4px; padding: 12px 16px; margin: 16px 0; font-size: 13px; }
-  .important-notice { background: #ffebee; border: 2px solid #c62828; padding: 14px 16px; margin: 16px 0; font-weight: bold; font-size: 13px; }
+  .header-bar { background: #2c5530; color: #fff; padding: 10px 16px; margin: -16px -24px 18px; }
+  .header-bar h1 { color: #fff; border: none; margin: 0; padding: 0; font-size: 18px; }
+  .header-bar .sub { color: #c8e6c9; font-size: 12px; margin: 2px 0 0; }
+  .notice-box { background: #fff3e0; border: 1px solid #ff9800; border-radius: 4px; padding: 10px 12px; margin: 10px 0; font-size: 13px; }
+  /* LEGAL REQUIREMENT — Minnesota Stat. 325F.182 / HUD 24 CFR 3280.309: formaldehyde notice must be ALL CAPS, bold, minimum 10pt (≈13px). DO NOT reduce font-size below 13px. */
+  .important-notice { background: #ffebee; border: 2px solid #c62828; padding: 14px 16px; margin: 16px 0; font-weight: bold; font-size: 13px; line-height: 1.6; }
   .checklist-table td:first-child { width: 85%; }
-  .checklist-table td:last-child { width: 15%; text-align: center; font-size: 18px; }
-  .generated-note { margin-top: 40px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 11px; color: #999; }
+  .checklist-table td:last-child { width: 15%; text-align: center; font-size: 16px; }
+  .generated-note { margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 11px; color: #999; }
   .editable { cursor: text; background: transparent; transition: background 0.15s; min-height: 1.1em; }
   .editable:hover { background: #fffde7; border-radius: 3px; }
   .editable:focus { outline: 2px solid #2c5530; background: #f0fff0; border-radius: 3px; }
