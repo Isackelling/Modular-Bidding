@@ -235,6 +235,7 @@ ${changes.added.length === 0 && changes.modified.length === 0 && changes.removed
     <li>This change order is valid for 30 days from the date above</li>
     <li>Work will not proceed until this change order is signed by the customer</li>
     <li>Payment for additional costs is due before work begins on the changes</li>
+    <li>A <strong>$300 administrative fee</strong> is included in the total cost of this Change Order</li>
     <li>All other terms of the original contract remain in effect</li>
   </ul>
 </div>

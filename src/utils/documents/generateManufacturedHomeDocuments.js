@@ -63,6 +63,7 @@ const prep = (quote, customer, totals) => {
       ? `$${Number(t.totalWithContingency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       : '',
     contractFmt:   t.totalWithContingency ? fmt(t.totalWithContingency) : '',
+    downPaymentFmt: t.totalWithContingency ? fmt(t.totalWithContingency * 0.5) : '',
   };
 };
 
@@ -72,7 +73,7 @@ export const generateManufacturedHomeContract = (quote, customer, totals) => {
   const d = prep(quote, customer, totals);
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<title>Purchase &amp; Installation Agreement — ${d.ownerName || 'Sherman Builders'}</title>
+<title>Purchase &amp; Installation Agreement — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
 <div class="header-bar">
   <h1>Fixed Contract Amount</h1>
@@ -90,16 +91,16 @@ export const generateManufacturedHomeContract = (quote, customer, totals) => {
 <p>Phone &amp; Email: ${field(d.phoneEmail)}</p>
 
 <p><strong>And The Contractor:</strong><br>
-Sherman Builders<br>
+Sherman Homes<br>
 2244 Hwy 65<br>
 Mora, MN 55051<br>
 Lic. # BC532878</p>
 
 <p><strong>And The Manufacturer:</strong><br>
 <em>(The third-party manufacturer that constructs the home unit off-site in a factory)</em><br>
-Name: ${blank(240)}<br>
-Address: ${blank(240)}<br>
-HUD Certification / License No.: ${blank(200)} &nbsp; Sales Contact: ${blank(200)}</p>
+Name: <strong>Schult Homes by Clayton</strong><br>
+Address: <strong>201 Industrial Dr, Redwood Falls, MN 56283</strong><br>
+HUD Certification / License No.: ${blank(200)} &nbsp; Sales Contact: <strong>Sherman</strong></p>
 
 <p><strong>For The Project:</strong><br>
 Home Model: ${field(d.homeModel)}<br>
@@ -113,7 +114,7 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 <blockquote><strong>Note:</strong> The Homeowner Guide is incorporated into this Contract by reference. Owner must read, initial, and sign the Homeowner Guide as part of executing this Agreement.</blockquote>
 
 <h2>2. Scope of Work — Division of Responsibility</h2>
-<p>Because this project involves a factory-built home, construction responsibilities are divided between the Manufacturer and Sherman Builders as follows.</p>
+<p>Because this project involves a factory-built home, construction responsibilities are divided between the Manufacturer and Sherman Homes as follows.</p>
 
 <h3>2.1 Manufacturer Responsibilities (Off-Site Factory Work)</h3>
 <ul>
@@ -123,9 +124,9 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
   <li>Provision of the HUD Data Plate and certification label(s) on the completed unit (for HUD-code homes)</li>
   <li>Providing manufacturer warranties covering factory-built components and workmanship</li>
 </ul>
-<p><strong>Sherman Builders is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility.</strong> Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer, not Sherman Builders.</p>
+<p><strong>Sherman Homes is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility.</strong> Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer, not Sherman Homes.</p>
 
-<h3>2.2 Sherman Builders Responsibilities (Site Work &amp; Installation)</h3>
+<h3>2.2 Sherman Homes Responsibilities (Site Work &amp; Installation)</h3>
 <ul>
   <li>Site preparation and grading</li>
   <li>Foundation design coordination, permitting, and construction</li>
@@ -150,11 +151,11 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 <h3>4.2 Changes After Factory Order</h3>
 <p>Once the factory order has been placed with the Manufacturer, changes to factory-built components may not be possible. If the Manufacturer permits post-order changes, all associated factory change fees, restocking fees, and production delay costs shall be the Owner's sole financial responsibility and treated as a Change Order under Section 8.</p>
 <h3>4.3 Factory-Locked vs. Site Allowances</h3>
-<p>The Allowance Budget (Section 9) distinguishes between <strong>factory-locked items</strong> (selections finalized at order — cannot be modified after the Factory Order Lock-In Date without Manufacturer approval and potential fees) and <strong>site allowance items</strong> (work completed on-site by Sherman Builders, subject to standard Change Order and Allowance processes).</p>
+<p>The Allowance Budget (Section 9) distinguishes between <strong>factory-locked items</strong> (selections finalized at order — cannot be modified after the Factory Order Lock-In Date without Manufacturer approval and potential fees) and <strong>site allowance items</strong> (work completed on-site by Sherman Homes, subject to standard Change Order and Allowance processes).</p>
 
 <h2>5. The Contract Price</h2>
 <p>The Contract Price shall be ${d.contractFmt ? field(d.contractFmt) : blank(180)} (${d.contractPrice ? field(d.contractPrice) : `$${blank(140)}`}), subject to the Allowance Budget, Change Orders, and short-notice price increases from suppliers or the Manufacturer beyond our control.</p>
-<p>The Owner and the Contractor acknowledge that the Owner will pay a Down Payment of <strong>Twenty Thousand Dollars ($20,000.00)</strong> upon signing of this Agreement. Additional funds will be required before construction begins, according to the Payment Schedule. This Contract Price is contingent on the agreed Payment Schedule between the Contractor, Owner, and Loan Agency, if applicable.</p>
+<p>The Owner and the Contractor acknowledge that the Owner will pay a Down Payment of ${d.downPaymentFmt ? `<strong>${d.downPaymentFmt} (50% of Contract Price)</strong>` : '<strong>50% of the Contract Price</strong>'} upon signing of this Agreement. Additional funds will be required before construction begins, according to the Payment Schedule. This Contract Price is contingent on the agreed Payment Schedule between the Contractor, Owner, and Loan Agency, if applicable.</p>
 
 <h2>6. Progress Payments</h2>
 <p>Payment delays will result in construction delays. Rescheduling service and material providers due to Payment Schedule delays may result in penalties for financial loss. High-demand service and material providers may be unable to reschedule quickly, causing significant disruptions to the construction schedule.</p>
@@ -168,7 +169,7 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 <h2>8. Duties of the Owner</h2>
 <p>Except as specifically noted in the Owner's Responsibility Acknowledgement, the Owner shall communicate with subcontractors and the Manufacturer only through the Contractor. Owner is responsible for all utility account setups, fees, permits, installations, connections, and for all utility usage expenses.</p>
 <p><strong>Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date.</strong> This includes: foundation complete and inspected, driveway and site access clear and adequate for transport trucks and crane equipment, and any required site grading complete. Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order.</p>
-<p><strong>No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Builders.</strong></p>
+<p><strong>No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.</strong></p>
 
 <h2>9. Change Orders</h2>
 <p>A Change Order is any change to the original Contract Documents, including changes to factory-ordered items (subject to Manufacturer approval per Section 4). All Change Orders must be agreed upon in writing, including all costs and additional time considerations. <strong>100% of each Change Order cost must be paid prior to the change being made.</strong></p>
@@ -180,11 +181,11 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 
 <h2>11. Delivery, Transportation &amp; Installation</h2>
 <h3>11.1 Transportation &amp; Permits</h3>
-<p>Sherman Builders shall coordinate transportation of the home unit from the Manufacturer's facility to the project site. Unless otherwise specified in writing, the following are <strong>included in the Contract Price</strong>: transportation costs, oversize-load road permits, and crane and set fees. Any costs arising from Owner-caused delays, inaccessible site conditions, or additional permits required due to site location are the Owner's financial responsibility and shall be treated as a Change Order.</p>
+<p>Sherman Homes shall coordinate transportation of the home unit from the Manufacturer's facility to the project site. Unless otherwise specified in writing, the following are <strong>included in the Contract Price</strong>: transportation costs, oversize-load road permits, and crane and set fees. Any costs arising from Owner-caused delays, inaccessible site conditions, or additional permits required due to site location are the Owner's financial responsibility and shall be treated as a Change Order.</p>
 <h3>11.2 Pre-Delivery Inspection</h3>
-<p>Prior to placement on the foundation, Sherman Builders shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery, including any visible damage, incomplete work, or items not conforming to Exhibit A specifications.</p>
+<p>Prior to placement on the foundation, Sherman Homes shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery, including any visible damage, incomplete work, or items not conforming to Exhibit A specifications.</p>
 <h3>11.3 Reporting Factory Defects</h3>
-<p>Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer within <strong>5 business days</strong> of delivery. Sherman Builders will assist the Owner in filing claims with the Manufacturer but is not liable for factory defects.</p>
+<p>Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer within <strong>5 business days</strong> of delivery. Sherman Homes will assist the Owner in filing claims with the Manufacturer but is not liable for factory defects.</p>
 <h3>11.4 Formal Acceptance</h3>
 <p>The Owner shall not formally accept the home unit until the joint pre-delivery inspection is complete and documented. Formal acceptance occurs at final payment per Section 19.</p>
 
@@ -205,20 +206,20 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 <p>Any controversy or claim arising out of or relating to this Contract, or the breach thereof, shall be settled by arbitration administered by the American Arbitration Association under its Construction Industry Arbitration Rules.</p>
 
 <h2>17. Warranty</h2>
-<h3>17.1 Sherman Builders Warranty (Site Work &amp; Installation)</h3>
-<p>At the completion of this project, Contractor shall execute a warranty instrument to the Owner covering <strong>Sherman Builders' site work and installation</strong> for: <strong>1 year</strong> on workmanship and material defects; <strong>2 years</strong> on plumbing, heating, and electrical system defects; <strong>10 years</strong> on structural defects related to the foundation and site installation. This warranty covers only work performed by Sherman Builders.</p>
+<h3>17.1 Sherman Homes Warranty (Site Work &amp; Installation)</h3>
+<p>At the completion of this project, Contractor shall execute a warranty instrument to the Owner covering <strong>Sherman Homes' site work and installation</strong> for: <strong>1 year</strong> on workmanship and material defects; <strong>2 years</strong> on plumbing, heating, and electrical system defects; <strong>10 years</strong> on structural defects related to the foundation and site installation. This warranty covers only work performed by Sherman Homes.</p>
 <h3>17.2 Manufacturer Warranty (Pass-Through)</h3>
-<p>Sherman Builders shall pass through to the Owner all warranties provided by the Manufacturer. The Manufacturer's warranty covers factory-built components and factory workmanship, and is attached as <strong>Exhibit B</strong>.</p>
+<p>Sherman Homes shall pass through to the Owner all warranties provided by the Manufacturer. The Manufacturer's warranty covers factory-built components and factory workmanship, and is attached as <strong>Exhibit B</strong>.</p>
 <h3>17.3 Warranty Date</h3>
-<p>The Warranty Date for Sherman Builders' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy — but not earlier than the date the home unit is set on the foundation and site work commences.</p>
+<p>The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy — but not earlier than the date the home unit is set on the foundation and site work commences.</p>
 <h3>17.4 Warranty Claim Deadline</h3>
-<p>As required by MN Stat. § 327A, Owner must provide written notice of any warranty claim to Sherman Builders within <strong>6 months</strong> of discovering the defect.</p>
+<p>As required by MN Stat. § 327A, Owner must provide written notice of any warranty claim to Sherman Homes within <strong>6 months</strong> of discovering the defect.</p>
 <blockquote><strong>Note:</strong> Read and sign the Warranty Statement.</blockquote>
 
 <h2>18. Termination of the Contract</h2>
 <p>Should the Owner or Contractor fail to carry out this Contract, the non-defaulting party may declare the Contract in default and proceed against the defaulting party for recovery of all damages, including reasonable attorney fees. In the case of a defaulting Owner, the Down Payment shall be applied to legally ascertained damages.</p>
 <h3>18.1 Manufacturer Default</h3>
-<p>In the event the Manufacturer fails to deliver the home unit, delivers a non-conforming unit, or becomes insolvent prior to delivery, Sherman Builders shall notify the Owner in writing within 5 business days. Costs already incurred by Sherman Builders for site work, permits, and preparation prior to Manufacturer default shall remain the Owner's financial responsibility per the Payment Schedule. <strong>Sherman Builders shall not be held liable for damages arising solely from Manufacturer default.</strong></p>
+<p>In the event the Manufacturer fails to deliver the home unit, delivers a non-conforming unit, or becomes insolvent prior to delivery, Sherman Homes shall notify the Owner in writing within 5 business days. Costs already incurred by Sherman Homes for site work, permits, and preparation prior to Manufacturer default shall remain the Owner's financial responsibility per the Payment Schedule. <strong>Sherman Homes shall not be held liable for damages arising solely from Manufacturer default.</strong></p>
 
 <h2>19. Attorney Fees</h2>
 <p>In the event of any arbitration or litigation relating to the project, project performance, or this Contract, the prevailing party shall be entitled to reasonable attorney fees, costs, and expenses.</p>
@@ -255,7 +256,7 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
   <div class="sig-block"><div class="sig-line">&nbsp;</div><div class="sig-label">Print Name</div></div>
   <p>Date: ${blank(120)}</p>`}
 
-  <p><strong>Sherman Builders (Contractor):</strong></p>
+  <p><strong>Sherman Homes (Contractor):</strong></p>
   <div class="sig-block"><div class="sig-line">&nbsp;</div><div class="sig-label">Signature</div></div>
   <div class="sig-block"><div class="sig-line">&nbsp;</div><div class="sig-label">Print Name</div></div>
   <div class="sig-block"><div class="sig-line">&nbsp;</div><div class="sig-label">Title</div></div>
@@ -274,18 +275,18 @@ export const generateFormaldehydeDisclosure = (quote, customer, totals) => {
   const d = prep(quote, customer, totals);
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<title>Formaldehyde Disclosure — ${d.ownerName || 'Sherman Builders'}</title>
+<title>Formaldehyde Disclosure — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
 <div class="header-bar">
   <h1>Formaldehyde Disclosure</h1>
   <p class="sub">Modular / Manufactured Home &mdash; ${COMPANY.name} &mdash; Lic. # BC532878${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''}</p>
 </div>
 
-<p><strong>Sherman Builders</strong><br>License # BC532878</p>
+<p><strong>Sherman Homes</strong><br>License # BC532878</p>
 
 <h2>Why You're Receiving This Disclosure</h2>
 <p>Minnesota law requires us to inform you that some building materials used in construction may contain formaldehyde. Please carefully read the following important health information.</p>
-<p><strong>This disclosure is especially important for modular and manufactured homes.</strong> Because the majority of construction occurs in a factory setting, your home contains significant quantities of engineered wood products — including particleboard, oriented strand board (OSB), plywood, factory-installed cabinetry, and flooring — which may emit higher concentrations of formaldehyde than materials used in traditional site-built construction. These materials are selected and installed by the Manufacturer, not by Sherman Builders.</p>
+<p><strong>This disclosure is especially important for modular and manufactured homes.</strong> Because the majority of construction occurs in a factory setting, your home contains significant quantities of engineered wood products — including particleboard, oriented strand board (OSB), plywood, factory-installed cabinetry, and flooring — which may emit higher concentrations of formaldehyde than materials used in traditional site-built construction. These materials are selected and installed by the Manufacturer, not by Sherman Homes.</p>
 
 <div class="important-notice">
   SOME OF THE BUILDING MATERIALS USED IN THIS HOME EMIT FORMALDEHYDE. EYE, NOSE, AND THROAT IRRITATION, HEADACHE, NAUSEA AND A VARIETY OF ASTHMA-LIKE SYMPTOMS, INCLUDING SHORTNESS OF BREATH, HAVE BEEN REPORTED AS A RESULT OF FORMALDEHYDE EXPOSURE. ELDERLY PERSONS AND YOUNG CHILDREN, AS WELL AS ANYONE WITH A HISTORY OF ASTHMA, ALLERGIES, OR LUNG PROBLEMS, MAY BE AT GREATER RISK. RESEARCH IS CONTINUING ON THE POSSIBLE LONG-TERM EFFECTS OF EXPOSURE TO FORMALDEHYDE.
@@ -308,7 +309,7 @@ export const generateFormaldehydeDisclosure = (quote, customer, totals) => {
 <p>Because the factory environment involves enclosed assembly of many of these materials simultaneously, formaldehyde concentrations in newly delivered manufactured homes may be higher than in site-built homes during the initial period after delivery and installation.</p>
 
 <h3>Manufacturer Responsibility</h3>
-<p>The Manufacturer — not Sherman Builders — is primarily responsible for the selection and installation of factory-built materials, including those that may emit formaldehyde. Sherman Builders' role is limited to site work, installation, and finish work performed on-site.</p>
+<p>The Manufacturer — not Sherman Homes — is primarily responsible for the selection and installation of factory-built materials, including those that may emit formaldehyde. Sherman Homes' role is limited to site work, installation, and finish work performed on-site.</p>
 <p>If you have questions about the specific materials used in your home, you have the right to request material specifications directly from the Manufacturer prior to the Factory Order Lock-In Date. The Manufacturer can provide information on formaldehyde emission levels and, in many cases, offer lower-formaldehyde or no-added-formaldehyde (NAF) material options.</p>
 
 <h3>Steps You Can Take</h3>
@@ -354,7 +355,7 @@ export const generateHomeownerGuide = (quote, customer, totals) => {
 </div>`;
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<title>Homeowner's Guide — ${d.ownerName || 'Sherman Builders'}</title>
+<title>Homeowner's Guide — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
 <div class="header-bar">
   <h1>Homeowner's Guide to Selections, Purchases &amp; Key Milestones</h1>
@@ -384,7 +385,7 @@ Email: [Email]</p>
 
 <h2>How This Process Works</h2>
 <p>The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.</p>
-<p>Because your home is built in a manufacturing facility — not entirely on-site — this process works differently than a traditional custom home build. <strong>Two separate workflows run in parallel:</strong> the Manufacturer builds your home unit in the factory while Sherman Builders prepares your site, foundation, and utilities. Understanding how these two tracks connect is essential to a smooth experience.</p>
+<p>Because your home is built in a manufacturing facility — not entirely on-site — this process works differently than a traditional custom home build. <strong>Two separate workflows run in parallel:</strong> the Manufacturer builds your home unit in the factory while Sherman Homes prepares your site, foundation, and utilities. Understanding how these two tracks connect is essential to a smooth experience.</p>
 <p>Changes are almost always part of the process, but in a modular or manufactured home, <strong>many selections are locked the moment the factory order is placed.</strong> Changes that are easy and inexpensive before the order can become impossible — or very costly — after it. Please do not assume any specific materials or services are included. It's always better to ask for clarification early.</p>
 <p>We're excited to partner with you on this journey and bring your new home to life.</p>
 
@@ -394,8 +395,8 @@ Email: [Email]</p>
 <h3>What the Manufacturer Builds (Factory)</h3>
 <p>The Manufacturer constructs your home unit in a controlled factory environment. This includes the structural frame, walls, roof, factory-installed insulation, interior finishes, cabinetry, flooring, plumbing rough-in, electrical rough-in, and any other factory-installed options you select. Once the factory order is placed, <strong>these items are locked.</strong></p>
 
-<h3>What Sherman Builders Builds (On-Site)</h3>
-<p>Sherman Builders handles everything at your property: site preparation, grading, foundation construction, utility stub-outs, home delivery coordination, crane and set operations, marriage wall assembly (for multi-section homes), final utility connections, site finish work, and any on-site upgrades specified in your Allowance Budget.</p>
+<h3>What Sherman Homes Builds (On-Site)</h3>
+<p>Sherman Homes handles everything at your property: site preparation, grading, foundation construction, utility stub-outs, home delivery coordination, crane and set operations, marriage wall assembly (for multi-section homes), final utility connections, site finish work, and any on-site upgrades specified in your Allowance Budget.</p>
 
 <h3>Factory vs. Site Selections at a Glance</h3>
 <table>
@@ -406,10 +407,10 @@ Email: [Email]</p>
 <blockquote><strong>Rule of thumb:</strong> If it's built or installed inside the factory, it must be decided before the Factory Order Lock-In Date. If it happens at your property after delivery, it follows Sherman's standard timeline.</blockquote>
 
 <h2>Your Project Timeline</h2>
-<p><strong>Phase 1 — Pre-Order (Selections &amp; Site Planning)</strong><br>All factory selections must be finalized. Foundation design and permits are initiated. Factory Order Lock-In Date is confirmed in writing by Sherman Builders.</p>
-<p><strong>Phase 2 — Factory Production</strong><br>The Manufacturer builds your home unit in the factory (typically 4–8 weeks). During this time, Sherman Builders completes site preparation, foundation, and utility stub-outs so the site is ready when the home arrives.</p>
-<p><strong>Phase 3 — Delivery &amp; Set</strong><br>The completed home unit is transported from the factory to your site. Sherman Builders coordinates the crane and set operations, placing the home on the foundation. <strong>A joint pre-delivery inspection is conducted by the Owner and Sherman Builders before the home is placed on the foundation.</strong></p>
-<p><strong>Phase 4 — Installation &amp; Site Finish</strong><br>Sherman Builders connects utilities, completes marriage wall assembly (if applicable), completes on-site finish work, and coordinates final inspections.</p>
+<p><strong>Phase 1 — Pre-Order (Selections &amp; Site Planning)</strong><br>All factory selections must be finalized. Foundation design and permits are initiated. Factory Order Lock-In Date is confirmed in writing by Sherman Homes.</p>
+<p><strong>Phase 2 — Factory Production</strong><br>The Manufacturer builds your home unit in the factory (typically 4–8 weeks). During this time, Sherman Homes completes site preparation, foundation, and utility stub-outs so the site is ready when the home arrives.</p>
+<p><strong>Phase 3 — Delivery &amp; Set</strong><br>The completed home unit is transported from the factory to your site. Sherman Homes coordinates the crane and set operations, placing the home on the foundation. <strong>A joint pre-delivery inspection is conducted by the Owner and Sherman Homes before the home is placed on the foundation.</strong></p>
+<p><strong>Phase 4 — Installation &amp; Site Finish</strong><br>Sherman Homes connects utilities, completes marriage wall assembly (if applicable), completes on-site finish work, and coordinates final inspections.</p>
 <p><strong>Phase 5 — Final Walkthrough &amp; Occupancy</strong><br>Final inspection, punch list completion, final payment, and issuance of the Right to Occupy Certificate.</p>
 
 <h2>Key Acknowledgements</h2>
@@ -421,11 +422,11 @@ ${ack(4, 'Cost Responsibility', 'I/We understand that the final price of this pr
 ${ack(5, 'Site Readiness for Delivery', 'I/We understand that the project site must be fully ready on or before the confirmed delivery date. This includes the foundation being complete and inspected, the driveway and site access being clear and adequate for transport trucks and crane equipment, and all required site grading being complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.')}
 ${ack(6, 'Pre-Delivery Inspection', 'I/We understand that a joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection, and that any visible defects or damage must be documented at that time. I/We will not formally accept the home unit until this inspection is complete.')}
 ${ack(7, 'Floor Plan & Framing Tolerances', 'I/We understand that floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.')}
-${ack(8, 'Homeowner-Hired Contractors', 'I/We understand that if we wish to hire any additional contractors to work on our project, we must inform Sherman Builders in advance. No third-party contractor work is permitted during the delivery and installation phase without prior written approval from Sherman Builders.')}
-${ack(9, 'Homeowner-Selected Subcontractors', 'I/We understand that if we choose to use subcontractors different from Sherman Builders\' standard team, Sherman Builders does not accept responsibility for the work quality, warranty, or performance of homeowner-selected subcontractors. We understand we should obtain written contracts and warranties directly from any subcontractors we select.')}
-${ack(10, 'Seasonal Construction & Weather Delays', 'I/We understand that construction in Minnesota and Wisconsin is very seasonal. Portions of the work can only be performed in warm weather conditions, and delivery/set operations may be delayed by weather. I/We understand that weather-related delays are not the responsibility of Sherman Builders.')}
+${ack(8, 'Homeowner-Hired Contractors', 'I/We understand that if we wish to hire any additional contractors to work on our project, we must inform Sherman Homes in advance. No third-party contractor work is permitted during the delivery and installation phase without prior written approval from Sherman Homes.')}
+${ack(9, 'Homeowner-Selected Subcontractors', 'I/We understand that if we choose to use subcontractors different from Sherman Homes\' standard team, Sherman Homes does not accept responsibility for the work quality, warranty, or performance of homeowner-selected subcontractors. We understand we should obtain written contracts and warranties directly from any subcontractors we select.')}
+${ack(10, 'Seasonal Construction & Weather Delays', 'I/We understand that construction in Minnesota and Wisconsin is very seasonal. Portions of the work can only be performed in warm weather conditions, and delivery/set operations may be delayed by weather. I/We understand that weather-related delays are not the responsibility of Sherman Homes.')}
 ${ack(11, 'Utility Costs During Construction', 'I/We understand that all utility bills accrued during construction (including but not limited to electric, gas, water, and sewer) are our responsibility and will be billed directly to us.')}
-${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insurance requirements detailed in Section 12 of our contract. Sherman Builders carries Workers Compensation, Liability, and Builder\'s Risk insurance covering the Contractor and its direct subcontractors during construction. I/We are required to maintain liability insurance on the property during construction and will acquire homeowners insurance immediately after drywall is hung.')}
+${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insurance requirements detailed in Section 12 of our contract. Sherman Homes carries Workers Compensation, Liability, and Builder\'s Risk insurance covering the Contractor and its direct subcontractors during construction. I/We are required to maintain liability insurance on the property during construction and will acquire homeowners insurance immediately after drywall is hung.')}
 
 <h2>Your Selections &amp; Recommended Partners</h2>
 <blockquote><strong>IMPORTANT: Factory-Locked vs. Site Selections</strong><br>Before making any selection, confirm with your Sherman Team whether it is a factory-locked item (must be decided before the Factory Order Lock-In Date) or a site allowance item (follows Sherman's standard timeline). Making this distinction early prevents costly delays and change fees.</blockquote>
@@ -480,21 +481,21 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
 
 <h3>Appliances</h3>
 <p><em>Purchase: After Painting — Coordinated with Project Manager</em></p>
-<p>Confirm that the retailer also handles installation (Sherman Builders does not install or hook up appliances). Your Project Manager will coordinate delivery timing to avoid damage or obstruction during construction. <strong>Exceptions:</strong> Range Hoods and Dishwashers (if the dishwasher arrives while the plumber is on site, the plumber will install it).</p>
+<p>Confirm that the retailer also handles installation (Sherman Homes does not install or hook up appliances). Your Project Manager will coordinate delivery timing to avoid damage or obstruction during construction. <strong>Exceptions:</strong> Range Hoods and Dishwashers (if the dishwasher arrives while the plumber is on site, the plumber will install it).</p>
 
 <h3>Additional Items to Purchase</h3>
 <p><em>Deliver: After Painting</em></p>
 <p>Mirrors | Towel bars and toilet paper holders | Interior door hardware | Exterior door hardware</p>
-<p><em>Sherman Builders installs all of these items; installation fees may apply.</em></p>
+<p><em>Sherman Homes installs all of these items; installation fees may apply.</em></p>
 
 <h3>Utilities</h3>
 <p>You are responsible for setting up utility accounts. <strong>Open accounts early — utility delays can hold up foundation work and affect the delivery schedule.</strong> You are responsible for all utility costs during construction.</p>
 
 <h2>Factory Delivery &amp; Set — What to Expect</h2>
-<p><strong>Before Delivery:</strong> Sherman Builders will confirm the delivery date and time in writing. The foundation must be complete, inspected, and approved before delivery. Driveway and site access must be clear for transport trucks and crane equipment.</p>
-<p><strong>Day of Delivery — Pre-Delivery Inspection:</strong> Before the home is placed on the foundation, you (or your designated representative) and a Sherman Builders representative will conduct a joint inspection. Document any visible damage, incomplete work, or items not matching your Manufacturer's specifications in writing. Do not formally accept the unit until this inspection is complete and documented. Any factory defects or transit damage must be reported to the Manufacturer in writing within <strong>5 business days</strong> of delivery.</p>
+<p><strong>Before Delivery:</strong> Sherman Homes will confirm the delivery date and time in writing. The foundation must be complete, inspected, and approved before delivery. Driveway and site access must be clear for transport trucks and crane equipment.</p>
+<p><strong>Day of Delivery — Pre-Delivery Inspection:</strong> Before the home is placed on the foundation, you (or your designated representative) and a Sherman Homes representative will conduct a joint inspection. Document any visible damage, incomplete work, or items not matching your Manufacturer's specifications in writing. Do not formally accept the unit until this inspection is complete and documented. Any factory defects or transit damage must be reported to the Manufacturer in writing within <strong>5 business days</strong> of delivery.</p>
 <p><strong>Set Operations:</strong> A crane will be used to lift and place the home unit(s) on the foundation. <strong>No guests, family members, or third-party contractors are permitted on site during set operations</strong> for safety reasons.</p>
-<p><strong>After Set:</strong> Sherman Builders will connect utilities, complete installation, and begin site finish work. HUD inspection (if applicable) will be scheduled and coordinated by Sherman Builders.</p>
+<p><strong>After Set:</strong> Sherman Homes will connect utilities, complete installation, and begin site finish work. HUD inspection (if applicable) will be scheduled and coordinated by Sherman Homes.</p>
 
 <h2>Quick Reference Checklist</h2>
 <h3>Factory-Locked Selections <em style="font-weight:400;font-size:13px">(Must be completed before the Factory Order Lock-In Date)</em></h3>
@@ -511,15 +512,15 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
 <h3>Project Milestones</h3>
 <table>
   <tr><th>Milestone</th><th>Who is Responsible</th></tr>
-  <tr><td>Factory Order Lock-In Date</td><td>Owner + Sherman Builders</td></tr>
+  <tr><td>Factory Order Lock-In Date</td><td>Owner + Sherman Homes</td></tr>
   <tr><td>Factory production complete</td><td>Manufacturer</td></tr>
-  <tr><td>Site ready for delivery (foundation, access)</td><td>Owner + Sherman Builders</td></tr>
-  <tr><td>Pre-delivery inspection</td><td>Owner + Sherman Builders</td></tr>
-  <tr><td>Delivery &amp; set</td><td>Sherman Builders</td></tr>
-  <tr><td>HUD/modular inspection</td><td>Sherman Builders</td></tr>
-  <tr><td>Utility connections complete</td><td>Sherman Builders</td></tr>
-  <tr><td>Final walkthrough</td><td>Owner + Sherman Builders</td></tr>
-  <tr><td>Right to Occupy Certificate issued</td><td>Sherman Builders</td></tr>
+  <tr><td>Site ready for delivery (foundation, access)</td><td>Owner + Sherman Homes</td></tr>
+  <tr><td>Pre-delivery inspection</td><td>Owner + Sherman Homes</td></tr>
+  <tr><td>Delivery &amp; set</td><td>Sherman Homes</td></tr>
+  <tr><td>HUD/modular inspection</td><td>Sherman Homes</td></tr>
+  <tr><td>Utility connections complete</td><td>Sherman Homes</td></tr>
+  <tr><td>Final walkthrough</td><td>Owner + Sherman Homes</td></tr>
+  <tr><td>Right to Occupy Certificate issued</td><td>Sherman Homes</td></tr>
 </table>
 
 <div class="sig-section">
@@ -534,11 +535,11 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
   <p>Signature: ${blank(300)} &nbsp; Date: ${blank(110)}</p>
   <p>Printed Name: <span class="sig-prefilled">${d.owner2Name || blank(200)}</span></p>
 
-  <p><strong>Sherman Builders Representative:</strong></p>
+  <p><strong>Sherman Homes Representative:</strong></p>
   <p>Signature: ${blank(300)} &nbsp; Date: ${blank(110)}</p>
   <p>Printed Name: ${blank(200)}</p>
 
-  <p style="font-size:14px;margin-top:20px;color:#2c5530;font-weight:600">Thank you for choosing Sherman Builders. Let's build something amazing together.</p>
+  <p style="font-size:14px;margin-top:20px;color:#2c5530;font-weight:600">Thank you for choosing Sherman Homes. Let's build something amazing together.</p>
   <p style="font-size:12px;color:#555;font-style:italic">This guide is for informational purposes and project coordination. It is incorporated by reference into the Main Contract. It does not constitute legal advice. Consult a licensed Minnesota construction attorney with any legal questions regarding your purchase.</p>
 </div>
 
@@ -552,34 +553,34 @@ export const generateWarrantyStatement = (quote, customer, totals) => {
   const d = prep(quote, customer, totals);
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<title>Warranty Statement — ${d.ownerName || 'Sherman Builders'}</title>
+<title>Warranty Statement — ${d.ownerName || 'Sherman Homes'}</title>
 <style>${STYLES}</style></head><body>
 <div class="header-bar">
   <h1>Warranty Statement</h1>
-  <p class="sub">Sherman Builders | License # BC532878 | Modular / Manufactured Home${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''}</p>
+  <p class="sub">Sherman Homes | License # BC532878 | Modular / Manufactured Home${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''}</p>
 </div>
 
-<blockquote><strong>Important Notice:</strong> This warranty statement covers a factory-built home. Construction responsibilities — and therefore warranty responsibilities — are divided between <strong>the Manufacturer</strong> (who builds the home unit in a factory) and <strong>Sherman Builders</strong> (who performs site work and installation). Read all sections carefully. This document does not constitute legal advice; consult a licensed Minnesota attorney with questions about your rights.</blockquote>
+<blockquote><strong>Important Notice:</strong> This warranty statement covers a factory-built home. Construction responsibilities — and therefore warranty responsibilities — are divided between <strong>the Manufacturer</strong> (who builds the home unit in a factory) and <strong>Sherman Homes</strong> (who performs site work and installation). Read all sections carefully. This document does not constitute legal advice; consult a licensed Minnesota attorney with questions about your rights.</blockquote>
 
-<h2>A. Sherman Builders Statutory Warranties — Site Work &amp; Installation</h2>
-<p>Sherman Builders warrants the <strong>site work and installation</strong> portions of your home under Minnesota Statutes Chapter 327A, as follows:</p>
+<h2>A. Sherman Homes Statutory Warranties — Site Work &amp; Installation</h2>
+<p>Sherman Homes warrants the <strong>site work and installation</strong> portions of your home under Minnesota Statutes Chapter 327A, as follows:</p>
 <table>
   <tr><th>Warranty Period</th><th>Coverage</th></tr>
   <tr><td><strong>1-Year</strong></td><td>Site work and installation shall be free from defects caused by faulty workmanship and defective materials due to non-compliance with building standards.</td></tr>
   <tr><td><strong>2-Year</strong></td><td>Site-installed plumbing, electrical, heating, and cooling systems shall be free from defects caused by faulty installation due to non-compliance with building standards.</td></tr>
   <tr><td><strong>10-Year</strong></td><td>Site work and installation shall be free from major construction defects due to non-compliance with building standards.</td></tr>
 </table>
-<p><strong>Sherman Builders' warranties apply to site work and installation only.</strong> They do not cover defects originating in the manufacturing facility. See Section C for manufacturer warranty coverage.</p>
-<p><strong>Warranty Date:</strong> The Warranty Date for Sherman Builders' statutory warranties is the earlier of: (1) the date the Owner first occupies the home, or (2) the date the Owner takes legal title to the home — but not earlier than the date the home unit is set on the foundation and site work commences.</p>
-<p><strong>Claims Requirement:</strong> Written warranty claims against Sherman Builders must be reported within <strong>six months</strong> after the Owner discovers or should have discovered the defect.</p>
+<p><strong>Sherman Homes' warranties apply to site work and installation only.</strong> They do not cover defects originating in the manufacturing facility. See Section C for manufacturer warranty coverage.</p>
+<p><strong>Warranty Date:</strong> The Warranty Date for Sherman Homes' statutory warranties is the earlier of: (1) the date the Owner first occupies the home, or (2) the date the Owner takes legal title to the home — but not earlier than the date the home unit is set on the foundation and site work commences.</p>
+<p><strong>Claims Requirement:</strong> Written warranty claims against Sherman Homes must be reported within <strong>six months</strong> after the Owner discovers or should have discovered the defect.</p>
 
 <h2>B. Scope of Responsibility — Why This Warranty Is Divided</h2>
 <p><strong>The Manufacturer</strong> constructed the home unit in a factory, including: structural framing, roof, and exterior shell; factory-installed interior finishes, cabinetry, flooring; plumbing rough-in and electrical rough-in completed at the factory; factory-installed appliances and mechanical systems.</p>
-<p><strong>Sherman Builders</strong> is responsible for: foundation design coordination and construction; delivery coordination and transportation permitting; crane and set operations (placing the home on the foundation); marriage wall assembly (multi-section homes); final utility connections (electric, plumbing, HVAC, fuel); all finish work completed on-site; site cleanup and final inspection coordination.</p>
-<p><strong>Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer</strong>, not Sherman Builders. Sherman Builders will assist the Owner in pursuing manufacturer warranty claims but does not assume liability for factory defects.</p>
+<p><strong>Sherman Homes</strong> is responsible for: foundation design coordination and construction; delivery coordination and transportation permitting; crane and set operations (placing the home on the foundation); marriage wall assembly (multi-section homes); final utility connections (electric, plumbing, HVAC, fuel); all finish work completed on-site; site cleanup and final inspection coordination.</p>
+<p><strong>Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer</strong>, not Sherman Homes. Sherman Homes will assist the Owner in pursuing manufacturer warranty claims but does not assume liability for factory defects.</p>
 
 <h2>C. Manufacturer Warranty</h2>
-<p>Sherman Builders will pass through to the Owner all warranties provided by the Manufacturer with respect to the factory-built home unit. The Manufacturer's warranty is separate from and in addition to Sherman Builders' statutory warranties.</p>
+<p>Sherman Homes will pass through to the Owner all warranties provided by the Manufacturer with respect to the factory-built home unit. The Manufacturer's warranty is separate from and in addition to Sherman Homes' statutory warranties.</p>
 <p><strong>Manufacturer Information:</strong></p>
 <table>
   <tr><td>Manufacturer Name</td><td>${blank(240)}</td></tr>
@@ -606,50 +607,50 @@ export const generateWarrantyStatement = (quote, customer, totals) => {
 <ol>
   <li>Document the defect in writing with photographs.</li>
   <li>Contact the Manufacturer directly using the contact information above.</li>
-  <li>Notify Sherman Builders in writing at the same time.</li>
-  <li>Sherman Builders will cooperate with and assist in the claims process.</li>
+  <li>Notify Sherman Homes in writing at the same time.</li>
+  <li>Sherman Homes will cooperate with and assist in the claims process.</li>
 </ol>
-<p>Sherman Builders does not assume any warranty obligation for items covered by the Manufacturer's warranty. However, if a defect is disputed between manufacturer and site-work origin, Sherman Builders and the Manufacturer will cooperate to determine responsibility.</p>
+<p>Sherman Homes does not assume any warranty obligation for items covered by the Manufacturer's warranty. However, if a defect is disputed between manufacturer and site-work origin, Sherman Homes and the Manufacturer will cooperate to determine responsibility.</p>
 
 <h2>D. Applicable Building Standards — HUD Code vs. MN State Building Code</h2>
 <p><strong>HUD-Code Manufactured Home:</strong> Factory-built portions of a HUD-code manufactured home are constructed under <strong>federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280)</strong>. Federal HUD standards may govern warranty rights for factory-built components in ways that differ from or supersede Minnesota Chapter 327A.</p>
 <p><strong>Modular Home:</strong> A modular home is factory-built to <strong>Minnesota State Building Code</strong> standards. Minnesota Chapter 327A applies in full to both site work and factory-built portions.</p>
-<p><strong>Site Work (both home types):</strong> All site work performed by Sherman Builders complies with the <strong>Minnesota State Building Code</strong> and applicable local codes, regardless of home type.</p>
-<p>The HUD Data Plate and/or certification label(s) must be present on the completed unit at delivery. If any label is missing, notify Sherman Builders immediately.</p>
+<p><strong>Site Work (both home types):</strong> All site work performed by Sherman Homes complies with the <strong>Minnesota State Building Code</strong> and applicable local codes, regardless of home type.</p>
+<p>The HUD Data Plate and/or certification label(s) must be present on the completed unit at delivery. If any label is missing, notify Sherman Homes immediately.</p>
 
 <h2>E. Warranty Date — Factory-Built Home Clarification</h2>
-<p><strong>For Sherman Builders' site work warranties</strong>, the Warranty Date shall not begin earlier than the <strong>date the home unit is set on the foundation and site work commences.</strong> <strong>For the Manufacturer's warranty</strong>, the warranty date and trigger are governed by the Manufacturer's warranty document (Exhibit W-1).</p>
+<p><strong>For Sherman Homes' site work warranties</strong>, the Warranty Date shall not begin earlier than the <strong>date the home unit is set on the foundation and site work commences.</strong> <strong>For the Manufacturer's warranty</strong>, the warranty date and trigger are governed by the Manufacturer's warranty document (Exhibit W-1).</p>
 
 <h2>F. Claims Procedures</h2>
-<h3>F.1 — Claims Against Sherman Builders (Site Work &amp; Installation)</h3>
+<h3>F.1 — Claims Against Sherman Homes (Site Work &amp; Installation)</h3>
 <ol>
-  <li><strong>Report in writing</strong> within six months of discovering the defect — Sherman Builders | 2244 Hwy 65, Mora, MN 55051</li>
-  <li>Sherman Builders will <strong>inspect within 30 days</strong> of receiving written notice.</li>
-  <li>Sherman Builders will provide a <strong>written offer to repair within 15 days</strong> of completing the inspection.</li>
-  <li>If the parties agree on scope of repair, Sherman Builders will perform repairs per the written agreement.</li>
+  <li><strong>Report in writing</strong> within six months of discovering the defect — Sherman Homes | 2244 Hwy 65, Mora, MN 55051</li>
+  <li>Sherman Homes will <strong>inspect within 30 days</strong> of receiving written notice.</li>
+  <li>Sherman Homes will provide a <strong>written offer to repair within 15 days</strong> of completing the inspection.</li>
+  <li>If the parties agree on scope of repair, Sherman Homes will perform repairs per the written agreement.</li>
   <li>If the parties do not agree, the matter proceeds to the <strong>MN Home Warranty Dispute Resolution Process</strong> under MN Stat. § 327A.051 before any court action may be filed.</li>
 </ol>
 <h3>F.2 — Claims Against the Manufacturer (Factory-Built Components)</h3>
 <ol>
   <li>Contact the Manufacturer directly using the contact information in Section C.</li>
-  <li>Notify Sherman Builders in writing at the same time.</li>
+  <li>Notify Sherman Homes in writing at the same time.</li>
   <li>Follow the Manufacturer's claims procedure as set forth in Exhibit W-1.</li>
-  <li>Sherman Builders will assist in coordinating access, documentation, and follow-up.</li>
+  <li>Sherman Homes will assist in coordinating access, documentation, and follow-up.</li>
 </ol>
 <h3>F.3 — Disputed Claims (Origin Unclear)</h3>
-<p>If it is not clear whether a defect originated in factory construction or site installation, notify <strong>both</strong> Sherman Builders and the Manufacturer in writing. Both parties will cooperate to inspect and determine the responsible party. The Owner's claim rights are preserved against both parties during this process.</p>
+<p>If it is not clear whether a defect originated in factory construction or site installation, notify <strong>both</strong> Sherman Homes and the Manufacturer in writing. Both parties will cooperate to inspect and determine the responsible party. The Owner's claim rights are preserved against both parties during this process.</p>
 
 <h2>G. Warranty Exclusions</h2>
-<p>The liability of Sherman Builders under this warranty is limited to site work and installation defects and does not extend to the following:</p>
+<p>The liability of Sherman Homes under this warranty is limited to site work and installation defects and does not extend to the following:</p>
 <ul>
   <li>Loss or damage <strong>not reported in writing within six months</strong> after discovery</li>
   <li>Loss or damage caused by <strong>defects in design, materials, or installation supplied or directed by the Owner</strong></li>
   <li>Secondary loss or damage such as personal injury or property damage</li>
   <li>Loss or damage from <strong>normal wear and tear</strong> or normal shrinkage within building standard tolerances</li>
   <li>Loss or damage from dampness or condensation due to insufficient ventilation after occupancy</li>
-  <li>Loss or damage from <strong>negligence, improper maintenance, or alteration</strong> by parties other than Sherman Builders</li>
+  <li>Loss or damage from <strong>negligence, improper maintenance, or alteration</strong> by parties other than Sherman Homes</li>
   <li>Loss or damage from <strong>Acts of God</strong>, including fire, explosion, smoke, water escape, windstorm, hail, lightning, flood, and earthquake — except where caused by failure to comply with building standards</li>
-  <li>Loss or damage due to <strong>soil conditions on Owner-supplied land</strong> obtained independently of Sherman Builders</li>
+  <li>Loss or damage due to <strong>soil conditions on Owner-supplied land</strong> obtained independently of Sherman Homes</li>
   <li><strong>Defects in manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility</strong> — these are the responsibility of the Manufacturer and are governed by the Manufacturer's warranty (Exhibit W-1)</li>
 </ul>
 
@@ -663,8 +664,8 @@ export const generateWarrantyStatement = (quote, customer, totals) => {
 
 <div class="sig-section">
   <h2 style="border:none;margin-top:0">Acknowledgment and Signature</h2>
-  <p>By signing below, I/we acknowledge that I/we have received and reviewed this Warranty Statement, understand the division of warranty responsibility between Sherman Builders and the Manufacturer, and understand the warranty coverage, exclusions, claims procedures, and dispute resolution process.</p>
-  <p>I/we understand that: Sherman Builders warrants <strong>site work and installation</strong> under MN Chapter 327A. The <strong>Manufacturer</strong> warrants factory-built components per Exhibit W-1. Written warranty claims must be reported within <strong>six months</strong> of discovery. The <strong>Manufacturer Warranty document (Exhibit W-1)</strong> is attached and has been provided to me/us.</p>
+  <p>By signing below, I/we acknowledge that I/we have received and reviewed this Warranty Statement, understand the division of warranty responsibility between Sherman Homes and the Manufacturer, and understand the warranty coverage, exclusions, claims procedures, and dispute resolution process.</p>
+  <p>I/we understand that: Sherman Homes warrants <strong>site work and installation</strong> under MN Chapter 327A. The <strong>Manufacturer</strong> warrants factory-built components per Exhibit W-1. Written warranty claims must be reported within <strong>six months</strong> of discovery. The <strong>Manufacturer Warranty document (Exhibit W-1)</strong> is attached and has been provided to me/us.</p>
 
   <p><strong>Owner Signature:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
   <p><strong>Print Name:</strong> <span class="sig-prefilled">${d.ownerName || blank(200)}</span></p>
@@ -674,7 +675,7 @@ export const generateWarrantyStatement = (quote, customer, totals) => {
   <p><strong>Print Name:</strong> <span class="sig-prefilled">${d.owner2Name || blank(200)}</span></p>
 
   <br>
-  <p><strong>Sherman Builders Representative:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
+  <p><strong>Sherman Homes Representative:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
   <p><strong>Print Name / Title:</strong> ${blank(200)}</p>
 
   <p style="margin-top:20px;font-size:12px;color:#555;font-style:italic">This Warranty Statement is a required contract document under MN Stat. § 327A.08. Failure to provide this warranty in writing is a violation of MN Stat. § 326B.84. This document does not constitute legal advice. Consult a licensed Minnesota construction attorney with questions about your rights under this warranty or under applicable HUD regulations.</p>
