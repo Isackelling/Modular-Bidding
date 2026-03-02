@@ -29,7 +29,7 @@ import { CalcHelpers } from './utils/CalcHelpers.js';
 import { FolderUtils } from './utils/FolderUtils.js';
 import { calcTotals, enforceMiles, calcDefaultServicePrice, getFoundationAdjustment } from './utils/calculations.js';
 import { getServiceDescription, calcSurfacedDrivewayPrice, calcSurfacedPrice, SURFACED_DRIVEWAY_RATES } from './utils/serviceDescriptions.js';
-import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport } from './utils/documents/index.js';
+import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport, generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './utils/documents/index.js';
 import { createFolderSavers } from './utils/folderSavers.js';
 
 // Shared Components
@@ -1797,14 +1797,17 @@ function AppInner() {
                             <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 700, color: '#2c5530', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Manufactured Home Documents</p>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                               {[
-                                { key: 'contract', label: 'Purchase & Installation Contract' },
-                                { key: 'formaldehyde', label: 'Formaldehyde Disclosure' },
-                                { key: 'guide', label: "Homeowner's Guide" },
-                                { key: 'warranty', label: 'Warranty Statement' },
-                              ].map(({ key, label }) => (
+                                { key: 'contract', label: 'Purchase & Installation Contract', fn: generateManufacturedHomeContract },
+                                { key: 'formaldehyde', label: 'Formaldehyde Disclosure', fn: generateFormaldehydeDisclosure },
+                                { key: 'guide', label: "Homeowner's Guide", fn: generateHomeownerGuide },
+                                { key: 'warranty', label: 'Warranty Statement', fn: generateWarrantyStatement },
+                              ].map(({ key, label, fn }) => (
                                 <button key={key} style={{ ...S.btnSm, padding: '5px 12px', fontSize: 12, background: '#2c5530', color: '#fff' }}
-                                  onClick={() => folderSavers.saveManufacturedHomeDocToContracts(key, currentItem, custForQuote)}
-                                  title={`Generate and save ${label} to Contracts folder`}>
+                                  onClick={() => {
+                                    const totals = CalcHelpers.calculateQuoteTotals(currentItem, custForQuote, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates);
+                                    openDocumentWindow(fn(currentItem, custForQuote, totals));
+                                  }}
+                                  title={`Open ${label}`}>
                                   📄 {label}
                                 </button>
                               ))}
