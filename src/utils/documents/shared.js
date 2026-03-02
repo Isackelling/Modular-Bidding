@@ -1,3 +1,22 @@
+// ─── Shared print bar + editable field utilities ─────────────────────────────
+// Inject PRINT_STYLES into each document's <style> block.
+// Use PRINT_BAR (read-only docs) or PRINT_BAR_EDITABLE (docs with blank fields).
+export const PRINT_STYLES = `
+  .print-bar{position:fixed;top:14px;right:18px;z-index:999;display:flex;align-items:center;gap:10px}
+  .print-bar button{background:#2c5530;color:#fff;border:none;padding:9px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+  .print-bar button:hover{background:#1b3a20}
+  .print-hint{font-size:12px;color:#444;background:#fff;padding:5px 10px;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+  .editable{cursor:text;background:transparent;transition:background .15s;min-height:1.1em;display:inline-block;border-bottom:1px solid #aaa}
+  .editable:hover{background:#fffde7;border-radius:3px}
+  .editable:focus{outline:2px solid #2c5530;background:#f0fff0;border-radius:3px}
+  @media print{.print-bar{display:none!important}}
+`;
+export const PRINT_BAR = `<div class="print-bar"><button onclick="window.print()">🖨 Print / Save PDF</button></div>`;
+export const PRINT_BAR_EDITABLE = `<div class="print-bar"><button onclick="window.print()">🖨 Print / Save PDF</button><span class="print-hint">Click any underlined field to edit</span></div>`;
+// Inline editable blank — use inside template literals where ___ would appear
+export const eb = (width = 120) => `<span class="editable" contenteditable="true" spellcheck="false" style="min-width:${width}px">&nbsp;</span>`;
+
+// ─── Re-export everything document generators commonly need ───────────────────
 // Re-export everything document generators commonly need
 export { ALLOWANCE_ITEMS, SUMMARY_SERVICES, PIER_SPECS, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, DEFAULT_MATERIALS, DEFAULT_SEWER, DEFAULT_PATIO, DEFAULT_FOUNDATION, DRIVE_RATE_INSTALL, DRIVE_RATE_SERVICE, DRIVE_RATE_PC, DRIVE_RATE_INSPECTION, MIN_MILES, COMPANY } from '../../constants/index.js';
 export { calcIBeam, fmt, fmtCurrency, formatPhone } from '../helpers.js';

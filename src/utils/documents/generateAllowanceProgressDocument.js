@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, fmt, formatPhone, DocumentUtils, COMPANY } from './shared.js';
+import { ALLOWANCE_ITEMS, fmt, formatPhone, DocumentUtils, COMPANY, PRINT_STYLES, PRINT_BAR } from './shared.js';
 
 export const generateAllowanceProgressDocument = (quote, customer, totals, services) => {
   const today = DocumentUtils.formatDate();
@@ -71,7 +71,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
 .fund-box{background:#e3f2fd;padding:20px;border-radius:8px;border:2px solid #1565c0;margin:20px 0}
 .fund-row{display:flex;justify-content:space-between;padding:8px 0;font-size:16px}
 .fund-total{font-size:24px;font-weight:800;border-top:3px solid #1565c0;margin-top:12px;padding-top:12px}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR}
 
 <div class="header">
   <div>

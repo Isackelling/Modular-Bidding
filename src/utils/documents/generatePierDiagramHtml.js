@@ -1,4 +1,4 @@
-import { PIER_SPECS, calcIBeam, COMPANY } from './shared.js';
+import { PIER_SPECS, calcIBeam, COMPANY, PRINT_STYLES, PRINT_BAR } from './shared.js';
 
 export const generatePierDiagramHtml = (quote, customer) => {
   const w = parseFloat(quote.houseWidth) || 28;
@@ -84,8 +84,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1100px;margi
 .info-value{font-size:18px;font-weight:700}
 .diagrams{display:grid;grid-template-columns:350px 1fr;gap:20px}
 .section-title{font-size:12px;font-weight:600;color:#333;margin:0 0 10px;padding-bottom:5px;border-bottom:1px solid #ddd}
-@media print{body{padding:20px}.diagrams{grid-template-columns:1fr}}
+@media print{body{padding:20px}.diagrams{grid-template-columns:1fr}.print-bar{display:none!important}}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR}
 <div class="header">
   <div><img src="${COMPANY.logoUrl}" style="height:35px"></div>
   <div style="text-align:right">

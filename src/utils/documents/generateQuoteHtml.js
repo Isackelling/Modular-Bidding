@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription, COMPANY, collectOtherServices } from './shared.js';
+import { ALLOWANCE_ITEMS, SUMMARY_SERVICES, HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription, COMPANY, collectOtherServices, PRINT_STYLES, PRINT_BAR } from './shared.js';
 
 export const generateQuoteHtml = (quote, totals, homeModels) => {
   const services = [];
@@ -73,7 +73,9 @@ ${DocumentUtils.getBaseStyles('850px')}
 .contingency-box{background:#e3f2fd;padding:18px;border-radius:8px;border:2px solid #1565c0;margin:20px 0}
 .contingency-title{font-size:20px;font-weight:700;color:#1565c0;margin-bottom:10px;display:flex;justify-content:space-between}
 .investment-total{font-size:32px;font-weight:800;color:#2c5530;text-align:center;padding:24px;background:#e8f5e9;border-radius:8px;border:3px solid #2c5530;margin-top:20px}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR}
 <div class="header"><img src="${COMPANY.logoUrl}" style="height:50px"><div style="float:right;text-align:right;font-size:13px;color:#666">Quote #${DocumentUtils.getQuoteNum(quote)}<br>${today}</div></div>
 <div class="section"><div class="section-title">Customer</div><strong>${quote.customerFirstName} ${quote.customerLastName}</strong><br>${formatPhone(quote.phone)} | ${quote.email}<br>${quote.siteAddress}, ${quote.siteCity}, ${quote.siteState} ${quote.siteZip}</div>
 ${quote.homeModel && quote.homeModel !== 'NONE' ? `<div class="section"><div class="section-title">Home</div><strong>${quote.homeModel}</strong><br>${quote.houseWidth}' × ${quote.houseLength}' ${quote.singleDouble} Wide</div>` : ''}

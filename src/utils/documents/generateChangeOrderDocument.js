@@ -1,4 +1,4 @@
-import { fmt, formatPhone, DocumentUtils, COMPANY } from './shared.js';
+import { fmt, formatPhone, DocumentUtils, COMPANY, PRINT_STYLES, PRINT_BAR_EDITABLE, eb } from './shared.js';
 
 export const generateChangeOrderDocument = (changeOrder, originalQuote, customer, changeOrderTotals, originalTotals, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, deletions = [], adjustments = {}, additions = []) => {
   const today = DocumentUtils.formatDate();
@@ -96,7 +96,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
 .signature-box{margin-top:40px;border:2px solid #333;padding:20px;border-radius:8px}
 .sig-line{border-bottom:2px solid #333;margin:30px 0 10px;min-height:40px}
 .warning{background:#fff3cd;border:2px solid #ffc107;padding:15px;border-radius:8px;margin:20px 0}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR_EDITABLE}
 
 <div class="header">
   <div>
@@ -215,7 +217,7 @@ ${changes.added.length === 0 && changes.modified.length === 0 && changes.removed
     <div class="sig-line"></div>
     <div style="display:flex;justify-content:space-between;font-size:13px;color:#666">
       <span>Print Name: ${customer.firstName} ${customer.lastName}</span>
-      <span>Date: _______________</span>
+      <span>Date: ${eb(130)}</span>
     </div>
   </div>
 
@@ -223,8 +225,8 @@ ${changes.added.length === 0 && changes.modified.length === 0 && changes.removed
     <div style="font-weight:700;margin-bottom:8px">${COMPANY.name} Representative:</div>
     <div class="sig-line"></div>
     <div style="display:flex;justify-content:space-between;font-size:13px;color:#666">
-      <span>Print Name: _______________</span>
-      <span>Date: _______________</span>
+      <span>Print Name: ${eb(200)}</span>
+      <span>Date: ${eb(130)}</span>
     </div>
   </div>
 </div>

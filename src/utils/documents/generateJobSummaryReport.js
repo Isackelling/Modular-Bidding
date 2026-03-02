@@ -1,4 +1,4 @@
-import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmtCurrency, formatPhone, DocumentUtils, COMPANY, calcTotalsWithDefaults, formatNoteDateTime, buildServiceData as _buildSvcData, collectOtherServices, getFoundationName } from './shared.js';
+import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, fmtCurrency, formatPhone, DocumentUtils, COMPANY, calcTotalsWithDefaults, formatNoteDateTime, buildServiceData as _buildSvcData, collectOtherServices, getFoundationName, PRINT_STYLES, PRINT_BAR } from './shared.js';
 
 export const generateJobSummaryReport = (quote, customer, servicesParam, crewChecklistData, crewCommentsData) => {
   const services = servicesParam || DEFAULT_SERVICES;
@@ -164,8 +164,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1000px;margi
 .checklist-row:nth-child(odd){background:#f5f5f5}
 .no-data-notice{background:#fff3cd;border:2px solid #ffc107;border-radius:8px;padding:20px;text-align:center;margin-bottom:20px}
 .co-card{background:#fff;border:2px solid #ff6b35;border-radius:8px;padding:16px;margin-bottom:12px}
-@media print{body{padding:15px;background:#fff}.section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}.header{box-shadow:none}}
+@media print{body{padding:15px;background:#fff}.section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}.header{box-shadow:none}.print-bar{display:none!important}}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR}
 
 <div class="header">
   <div class="header-left">

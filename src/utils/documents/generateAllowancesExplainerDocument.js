@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, fmt, DocumentUtils, COMPANY, collectOtherServices } from './shared.js';
+import { ALLOWANCE_ITEMS, fmt, DocumentUtils, COMPANY, collectOtherServices, PRINT_STYLES, PRINT_BAR } from './shared.js';
 
 export const generateAllowancesExplainerDocument = (quote, customer, totals, services) => {
   const today = DocumentUtils.formatDate();
@@ -57,7 +57,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:40px;max-width:900px;margin
 .total-amount{font-size:32px;font-weight:900}
 ul{line-height:1.9}
 .contact-box{background:#f8f9fa;padding:20px;border-radius:8px;margin-top:40px;text-align:center}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR}
 
 <div class="header">
   <div class="title">Understanding Your Quote</div>

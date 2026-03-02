@@ -1,4 +1,4 @@
-import { ALLOWANCE_ITEMS, HOME_OPTIONS, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription, COMPANY, collectOtherServices } from './shared.js';
+import { ALLOWANCE_ITEMS, HOME_OPTIONS, DEFAULT_SERVICES, fmt, formatPhone, DocumentUtils, getServiceDescription, COMPANY, collectOtherServices, PRINT_STYLES } from './shared.js';
 import { openDocumentWindow } from '../windowUtils.js';
 
 export const generateCustomerQuote = (quote, totals, homeModels) => {
@@ -95,10 +95,14 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .btn-group { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; }
     .close-btn { background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px; }
     .close-btn:hover { background: #5a6268; }
+    .print-btn-cq { background: #2c5530; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; }
+    .print-btn-cq:hover { background: #1b3a20; }
+    ${PRINT_STYLES}
   </style>
 </head>
 <body>
   <div class="btn-group no-print">
+    <button class="print-btn-cq" onclick="window.print()">🖨 Print / Save PDF</button>
     <button class="close-btn" onclick="window.close()">Close</button>
   </div>
 

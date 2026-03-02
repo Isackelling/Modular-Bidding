@@ -1,4 +1,4 @@
-import { formatPhone, DocumentUtils, COMPANY } from './shared.js';
+import { formatPhone, DocumentUtils, COMPANY, PRINT_STYLES, PRINT_BAR_EDITABLE, eb } from './shared.js';
 
 export const generateScopeOfWorkDocument = (quote, customer, services) => {
   const today = DocumentUtils.formatDate();
@@ -199,8 +199,10 @@ th{background:#2c5530;color:#fff;padding:14px;text-align:left;font-weight:700;fo
 td{padding:12px 14px;border-bottom:1px solid #dee2e6;font-size:14px}
 tr:last-child td{border-bottom:none}
 .page-break{page-break-after:always}
-@media print{body{padding:20px;font-size:12px}.page-break{page-break-after:always}}
+@media print{body{padding:20px;font-size:12px}.page-break{page-break-after:always}.print-bar{display:none!important}}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR_EDITABLE}
 
 <div class="header">
   <div class="title">SCOPE OF WORK</div>
@@ -586,7 +588,7 @@ ${additionalServices.map(service => `
     <div class="sig-line"></div>
     <div style="display:flex;justify-content:space-between;font-size:14px;color:#666">
       <span><strong>Print Name:</strong> ${customer.firstName} ${customer.lastName}</span>
-      <span><strong>Date:</strong> _______________</span>
+      <span><strong>Date:</strong> ${eb(130)}</span>
     </div>
   </div>
 
@@ -594,8 +596,8 @@ ${additionalServices.map(service => `
     <div style="font-weight:700;margin-bottom:12px;font-size:16px">${COMPANY.name} Representative:</div>
     <div class="sig-line"></div>
     <div style="display:flex;justify-content:space-between;font-size:14px;color:#666">
-      <span><strong>Print Name:</strong> _______________</span>
-      <span><strong>Date:</strong> _______________</span>
+      <span><strong>Print Name:</strong> ${eb(200)}</span>
+      <span><strong>Date:</strong> ${eb(130)}</span>
     </div>
   </div>
 </div>

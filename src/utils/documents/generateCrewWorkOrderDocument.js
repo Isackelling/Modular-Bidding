@@ -1,4 +1,4 @@
-import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, formatPhone, DocumentUtils, COMPANY, calcTotalsWithDefaults, formatNoteDateTime, buildServiceData as _buildSvcData, collectOtherServices, getFoundationName } from './shared.js';
+import { HOME_OPTIONS, LICENSED_SERVICES, DEFAULT_SERVICES, formatPhone, DocumentUtils, COMPANY, calcTotalsWithDefaults, formatNoteDateTime, buildServiceData as _buildSvcData, collectOtherServices, getFoundationName, PRINT_STYLES, PRINT_BAR } from './shared.js';
 
 export const generateCrewWorkOrderDocument = (quote, customer, servicesParam) => {
   const services = servicesParam || DEFAULT_SERVICES;
@@ -113,8 +113,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:1400px;margi
 .completion-section .section-header:hover{box-shadow:0 4px 12px rgba(46,125,50,0.3)}
 @media(max-width:1024px){body{padding:20px;max-width:100%}.info-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr}.title{font-size:28px}.section-header-title{font-size:18px}}
 @media(max-width:768px){body{padding:12px}.info-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}.title{font-size:24px}.section-header-title{font-size:16px}.section-header{padding:12px 16px}.service-name{font-size:16px}.info-box{padding:12px}.header{padding:20px}.crew-comment-input:focus{height:60px}.publish-btn{padding:4px 8px;font-size:10px}.staged-thumb{width:50px;height:50px}.published-note-images img{width:48px;height:48px}}
-@media print{body{padding:15px;font-size:12px;max-width:100%}.service-card{page-break-inside:avoid}.progress-bar-container{display:none}.crew-comment-input{border:1px solid #999;height:36px!important}.section-content{max-height:none!important;padding:20px 0!important}.section-toggle-btn{display:none}.checklist-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}.publish-btn{display:none}.delete-note-btn{display:none}.camera-btn{display:none}.image-staging{display:none}.remove-staged{display:none}.published-note-item{border-left:2px solid #2e7d32}.published-note-images img{width:80px;height:80px}}
+@media print{body{padding:15px;font-size:12px;max-width:100%}.service-card{page-break-inside:avoid}.progress-bar-container{display:none}.crew-comment-input{border:1px solid #999;height:36px!important}.section-content{max-height:none!important;padding:20px 0!important}.section-toggle-btn{display:none}.checklist-grid{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}.publish-btn{display:none}.delete-note-btn{display:none}.camera-btn{display:none}.image-staging{display:none}.remove-staged{display:none}.published-note-item{border-left:2px solid #2e7d32}.published-note-images img{width:80px;height:80px}.print-bar{display:none!important}}
+${PRINT_STYLES}
 </style></head><body>
+${PRINT_BAR}
 
 <div class="header">
   <div class="title">🔧 CREW WORK ORDER</div>
