@@ -632,8 +632,14 @@ ${printBar}
 <p><strong>Claims Requirement:</strong> Written warranty claims against Sherman Homes must be reported within <strong>six months</strong> after the Owner discovers or should have discovered the defect.</p>
 
 <h2>B. Scope of Responsibility — Why This Warranty Is Divided</h2>
-<p><strong>The Manufacturer</strong> constructed the home unit in a factory, including: structural framing, roof, and exterior shell; factory-installed interior finishes, cabinetry, flooring; plumbing rough-in and electrical rough-in completed at the factory; factory-installed appliances and mechanical systems.</p>
-<p><strong>Sherman Homes</strong> is responsible for: foundation design coordination and construction; delivery coordination and transportation permitting; crane and set operations (placing the home on the foundation); marriage wall assembly (multi-section homes); final utility connections (electric, plumbing, HVAC, fuel); all finish work completed on-site; site cleanup and final inspection coordination.</p>
+<p>Your home is built in <strong>two places</strong> by <strong>two separate teams</strong>, and there is a clear line between them:</p>
+<blockquote>
+  <strong>The Manufacturer</strong> is responsible for the home itself and everything inside it — structure, cabinetry, countertops, plumbing fixtures, electrical fixtures, flooring, fireplace, appliances, and all interior finishes.<br><br>
+  <strong>Sherman Homes</strong> is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).<br><br>
+  <strong>If it's inside the home, it's the Manufacturer. If it's at the site, it's Sherman.</strong>
+</blockquote>
+<p><strong>The Manufacturer</strong> constructed the home unit in a factory, including: structural framing, roof, and exterior shell; factory-installed interior finishes, cabinetry, countertops, flooring; plumbing rough-in, plumbing fixtures, and electrical rough-in and fixtures completed at the factory; fireplace (if applicable); factory-installed appliances and mechanical systems.</p>
+<p><strong>Sherman Homes</strong> is responsible for: site preparation and grading; foundation design coordination and construction; delivery coordination and transportation permitting; crane and set operations (placing the home on the foundation); marriage wall assembly (multi-section homes); final utility connections (electric, plumbing, HVAC, fuel); all finish work completed on-site; site services (sewer, well, gravel driveway, sand pad, landscaping); site cleanup and final inspection coordination.</p>
 <p><strong>Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer</strong>, not Sherman Homes. Sherman Homes will assist the Owner in pursuing manufacturer warranty claims but does not assume liability for factory defects.</p>
 
 <h2>C. Manufacturer Warranty</h2>
