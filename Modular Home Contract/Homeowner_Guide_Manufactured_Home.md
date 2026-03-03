@@ -20,10 +20,10 @@ Email: [Email]
 Cell: [Phone]
 Email: [Email]
 
-**Manufacturer Sales Contact via Sherman:**
-[Name]
-Cell: [Phone]
-Email: [Email]
+**Manufacturer Contact** *(The Manufacturer is an independent third-party entity; Sherman Homes is not a representative of the Manufacturer):*
+Contact the Manufacturer directly for questions about factory-built components, specifications, and warranties.
+Manufacturer Name: ___________________________
+Manufacturer Phone / Website: ___________________________
 
 ---
 
@@ -31,7 +31,7 @@ Email: [Email]
 
 The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.
 
-Because your home is built in a manufacturing facility — not entirely on-site — this process works differently than a traditional custom home build. **Two separate workflows run in parallel:** the Manufacturer builds your home unit in the factory while Sherman Homes prepares your site, foundation, and utilities. Understanding how these two tracks connect is essential to a smooth experience.
+Because your home is built in a manufacturing facility — not entirely on-site — this process works differently than a traditional custom home build. **Two separate workflows run in parallel:** the Manufacturer (an independent third-party entity) builds your home unit in the factory while Sherman Homes prepares your site, foundation, and utilities. Understanding how these two tracks connect is essential to a smooth experience. **Sherman Homes is not a representative, agent, or partner of the Manufacturer** and has no control over the Manufacturer's operations, timelines, products, or business practices.
 
 Changes are almost always part of the process, but in a modular or manufactured home, **many selections are locked the moment the factory order is placed.** Changes that are easy and inexpensive before the order can become impossible — or very costly — after it. Please do not assume any specific materials or services are included. It's always better to ask for clarification early.
 
@@ -41,21 +41,21 @@ We're excited to partner with you on this journey and bring your new home to lif
 
 ## Understanding Your Build: Factory vs. Site
 
-This is the most important concept in your project. Your home is built in **two places** by **two separate teams**, and there is a clear line between them:
+This is the most important concept in your project. Your home is built in **two places** by **two separate entities**:
 
-> **The Manufacturer** is responsible for the home itself and everything inside it — structure, cabinetry, countertops, plumbing fixtures, electrical fixtures, flooring, fireplace, appliances, and all interior finishes.
+> **The Manufacturer** is an independent third-party entity that constructs the home unit in a factory. Sherman Homes is not a representative, agent, or partner of the Manufacturer and does not control, direct, or have authority over the Manufacturer's work, products, warranties, or business practices.
 >
 > **Sherman Homes** is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).
 >
-> **If it's inside the home, it's the Manufacturer. If it's at the site, it's Sherman.**
+> **Sherman Homes warrants only the work that Sherman Homes performs.** For questions about the home unit itself — including warranties, specifications, and factory-installed components — contact the Manufacturer directly.
 
-### What the Manufacturer Builds (Factory)
+### What the Manufacturer Builds (Factory) — Independent Third Party
 
-The Manufacturer constructs your home unit in a controlled factory environment. This includes the structural frame, walls, roof, factory-installed insulation, interior finishes, cabinetry, flooring, plumbing rough-in, electrical rough-in, and any other factory-installed options you select. Once the factory order is placed, **these items are locked.**
+The Manufacturer is an independent third-party entity that constructs your home unit in a controlled factory environment. Sherman Homes does not control, direct, or oversee the Manufacturer's construction process. For questions about factory-built components, specifications, materials, or quality, contact the Manufacturer directly. Once the factory order is placed, **these items are locked.**
 
 ### What Sherman Homes Does (Site Work & Installation)
 
-Sherman Homes handles everything at your property — **not** the home itself. This includes: site preparation and grading, foundation construction, utility stub-outs, home delivery coordination, crane and set operations, marriage wall assembly and sealing (for multi-section homes), connecting the home's systems to site utilities (electric, plumbing, HVAC, fuel), and executing the site services you selected (sewer, well, gravel driveway, sand pad, etc.). Sherman does not build, modify, or warrant any component that comes from the factory.
+Sherman Homes handles everything at your property — **not** the home itself. This includes: site preparation and grading, foundation construction, utility stub-outs, home delivery coordination, crane and set operations, marriage wall assembly and sealing (for multi-section homes), connecting the home's systems to site utilities (electric, plumbing, HVAC, fuel), and executing the site services you selected (sewer, well, gravel driveway, sand pad, etc.). Sherman does not build, modify, or warrant any component that comes from the factory. The Manufacturer is an independent third-party entity — contact the Manufacturer directly for questions about factory-built components and warranties.
 
 ### Factory vs. Site Selections at a Glance
 
@@ -64,7 +64,7 @@ Sherman Homes handles everything at your property — **not** the home itself. T
 | **Factory-locked** | Home model, floor plan, structural options, factory cabinetry, factory flooring, factory-installed fixtures | Before Factory Order Lock-In Date |
 | **Site allowance** | Foundation type, sewer connection, well, gravel driveway, sand pad, crane & set, landscaping, exterior grading | Per Sherman timeline |
 
-> **Rule of thumb:** If it's part of the home or goes inside the home, it's the Manufacturer's scope and must be decided before the Factory Order Lock-In Date. If it happens at your property (site prep, foundation, utility connections, driveway, sewer, well, etc.), it's Sherman's scope and follows Sherman's timeline.
+> **Rule of thumb:** If it's part of the home or goes inside the home, it's the Manufacturer's scope (an independent third party — contact them directly) and must be decided before the Factory Order Lock-In Date. If it happens at your property (site prep, foundation, utility connections, driveway, sewer, well, etc.), it's Sherman's scope and follows Sherman's timeline.
 
 ---
 
@@ -155,7 +155,7 @@ _______ Initial _______ Initial
 
 > **IMPORTANT:** Selections fall into two categories: **Factory-Locked** (must be finalized before the Factory Order Lock-In Date — cannot be changed once the order is placed) and **Site Allowance** (follows Sherman's standard timeline). Confirm which category each item falls into with your Sherman Team. Monitor your spending against the Allowance Budget throughout the process.
 
-For all factory-locked items, refer to your **Manufacturer's Quote and Specification Booklet** for base-package inclusions and available upgrades. Work with your Manufacturer Sales Contact to confirm selections and with your Sherman Team for any on-site upgrades.
+For all factory-locked items, contact the Manufacturer directly to review your Manufacturer's Quote and Specification Booklet for base-package inclusions and available upgrades. The Manufacturer is an independent third-party entity — Sherman Homes does not represent the Manufacturer and cannot make commitments on their behalf. Work with your Sherman Team for any on-site upgrades.
 
 ### Factory-Locked Selections *(Finalize before Factory Order Lock-In Date)*
 
@@ -183,7 +183,7 @@ For all factory-locked items, refer to your **Manufacturer's Quote and Specifica
 
 ### After Home is Set on Foundation
 
-**Post-Set Verification Walkthrough:** Once the home is set and Sherman begins utility connections, we'll schedule a walkthrough so you can verify that all factory-installed items (cabinetry, fixtures, flooring, electrical, plumbing) match your Manufacturer's specifications. Any factory defects or missing items should be noted at this time so they can be reported to the Manufacturer.
+**Post-Set Verification Walkthrough:** Once the home is set and Sherman begins utility connections, we'll schedule a walkthrough so you can verify the condition of the home. Any factory defects or missing items should be noted at this time so **you can report them directly to the Manufacturer.** Sherman Homes may assist in documentation but does not represent the Manufacturer and has no authority over the Manufacturer's response to defect claims.
 
 ### Utilities
 
@@ -202,9 +202,9 @@ Delivery day is one of the most exciting and logistically complex days of your p
 
 **Day of Delivery — Pre-Delivery Inspection**
 - Before the home is placed on the foundation, you (or your designated representative) and a Sherman Homes representative will conduct a joint inspection of the home unit.
-- Document any visible damage, incomplete work, or items not matching your Manufacturer's specifications in writing.
+- Document any visible damage, incomplete work, or items not matching specifications in writing.
 - Do not formally accept the unit until this inspection is complete and documented.
-- Any factory defects or transit damage must be reported to the Manufacturer in writing within 5 business days of delivery. Sherman Homes will assist you in filing the claim.
+- Any factory defects or transit damage must be reported by the Owner directly to the Manufacturer in writing within 5 business days of delivery. Sherman Homes may assist in documentation but does not represent the Manufacturer and has no authority over their claims process.
 
 **Set Operations**
 - A crane will be used to lift and place the home unit(s) on the foundation.

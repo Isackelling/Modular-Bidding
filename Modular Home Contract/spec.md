@@ -17,7 +17,7 @@ Canonical terms are defined here. All four documents must use these terms consis
 | **Project** | A modular or manufactured home purchase and installation engagement involving Owner, Contractor, and Manufacturer. ~~"job"~~ and ~~"work order"~~ are deprecated synonyms — use *Project*. |
 | **Owner** | The homebuyer party to the Contract. May be one or two persons. |
 | **Contractor** | Sherman Builders, 2244 Hwy 65, Mora, MN 55051, License # BC532878. |
-| **Manufacturer** | The third-party factory builder that constructs the Home Unit off-site. Not an agent or subcontractor of the Contractor. |
+| **Manufacturer** | An independent third-party entity that constructs the Home Unit off-site in a factory. The Manufacturer is NOT an agent, representative, partner, or subcontractor of the Contractor. The Contractor has no control over, knowledge of, or responsibility for the Manufacturer's operations, business practices, warranties, or obligations. The Contractor does not represent the Manufacturer in any capacity. |
 | **Home Unit** | The factory-built structural home delivered to the project site. ~~"home," "unit," "structure"~~ — use *Home Unit* when referring to the factory-built object specifically. |
 | **Factory Order** | The binding order placed by Sherman Builders with the Manufacturer committing to a specific Home Unit configuration. |
 | **Factory Order Lock-In Date** | The contractually agreed deadline by which Owner must finalize all factory-locked selections. Changes after this date are governed by Section 4 of the Contract. |
@@ -37,7 +37,7 @@ Canonical terms are defined here. All four documents must use these terms consis
 | **Site Work** | All construction activities performed by Contractor at the project site, including foundation, utility connections, and installation. Not factory work. |
 | **Pre-Delivery Inspection** | The joint inspection conducted by Owner and Contractor before the Home Unit is placed on the foundation, documenting condition at delivery. |
 | **Marriage Wall** | The interior wall assembly and sealing required at the junction of sections in a multi-section Home Unit. |
-| **Manufacturer Warranty Document** | The Manufacturer's written warranty for the Home Unit. Referenced as **Exhibit B** in the Main Contract and as **Exhibit W-1** in the Warranty Statement. Both labels refer to the same physical document; using different exhibit labels in each document is intentional to match each document's own exhibit numbering scheme. A loop agent must not unify the labels — use "Exhibit B" in the Main Contract and "Exhibit W-1" in the Warranty Statement. |
+| **Manufacturer Warranty Document** | The Manufacturer's own written warranty for the Home Unit. This document is provided by the Manufacturer (an independent third party) and is NOT drafted, controlled, or guaranteed by the Contractor. The Contractor makes no representations about the accuracy, completeness, or currency of the Manufacturer's warranty. The Owner must contact the Manufacturer directly for current warranty information, as the Manufacturer's warranty terms may change at any time without notice to the Contractor. |
 
 ---
 
@@ -60,7 +60,7 @@ This spec does NOT cover the following items. A loop agent must not modify or cr
 
 - The Allowance Budget spreadsheet or its line items
 - Exhibit A (Manufacturer's Quote, Floor Plan, and Specifications)
-- Exhibit B / Exhibit W-1 (Manufacturer's Warranty Documentation)
+- Manufacturer's warranty documentation (provided by the Manufacturer, an independent third party — Contractor makes no representations about it)
 - The Plans and Specification Booklet
 - The Payment Schedule document
 - Project-specific fill-in values (Owner name, Contract Price, project address, dates)
@@ -76,11 +76,11 @@ These assertions apply to all four documents and are verifiable across the suite
 1. Every document uses Glossary terms consistently. No document uses a deprecated synonym when a canonical term is defined above.
 2. Every document that references another document does so by its canonical document title (e.g., "the Warranty Statement," "the Homeowner's Guide").
 3. No document contradicts another document on legal obligations, definitions, or scope of responsibility.
-4. The division of responsibility between Contractor (Site Work) and Manufacturer (factory construction) is stated consistently: Contractor is not liable for Manufacturer defects; Manufacturer is not liable for Contractor Site Work defects.
+4. The division of responsibility between Contractor (Site Work) and Manufacturer (factory construction) is stated consistently: Contractor is not liable for Manufacturer defects; the Manufacturer is an independent third-party entity whose obligations are governed by its own agreements. Contractor does not represent, warrant, or guarantee any aspect of the Manufacturer's work, products, warranties, or business practices.
 5. Every document that requires Owner signature includes an Acknowledgment and Signature block with fields for: Owner signature, Owner printed name, and date. Where two owners may exist, both signature lines are present.
 6. Every signature block that requires a Contractor representative signature includes fields for: representative signature, printed name, title, and date.
 7. All statutory citations reference the correct Minnesota statute and section number.
-8. The Manufacturer Warranty Document is referenced as "Exhibit B" in the Main Contract and as "Exhibit W-1" in the Warranty Statement. No document uses the other document's label. This intentional dual naming is defined in the Glossary under *Manufacturer Warranty Document*.
+8. All four documents must clearly state that the Manufacturer is an independent third-party entity, that the Contractor is not a representative, agent, or partner of the Manufacturer, and that the Contractor makes no representations about the Manufacturer's warranties, products, or business practices. The Owner must be directed to contact the Manufacturer directly for warranty information.
 
 ---
 
@@ -116,8 +116,8 @@ The Contract contains these sections in order, each present and titled:
 
 ### Scope of Work (Section 2)
 
-- Section 2.1 states that the Manufacturer constructs the Home Unit under HUD (24 CFR Part 3280) or applicable modular home standards, and enumerates factory responsibilities.
-- Section 2.1 states that Contractor is **not** liable for defects originating at the Manufacturer's facility.
+- Section 2.1 states that the Manufacturer is an independent third-party entity that constructs the Home Unit. Contractor is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's operations, construction methods, quality control, warranties, or business practices. Owner is directed to contact the Manufacturer directly for information about their responsibilities and processes.
+- Section 2.1 states that Contractor is **not** liable for defects originating at the Manufacturer's facility and does not warrant, guarantee, or make any representations regarding the Manufacturer's work.
 - Section 2.2 enumerates Contractor's Site Work responsibilities, including: site prep and grading, foundation, delivery coordination, transportation and oversize permits, crane and set, Marriage Wall assembly, utility connections, on-site finish work, permitting, MN Building Code compliance, and broom-clean completion.
 
 ### Factory Order Lock-In (Section 4)
@@ -197,8 +197,8 @@ The Contract contains these sections in order, each present and titled:
   - 2 years — site-installed plumbing, heating, and electrical system defects
   - 10 years — structural defects related to foundation and site installation
 - Section 17.1 states this warranty covers only Contractor's Site Work; it does not cover factory-built components.
-- Section 17.2: Contractor passes through all Manufacturer warranties to Owner. Key terms, coverage periods, exclusions, and claim process are in Exhibit B. To claim on factory components, Owner contacts Manufacturer directly; Contractor assists but is not financially responsible for factory defects.
-- Section 17.3: Warranty Date for Contractor's warranty is the earlier of (1) first Owner occupancy or (2) Owner's legal title to the home — but not before the Home Unit is set on the foundation. Manufacturer's warranty date may differ; refer to Exhibit B.
+- Section 17.2: Contractor is not a representative of the Manufacturer and does not warrant, guarantee, or make any representations regarding the Manufacturer's warranty coverage, terms, exclusions, or claims process. The Manufacturer is an independent third-party entity whose warranty obligations are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to the Contractor. Owner must contact the Manufacturer directly for warranty information. To claim on factory components, Owner contacts Manufacturer directly; Contractor is not financially responsible for factory defects.
+- Section 17.3: Warranty Date for Contractor's warranty is the earlier of (1) first Owner occupancy or (2) Owner's legal title to the home — but not before the Home Unit is set on the foundation. Manufacturer's warranty date is governed by the Manufacturer's own terms — contact the Manufacturer directly.
 - Section 17.4: If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions. Owner is encouraged to consult a licensed MN attorney.
 - Section 17.5: Owner must provide written notice of any warranty claim to Contractor within **6 months of discovering the defect**, as required by MN Stat. § 327A.
 
@@ -218,8 +218,8 @@ The Contract contains these sections in order, each present and titled:
 
 ### Exhibits
 
-- Exhibit A: Manufacturer's Quote, Floor Plan, and Specifications — present and listed.
-- Exhibit B: Manufacturer's Warranty Documentation — present and listed.
+- Exhibit A: Manufacturer's Quote, Floor Plan, and Specifications — present and listed, with disclaimer that Contractor makes no representations regarding the accuracy or completeness of Manufacturer-supplied documents.
+- Exhibit B: Approved Engineered Foundation Drawings (to be attached when available).
 
 ---
 
@@ -236,7 +236,7 @@ The Contract contains these sections in order, each present and titled:
   6. Higher temperatures and humidity increase formaldehyde off-gassing; manage HVAC accordingly.
   7. The warning is printed in ALL CAPS (or all uppercase) so it is visually distinct from surrounding text.
 - Specifies that for modular and manufactured homes, factory construction introduces higher quantities of formaldehyde-emitting materials (particleboard, OSB, plywood, factory cabinetry, flooring).
-- States that the Manufacturer — not Contractor — is primarily responsible for factory-selected and factory-installed materials.
+- States that the Manufacturer — an independent third-party entity — selects and installs factory-built materials. Contractor has no control over, knowledge of, or responsibility for these materials and makes no representations about them.
 - Informs Owner of the right to request material specifications from the Manufacturer before the Factory Order Lock-In Date.
 - Provides actionable steps: request low-formaldehyde or NAF options before ordering; ventilate after delivery; manage temperature and humidity.
 - Includes Owner Acknowledgment and Signature block (two signature lines for dual-owner scenarios).
@@ -248,8 +248,8 @@ The Contract contains these sections in order, each present and titled:
 
 ### Team Contact Block
 
-- Lists four named roles with contact fields: Project Design Representative, Project Specification Coordinator, Project Construction Manager, and Manufacturer Sales Contact.
-- Each role has fields for name, office phone, cell phone, and email.
+- Lists three Sherman team roles with contact fields: Project Design Representative, Project Specification Coordinator, and Project Construction Manager. Each role has fields for name, office phone, cell phone, and email.
+- Lists a Manufacturer Contact section that clearly states the Manufacturer is an independent third-party entity and that the Owner should contact the Manufacturer directly for questions about factory-built components, specifications, and warranties. Includes blank fields for manufacturer name and phone/website.
 
 ### Factory vs. Site Distinction
 
@@ -308,8 +308,8 @@ The Guide contains exactly 12 numbered Key Acknowledgements, each with two initi
 The Warranty Statement contains these sections in order:
 
 - A. Sherman Builders Statutory Warranties — Site Work & Installation
-- B. Scope of Responsibility — Why This Warranty Is Divided
-- C. Manufacturer Warranty
+- B. Scope of Responsibility — Why This Warranty Covers Only Site Work
+- C. Manufacturer Warranty — Contact the Manufacturer Directly
 - D. Applicable Building Standards — HUD Code vs. MN State Building Code
 - E. Warranty Date — Factory-Built Home Clarification
 - F. Claims Procedures (F.1 Contractor claims, F.2 Manufacturer claims, F.3 Disputed claims)
@@ -329,18 +329,21 @@ The Warranty Statement contains these sections in order:
 - States Warranty Date clearly (earlier of first occupancy or legal title), with note that it does not begin before the Home Unit is set on the foundation.
 - States written warranty claims must be reported within **6 months** of Owner discovering the defect.
 
-### Section C — Manufacturer Warranty
+### Section C — Manufacturer Warranty — Contact the Manufacturer Directly
 
-- Contains a Manufacturer information table with fields: Manufacturer Name, Address, HUD Certification / License No., Warranty Contact Name, Warranty Phone, Warranty Email / Portal.
-- Contains a Manufacturer Warranty Summary table with coverage and term fields for: Structural / Home Unit, Plumbing (factory-installed), Electrical (factory-installed), Roofing, Appliances, Windows & Doors.
-- States the full manufacturer warranty document is attached as Exhibit W-1.
-- Provides a numbered four-step claims procedure for manufacturer claims: (1) document in writing with photos, (2) contact Manufacturer directly, (3) notify Sherman Builders simultaneously, (4) Sherman Builders cooperates.
+- Clearly states that Contractor is NOT a representative of the Manufacturer and does not warrant, guarantee, or make any representations regarding the Manufacturer's warranty coverage, terms, exclusions, or claims process.
+- States that the Manufacturer is an independent third-party entity whose warranty obligations are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to the Contractor.
+- States that the Owner must contact the Manufacturer directly for warranty information, including coverage periods, exclusions, limitations, and how to file a claim.
+- States that the Manufacturer's warranty documentation will likely be provided by the Manufacturer with the home upon delivery.
+- Contains blank Manufacturer contact information fields (name, address, warranty contact, phone, email/website) with a disclaimer that the information is provided for Owner convenience only and that the Contractor does not guarantee its accuracy as the Manufacturer may update it at any time.
+- Does NOT contain specific warranty terms, coverage periods, or warranty summary tables — these are the Manufacturer's information to provide, not the Contractor's.
+- Provides a numbered three-step procedure for factory defect claims: (1) document in writing with photos, (2) contact Manufacturer directly, (3) optionally notify Contractor for documentation assistance only.
 
 ### Section D — Applicable Building Standards
 
 - Distinguishes two home types and their governing standards:
-  - HUD-Code Home: governed by 24 CFR Part 3280 for factory-built portions; federal HUD standards may supersede MN Chapter 327A for factory components; attorney consultation recommended.
-  - Modular Home: governed by MN State Building Code; Chapter 327A applies in full to both Site Work and factory-built portions.
+  - HUD-Code Home: may be governed by 24 CFR Part 3280 for factory-built portions; Contractor does not represent the Manufacturer and makes no representations about the Manufacturer's compliance with HUD standards; attorney consultation recommended.
+  - Modular Home: may be factory-built to MN State Building Code standards; Contractor warrants its own Site Work under Chapter 327A; the Manufacturer's obligations are governed by the Manufacturer's own agreements and applicable law — contact the Manufacturer directly.
 - States that all Contractor Site Work complies with MN State Building Code regardless of home type.
 - States HUD Data Plate and certification labels must be present at delivery; if missing, Owner notifies Contractor immediately.
 
@@ -357,8 +360,8 @@ The Warranty Statement contains these sections in order:
   3. Contractor provides written offer to repair within 15 days of inspection.
   4. If parties agree, Contractor performs repairs per written agreement.
   5. If parties disagree, matter proceeds to MN Home Warranty Dispute Resolution Process under MN Stat. § 327A.051 before any court action.
-- F.2 (Claims Against Manufacturer): four numbered steps per Section C procedure.
-- F.3 (Disputed Claims): if defect origin is unclear, Owner notifies both Contractor and Manufacturer in writing; both cooperate to determine responsibility; Owner's claim rights preserved against both during process.
+- F.2 (Claims Against Manufacturer): three numbered steps: (1) contact Manufacturer directly, (2) follow Manufacturer's own claims procedure — Contractor has no authority over or knowledge of the Manufacturer's claims process, (3) optionally notify Contractor for documentation assistance only.
+- F.3 (Disputed Claims): if defect origin is unclear, Owner notifies both Contractor and Manufacturer in writing; Contractor inspects site work components; determination of Manufacturer's responsibility rests solely with the Manufacturer per the Manufacturer's own policies.
 
 ### Section G — Warranty Exclusions
 
@@ -379,7 +382,7 @@ Contains at minimum these exclusions, labeled (a) through (p):
 - (m) Acts of God (fire, explosion, smoke, water escape, windstorm, hail, lightning, falling trees, aircraft, vehicles, flood, earthquake) — except where caused by failure to comply with building standards
 - (n) Soil movement compensated by legislation or insurance
 - (o) Soil conditions on Owner-supplied land obtained independently of Contractor
-- (p) Defects in Manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility — these are the Manufacturer's responsibility
+- (p) Defects in Manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility — the Manufacturer is an independent third-party entity; contact the Manufacturer directly regarding their warranty obligations
 
 ### Section H — Waiver and Modification
 
@@ -397,7 +400,7 @@ Contains at minimum these exclusions, labeled (a) through (p):
 
 - Two Owner signature lines with printed name and date fields.
 - One Contractor representative signature line with printed name/title and date.
-- Summary acknowledgement block states: Contractor warrants Site Work under Chapter 327A; Manufacturer warrants factory-built components per Exhibit W-1; written claims within 6 months of discovery; Exhibit W-1 attached and provided.
+- Summary acknowledgement block states: Contractor warrants Site Work only under Chapter 327A; the Manufacturer is an independent third-party entity whose warranty obligations are governed by the Manufacturer's own agreements — Contractor does not represent the Manufacturer and makes no representations about the Manufacturer's warranty; written claims against Contractor within 6 months of discovery; Owner must contact the Manufacturer directly for warranty information.
 - States this document is required under MN Stat. § 327A.08 and that failure to provide it in writing violates MN Stat. § 326B.84.
 
 ---
@@ -408,7 +411,7 @@ These items require human decision-making before a loop agent can implement them
 
 1. **Section 20 Early-Occupancy Waiver**: The current Contract language uses a conduct-based "deemed waiver" that does not satisfy MN Stat. § 327A.04. The human decision needed: remove the provision entirely, or replace it with a separately executed § 327A.04-compliant written waiver instrument. The loop agent may flag this finding but must not unilaterally rewrite Section 20 in a legally opinionated way without human direction.
 
-2. **Exhibit B / Exhibit W-1**: The Manufacturer's warranty document and contact information are placeholders. These cannot be drafted by the loop agent — they come from the specific Manufacturer chosen for each project.
+2. **Manufacturer Warranty Information**: The Manufacturer is an independent third-party entity. The Contractor does not draft, control, or guarantee any Manufacturer warranty documentation. All manufacturer contact information in the contracts is left blank — to be filled in by the Owner based on information obtained directly from the Manufacturer. The Contractor makes no representations about the accuracy or currency of any Manufacturer information.
 
 3. **Homeowner's Guide Vendor Placeholders**: Sections for Plumbing Fixtures, Paint Colors, and other selections contain placeholder vendor names, contacts, and phone numbers in brackets (`[Name]`, `[Phone]`, etc.). These require human input and must not be invented by the loop agent.
 

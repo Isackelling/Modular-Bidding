@@ -17,12 +17,11 @@ Sherman Homes
 Mora, MN 55051
 Lic. # BC532878
 
-**And The Manufacturer:**
-*(The third-party manufacturer that constructs the home unit off-site in a factory)*
-Name: **Schult Homes by Clayton**
-Address: **201 Industrial Dr, Redwood Falls, MN 56283**
+**And The Manufacturer (Independent Third Party):**
+*(The manufacturer is an independent third-party entity that constructs the home unit off-site in a factory. Sherman Homes is not an agent, representative, or partner of the Manufacturer. Sherman Homes does not control, direct, or have authority over the Manufacturer's operations, business practices, warranties, or obligations.)*
+Name: ___________________________
+Address: ___________________________
 HUD Certification / License No.: ___________________________
-Sales Contact: **Sherman**
 
 **For The Project:**
 Home Model: ___________________________ &nbsp; Type: ___________________________ &nbsp; Dimensions: ___________________________
@@ -44,17 +43,18 @@ The Contract Documents consist of this Agreement, the Plans, the Specification B
 
 Because this project involves a factory-built home, construction responsibilities are divided between the Manufacturer and Sherman Homes as follows.
 
-### 2.1 Manufacturer Responsibilities (Off-Site Factory Work)
+### 2.1 Manufacturer (Off-Site Factory Work) — Independent Third Party
 
-The Manufacturer is responsible for constructing the home unit in a manufacturing facility in accordance with applicable federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280) or applicable modular home standards. Manufacturer responsibilities include:
+The Manufacturer is an independent third-party entity that constructs the home unit in a manufacturing facility. **Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's operations, construction methods, quality control, warranties, or business practices.**
 
-- Fabrication of the structural home unit per the agreed floor plan and specifications
-- Factory installation of interior finishes, cabinetry, flooring, plumbing rough-in, and electrical rough-in as specified in Exhibit A
-- Compliance with all applicable HUD or state modular construction standards
-- Provision of the HUD Data Plate and certification label(s) on the completed unit (for HUD-code homes)
-- Providing manufacturer warranties covering factory-built components and workmanship
+The Manufacturer's responsibilities, warranties, and obligations are governed solely by the Manufacturer's own agreements, policies, and applicable law. Owner should contact the Manufacturer directly for information regarding:
 
-**Sherman Homes is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility.** Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer, not Sherman Homes.
+- The Manufacturer's construction standards, processes, and quality control
+- Factory-installed components, finishes, and specifications
+- The Manufacturer's warranty coverage, terms, exclusions, and claims procedures
+- HUD Data Plate, certification labels, and compliance documentation
+
+**Sherman Homes does not warrant, guarantee, or make any representations regarding the Manufacturer's work, products, warranties, or obligations.** Sherman Homes is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility. Any claims related to factory-built components must be directed to the Manufacturer.
 
 ### 2.2 Sherman Homes Responsibilities (Site Work & Installation)
 
@@ -127,7 +127,7 @@ If payment is not received by the Contractor within 7 business days of a payment
 
 All site work and installation shall be in accordance with the Plans and the Specification Booklet, subject to Plan and Specification approval by all authorities with jurisdiction over the project. Requirements demanded by such jurisdictions but not accounted for in the Contract Price are the financial responsibility of the Owner.
 
-All site work and installation shall be completed in a workmanlike manner and shall comply with all applicable MN State Building Code and local codes. Factory-built portions of the home shall comply with federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280) or applicable modular home standards, as the Manufacturer's responsibility.
+All site work and installation shall be completed in a workmanlike manner and shall comply with all applicable MN State Building Code and local codes. Factory-built portions of the home are the sole responsibility of the Manufacturer, an independent third-party entity. Sherman Homes makes no representations regarding the Manufacturer's compliance with federal HUD Manufactured Home Construction and Safety Standards or other applicable standards.
 
 Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense. Contractor will remove all construction debris and leave the project in a broom-clean condition.
 
@@ -186,7 +186,7 @@ Prior to placement on the foundation, Sherman Homes shall conduct a joint inspec
 
 ### 11.3 Reporting Factory Defects
 
-Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer within **5 business days** of delivery. The cost of repair or replacement for factory-caused defects or transit damage attributable to the Manufacturer shall be the Manufacturer's responsibility, not the Owner's or Sherman Homes'. Sherman Homes will assist the Owner in filing claims with the Manufacturer but is not liable for factory defects.
+Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer directly by the Owner within **5 business days** of delivery. Sherman Homes may assist the Owner in documenting defects but **does not represent the Manufacturer, does not control the Manufacturer's response, and is not liable for factory defects or transit damage.** The Owner should contact the Manufacturer directly regarding repair, replacement, or warranty claims for factory-caused defects. The Manufacturer's response to such claims is governed solely by the Manufacturer's own policies and warranty terms, which Sherman Homes has no control over and makes no representations about.
 
 ### 11.4 Formal Acceptance
 
@@ -214,7 +214,7 @@ If the Contractor is delayed at any time by causes beyond the Contractor's reaso
 
 ## 15. HAZARDOUS MATERIALS, WASTE, AND FORMALDEHYDE
 
-Unless the scope of this Agreement specifically includes handling of hazardous materials, upon discovery of such materials the Contractor shall notify the Owner immediately and allow engagement of a properly licensed hazardous material contractor. Any such work shall be treated as a Change Order. The Manufacturer bears primary responsibility for hazardous materials (including formaldehyde-emitting materials) introduced during factory construction.
+Unless the scope of this Agreement specifically includes handling of hazardous materials, upon discovery of such materials the Contractor shall notify the Owner immediately and allow engagement of a properly licensed hazardous material contractor. Any such work shall be treated as a Change Order. Materials introduced during factory construction — including those that may contain formaldehyde — are selected and installed by the Manufacturer, an independent third-party entity. Sherman Homes does not select, specify, or control factory-installed materials and makes no representations about them.
 
 > **Note:** Read and sign the Formaldehyde Disclosure before executing this Agreement.
 
@@ -238,11 +238,13 @@ At the completion of this project, Contractor shall execute a warranty instrumen
 
 This warranty covers only work performed by Sherman Homes. It does not cover factory-built components or factory workmanship, which are covered under the Manufacturer's warranty (Section 17.2).
 
-### 17.2 Manufacturer Warranty (Pass-Through)
+### 17.2 Manufacturer Warranty — Independent of Sherman Homes
 
-Sherman Homes shall pass through to the Owner all warranties provided by the Manufacturer. The Manufacturer's warranty covers factory-built components and factory workmanship. Key terms of the Manufacturer's warranty, including coverage periods, exclusions, and the warranty claim process, are provided in the Manufacturer's warranty documentation attached as **Exhibit B**.
+**Sherman Homes is not a representative of the Manufacturer and does not warrant, guarantee, or make any representations regarding the Manufacturer's warranty coverage, terms, exclusions, or claims process.** The Manufacturer is an independent third-party entity whose warranty obligations are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to Sherman Homes.
 
-To make a warranty claim for factory-built components, the Owner shall contact the Manufacturer directly using the contact information in Exhibit B. Sherman Homes will assist in facilitating warranty claims but is not financially responsible for the cost of rectifying factory defects.
+The Owner should contact the Manufacturer directly to obtain complete and current information about the Manufacturer's warranty, including coverage periods, exclusions, limitations, and claims procedures. Warranty documentation may be provided by the Manufacturer upon delivery of the home. Sherman Homes has no control over the Manufacturer's warranty program and cannot make promises or representations on the Manufacturer's behalf.
+
+To make a warranty claim for factory-built components, the Owner must contact the Manufacturer directly. Sherman Homes is not financially responsible for factory defects and has no authority over the Manufacturer's warranty process.
 
 ### 17.3 Warranty Date
 
@@ -264,12 +266,12 @@ Should the Owner or Contractor fail to carry out this Contract, the non-defaulti
 
 ### 18.1 Manufacturer Default
 
-In the event the Manufacturer fails to deliver the home unit, delivers a non-conforming unit, or becomes insolvent or ceases operations prior to delivery, the following shall apply:
+The Manufacturer is an independent third-party entity over which Sherman Homes has no control. In the event the Manufacturer fails to deliver the home unit, delivers a non-conforming unit, or becomes insolvent or ceases operations prior to delivery, the following shall apply:
 
 - Sherman Homes shall notify the Owner in writing within 5 business days of becoming aware of such a Manufacturer default.
 - Owner and Sherman Homes shall cooperate in good faith to identify an alternate manufacturer or remedy.
 - Any costs already incurred by Sherman Homes for site work, permits, and preparation prior to Manufacturer default shall remain the Owner's financial responsibility per the Payment Schedule for completed work.
-- Sherman Homes shall not be held liable for damages arising solely from Manufacturer default, insolvency, or failure to perform.
+- **Sherman Homes shall not be held liable for damages arising solely from Manufacturer default, insolvency, or failure to perform.** Sherman Homes has no control over the Manufacturer's business operations, financial condition, or ability to perform, and makes no representations or guarantees regarding the same.
 
 ---
 
@@ -329,9 +331,8 @@ This Contract is based on the following assumptions. If actual conditions differ
 
 ## EXHIBITS
 
-- **Exhibit A:** Manufacturer's Quote, Floor Plan, and Specifications
-- **Exhibit B:** Manufacturer's Warranty Documentation
-- **Exhibit C:** Approved Engineered Foundation Drawings (to be attached when available)
+- **Exhibit A:** Manufacturer's Quote, Floor Plan, and Specifications *(provided by the Manufacturer; Sherman Homes makes no representations regarding the accuracy or completeness of Manufacturer-supplied documents)*
+- **Exhibit B:** Approved Engineered Foundation Drawings (to be attached when available)
 
 ---
 
@@ -354,4 +355,4 @@ Title: _________________________________
 
 ---
 
-*This Contract is for site work and installation services only. The purchase of the manufactured/modular home unit itself is governed by a separate Purchase Agreement between the Owner and the Manufacturer (or between Sherman Homes and the Manufacturer on the Owner's behalf). This Contract does not constitute legal advice. Consult a licensed Minnesota construction attorney before executing.*
+*This Contract is for site work and installation services only. Sherman Homes is not a representative, agent, or partner of the Manufacturer. The Manufacturer is an independent third-party entity, and Sherman Homes makes no representations or warranties regarding the Manufacturer's products, services, warranties, or business practices. This Contract does not constitute legal advice. Consult a licensed Minnesota construction attorney before executing.*

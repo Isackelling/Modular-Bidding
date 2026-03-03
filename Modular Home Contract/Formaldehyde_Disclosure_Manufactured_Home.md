@@ -38,15 +38,15 @@ In modular and manufactured homes, formaldehyde-emitting materials are commonly 
 
 Because the factory environment involves enclosed assembly of many of these materials simultaneously, formaldehyde concentrations in newly delivered manufactured homes may be higher than in site-built homes during the initial period after delivery and installation.
 
-### Manufacturer Responsibility
+### Manufacturer — Independent Third Party
 
-The Manufacturer — not Sherman Homes — is primarily responsible for the selection and installation of factory-built materials, including those that may emit formaldehyde. Sherman Homes' role is limited to site work, installation, and finish work performed on-site.
+The Manufacturer is an independent third-party entity that selects and installs factory-built materials, including those that may emit formaldehyde. **Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the materials the Manufacturer selects or installs.** Sherman Homes' role is limited to site work, installation, and finish work performed on-site.
 
-If you have questions about the specific materials used in your home, you have the right to request material specifications directly from the Manufacturer prior to the Factory Order Lock-In Date. The Manufacturer can provide information on formaldehyde emission levels and, in many cases, offer lower-formaldehyde or no-added-formaldehyde (NAF) material options.
+If you have questions about the specific materials used in your home — including formaldehyde emission levels, material specifications, or available alternatives — **contact the Manufacturer directly.** Sherman Homes cannot make representations about materials selected and installed by the Manufacturer. The Manufacturer may be able to provide information on lower-formaldehyde or no-added-formaldehyde (NAF) material options, but Sherman Homes makes no guarantees about the availability of such options.
 
 ### Steps You Can Take
 
-- **Before ordering:** Ask the Manufacturer about low-formaldehyde or NAF (no-added-formaldehyde) options for cabinetry, flooring, and engineered wood panels.
+- **Before ordering:** Contact the Manufacturer directly to ask about low-formaldehyde or NAF (no-added-formaldehyde) options for cabinetry, flooring, and engineered wood panels. Sherman Homes does not control or have knowledge of the Manufacturer's material options.
 - **After delivery:** Ventilate the home thoroughly before and after move-in by opening windows and running ventilation systems.
 - **Ongoing:** Maintain moderate indoor temperatures and humidity levels to reduce formaldehyde off-gassing over time. Formaldehyde emissions typically decrease significantly within the first 1–2 years after manufacture.
 
