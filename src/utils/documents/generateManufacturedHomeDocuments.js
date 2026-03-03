@@ -35,6 +35,13 @@ const STYLES = `
   .checklist-table td:last-child { width: 15%; text-align: center; font-size: 16px; }
   .generated-note { margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 11px; color: #999; }
   .ack-block { margin: 14px 0; padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
+  .ack-group { border: 1px solid #ccc; border-radius: 6px; margin: 12px 0; overflow: hidden; }
+  .ack-group-title { background: #2c5530; color: #fff; margin: 0; padding: 7px 12px; font-size: 13px; font-weight: 700; }
+  .ack-group table { margin: 0; }
+  .ack-group th { background: #f5f5f5; color: #555; font-size: 11px; font-weight: 600; padding: 4px 10px; }
+  .ack-group td { vertical-align: top; font-size: 12px; padding: 7px 10px; line-height: 1.4; }
+  .ack-group td.ack-init { width: 55px; text-align: center; vertical-align: middle; padding: 5px 4px; }
+  .ack-group .initial-box { width: 50px; margin: 0; }
   .editable { cursor: text; background: transparent; transition: background 0.15s; min-height: 1.1em; }
   .editable:hover { background: #fffde7; border-radius: 3px; }
   .editable:focus { outline: 2px solid #2c5530; background: #f0fff0; border-radius: 3px; }
@@ -66,10 +73,16 @@ const STYLES = `
     .notice-box, blockquote, .important-notice { page-break-inside: avoid; }
     .sig-section { page-break-inside: avoid; }
     h2, h3 { page-break-after: avoid; }
-    /* Acknowledgement blocks — keep each one together, tighten for print */
+    /* Acknowledgement blocks (legacy) */
     .ack-block { page-break-inside: avoid; margin: 8px 0; padding: 8px 10px; }
     .ack-block p { font-size: 11.5px; margin: 0 0 4px; }
     .initial-row { margin: 4px 0; }
+    /* Grouped acknowledgement cards */
+    .ack-group { page-break-inside: avoid; margin: 8px 0; }
+    .ack-group-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 5px 10px; font-size: 12px; }
+    .ack-group td { font-size: 11px; padding: 4px 8px; }
+    .ack-group th { font-size: 10px; padding: 3px 8px; }
+    .ack-group .initial-box { width: 42px; }
   }
 `;
 
@@ -386,16 +399,11 @@ export const generateHomeownerGuide = (quote, customer, totals, user) => {
   const d = prep(quote, customer, totals);
   const u = user || {};
 
-  const ack = (num, title, text) => `
-<div class="ack-block">
-  <p style="margin:0 0 8px"><strong>${num}. ${title}</strong></p>
-  <p style="margin:0 0 10px;font-size:13px">${text}</p>
-  <div class="initial-row">
-    <span class="initial-box">&nbsp;</span><span style="font-size:12px;color:#555">Initial${d.ownerName ? ` — ${d.ownerName}` : ''}</span>
-    &nbsp;&nbsp;&nbsp;
-    <span class="initial-box">&nbsp;</span><span style="font-size:12px;color:#555">Initial${d.owner2Name ? ` — ${d.owner2Name}` : ''}</span>
-  </div>
-</div>`;
+  const initH1 = d.ownerName || 'Owner 1';
+  const initH2 = d.owner2Name || 'Owner 2';
+  const initCols = `<th class="ack-init">${initH1}</th><th class="ack-init">${initH2}</th>`;
+  const initBoxes = `<td class="ack-init"><span class="initial-box">&nbsp;</span></td><td class="ack-init"><span class="initial-box">&nbsp;</span></td>`;
+  const ackRow = (num, text) => `<tr><td><strong>${num}.</strong> ${text}</td>${initBoxes}</tr>`;
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Homeowner's Guide — ${d.ownerName || 'Sherman Homes'}</title>
@@ -464,18 +472,46 @@ Email: isac@shermanbuildings.com</p>
 
 <h2>Key Acknowledgements</h2>
 <p>Please read each statement carefully and initial to confirm your understanding.</p>
-${ack(1, 'Document Review', 'I/We have received and reviewed the Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer\'s Quote and Floor Plan. I/We understand these documents define the scope, specifications, and pricing for this project across both factory-built and site-built components.')}
-${ack(2, 'Factory Order Lock-In', 'I/We understand that once the factory order is placed with the Manufacturer, changes to factory-built components (including floor plan, structural options, factory-installed cabinetry, flooring, and fixtures) may not be possible. Any changes the Manufacturer permits after the order is placed will be treated as a Change Order and are my/our sole financial responsibility, including any restocking fees, factory change fees, or production delay costs.')}
-${ack(3, 'Change Authorization', 'I/We understand that only changes discussed directly with our Sherman Team project contacts (listed above) will be authorized. This policy helps avoid misunderstandings and ensures all modifications are properly documented and priced.')}
-${ack(4, 'Cost Responsibility', 'I/We understand that the final price of this project is subject to unknown conditions and enhancements made as construction progresses. I/We accept responsibility for costs associated with changes or additions we request, including factory change fees.')}
-${ack(5, 'Site Readiness for Delivery', 'I/We understand that the project site must be fully ready on or before the confirmed delivery date. This includes the foundation being complete and inspected, the driveway and site access being clear and adequate for transport trucks and crane equipment, and all required site grading being complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.')}
-${ack(6, 'Pre-Delivery Inspection', 'I/We understand that a joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection, and that any visible defects or damage must be documented at that time. I/We will not formally accept the home unit until this inspection is complete.')}
-${ack(7, 'Floor Plan & Framing Tolerances', 'I/We understand that floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.')}
-${ack(8, 'Homeowner-Hired Contractors', 'I/We understand that if we wish to hire any additional contractors to work on our project, we must inform Sherman Homes in advance. No third-party contractor work is permitted during the delivery and installation phase without prior written approval from Sherman Homes.')}
-${ack(9, 'Homeowner-Selected Subcontractors', 'I/We understand that if we choose to use subcontractors different from Sherman Homes\' standard team, Sherman Homes does not accept responsibility for the work quality, warranty, or performance of homeowner-selected subcontractors. We understand we should obtain written contracts and warranties directly from any subcontractors we select.')}
-${ack(10, 'Seasonal Construction & Weather Delays', 'I/We understand that construction in Minnesota and Wisconsin is very seasonal. Portions of the work can only be performed in warm weather conditions, and delivery/set operations may be delayed by weather. I/We understand that weather-related delays are not the responsibility of Sherman Homes.')}
-${ack(11, 'Utility Costs During Construction', 'I/We understand that all utility bills accrued during construction (including but not limited to electric, gas, water, and sewer) are our responsibility and will be billed directly to us.')}
-${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insurance requirements detailed in Section 12 of our contract. Sherman Homes carries Workers Compensation, Liability, and Builder\'s Risk insurance covering the Contractor and its direct subcontractors during construction. I/We are required to maintain liability insurance on the property during construction and will acquire homeowners insurance immediately after drywall is hung.')}
+
+<div class="ack-group">
+  <div class="ack-group-title">Documents &amp; Cost</div>
+  <table>
+    <tr><th>Acknowledgement</th>${initCols}</tr>
+    ${ackRow(1, 'I/We have reviewed the Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer\'s Quote and Floor Plan. These documents define the scope, specifications, and pricing for this project.')}
+    ${ackRow(2, 'Only changes discussed directly with our Sherman Team project contacts (listed above) will be authorized. This ensures all modifications are properly documented and priced.')}
+    ${ackRow(3, 'The final price is subject to unknown conditions and enhancements as construction progresses. I/We accept responsibility for costs associated with changes or additions we request, including factory change fees.')}
+  </table>
+</div>
+
+<div class="ack-group">
+  <div class="ack-group-title">Factory &amp; Order</div>
+  <table>
+    <tr><th>Acknowledgement</th>${initCols}</tr>
+    ${ackRow(4, 'Once the factory order is placed, changes to factory-built components (floor plan, structural options, cabinetry, flooring, fixtures) may not be possible. Post-order changes the Manufacturer permits will be treated as a Change Order and are my/our sole financial responsibility, including restocking fees, factory change fees, or production delay costs.')}
+    ${ackRow(5, 'Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.')}
+  </table>
+</div>
+
+<div class="ack-group">
+  <div class="ack-group-title">Delivery &amp; Site</div>
+  <table>
+    <tr><th>Acknowledgement</th>${initCols}</tr>
+    ${ackRow(6, 'The project site must be fully ready on or before the confirmed delivery date — foundation complete and inspected, driveway and site access clear for transport trucks and crane equipment, all required grading complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.')}
+    ${ackRow(7, 'A joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.')}
+    ${ackRow(8, 'If we wish to hire additional contractors, we must inform Sherman Homes in advance. No third-party contractor work is permitted during the delivery and installation phase without prior written approval from Sherman Homes.')}
+    ${ackRow(9, 'If we use subcontractors different from Sherman Homes\' standard team, Sherman Homes does not accept responsibility for their work quality, warranty, or performance. We should obtain written contracts and warranties directly from any subcontractors we select.')}
+  </table>
+</div>
+
+<div class="ack-group">
+  <div class="ack-group-title">Construction Conditions</div>
+  <table>
+    <tr><th>Acknowledgement</th>${initCols}</tr>
+    ${ackRow(10, 'Construction in Minnesota and Wisconsin is very seasonal. Portions of work can only be performed in warm weather, and delivery/set may be delayed by weather. Weather-related delays are not the responsibility of Sherman Homes.')}
+    ${ackRow(11, 'All utility bills accrued during construction (electric, gas, water, sewer) are our responsibility and will be billed directly to us.')}
+    ${ackRow(12, 'Sherman Homes carries Workers Comp, Liability, and Builder\'s Risk insurance covering the Contractor and its direct subcontractors. I/We are required to maintain liability insurance on the property during construction and will acquire homeowners insurance immediately after drywall is hung.')}
+  </table>
+</div>
 
 <h2>Your Manufactured Home Selections</h2>
 <blockquote><strong>IMPORTANT:</strong> Selections fall into two categories: <strong>Factory-Locked</strong> (must be finalized before the Factory Order Lock-In Date — cannot be changed once the order is placed) and <strong>Site Allowance</strong> (follows Sherman's standard timeline). Confirm which category each item falls into with your Sherman Team. Monitor your spending against the Allowance Budget throughout the process.</blockquote>
