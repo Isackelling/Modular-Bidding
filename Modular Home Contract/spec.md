@@ -1,8 +1,8 @@
-# Spec — Sherman Builders Modular/Manufactured Home Contract Document Suite
+# Spec — Sherman Homes Modular/Manufactured Home Contract Document Suite
 
 ## Purpose
 
-This spec describes the target state of Sherman Builders' contract document suite for modular and manufactured home projects in Minnesota. A loop agent reading this spec can evaluate any single document against these requirements and implement improvements independently, without needing context from prior iterations.
+This spec describes the target state of Sherman Homes' contract document suite for modular and manufactured home projects in Minnesota. A loop agent reading this spec can evaluate any single document against these requirements and implement improvements independently, without needing context from prior iterations.
 
 ---
 
@@ -16,10 +16,10 @@ Canonical terms are defined here. All four documents must use these terms consis
 |---|---|
 | **Project** | A modular or manufactured home purchase and installation engagement involving Owner, Contractor, and Manufacturer. ~~"job"~~ and ~~"work order"~~ are deprecated synonyms — use *Project*. |
 | **Owner** | The homebuyer party to the Contract. May be one or two persons. |
-| **Contractor** | Sherman Builders, 2244 Hwy 65, Mora, MN 55051, License # BC532878. |
+| **Contractor** | Sherman Homes, 2244 Hwy 65, Mora, MN 55051, License # BC532878. |
 | **Manufacturer** | An independent third-party entity that constructs the Home Unit off-site in a factory. The Manufacturer is NOT an agent, representative, partner, or subcontractor of the Contractor. The Contractor has no control over, knowledge of, or responsibility for the Manufacturer's operations, business practices, warranties, or obligations. The Contractor does not represent the Manufacturer in any capacity. |
 | **Home Unit** | The factory-built structural home delivered to the project site. ~~"home," "unit," "structure"~~ — use *Home Unit* when referring to the factory-built object specifically. |
-| **Factory Order** | The binding order placed by Sherman Builders with the Manufacturer committing to a specific Home Unit configuration. |
+| **Factory Order** | The binding order placed by Sherman Homes with the Manufacturer committing to a specific Home Unit configuration. |
 | **Factory Order Lock-In Date** | The contractually agreed deadline by which Owner must finalize all factory-locked selections. Changes after this date are governed by Section 4 of the Contract. |
 | **Factory-Locked Item** | A selection or component that must be finalized before the Factory Order is placed and cannot be changed after without Manufacturer approval and potential fees. |
 | **Site Allowance Item** | Work or materials completed on-site by Contractor; modifiable per the standard Change Order and Allowance processes. |
@@ -91,7 +91,7 @@ These assertions apply to all four documents and are verifiable across the suite
 The Contract contains these sections in order, each present and titled:
 
 1. Contract Documents
-2. Scope of Work — Division of Responsibility (with subsections 2.1 Manufacturer Responsibilities and 2.2 Sherman Builders Responsibilities)
+2. Scope of Work — Division of Responsibility (with subsections 2.1 Manufacturer Responsibilities and 2.2 Sherman Homes Responsibilities)
 3. Time of Completion
 4. Factory Order Lock-In (with subsections 4.1, 4.2, 4.3)
 5. The Contract Price
@@ -110,9 +110,11 @@ The Contract contains these sections in order, each present and titled:
 18. Termination of the Contract (with subsection 18.1)
 19. Attorney Fees
 20. Acceptance and Occupancy
-21. Mechanic's Lien Notice (PLEASE TAKE NOTICE block)
-22. Exhibits list
-23. Acknowledgment and Signature
+(unnumbered) Mechanic's Lien Notice (PLEASE TAKE NOTICE block)
+21. General Exclusions (Available Services Not Selected; Items Never Included)
+22. Project Assumptions
+(unnumbered) Exhibits list
+(unnumbered) Acknowledgment and Signature
 
 ### Scope of Work (Section 2)
 
@@ -128,7 +130,7 @@ The Contract contains these sections in order, each present and titled:
 
 ### Contract Price (Section 5)
 
-- States a dollar amount (or blank for fill-in) and acknowledges a $20,000 Down Payment due at signing.
+- States the Contract Price (or blank for fill-in) and acknowledges a Down Payment of 50% of the Contract Price due at signing.
 - States that the price is contingent on the Payment Schedule between Contractor, Owner, and Loan Agency (if applicable).
 
 ### Progress Payments (Section 6)
@@ -226,7 +228,7 @@ The Contract contains these sections in order, each present and titled:
 
 ## Formaldehyde Disclosure Requirements
 
-- Identifies Sherman Builders by name and license number at the top.
+- Identifies Sherman Homes by name and license number at the top.
 - States disclosure is required under **Minnesota Statutes Section 325F.182**.
 - Includes a CAPITALIZED health warning block as required by MN Stat. § 325F.182. The warning block must contain all of the following elements (each is independently verifiable by checking the disclosure text):
   1. Formaldehyde is present in building materials including particleboard, plywood, OSB, and adhesives.
@@ -310,7 +312,7 @@ The Guide contains exactly 12 numbered Key Acknowledgements, each with two initi
 
 The Warranty Statement contains these sections in order:
 
-- A. Sherman Builders Statutory Warranties — Site Work & Installation
+- A. Sherman Homes Statutory Warranties — Site Work & Installation
 - B. Scope of Responsibility — Why This Warranty Covers Only Site Work
 - C. Manufacturer Warranty — Contact the Manufacturer Directly
 - D. Applicable Building Standards — HUD Code vs. MN State Building Code
@@ -358,7 +360,7 @@ The Warranty Statement contains these sections in order:
 ### Section F — Claims Procedures
 
 - F.1 (Claims Against Contractor): five numbered steps:
-  1. Report in writing within 6 months of discovering defect to Sherman Builders, 2244 Hwy 65, Mora, MN 55051.
+  1. Report in writing within 6 months of discovering defect to Sherman Homes, 2244 Hwy 65, Mora, MN 55051.
   2. Contractor inspects within 30 days of written notice.
   3. Contractor provides written offer to repair within 15 days of inspection.
   4. If parties agree, Contractor performs repairs per written agreement.

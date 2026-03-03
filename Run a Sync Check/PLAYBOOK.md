@@ -97,18 +97,29 @@ Folders:     folders (clayton_docs, crew_files, estimates, permits, change_order
 
 ---
 
-## Step 3 — The Eight Documents and What They Need
+## Step 3 — Document Generators and What They Need
+
+### Core Generators (`src/utils/documents/`)
 
 | # | Generator | Purpose | Critical Fields |
 |---|-----------|---------|----------------|
 | 1 | `generateQuoteHtml` | Internal admin summary | All fields, all prices |
-| 2 | `generateCustomerQuote` | Customer-facing document | Price, scope, sewerType, wellDepth, patioSize |
+| 2 | `generateCustomerQuote` | Customer-facing quote (includes Scope of Work section) | Price, scope, sewerType, wellDepth, patioSize |
 | 3 | `generatePierDiagramHtml` | Visual pier layout | houseWidth, houseLength, iBeamHeight, singleDouble, foundationType ONLY |
-| 4 | `generateScopeOfWorkDocument` | Legal scope document | selectedServices, customServices, dimensions, homeModel |
-| 5 | `generateCrewWorkOrderDocument` | Crew job-site instructions | ALL fields crew needs — services, notes, sewer, well, patio, drive time |
-| 6 | `generateJobSummaryReport` | Post-completion checklist | Service details, quantities, days, dimensions, special features |
-| 7 | `generateChangeOrderDocument` | Change order delta tracker | Any field that can change between quote versions |
-| 8 | `generateAllowanceProgressDocument` | Allowance cost tracking | scrubbCosts, scrubbPayments, sewerType, wellDepth, permitEntries |
+| 4 | `generateCrewWorkOrderDocument` | Crew job-site instructions | ALL fields crew needs — services, notes, sewer, well, patio, drive time |
+| 5 | `generateJobSummaryReport` | Post-completion checklist | Service details, quantities, days, dimensions, special features |
+| 6 | `generateChangeOrderDocument` | Change order delta tracker | Any field that can change between quote versions |
+| 7 | `generateAllowanceProgressDocument` | Allowance cost tracking | scrubbCosts, scrubbPayments, sewerType, wellDepth, permitEntries |
+| 8 | `generateAllowancesExplainerDocument` | Allowance explanation for customers | selectedServices (allowance items), totals.contingency |
+
+### Contract Suite Generators (`src/utils/documents/generateModularHomeDocuments.js`)
+
+| # | Generator | Purpose |
+|---|-----------|---------|
+| 9 | `generateManufacturedHomeContract` | Purchase & Installation Agreement |
+| 10 | `generateFormaldehydeDisclosure` | Statutory formaldehyde health disclosure |
+| 11 | `generateHomeownerGuide` | Selections, milestones & key acknowledgements |
+| 12 | `generateWarrantyStatement` | Site work warranty terms & claims procedures |
 
 ---
 
@@ -308,7 +319,7 @@ Walk through each numbered section / heading in the `.md` file and confirm the g
 
 #### 2. Legal Language — Does critical legal text match word-for-word?
 The following must be **exact matches** between `.md` and code (no paraphrasing):
-- Mechanic's Lien Notice (Contract Section 21 — "PLEASE TAKE NOTICE" block)
+- Mechanic's Lien Notice (Contract — unnumbered "PLEASE TAKE NOTICE" block between Section 20 and Section 21)
 - IMPORTANT HEALTH NOTICE (Formaldehyde Disclosure — all-caps health warning)
 - Warranty tiers (Warranty Statement Section A — 1-yr, 2-yr, 10-yr descriptions)
 - MN Statute references (§ 325F.182, § 327A.08, § 326B.84, § 327A.04)

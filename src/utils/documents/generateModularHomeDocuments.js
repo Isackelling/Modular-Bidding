@@ -327,6 +327,7 @@ ${siteServices.length > 0 ? `
 
 <h2>10. Allowances</h2>
 <p>The Allowance Budget includes an Allowance Contingency line item. The Allowance Contingency is a reserve fund designed to cover cost overruns in any allowance category without requiring a Change Order. When any allowance line item exceeds its allocated amount, the overage shall be automatically deducted from the Allowance Contingency. Only after the Allowance Contingency has been completely depleted will an Allowance Overage Change Order be required.</p>
+<p>Owner may request Allowance Reallocations within the Allowance Budget total at no administrative fee. An Allowance Reallocation redistributes funds between allowance line items without increasing the total Allowance Budget amount.</p>
 <p><strong>Unused funds in the Allowance Budget, including any unused Allowance Contingency, will be credited back to the Owner.</strong></p>
 
 <h2>11. Delivery, Transportation &amp; Installation</h2>
@@ -750,7 +751,7 @@ Manufacturer Website / Email: ${field(d.mfgEmail)}</p>
 
   <p><strong>Sherman Homes Representative:</strong></p>
   <p>Signature: ${blank(300)} &nbsp; Date: ${blank(110)}</p>
-  <p>Printed Name: <span class="sig-prefilled">${u.fullName || blank(200)}</span></p>
+  <p>Printed Name / Title: <span class="sig-prefilled">${u.fullName || blank(200)}</span></p>
 
   <p style="font-size:14px;margin-top:20px;color:#2c5530;font-weight:600">Thank you for choosing Sherman Homes. Let's build something amazing together.</p>
   <p style="font-size:12px;color:#555;font-style:italic">This guide is for informational purposes and project coordination. It is incorporated by reference into the Main Contract. It does not constitute legal advice. Consult a licensed Minnesota construction attorney with any legal questions regarding your purchase.</p>

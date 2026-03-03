@@ -176,6 +176,8 @@ An Allowance Overage Change Order shall not be subject to an administrative fee 
 
 The Allowance Budget includes an Allowance Contingency line item. The Allowance Contingency is a reserve fund designed to cover cost overruns in any allowance category without requiring a Change Order. When any allowance line item exceeds its allocated amount, the overage shall be automatically deducted from the Allowance Contingency. Only after the Allowance Contingency has been completely depleted will an Allowance Overage Change Order be required.
 
+Owner may request Allowance Reallocations within the Allowance Budget total at no administrative fee. An Allowance Reallocation redistributes funds between allowance line items without increasing the total Allowance Budget amount.
+
 **Unused funds in the Allowance Budget, including any unused Allowance Contingency, will be credited back to the Owner.**
 
 ---

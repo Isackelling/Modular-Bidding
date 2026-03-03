@@ -1866,7 +1866,10 @@ function AppInner() {
 
                   if (trackingItems.length === 0) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}><p>No items to track.</p></div>;
 
-                  const startC = totals.contingency || 0;
+                  const coHistoryForStart = currentItem.changeOrderHistory || [];
+                  const startC = coHistoryForStart.length > 0
+                    ? (coHistoryForStart[0].contingencyUsed || 0) + (coHistoryForStart[0].contingencyBalance || 0)
+                    : (totals.contingency || 0);
 
                   // Format number string with commas as user types
                   const fmtInput = (val) => {
