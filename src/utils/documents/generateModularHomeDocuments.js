@@ -231,7 +231,8 @@ Address: ${field(d.mfgAddress)}</p>
 Home Model: ${field(d.homeModel)} &nbsp; Type: ${field(d.homeType)} &nbsp; Dimensions: ${field(d.dimensions)}<br>
 Foundation: ${field(foundationName)}<br>
 Project Address: ${field(d.address)}<br>
-City, State, Zip: ${field(d.cityStateZip)}</p>
+City, State, Zip: ${field(d.cityStateZip)}<br>
+<strong>Contract Price: ${d.contractPrice ? field(d.contractPrice) : `$${blank(140)}`}</strong></p>
 
 ${siteServices.length > 0 ? `
 <p><strong>Contracted Site Services:</strong></p>
