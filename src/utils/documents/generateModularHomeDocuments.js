@@ -122,7 +122,8 @@ const prep = (quote, customer, totals) => {
     foundationType: q.foundationType || '',
     mfgName:       'Schult Homes by Clayton',
     mfgAddress:    '201 Industrial Dr, Redwood Falls, MN 56283',
-    mfgPhone:      '(507) 697-5150 | claytonredwoodfalls.com',
+    mfgPhone:      '(507) 697-5150',
+    mfgEmail:      'claytonredwoodfalls.com',
   };
 };
 
@@ -225,7 +226,9 @@ Lic. # BC532878</p>
 <p><strong>And The Manufacturer (Independent Third Party):</strong><br>
 <em>(The manufacturer is an independent third-party entity that constructs the home unit off-site in a factory. Sherman Homes is not an agent, representative, or partner of the Manufacturer. Sherman Homes does not control, direct, or have authority over the Manufacturer's operations, business practices, warranties, or obligations.)</em><br>
 Name: ${field(d.mfgName)}<br>
-Address: ${field(d.mfgAddress)}</p>
+Address: ${field(d.mfgAddress)}<br>
+Phone: ${field(d.mfgPhone)}<br>
+Website / Email: ${field(d.mfgEmail)}</p>
 
 <p><strong>For The Project:</strong><br>
 Home Model: ${field(d.homeModel)} &nbsp; Type: ${field(d.homeType)} &nbsp; Dimensions: ${field(d.dimensions)}<br>
@@ -501,6 +504,14 @@ ${printBar}
 <p>If you have questions about the specific materials used in your home &mdash; including formaldehyde emission levels, material specifications, or available alternatives &mdash; <strong>contact the Manufacturer directly.</strong> Sherman Homes cannot make representations about materials selected and installed by the Manufacturer. The Manufacturer may be able to provide information on lower-formaldehyde or no-added-formaldehyde (NAF) material options, but Sherman Homes makes no guarantees about the availability of such options.</p>
 <p>Although Sherman Homes does not control the Manufacturer's material selections, Sherman Homes maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in communicating material concerns or questions to the Manufacturer upon request.</p>
 
+<p><strong>Manufacturer Contact Information</strong> <em>(provided for Owner convenience only &mdash; Sherman Homes does not guarantee the accuracy of this information as the Manufacturer may update it at any time):</em></p>
+<table>
+  <tr><td>Manufacturer Name</td><td>${field(d.mfgName)}</td></tr>
+  <tr><td>Address</td><td>${field(d.mfgAddress)}</td></tr>
+  <tr><td>Phone</td><td>${field(d.mfgPhone)}</td></tr>
+  <tr><td>Website / Email</td><td>${field(d.mfgEmail)}</td></tr>
+</table>
+
 <h3>Steps You Can Take</h3>
 <ul>
   <li><strong>Before ordering:</strong> Contact the Manufacturer directly &mdash; or ask your Sherman Team to help coordinate the conversation &mdash; to ask about low-formaldehyde or NAF (no-added-formaldehyde) options for cabinetry, flooring, and engineered wood panels. Sherman Homes does not control or have knowledge of the Manufacturer's material options but will assist in facilitating communication where possible.</li>
@@ -567,7 +578,9 @@ Email: ${TEAM_CONTACTS.constructionManager.email}</p>
 <p><strong>Manufacturer Contact</strong> <em>(The Manufacturer is an independent third-party entity; Sherman Homes is not a representative of the Manufacturer):</em><br>
 Contact the Manufacturer directly for questions about factory-built components, specifications, and warranties.<br>
 Manufacturer Name: ${field(d.mfgName)}<br>
-Manufacturer Phone / Website: ${field(d.mfgPhone)}</p>
+Manufacturer Address: ${field(d.mfgAddress)}<br>
+Manufacturer Phone: ${field(d.mfgPhone)}<br>
+Manufacturer Website / Email: ${field(d.mfgEmail)}</p>
 
 <h2>How This Process Works</h2>
 <p>The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.</p>
@@ -825,7 +838,8 @@ ${printBar}
 <table>
   <tr><td>Manufacturer Name</td><td>${field(d.mfgName)}</td></tr>
   <tr><td>Address</td><td>${field(d.mfgAddress)}</td></tr>
-  <tr><td>Phone / Website</td><td>${field(d.mfgPhone)}</td></tr>
+  <tr><td>Phone</td><td>${field(d.mfgPhone)}</td></tr>
+  <tr><td>Website / Email</td><td>${field(d.mfgEmail)}</td></tr>
 </table>
 
 <p><strong>Sherman Homes does not assume any warranty obligation for factory-built components or the Manufacturer's products.</strong> Sherman Homes has no authority over, knowledge of, or control over the Manufacturer's warranty program, claims process, or response to claims. The Owner is solely responsible for pursuing any warranty claims directly with the Manufacturer.</p>
