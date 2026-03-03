@@ -1,7 +1,7 @@
 # Formaldehyde Disclosure
 ## Modular / Manufactured Home
 
-**Sherman Builders**
+**Sherman Homes**
 License # BC532878
 
 ---
@@ -10,7 +10,7 @@ License # BC532878
 
 Minnesota law requires us to inform you that some building materials used in construction may contain formaldehyde. Please carefully read the following important health information.
 
-**This disclosure is especially important for modular and manufactured homes.** Because the majority of construction occurs in a factory setting, your home contains significant quantities of engineered wood products — including particleboard, oriented strand board (OSB), plywood, factory-installed cabinetry, and flooring — which may emit higher concentrations of formaldehyde than materials used in traditional site-built construction. These materials are selected and installed by the Manufacturer, not by Sherman Builders.
+**This disclosure is especially important for modular and manufactured homes.** Because the majority of construction occurs in a factory setting, your home contains significant quantities of engineered wood products — including particleboard, oriented strand board (OSB), plywood, factory-installed cabinetry, and flooring — which may emit higher concentrations of formaldehyde than materials used in traditional site-built construction. These materials are selected and installed by the Manufacturer, not by Sherman Homes.
 
 ---
 
@@ -40,7 +40,7 @@ Because the factory environment involves enclosed assembly of many of these mate
 
 ### Manufacturer Responsibility
 
-The Manufacturer — not Sherman Builders — is primarily responsible for the selection and installation of factory-built materials, including those that may emit formaldehyde. Sherman Builders' role is limited to site work, installation, and finish work performed on-site.
+The Manufacturer — not Sherman Homes — is primarily responsible for the selection and installation of factory-built materials, including those that may emit formaldehyde. Sherman Homes' role is limited to site work, installation, and finish work performed on-site.
 
 If you have questions about the specific materials used in your home, you have the right to request material specifications directly from the Manufacturer prior to the Factory Order Lock-In Date. The Manufacturer can provide information on formaldehyde emission levels and, in many cases, offer lower-formaldehyde or no-added-formaldehyde (NAF) material options.
 

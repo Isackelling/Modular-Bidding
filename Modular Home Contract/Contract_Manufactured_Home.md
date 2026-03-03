@@ -12,20 +12,21 @@ City, State, Zip: ___________________________
 Phone & Email: ___________________________
 
 **And The Contractor:**
-Sherman Builders
+Sherman Homes
 2244 Hwy 65
 Mora, MN 55051
 Lic. # BC532878
 
 **And The Manufacturer:**
 *(The third-party manufacturer that constructs the home unit off-site in a factory)*
-Name: ___________________________
-Address: ___________________________
+Name: **Schult Homes by Clayton**
+Address: **201 Industrial Dr, Redwood Falls, MN 56283**
 HUD Certification / License No.: ___________________________
-Sales Contact: ___________________________
+Sales Contact: **Sherman**
 
 **For The Project:**
-Home Model: ___________________________
+Home Model: ___________________________ &nbsp; Type: ___________________________ &nbsp; Dimensions: ___________________________
+Foundation: ___________________________
 Project Address: ___________________________
 City, State, Zip: ___________________________
 
@@ -41,7 +42,7 @@ The Contract Documents consist of this Agreement, the Plans, the Specification B
 
 ## 2. SCOPE OF WORK — DIVISION OF RESPONSIBILITY
 
-Because this project involves a factory-built home, construction responsibilities are divided between the Manufacturer and Sherman Builders as follows.
+Because this project involves a factory-built home, construction responsibilities are divided between the Manufacturer and Sherman Homes as follows.
 
 ### 2.1 Manufacturer Responsibilities (Off-Site Factory Work)
 
@@ -53,11 +54,11 @@ The Manufacturer is responsible for constructing the home unit in a manufacturin
 - Provision of the HUD Data Plate and certification label(s) on the completed unit (for HUD-code homes)
 - Providing manufacturer warranties covering factory-built components and workmanship
 
-**Sherman Builders is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility.** Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer, not Sherman Builders.
+**Sherman Homes is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility.** Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer, not Sherman Homes.
 
-### 2.2 Sherman Builders Responsibilities (Site Work & Installation)
+### 2.2 Sherman Homes Responsibilities (Site Work & Installation)
 
-Sherman Builders is responsible for all site work and installation services, including:
+Sherman Homes is responsible for all site work and installation services, including:
 
 - Site preparation and grading
 - Foundation design coordination, permitting, and construction
@@ -98,7 +99,7 @@ Once the factory order has been placed with the Manufacturer, changes to factory
 The Allowance Budget (Section 9) distinguishes between:
 
 - **Factory-locked items:** Selections finalized at order (e.g., home model, base structural options, factory-installed finishes). These cannot be modified after the Factory Order Lock-In Date without Manufacturer approval and potential fees.
-- **Site allowance items:** Work completed on-site by Sherman Builders (e.g., foundation type, utilities, landscaping, site-finish upgrades). These are subject to the standard Change Order and Allowance processes.
+- **Site allowance items:** Work completed on-site by Sherman Homes (e.g., foundation type, utilities, landscaping, site-finish upgrades). These are subject to the standard Change Order and Allowance processes.
 
 ---
 
@@ -106,7 +107,7 @@ The Allowance Budget (Section 9) distinguishes between:
 
 The Contract Price shall be _______________ ($_______________), subject to the Allowance Budget, Change Orders, and short-notice price increases from suppliers or the Manufacturer beyond our control.
 
-The Owner and the Contractor acknowledge that the Owner will pay a Down Payment of Twenty Thousand Dollars ($20,000.00) upon signing of this Agreement. Additional funds will be required before construction begins, according to the Payment Schedule.
+The Owner and the Contractor acknowledge that the Owner will pay a Down Payment of **50% of the Contract Price** upon signing of this Agreement. Additional funds will be required before construction begins, according to the Payment Schedule.
 
 This Contract Price is contingent on the agreed Payment Schedule between the Contractor, Owner, and Loan Agency, if applicable.
 
@@ -128,13 +129,7 @@ All site work and installation shall be in accordance with the Plans and the Spe
 
 All site work and installation shall be completed in a workmanlike manner and shall comply with all applicable MN State Building Code and local codes. Factory-built portions of the home shall comply with federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280) or applicable modular home standards, as the Manufacturer's responsibility.
 
-All work shall be performed by qualified individuals as outlined by law. Where required by MN Statute 327B, Sherman Builders shall hold a valid Manufactured Home Installer License for installation of the home unit.
-
-Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense.
-
-Contractor will remove all construction debris and leave the project in a broom-clean condition.
-
-Upon satisfactory payment being made for any portion of the work performed, Contractor shall furnish a full and unconditional release from any claim or Mechanic's Lien for that portion of the work for which payment has been made.
+Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense. Contractor will remove all construction debris and leave the project in a broom-clean condition.
 
 ---
 
@@ -146,13 +141,16 @@ The Owner will not assume any liability or responsibility, nor have control over
 
 Owner is responsible for all utility account setups, fees, permits, installations, connections, and for all utility (electric & fuel) usage expenses. This includes fuel for generators if electric service is not provided and fuel for heaters if propane or natural gas service is not provided for cold weather construction conditions.
 
-**Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date.** This includes: foundation complete and inspected, driveway and site access clear and adequate for transport trucks and crane equipment, and any required site grading complete. Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order.
+**Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date.** Site readiness requires:
 
-Owner is financially responsible for plowing snow in the driveway and construction site as needed for material deliveries, inspections, workers, trucks, and equipment access.
+- Foundation complete, cured, and inspected before delivery date
+- **Access road** capable of accommodating a semi-truck with 65'+ trailer and an 85-ton crane — minimum 45-foot turning radius and 16-foot overhead clearance
+- Electric, water, and sewer/septic available at the property line
+- **Staging area:** minimum 50' × 100' clear area adjacent to the foundation for crane setup — site clear of debris, vehicles, and obstacles
 
-Owner shall not store belongings in the structure(s) or on the property in any location that interferes with the construction process without the consent of the Contractor.
+Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order. Installation cannot proceed in high winds, heavy rain, or icy conditions; weather-related delays are not the responsibility of Sherman Homes.
 
-**No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Builders.**
+**No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.**
 
 ---
 
@@ -170,19 +168,9 @@ An Allowance Overage Change Order shall not be subject to an administrative fee 
 
 ## 10. ALLOWANCES
 
-The Allowance Budget includes an Allowance Contingency line item. The Allowance Contingency is a reserve fund designed to cover cost overruns in any allowance category without requiring a Change Order.
+The Allowance Budget includes an Allowance Contingency line item. The Allowance Contingency is a reserve fund designed to cover cost overruns in any allowance category without requiring a Change Order. When any allowance line item exceeds its allocated amount, the overage shall be automatically deducted from the Allowance Contingency. Only after the Allowance Contingency has been completely depleted will an Allowance Overage Change Order be required.
 
-When any allowance line item exceeds its allocated amount, the overage shall be automatically deducted from the Allowance Contingency. The Contractor will notify the Owner when contingency funds are used and provide documentation of the overage.
-
-Only after the Allowance Contingency has been completely depleted will an Allowance Overage Change Order be required to add additional funds or cover remaining overages.
-
-Owner is financially responsible for any overages above the Allowance Budget after the Allowance Contingency has been fully utilized.
-
-Without incurring administrative fees, the Owner may request an Allowance Reallocation within the Allowance Budget. Reallocations shall not cause the total budget to exceed the original total amount.
-
-Unused funds in the Allowance Budget, including any unused Allowance Contingency, will be credited back to the Owner.
-
-Payment for work designated as allowance work has been factored into the Contract Price and Payment Schedule. All invoices and lien waivers received for allowance work will be shared with the Owner.
+**Unused funds in the Allowance Budget, including any unused Allowance Contingency, will be credited back to the Owner.**
 
 ---
 
@@ -190,15 +178,15 @@ Payment for work designated as allowance work has been factored into the Contrac
 
 ### 11.1 Transportation & Permits
 
-Sherman Builders shall coordinate transportation of the home unit from the Manufacturer's facility to the project site. Unless otherwise specified in writing, the following are **included in the Contract Price**: transportation costs, oversize-load road permits, and crane and set fees. Any costs arising from Owner-caused delays, inaccessible site conditions, or additional permits required due to site location are the Owner's financial responsibility and shall be treated as a Change Order.
+Sherman Homes shall coordinate transportation of the home unit from the Manufacturer's facility to the project site. Unless otherwise specified in writing, the following are **included in the Contract Price**: transportation costs, oversize-load road permits, and crane and set fees. Any costs arising from Owner-caused delays, inaccessible site conditions, or additional permits required due to site location are the Owner's financial responsibility and shall be treated as a Change Order.
 
 ### 11.2 Pre-Delivery Inspection
 
-Prior to placement on the foundation, Sherman Builders shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery, including any visible damage, incomplete work, or items not conforming to Exhibit A specifications.
+Prior to placement on the foundation, Sherman Homes shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery, including any visible damage, incomplete work, or items not conforming to Exhibit A specifications.
 
 ### 11.3 Reporting Factory Defects
 
-Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer within **5 business days** of delivery. The cost of repair or replacement for factory-caused defects or transit damage attributable to the Manufacturer shall be the Manufacturer's responsibility, not the Owner's or Sherman Builders'. Sherman Builders will assist the Owner in filing claims with the Manufacturer but is not liable for factory defects.
+Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer within **5 business days** of delivery. The cost of repair or replacement for factory-caused defects or transit damage attributable to the Manufacturer shall be the Manufacturer's responsibility, not the Owner's or Sherman Homes'. Sherman Homes will assist the Owner in filing claims with the Manufacturer but is not liable for factory defects.
 
 ### 11.4 Formal Acceptance
 
@@ -208,13 +196,7 @@ The Owner shall not formally accept the home unit until the joint pre-delivery i
 
 ## 12. INSURANCE
 
-The Owner shall maintain liability insurance on the property of the project.
-
-The Contractor shall purchase and maintain Workers Compensation, Liability, and Builder's Risk insurance coverage as required by law.
-
-The Contractor's insurance only covers the Contractor and its direct Subcontractors. The Owner, as well as the Owner's agents, employees, family, friends, guests, neighbors, additional contractors, and all other persons are strictly forbidden from unscheduled unsupervised access to the property once construction has commenced and until the Contract is completed, without first providing a Certificate of Additional Insured directly to the Contractor.
-
-Property shall not be occupied until the Owner acquires a homeowners insurance policy. Owner shall acquire a homeowners insurance policy immediately after drywall is hung.
+The Owner shall maintain liability insurance on the property. The Contractor shall maintain Workers Compensation, Liability, and Builder's Risk insurance coverage as required by law. **Property shall not be occupied until the Owner acquires a homeowners insurance policy.** Owner shall acquire a homeowners insurance policy immediately after drywall is hung.
 
 ---
 
@@ -226,21 +208,13 @@ If conditions are encountered at the construction site which are subsurface or o
 
 ## 14. FORCE MAJEURE AND DELAYS BEYOND CONTRACTOR'S CONTROL
 
-If the Contractor is delayed at any time in the commencement or progress of the work by causes beyond the Contractor's reasonable control — including but not limited to acts of God, fire, flood, earthquake, tornado, epidemic, pandemic, quarantine restrictions, war, riot, civil unrest, strikes, labor disputes, government orders or regulations, unavailability of materials or labor, supplier failures, **Manufacturer production delays**, or any other cause beyond the Contractor's reasonable control (collectively "Force Majeure Events") — then the Contract completion date shall be extended by the amount of time lost due to such delay.
-
-The Contractor shall notify the Owner in writing within seven (7) business days of becoming aware of any Force Majeure Event that will delay the project. Such notice shall describe the nature of the delay and the anticipated impact on the project schedule.
-
-Force Majeure Events shall not relieve the Owner of the obligation to make payments for work completed prior to or during such events. If a Force Majeure Event results in increased costs to the Contractor (including extended overhead, storage fees, re-mobilization costs, or material price increases), such costs shall be treated as a Change Order.
-
-Neither party shall be liable for damages resulting from delays caused by Force Majeure Events, provided the delayed party has taken reasonable steps to mitigate the impact of the delay.
+If the Contractor is delayed at any time by causes beyond the Contractor's reasonable control — including but not limited to acts of God, fire, flood, epidemic, war, strikes, unavailability of materials, **Manufacturer production delays**, or any other Force Majeure Events — then the Contract completion date shall be extended by the amount of time lost. Contractor shall notify Owner in writing within **7 business days** of any Force Majeure Event.
 
 ---
 
 ## 15. HAZARDOUS MATERIALS, WASTE, AND FORMALDEHYDE
 
-Both parties agree that dealing with hazardous materials, waste, or asbestos requires specialized training, processes, precautions, and licenses. Unless the scope of this Agreement specifically includes handling, disturbance, removal, or transportation of hazardous materials, upon discovery of such materials the Contractor shall notify the Owner immediately and allow the Owner/Contractor to engage a properly licensed hazardous material contractor. Any such work shall be treated as a Change Order.
-
-The Manufacturer bears primary responsibility for hazardous materials (including formaldehyde-emitting materials such as particleboard, OSB, and engineered wood products) introduced during factory construction. Owner may request material specifications from the Manufacturer and consult the Manufacturer regarding low-formaldehyde options prior to the Factory Order Lock-In Date.
+Unless the scope of this Agreement specifically includes handling of hazardous materials, upon discovery of such materials the Contractor shall notify the Owner immediately and allow engagement of a properly licensed hazardous material contractor. Any such work shall be treated as a Change Order. The Manufacturer bears primary responsibility for hazardous materials (including formaldehyde-emitting materials) introduced during factory construction.
 
 > **Note:** Read and sign the Formaldehyde Disclosure before executing this Agreement.
 
@@ -254,35 +228,31 @@ Any controversy or claim arising out of or relating to this Contract, or the bre
 
 ## 17. WARRANTY
 
-### 17.1 Sherman Builders Warranty (Site Work & Installation)
+### 17.1 Sherman Homes Warranty (Site Work & Installation)
 
-At the completion of this project, Contractor shall execute a warranty instrument to the Owner covering **Sherman Builders' site work and installation** for:
+At the completion of this project, Contractor shall execute a warranty instrument to the Owner covering **Sherman Homes' site work and installation** for:
 
 - **1 year** on workmanship and material defects
 - **2 years** on plumbing, heating, and electrical system defects related to site work and installation
 - **10 years** on structural defects related to the foundation and site installation
 
-This warranty covers only work performed by Sherman Builders. It does not cover factory-built components or factory workmanship, which are covered under the Manufacturer's warranty (Section 17.2).
+This warranty covers only work performed by Sherman Homes. It does not cover factory-built components or factory workmanship, which are covered under the Manufacturer's warranty (Section 17.2).
 
 ### 17.2 Manufacturer Warranty (Pass-Through)
 
-Sherman Builders shall pass through to the Owner all warranties provided by the Manufacturer. The Manufacturer's warranty covers factory-built components and factory workmanship. Key terms of the Manufacturer's warranty, including coverage periods, exclusions, and the warranty claim process, are provided in the Manufacturer's warranty documentation attached as **Exhibit B**.
+Sherman Homes shall pass through to the Owner all warranties provided by the Manufacturer. The Manufacturer's warranty covers factory-built components and factory workmanship. Key terms of the Manufacturer's warranty, including coverage periods, exclusions, and the warranty claim process, are provided in the Manufacturer's warranty documentation attached as **Exhibit B**.
 
-To make a warranty claim for factory-built components, the Owner shall contact the Manufacturer directly using the contact information in Exhibit B. Sherman Builders will assist in facilitating warranty claims but is not financially responsible for the cost of rectifying factory defects.
+To make a warranty claim for factory-built components, the Owner shall contact the Manufacturer directly using the contact information in Exhibit B. Sherman Homes will assist in facilitating warranty claims but is not financially responsible for the cost of rectifying factory defects.
 
 ### 17.3 Warranty Date
 
-The Warranty Date for Sherman Builders' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy. For factory-built components, the Manufacturer's warranty start date may differ; refer to Exhibit B for the Manufacturer's warranty date definition.
+The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy — but not earlier than the date the home unit is set on the foundation and site work commences.
 
-### 17.4 HUD-Code Warranty Notice
+### 17.4 Warranty Claim Deadline
 
-If this home is a HUD-code manufactured home, the applicability of Minnesota Statute Chapter 327A to factory-built portions of the home may be affected by federal HUD preemption. Owner is encouraged to consult a licensed Minnesota attorney to confirm warranty rights applicable to this transaction.
+As required by MN Stat. § 327A, Owner must provide written notice of any warranty claim to Sherman Homes within **6 months** of discovering the defect.
 
-### 17.5 Warranty Claim Deadline
-
-As required by MN Stat. § 327A, Owner must provide written notice of any warranty claim to Sherman Builders within **6 months** of discovering the defect.
-
-Owner acknowledges that Sherman Builders does not warrant work performed by others, materials supplied by others, or damage to Sherman Builders' work caused by work performed by others and/or materials supplied by others.
+Owner acknowledges that Sherman Homes does not warrant work performed by others, materials supplied by others, or damage to Sherman Homes' work caused by work performed by others and/or materials supplied by others.
 
 > **Note:** Read and sign the Warranty Statement.
 
@@ -290,22 +260,16 @@ Owner acknowledges that Sherman Builders does not warrant work performed by othe
 
 ## 18. TERMINATION OF THE CONTRACT
 
-Should the Owner or Contractor fail to carry out this Contract with all of its provisions, the following options and stipulations shall apply:
-
-- If the Owner or the Contractor shall default on the Contract, the non-defaulting party may declare the Contract in default and proceed against the defaulting party for the recovery of all damages incurred as a result of said breach, including a reasonable attorney's fee. In the case of a defaulting Owner, the Down Payment shall be applied to the legally ascertained damages.
-
-- In the event of a default by the Owner or Contractor, the non-defaulting party may state their intention to comply with the Contract and proceed for specific performance.
-
-- In the case of a defaulting Owner, the Contractor may accept, at their option, the Down Payment as liquidated damages. Should the Down Payment not cover expenses to date, the Contractor may make claim to the Owner for all work executed and for proven loss with respect to equipment, materials, tools, and machinery, including reasonable overhead, profit, and damages, less the Down Payment.
+Should the Owner or Contractor fail to carry out this Contract, the non-defaulting party may declare the Contract in default and proceed against the defaulting party for recovery of all damages, including reasonable attorney fees. In the case of a defaulting Owner, the Down Payment shall be applied to legally ascertained damages.
 
 ### 18.1 Manufacturer Default
 
 In the event the Manufacturer fails to deliver the home unit, delivers a non-conforming unit, or becomes insolvent or ceases operations prior to delivery, the following shall apply:
 
-- Sherman Builders shall notify the Owner in writing within 5 business days of becoming aware of such a Manufacturer default.
-- Owner and Sherman Builders shall cooperate in good faith to identify an alternate manufacturer or remedy.
-- Any costs already incurred by Sherman Builders for site work, permits, and preparation prior to Manufacturer default shall remain the Owner's financial responsibility per the Payment Schedule for completed work.
-- Sherman Builders shall not be held liable for damages arising solely from Manufacturer default, insolvency, or failure to perform.
+- Sherman Homes shall notify the Owner in writing within 5 business days of becoming aware of such a Manufacturer default.
+- Owner and Sherman Homes shall cooperate in good faith to identify an alternate manufacturer or remedy.
+- Any costs already incurred by Sherman Homes for site work, permits, and preparation prior to Manufacturer default shall remain the Owner's financial responsibility per the Payment Schedule for completed work.
+- Sherman Homes shall not be held liable for damages arising solely from Manufacturer default, insolvency, or failure to perform.
 
 ---
 
@@ -317,11 +281,7 @@ In the event of any arbitration or litigation relating to the project, project p
 
 ## 20. ACCEPTANCE AND OCCUPANCY
 
-Upon Contract completion, the project shall be inspected jointly by the Owner and the Contractor. Any repairs necessary to comply with the Contract Documents shall be made by the Contractor. Upon final payment, Contractor will provide Owner and Loan Agency with Lien Waivers for all materials and labor for this project.
-
-The Owner shall not occupy the property until final payment has been received by the Contractor and a signed Right to Occupy Certificate has been issued by the Contractor.
-
-Occupancy by the Owner prior to issuance of the Right to Occupy Certificate, in violation of Section 20.2, shall constitute unconditional acceptance of the project and a waiver of any defects or uncompleted work.
+Upon Contract completion, the project shall be inspected jointly by the Owner and the Contractor. Upon final payment, Contractor will provide Owner and Loan Agency with Lien Waivers for all materials and labor for this project. The Owner shall not occupy the property until final payment has been received and a signed Right to Occupy Certificate has been issued by the Contractor.
 
 ---
 
@@ -333,10 +293,45 @@ Occupancy by the Owner prior to issuance of the Right to Occupy Certificate, in 
 
 ---
 
+## 21. GENERAL EXCLUSIONS
+
+Unless specifically listed in the Contracted Site Services above or added via Change Order, the following are **NOT** included in this Contract:
+
+### Items Never Included in Any Sherman Homes Contract
+
+- Fencing or property line work
+- Tree removal (unless obstructing delivery or foundation)
+- Retaining walls or major grading beyond standard site prep
+- Sheds, garages, or outbuildings
+- Interior painting or wall finishes beyond factory-installed
+- Flooring, cabinet, or countertop upgrades beyond factory-installed
+- Window treatments, blinds, or light fixture upgrades
+- Custom carpentry or built-ins beyond factory-installed
+- Utility account setup fees or meter installation fees
+- Water softener or filtration system
+- Security, alarm, or smart home systems
+- Driveway paving beyond gravel (unless surfaced driveway is contracted)
+
+---
+
+## 22. PROJECT ASSUMPTIONS
+
+This Contract is based on the following assumptions. If actual conditions differ materially, the resulting cost or schedule impact shall be addressed as a Change Order per Section 9.
+
+- **Site:** Normal soil conditions, adequate natural drainage, no rock, and water table below foundation depth
+- **Access:** Unrestricted site access for all vehicles and equipment during normal business hours
+- **Utilities:** Electric, water, and sewer/septic available at the property line with connections within 100 feet of the home
+- **Permits:** All necessary permits are obtainable without unknown zoning restrictions or variances
+- **Schedule:** Manufacturer delivers on agreed date; materials and subcontractors available as scheduled
+- **Structures:** No demolition of existing buildings is required (unless specifically quoted)
+
+---
+
 ## EXHIBITS
 
 - **Exhibit A:** Manufacturer's Quote, Floor Plan, and Specifications
 - **Exhibit B:** Manufacturer's Warranty Documentation
+- **Exhibit C:** Approved Engineered Foundation Drawings (to be attached when available)
 
 ---
 
@@ -352,11 +347,11 @@ Print Name: _________________________________
 Signature: _________________________________ Date: _____________
 Print Name: _________________________________
 
-**Sherman Builders (Contractor):**
+**Sherman Homes (Contractor):**
 Signature: _________________________________ Date: _____________
 Print Name: _________________________________
 Title: _________________________________
 
 ---
 
-*This Contract is for site work and installation services only. The purchase of the manufactured/modular home unit itself is governed by a separate Purchase Agreement between the Owner and the Manufacturer (or between Sherman Builders and the Manufacturer on the Owner's behalf). This Contract does not constitute legal advice. Consult a licensed Minnesota construction attorney before executing.*
+*This Contract is for site work and installation services only. The purchase of the manufactured/modular home unit itself is governed by a separate Purchase Agreement between the Owner and the Manufacturer (or between Sherman Homes and the Manufacturer on the Owner's behalf). This Contract does not constitute legal advice. Consult a licensed Minnesota construction attorney before executing.*
