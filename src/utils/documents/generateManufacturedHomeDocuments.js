@@ -405,27 +405,32 @@ Email: isac@shermanbuildings.com</p>
 <p>We're excited to partner with you on this journey and bring your new home to life.</p>
 
 <h2>Understanding Your Build: Factory vs. Site</h2>
-<p>This is the most important concept in your project. Your home is built in <strong>two places</strong> by <strong>two separate teams.</strong></p>
+<p>This is the most important concept in your project. Your home is built in <strong>two places</strong> by <strong>two separate teams</strong>, and there is a clear line between them:</p>
+<div class="notice-box">
+  <strong>The Manufacturer</strong> is responsible for the home itself and everything inside it — structure, cabinetry, countertops, plumbing fixtures, electrical fixtures, flooring, fireplace, appliances, and all interior finishes.<br><br>
+  <strong>Sherman Homes</strong> is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).<br><br>
+  <strong>If it's inside the home, it's the Manufacturer. If it's at the site, it's Sherman.</strong>
+</div>
 
 <h3>What the Manufacturer Builds (Factory)</h3>
 <p>The Manufacturer constructs your home unit in a controlled factory environment. This includes the structural frame, walls, roof, factory-installed insulation, interior finishes, cabinetry, flooring, plumbing rough-in, electrical rough-in, and any other factory-installed options you select. Once the factory order is placed, <strong>these items are locked.</strong></p>
 
-<h3>What Sherman Homes Builds (On-Site)</h3>
-<p>Sherman Homes handles everything at your property: site preparation, grading, foundation construction, utility stub-outs, home delivery coordination, crane and set operations, marriage wall assembly (for multi-section homes), final utility connections, site finish work, and any on-site upgrades specified in your Allowance Budget.</p>
+<h3>What Sherman Homes Does (Site Work &amp; Installation)</h3>
+<p>Sherman Homes handles everything at your property — <strong>not</strong> the home itself. This includes: site preparation and grading, foundation construction, utility stub-outs, home delivery coordination, crane and set operations, marriage wall assembly and sealing (for multi-section homes), connecting the home's systems to site utilities (electric, plumbing, HVAC, fuel), and executing the site services you selected (sewer, well, gravel driveway, sand pad, etc.). Sherman does not build, modify, or warrant any component that comes from the factory.</p>
 
 <h3>Factory vs. Site Selections at a Glance</h3>
 <table>
   <tr><th>Selection Type</th><th>Examples</th><th>Deadline</th></tr>
   <tr><td><strong>Factory-locked</strong></td><td>Home model, floor plan, structural options, factory cabinetry, factory flooring, factory-installed fixtures</td><td>Before Factory Order Lock-In Date</td></tr>
-  <tr><td><strong>Site allowance</strong></td><td>Foundation type, utility connections, on-site finish upgrades, landscaping, exterior grading</td><td>Per Sherman timeline</td></tr>
+  <tr><td><strong>Site allowance</strong></td><td>Foundation type, sewer connection, well, gravel driveway, sand pad, crane &amp; set, landscaping, exterior grading</td><td>Per Sherman timeline</td></tr>
 </table>
-<blockquote><strong>Rule of thumb:</strong> If it's built or installed inside the factory, it must be decided before the Factory Order Lock-In Date. If it happens at your property after delivery, it follows Sherman's standard timeline.</blockquote>
+<blockquote><strong>Rule of thumb:</strong> If it's part of the home or goes inside the home, it's the Manufacturer's scope and must be decided before the Factory Order Lock-In Date. If it happens at your property (site prep, foundation, utility connections, driveway, sewer, well, etc.), it's Sherman's scope and follows Sherman's timeline.</blockquote>
 
 <h2>Your Project Timeline</h2>
 <p><strong>Phase 1 — Pre-Order (Selections &amp; Site Planning)</strong><br>All factory selections must be finalized. Foundation design and permits are initiated. Factory Order Lock-In Date is confirmed in writing by Sherman Homes.</p>
 <p><strong>Phase 2 — Factory Production</strong><br>The Manufacturer builds your home unit in the factory (typically 4–8 weeks). During this time, Sherman Homes completes site preparation, foundation, and utility stub-outs so the site is ready when the home arrives.</p>
 <p><strong>Phase 3 — Delivery &amp; Set</strong><br>The completed home unit is transported from the factory to your site. Sherman Homes coordinates the crane and set operations, placing the home on the foundation. <strong>A joint pre-delivery inspection is conducted by the Owner and Sherman Homes before the home is placed on the foundation.</strong></p>
-<p><strong>Phase 4 — Installation &amp; Site Finish</strong><br>Sherman Homes connects utilities, completes marriage wall assembly (if applicable), completes on-site finish work, and coordinates final inspections.</p>
+<p><strong>Phase 4 — Installation &amp; Connections</strong><br>Sherman Homes connects the home's systems to site utilities (electric, plumbing, HVAC, fuel), completes marriage wall assembly and sealing (if applicable), and coordinates required inspections.</p>
 <p><strong>Phase 5 — Final Walkthrough &amp; Occupancy</strong><br>Final inspection, punch list completion, final payment, and issuance of the Right to Occupy Certificate.</p>
 
 <h2>Key Acknowledgements</h2>
@@ -454,20 +459,25 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
   <tr><td><strong>Cabinetry &amp; Finishes</strong></td><td>Selected through and installed by the Manufacturer. Review your Specification Booklet for available options. Items not selected are not included.</td></tr>
   <tr><td><strong>Countertops</strong></td><td>Selected through and installed by the Manufacturer. Material and style must be finalized before order. Items not selected are not included.</td></tr>
   <tr><td><strong>Plumbing Fixtures</strong></td><td>Selected through and installed by the Manufacturer. Review your Specification Booklet for included fixtures and available upgrades. Items not selected are not included.</td></tr>
-  <tr><td><strong>Fireplace</strong></td><td>Selected through and installed by the Manufacturer. Confirm with your Sherman Team whether the fireplace is a factory option or site-installed.</td></tr>
+  <tr><td><strong>Fireplace</strong></td><td>Selected through and installed by the Manufacturer. The fireplace is part of the home — it is a factory-locked item. Items not selected are not included.</td></tr>
   <tr><td><strong>Electrical Fixtures</strong></td><td>Selected through and installed by the Manufacturer. Label each fixture with its intended location and orientation. Items not selected are not included.</td></tr>
-  <tr><td><strong>Appliances</strong></td><td>Selected through the Manufacturer. Review your Specification Booklet for included appliances. Any appliances not selected (e.g., washer, dryer) become the homeowner's responsibility to purchase and install. Sherman does not install appliances. <em>Exceptions: range hoods and dishwashers (plumber will install if on-site).</em></td></tr>
+  <tr><td><strong>Appliances</strong></td><td>Selected through and installed by the Manufacturer. Review your Specification Booklet for included appliances. Any appliances not selected (e.g., washer, dryer) become the homeowner's responsibility to purchase and install. Appliances are the Manufacturer's scope — Sherman does not select, supply, or install appliances.</td></tr>
   <tr><td><strong>Hardware &amp; Accessories</strong></td><td>Selected through the Manufacturer. Mirrors, towel bars, toilet paper holders, interior &amp; exterior door hardware. Items not selected become the homeowner's responsibility.</td></tr>
 </table>
 
-<h3>Site Selections <em style="font-weight:400">(Select before site finish work begins)</em></h3>
+<h3>Site Selections <em style="font-weight:400">(Sherman's scope — select per Sherman's timeline)</em></h3>
 <table>
   <tr><th style="width:35%">Item</th><th>Notes</th></tr>
-  <tr><td><strong>Flooring &amp; Tile</strong></td><td>On-site upgrades or additions beyond what the factory provides. Your Sherman Team will coordinate selections.</td></tr>
+  <tr><td><strong>Foundation Type</strong></td><td>Coordinated and constructed by Sherman Homes. Type is determined during site planning.</td></tr>
+  <tr><td><strong>Sewer Connection</strong></td><td>City sewer hookup or septic system — coordinated and installed by Sherman Homes.</td></tr>
+  <tr><td><strong>Well</strong></td><td>If applicable — well drilling coordinated by Sherman Homes.</td></tr>
+  <tr><td><strong>Gravel Driveway</strong></td><td>Site access and driveway — coordinated and installed by Sherman Homes.</td></tr>
+  <tr><td><strong>Sand Pad</strong></td><td>Site grading and pad preparation by Sherman Homes.</td></tr>
+  <tr><td><strong>Landscaping</strong></td><td>If selected — coordinated by Sherman Homes after site work is complete.</td></tr>
 </table>
 
 <h3>After Home is Set on Foundation</h3>
-<p><strong>Cabinet &amp; Electrical Walkthrough:</strong> We'll schedule this once site framing/connections are underway. Before the walkthrough, start thinking about outlet placement, switch locations, charging stations, security systems, and TV locations.</p>
+<p><strong>Post-Set Verification Walkthrough:</strong> Once the home is set and Sherman begins utility connections, we'll schedule a walkthrough so you can verify that all factory-installed items (cabinetry, fixtures, flooring, electrical, plumbing) match your Manufacturer's specifications. Any factory defects or missing items should be noted at this time so they can be reported to the Manufacturer.</p>
 
 <h3>Utilities</h3>
 <p>You are responsible for setting up utility accounts and all utility costs during construction. <strong>Open accounts early — utility delays can hold up foundation work and affect the delivery schedule.</strong></p>
