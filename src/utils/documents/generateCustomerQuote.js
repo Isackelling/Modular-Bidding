@@ -99,54 +99,57 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .pay-amt { padding: 6px 10px; border-bottom: 1px solid #ddd; text-align: right; font-weight: 600; white-space: nowrap; }
     .pay-note { background: #e8f5e9; border-left: 4px solid #2c5530; padding: 10px 14px; border-radius: 4px; margin-bottom: 14px; font-size: 13px; color: #333; }
     @media print {
-      @page { size: letter; margin: 0.35in 0.4in; }
-      body { padding: 0; max-width: 100%; font-size: 11px; line-height: 1.35; }
+      @page { size: letter; margin: 0.35in 0.45in; }
+      body { padding: 0; max-width: 100%; font-size: 10px; line-height: 1.25; }
       .no-print { display: none !important; }
-      .header { padding-bottom: 8px; margin-bottom: 10px; }
-      .logo { font-size: 18px; }
-      .logo-sub { font-size: 11px; }
-      .company-info { font-size: 10px; }
-      .quote-title { font-size: 16px; padding: 7px 14px; margin-bottom: 10px; }
-      .quote-meta { margin-bottom: 10px; }
-      .meta-box { padding: 5px 8px; }
-      .meta-label { font-size: 9px; margin-bottom: 1px; }
-      .meta-value { font-size: 12px; }
-      .section { margin-bottom: 10px; }
-      .section-title { font-size: 13px; padding-bottom: 3px; margin-bottom: 6px; }
-      .info-grid { gap: 4px; }
-      .info-label { font-size: 9px; }
-      .info-value { font-size: 11px; }
-      .home-box { padding: 8px 12px; margin-bottom: 8px; }
-      .home-model { font-size: 14px; }
-      .home-specs { font-size: 11px; margin-top: 2px; }
-      .scope-section { margin-bottom: 6px; }
-      .scope-heading { font-size: 10px; padding-bottom: 2px; margin-bottom: 3px; }
-      .scope-items { column-gap: 12px; }
-      .scope-item { padding: 1px 0; font-size: 10px; }
-      .scope-item .svc-desc { font-size: 9px; margin: 0 0 1px 14px; }
+      /* --- Page 1: header through scope --- */
+      .header { padding-bottom: 5px; margin-bottom: 6px; border-bottom-width: 2px; }
+      .logo { font-size: 16px; }
+      .logo-sub { font-size: 9px; }
+      .company-info { font-size: 9px; }
+      .quote-title { font-size: 14px; padding: 5px 12px; margin-bottom: 6px; }
+      .quote-meta { margin-bottom: 6px; gap: 6px; }
+      .meta-box { padding: 3px 6px; margin: 0; }
+      .meta-label { font-size: 8px; margin-bottom: 0; }
+      .meta-value { font-size: 10px; }
+      .section { margin-bottom: 6px; }
+      .section-title { font-size: 11px; padding-bottom: 2px; margin-bottom: 4px; }
+      .info-grid { gap: 1px 8px; }
+      .info-label { font-size: 8px; }
+      .info-value { font-size: 10px; }
+      .home-box { padding: 5px 10px; margin-bottom: 4px; }
+      .home-model { font-size: 12px; }
+      .home-specs { font-size: 10px; margin-top: 1px; }
+      .scope-section { margin-bottom: 3px; }
+      .scope-heading { font-size: 9px; padding-bottom: 1px; margin-bottom: 2px; }
+      .scope-items { column-gap: 10px; }
+      .scope-item { padding: 0.5px 0; font-size: 9px; border-bottom: none; }
+      .scope-item .svc-desc { font-size: 8px; margin: 0 0 0 14px; }
+      .scope-intro { margin-bottom: 3px !important; font-size: 9px; }
+      .allowance-note { padding: 3px 6px !important; margin-top: 3px !important; }
+      .allowance-note p { font-size: 9px !important; }
+      .floor-plan-link { display: none; }
       .section.page-break-before { break-before: auto; page-break-before: auto; }
-      .total-section { padding: 10px 14px; break-before: page; page-break-before: always; }
+      /* --- Page 2: investment summary, terms, signatures --- */
+      .total-section { padding: 10px 14px; margin-top: 0; break-before: page; page-break-before: always; }
       .total-section .section-title { font-size: 13px; margin-bottom: 8px; }
       .total-row.grand { font-size: 16px; margin-top: 4px; padding-top: 6px; }
-      .terms { margin-top: 10px; padding: 8px 10px; font-size: 10px; }
-      .terms-title { margin-bottom: 4px; }
-      .terms ul { margin-left: 14px; }
-      .signature-section { margin-top: 14px; gap: 24px; }
-      .signature-label { font-size: 10px; }
       .contingency-box { padding: 6px 10px; margin-top: 6px; }
       .contingency-header { font-size: 13px; margin-bottom: 3px; }
       .contingency-desc { font-size: 10px; line-height: 1.35; }
       .total-investment { font-size: 17px; padding-top: 6px; margin-top: 6px; border-top-width: 2px; }
+      .notes-section { padding: 10px !important; margin: 10px 0 !important; }
+      .notes-section h3 { font-size: 13px; margin-bottom: 6px; }
+      .notes-section .note-card { padding: 6px; margin-bottom: 6px; }
+      .terms { margin-top: 12px; padding: 10px 12px; font-size: 10px; }
+      .terms-title { margin-bottom: 4px; font-size: 11px; }
+      .terms ul { margin-left: 14px; }
       .pay-heading { font-size: 11px; margin: 6px 0 4px; }
       .pay-table td { padding: 3px 6px; font-size: 10px; }
       .pay-note { padding: 5px 8px; margin-bottom: 8px; font-size: 10px; }
-      .scope-intro { margin-bottom: 6px !important; font-size: 10px; }
-      .allowance-note { padding: 5px 8px !important; margin-top: 6px !important; }
-      .allowance-note p { font-size: 10px !important; }
-      .notes-section { padding: 10px !important; margin: 10px 0 !important; }
-      .notes-section h3 { font-size: 13px; margin-bottom: 8px; }
-      .notes-section .note-card { padding: 6px; margin-bottom: 6px; }
-      .footer { margin-top: 10px; font-size: 9px; padding-top: 6px; }
+      .signature-section { margin-top: 16px; gap: 30px; }
+      .signature-label { font-size: 10px; }
+      .footer { margin-top: 12px; font-size: 9px; padding-top: 6px; }
       .avoid-break { break-inside: avoid; page-break-inside: avoid; }
     }
     .btn-group { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; }
