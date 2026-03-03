@@ -685,12 +685,13 @@ ${printBar}
 <p><strong>Manufacturer Warranty Summary:</strong></p>
 <table>
   <tr><th>Coverage</th><th>Term</th><th>Notes</th></tr>
-  <tr><td>Structural / Home Unit</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
-  <tr><td>Plumbing (factory-installed)</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
-  <tr><td>Electrical (factory-installed)</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
-  <tr><td>Roofing</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Structural / Home Unit</td><td><strong>1 Year full &mdash; 10 Year structural</strong></td><td>Schult 1 &amp; 10 Year Limited Warranty &mdash; Years 2&ndash;10 cover major structural defects</td></tr>
+  <tr><td>Plumbing (factory-installed)</td><td><strong>1</strong> Year</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Electrical (factory-installed)</td><td><strong>1</strong> Year</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Heating &amp; Cooling (factory-installed)</td><td><strong>1</strong> Year</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Roofing</td><td><strong>1</strong> Year</td><td>Per manufacturer warranty document</td></tr>
   <tr><td>Appliances</td><td>Per appliance mfr.</td><td>Individual appliance warranties passed through</td></tr>
-  <tr><td>Windows &amp; Doors</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Windows &amp; Doors</td><td><strong>1</strong> Year</td><td>Per manufacturer warranty document</td></tr>
 </table>
 <p><strong>The full manufacturer warranty document is attached to this Warranty Statement as Exhibit W-1.</strong> The Owner should review Exhibit W-1 carefully for complete coverage terms, exclusions, and claims procedures.</p>
 
