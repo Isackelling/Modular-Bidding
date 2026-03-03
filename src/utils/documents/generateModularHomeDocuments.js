@@ -154,8 +154,8 @@ export const generateManufacturedHomeContract = (quote, customer, totals) => {
   if (q.sewerType && q.sewerType !== 'none') siteServices.push(`Sewer System (${sewerLabels[q.sewerType] || q.sewerType})`);
   if (q.wellDepth && parseFloat(q.wellDepth) > 0) siteServices.push(`Well Drilling (${q.wellDepth} ft)`);
   if (q.patioSize && q.patioSize !== 'none') siteServices.push('Gable Roof Extension Patio');
-  if (q.hasLandscaping) siteServices.push('Landscaping');
-  if (q.hasDeck) siteServices.push('Deck Construction');
+  if (q.hasLandscaping) siteServices.push('Landscaping' + (q.serviceDescriptions?.landscaping ? ` — ${q.serviceDescriptions.landscaping}` : ''));
+  if (q.hasDeck) siteServices.push('Deck Construction' + (q.serviceDescriptions?.deck ? ` — ${q.serviceDescriptions.deck}` : ''));
   (q.customServices || []).forEach(cs => { if (cs.name) siteServices.push(cs.name); });
 
   const FOUNDATION_NAMES = { slab: 'Concrete Slab', crawlspace: 'Crawl Space', basement: 'Full Basement' };
