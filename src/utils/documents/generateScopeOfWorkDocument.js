@@ -26,7 +26,8 @@ export const generateScopeOfWorkDocument = (quote, customer, services) => {
     extraServices.push({ key: 'well', name: `Well Drilling — ${quote.wellDepth} ft` });
   }
   if (quote.patioSize && quote.patioSize !== 'none') {
-    extraServices.push({ key: 'patio', name: `Concrete Patio — ${quote.patioSize} ft` });
+    const homeWidth = quote.houseWidth ? ` x ${quote.houseWidth}' wide` : '';
+    extraServices.push({ key: 'patio', name: `Gable Roof Extension Patio — 8' deep${homeWidth}` });
   }
   if (quote.hasLandscaping) {
     extraServices.push({ key: 'landscaping', name: 'Landscaping' });

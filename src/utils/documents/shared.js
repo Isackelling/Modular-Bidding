@@ -95,10 +95,13 @@ export const collectOtherServices = (quote, totals) => {
     });
   }
   if (quote.patioSize && quote.patioSize !== 'none') {
+    const homeWidth = quote.houseWidth ? `${quote.houseWidth}'` : null;
     items.push({
-      key: 'patio', name: 'Patio',
-      nameWithDetail: `Patio (${quote.patioSize} ft)`,
-      description: `${quote.patioSize} wide`,
+      key: 'patio', name: 'Gable Roof Extension Patio',
+      nameWithDetail: `Gable Roof Extension Patio (8' deep${homeWidth ? ` x ${homeWidth} wide` : ''})`,
+      description: homeWidth
+        ? `8' deep gable roof extension patio spanning the full ${homeWidth} width of your home`
+        : `8' deep gable roof extension patio spanning the full width of your home`,
       cost: totals?.svc?.find(s => s.key === 'patio')?.cost || 0,
       customerNote: quote.serviceNotes?.patio || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.patio || [],

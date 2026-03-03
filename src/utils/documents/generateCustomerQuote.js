@@ -33,7 +33,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     } else if (o.key === 'landscaping' || o.key === 'deck') {
       services.push({ name: o.nameWithDetail, description: getServiceDescription(o.key, quote) });
     } else {
-      services.push({ name: o.nameWithDetail, description: '' });
+      services.push({ name: o.nameWithDetail, description: o.description || '' });
     }
   });
   (quote.customServices || []).forEach(cs => { if (cs.name) services.push({ name: cs.name, description: '' }); });

@@ -1637,7 +1637,7 @@ function AppInner() {
                   <h4 style={{ margin: '0 0 12px 0', color: '#2c5530', borderBottom: '2px solid #2c5530', paddingBottom: 6 }}>Home</h4>
                   <div><strong>Model:</strong> {currentItem.homeModel !== 'NONE' ? currentItem.homeModel : 'Custom'}</div>
                   {currentItem.patioSize && currentItem.patioSize !== 'none' && (
-                    <div style={{ marginTop: 4 }}><strong>Patio:</strong> {currentItem.patioSize}ft</div>
+                    <div style={{ marginTop: 4 }}><strong>Gable Roof Extension Patio:</strong> 8' deep</div>
                   )}
                   <div style={{ marginTop: 4 }}><strong>Foundation:</strong> {getLabel(FOUNDATION_LABELS, currentItem.foundationType)}</div>
                   {/* Selected Home Options */}
@@ -3287,7 +3287,7 @@ function AppInner() {
                         { key: 'drop_down_beam', name: 'Drop Down Beam', price: 500, hasQty: false },
                         { key: 'lp_trim', name: 'LP Trim', price: 2000, hasQty: false },
                         { key: 'amp_service_200', name: '200 Amp Service', price: 400, hasQty: false },
-                        { key: '_patio', name: 'Patio', isPatio: true }
+                        { key: '_patio', name: 'Gable Roof Extension Patio', isPatio: true }
                       ];
                     })().map(opt => {
                       if (opt.isPatio) {
@@ -3295,19 +3295,16 @@ function AppInner() {
                         const patioOvr = newQ.servicePriceOverrides?.patio;
                         return (
                           <div key="patio" style={{ padding: 12, background: patioSelected ? (patioOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${patioSelected ? (patioOvr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Patio</span>
-                              {patioSelected && <span style={{ fontSize: 13, fontWeight: 600, color: patioOvr ? '#856404' : '#2c5530' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing[newQ.patioSize])}</span>}
+                            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                              <input type="checkbox" data-testid="quote-patioSize" checked={patioSelected} onChange={() => updateField('patioSize', patioSelected ? 'none' : '8')} />
+                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Gable Roof Extension Patio (8')</span>
+                              <span style={{ fontSize: 13, fontWeight: 600, color: patioSelected ? (patioOvr ? '#856404' : '#2c5530') : '#999' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing['8'])}</span>
                             </label>
-                            <select data-testid="quote-patioSize" style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
-                              <option value="none">None</option>
-                              {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
-                            </select>
                             {patioSelected && (
                               <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Price:</label>
                                 <span style={{ fontSize: 11, color: '#666' }}>$</span>
-                                <input type="number" min="0" style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${patioOvr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: patioOvr ? '#fffbeb' : '#fff' }} placeholder={patioPricing[newQ.patioSize]} value={patioOvr || ''} onChange={e => { const value = e.target.value; if (value === '' || /^\d*\.?\d*$/.test(value)) updateServicePrice('patio', value); }} onFocus={e => e.target.select()} />
+                                <input type="number" min="0" style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${patioOvr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: patioOvr ? '#fffbeb' : '#fff' }} placeholder={patioPricing['8']} value={patioOvr || ''} onChange={e => { const value = e.target.value; if (value === '' || /^\d*\.?\d*$/.test(value)) updateServicePrice('patio', value); }} onFocus={e => e.target.select()} />
                                 {patioOvr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={e => { e.preventDefault(); updateServicePrice('patio', ''); }} title="Reset to default price">↺</button>}
                               </div>
                             )}
@@ -3459,7 +3456,7 @@ function AppInner() {
                         { key: 'drop_down_beam', name: 'Drop Down Beam', price: 500, hasQty: false },
                         { key: 'lp_trim', name: 'LP Trim', price: 2000, hasQty: false },
                         { key: 'amp_service_200', name: '200 Amp Service', price: 400, hasQty: false },
-                        { key: '_patio', name: 'Patio', isPatio: true }
+                        { key: '_patio', name: 'Gable Roof Extension Patio', isPatio: true }
                       ];
                     })().map(opt => {
                       if (opt.isPatio) {
@@ -3467,19 +3464,16 @@ function AppInner() {
                         const patioOvr = newQ.servicePriceOverrides?.patio;
                         return (
                           <div key="patio" style={{ padding: 12, background: patioSelected ? (patioOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${patioSelected ? (patioOvr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Patio</span>
-                              {patioSelected && <span style={{ fontSize: 13, fontWeight: 600, color: patioOvr ? '#856404' : '#2c5530' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing[newQ.patioSize])}</span>}
+                            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                              <input type="checkbox" data-testid="quote-patioSize" checked={patioSelected} onChange={() => updateField('patioSize', patioSelected ? 'none' : '8')} />
+                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Gable Roof Extension Patio (8')</span>
+                              <span style={{ fontSize: 13, fontWeight: 600, color: patioSelected ? (patioOvr ? '#856404' : '#2c5530') : '#999' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing['8'])}</span>
                             </label>
-                            <select data-testid="quote-patioSize" style={{ ...S.select, marginTop: 6, fontSize: 13 }} value={newQ.patioSize} onChange={e => updateField('patioSize', e.target.value)}>
-                              <option value="none">None</option>
-                              {Object.entries(patioPricing).filter(([k]) => k !== 'none').map(([k, v]) => <option key={k} value={k}>{k}ft - {fmt(v)}</option>)}
-                            </select>
                             {patioSelected && (
                               <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <label style={{ fontSize: 12, fontWeight: 600, color: '#666' }}>Price:</label>
                                 <span style={{ fontSize: 11, color: '#666' }}>$</span>
-                                <input type="number" min="0" style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${patioOvr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: patioOvr ? '#fffbeb' : '#fff' }} placeholder={patioPricing[newQ.patioSize]} value={patioOvr || ''} onChange={e => { const value = e.target.value; if (value === '' || /^\d*\.?\d*$/.test(value)) updateServicePrice('patio', value); }} onFocus={e => e.target.select()} />
+                                <input type="number" min="0" style={{ width: 90, padding: '4px 6px', fontSize: 13, border: `1px solid ${patioOvr ? '#ffc107' : '#dee2e6'}`, borderRadius: 4, background: patioOvr ? '#fffbeb' : '#fff' }} placeholder={patioPricing['8']} value={patioOvr || ''} onChange={e => { const value = e.target.value; if (value === '' || /^\d*\.?\d*$/.test(value)) updateServicePrice('patio', value); }} onFocus={e => e.target.select()} />
                                 {patioOvr && <button type="button" style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', fontSize: 11, padding: 0 }} onClick={e => { e.preventDefault(); updateServicePrice('patio', ''); }} title="Reset to default price">↺</button>}
                               </div>
                             )}
@@ -4381,7 +4375,7 @@ function AppInner() {
                       if (services[k]) return services[k].name;
                       if (k === 'sewer') return 'Sewer';
                       if (k === 'well') return 'Well';
-                      if (k === 'patio') return 'Patio';
+                      if (k === 'patio') return 'Gable Roof Extension Patio';
                       if (k.startsWith('custom_')) return 'Custom Service';
                       return k;
                     }).join(', ')}
