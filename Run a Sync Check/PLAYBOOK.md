@@ -58,8 +58,14 @@ Always read these files at the start of a sync check:
 | `src/constants/index.js` | `ALLOWANCE_ITEMS`, `HOME_OPTIONS`, `LICENSED_SERVICES`, service definitions |
 | `src/utils/calculations.js` | `calcTotals()` — pricing pipeline, what totals are produced |
 | `src/utils/documentGeneration.js` | All 8 generators — what fields each one reads from the quote |
+| `src/utils/documents/generateModularHomeDocuments.js` | Contract, Formaldehyde, Homeowner Guide, Warranty generators |
 | `src/components/Quotes/ScrubbTab.jsx` | Contingency fund formula |
 | `src/components/Auth/CustomerPortal.jsx` | Contingency formula (must match ScrubbTab) |
+| `Modular Home Contract/Contract_Manufactured_Home.md` | Main contract — sections, legal terms, scope of work |
+| `Modular Home Contract/Formaldehyde_Disclosure_Manufactured_Home.md` | Statutory health disclosure |
+| `Modular Home Contract/Homeowner_Guide_Manufactured_Home.md` | Process guide, acknowledgements, selections |
+| `Modular Home Contract/Warranty_Statement_Manufactured_Home.md` | Warranty terms, claims procedures, exclusions |
+| `Modular Home Contract/spec.md` | Contract suite governance — glossary, cross-doc requirements |
 
 ---
 
@@ -276,6 +282,113 @@ Exactly 6. No more, no less.
 - Sales role: cannot access Scrubb tab
 - Crew role: cannot create/edit quotes
 - Customer Portal: read-only, no editing
+
+---
+
+## Step 5c — Contract .md ↔ Code Generator Validation
+
+After the spec compliance audit, validate that the `.md` contract reference documents in `Modular Home Contract/` match what the code generators actually produce.
+
+### File Mapping
+
+| .md Reference Document | Code Generator | Generator File |
+|------------------------|---------------|----------------|
+| `Contract_Manufactured_Home.md` | `generateManufacturedHomeContract()` | `src/utils/documents/generateModularHomeDocuments.js` |
+| `Formaldehyde_Disclosure_Manufactured_Home.md` | `generateFormaldehydeDisclosure()` | `src/utils/documents/generateModularHomeDocuments.js` |
+| `Homeowner_Guide_Manufactured_Home.md` | `generateHomeownerGuide()` | `src/utils/documents/generateModularHomeDocuments.js` |
+| `Warranty_Statement_Manufactured_Home.md` | `generateWarrantyStatement()` | `src/utils/documents/generateModularHomeDocuments.js` |
+
+### What to Check (for each .md ↔ generator pair)
+
+#### 1. Section Structure — Do all sections in the .md exist in the code output?
+Walk through each numbered section / heading in the `.md` file and confirm the generator produces a corresponding HTML section. Flag any section that:
+- Exists in the `.md` but is missing from the code output
+- Exists in the code output but is missing from the `.md`
+- Appears in a different order than the `.md` defines
+
+#### 2. Legal Language — Does critical legal text match word-for-word?
+The following must be **exact matches** between `.md` and code (no paraphrasing):
+- Mechanic's Lien Notice (Contract Section 21 — "PLEASE TAKE NOTICE" block)
+- IMPORTANT HEALTH NOTICE (Formaldehyde Disclosure — all-caps health warning)
+- Warranty tiers (Warranty Statement Section A — 1-yr, 2-yr, 10-yr descriptions)
+- MN Statute references (§ 325F.182, § 327A.08, § 326B.84, § 327A.04)
+- Waiver and Modification language (Warranty Section H — 10-point boldface requirement)
+
+#### 3. Terminology Governance — Does the code use canonical glossary terms?
+Cross-reference `Modular Home Contract/spec.md` glossary against generator string literals:
+
+| Canonical Term | Deprecated Synonyms (must NOT appear in code) |
+|---------------|----------------------------------------------|
+| Project | ~~job~~, ~~work order~~ |
+| Owner | ~~buyer~~, ~~customer~~ (in legal contract context) |
+| Contractor | ~~builder~~ (in legal contract context) |
+| Home Unit | ~~home~~, ~~unit~~, ~~structure~~ (when referring to factory-built object) |
+| Factory Order Lock-In Date | ~~lock-in~~, ~~cutoff date~~ |
+| Site Work | ~~field work~~, ~~on-site construction~~ |
+| Change Order | ~~amendment~~, ~~modification~~ (in formal contract context) |
+| Pre-Delivery Inspection | ~~walk-through~~, ~~pre-set inspection~~ |
+
+#### 4. Dynamic Fields — Are fill-in blanks populated from the correct quote/customer data?
+Check that each `_____` or `[fill-in]` placeholder in the `.md` maps to the correct data reference in code:
+
+| .md Placeholder | Expected Code Reference |
+|----------------|------------------------|
+| Owner name/address | `customer.firstName`, `customer.lastName`, `customer.address` |
+| Contract Price | `totals.total` (formatted as currency) |
+| Down Payment (50%) | `totals.total * 0.50` |
+| Home Model | `quote.homeModel` |
+| Home dimensions | `quote.houseWidth`, `quote.houseLength` |
+| Single/Double wide | `quote.singleDouble` |
+| Foundation type | `quote.foundationType` |
+| Project address | `customer.address` (or project-specific address) |
+| Contracted services list | `quote.selectedServices` (filtered and formatted) |
+| Factory Order Lock-In Date | Blank (user fills in manually) |
+
+#### 5. Cross-Document References — Do internal cross-references match?
+Verify these cross-references are consistent in both `.md` and code:
+
+| Source Document | References | Expected Label |
+|----------------|-----------|----------------|
+| Contract § 15 | Formaldehyde Disclosure | "Formaldehyde Disclosure" |
+| Contract § 1 | Homeowner's Guide | "Homeowner's Guide" |
+| Contract § 17 | Warranty Statement | "Warranty Statement" |
+| Contract Exhibits | Manufacturer's Quote (Exhibit A), Warranty (Exhibit B), Foundation (Exhibit C) | Exact exhibit letters |
+| Warranty Statement | Manufacturer Warranty Document | "Exhibit W-1" (NOT "Exhibit B") |
+
+#### 6. Signature Blocks — Does the code generate matching signature sections?
+Each document's signature section must match the `.md`:
+
+| Document | Required Signature Lines |
+|----------|------------------------|
+| Contract | Owner 1 + Owner 2 + Contractor rep |
+| Formaldehyde Disclosure | Owner 1 + Owner 2 |
+| Homeowner's Guide | Homeowner 1 + Homeowner 2 + Sherman rep |
+| Warranty Statement | Owner 1 + Owner 2 + Sherman rep |
+
+#### 7. Key Acknowledgements Count (Homeowner's Guide only)
+The `.md` defines exactly **12 Key Acknowledgements** with dual-owner initial lines.
+Verify the code generates all 12, numbered correctly, with initial lines for both owners.
+
+### Severity for Contract .md Mismatches
+
+| Pattern | Severity |
+|---------|----------|
+| Legal text differs between .md and code (statutes, lien notice, health warning) | **CRITICAL** |
+| Section missing from code that exists in .md | **CRITICAL** |
+| Dynamic field references wrong quote/customer property | **HIGH** |
+| Deprecated glossary term used in code string literals | **HIGH** |
+| Cross-document reference uses wrong document name or exhibit label | **HIGH** |
+| Signature block missing an owner line | **HIGH** |
+| Key Acknowledgement count mismatch (not exactly 12) | **HIGH** |
+| Section ordering differs between .md and code | **MEDIUM** |
+| Minor wording difference in non-legal descriptive text | **LOW** |
+
+### Governance Authority
+
+When a conflict exists between the `.md` reference document and the code:
+- **`Modular Home Contract/spec.md`** is the ultimate authority
+- The `.md` documents are the **intended content** — code should match them
+- If the `.md` itself conflicts with `spec.md`, flag it as a spec governance issue
 
 ---
 
