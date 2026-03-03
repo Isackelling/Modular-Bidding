@@ -117,6 +117,9 @@ const prep = (quote, customer, totals) => {
       : '',
     contractFmt:   t.totalWithContingency ? fmt(t.totalWithContingency) : '',
     downPaymentFmt: t.totalWithContingency ? fmt(t.totalWithContingency * 0.5) : '',
+    homeType:      q.singleDouble === 'Double' ? 'Double-Wide' : 'Single-Wide',
+    dimensions:    (q.houseWidth && q.houseLength) ? `${q.houseWidth}' × ${q.houseLength}'` : '',
+    foundationType: q.foundationType || '',
   };
 };
 
@@ -124,6 +127,72 @@ const prep = (quote, customer, totals) => {
 // Fills: Agreement Date, Owner info, Home Model, Project Address, Contract Price, Signature print names
 export const generateManufacturedHomeContract = (quote, customer, totals) => {
   const d = prep(quote, customer, totals);
+  const q = quote || {};
+
+  // Build contracted site services list from quote data
+  const siteServices = [];
+  const sel = q.selectedServices || {};
+  const SERVICE_LABELS = {
+    matT: 'Material & Transport (NHL)',
+    installation_of_home: 'Home Installation (NHL)',
+    painting: 'Painting (NHL)',
+    crane: 'Crane & Set',
+    permits: 'Permits',
+    gravel_driveway: 'Gravel Driveway',
+    sand_pad: 'Sand Pad',
+  };
+  Object.entries(SERVICE_LABELS).forEach(([key, label]) => {
+    if (sel[key]) siteServices.push(label);
+  });
+  const sewerLabels = { '1_bed': '1 Bedroom', '2_bed': '2 Bedroom', '3_bed': '3 Bedroom' };
+  if (q.sewerType && q.sewerType !== 'none') siteServices.push(`Sewer System (${sewerLabels[q.sewerType] || q.sewerType})`);
+  if (q.wellDepth && parseFloat(q.wellDepth) > 0) siteServices.push(`Well Drilling (${q.wellDepth} ft)`);
+  if (q.patioSize && q.patioSize !== 'none') siteServices.push('Gable Roof Extension Patio');
+  if (q.hasLandscaping) siteServices.push('Landscaping');
+  if (q.hasDeck) siteServices.push('Deck Construction');
+  (q.customServices || []).forEach(cs => { if (cs.name) siteServices.push(cs.name); });
+
+  const FOUNDATION_NAMES = { slab: 'Concrete Slab', crawlspace: 'Crawl Space', basement: 'Full Basement' };
+  const foundationName = FOUNDATION_NAMES[q.foundationType] || 'Pier (Standard)';
+
+  // Build dynamic exclusions from unselected services
+  const CHECKABLE_SERVICES = {
+    permits: 'Permits',
+    electric_connection: 'Electric Connection',
+    plumbing: 'Plumbing Connections',
+    gas_propane: 'Gas & Propane Connection',
+    hvac: 'HVAC (AC Unit)',
+    concrete_skirting: 'Concrete Skirting',
+    siding_install: 'Siding Install',
+    gravel_driveway: 'Gravel Driveway',
+    surfaced_driveway: 'Surfaced Driveway',
+    sand_pad: 'Sand Pad',
+    crane: 'Crane & Set',
+    drywall: 'Drywall',
+    painting: 'Painting',
+    carpet: 'Carpet',
+    interior_trim_out: 'Interior Trim Out',
+    survey: 'Survey',
+    culvert: 'Culvert',
+    professional_cleaning: 'Professional Cleaning',
+    underground_sleeves: 'Underground Sleeves',
+    city_sewer_water: 'City Sewer & Water',
+    updraft_furnace: 'Updraft Furnace',
+    water_heater: 'Water Heater',
+    basement_stairs: 'Basement Stairs',
+    transformer: 'Transformer',
+    dumpster: 'Dumpster Service',
+    surfaced_sidewalks: 'Surfaced Sidewalks',
+  };
+  const unselectedServices = Object.entries(CHECKABLE_SERVICES)
+    .filter(([key]) => !sel[key])
+    .map(([, label]) => label);
+  // Quote-level items not selected
+  if (!q.sewerType || q.sewerType === 'none') unselectedServices.push('Sewer / Septic System');
+  if (!q.wellDepth || parseFloat(q.wellDepth) <= 0) unselectedServices.push('Well Drilling');
+  if (!q.patioSize || q.patioSize === 'none') unselectedServices.push('Gable Roof Extension Patio');
+  if (!q.hasLandscaping) unselectedServices.push('Landscaping');
+  if (!q.hasDeck) unselectedServices.push('Deck Construction');
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Purchase &amp; Installation Agreement — ${d.ownerName || 'Sherman Homes'}</title>
@@ -157,9 +226,19 @@ Address: <strong>201 Industrial Dr, Redwood Falls, MN 56283</strong><br>
 HUD Certification / License No.: ${blank(200)} &nbsp; Sales Contact: <strong>Sherman</strong></p>
 
 <p><strong>For The Project:</strong><br>
-Home Model: ${field(d.homeModel)}<br>
+Home Model: ${field(d.homeModel)} &nbsp; Type: ${field(d.homeType)} &nbsp; Dimensions: ${field(d.dimensions)}<br>
+Foundation: ${field(foundationName)}<br>
 Project Address: ${field(d.address)}<br>
 City, State, Zip: ${field(d.cityStateZip)}</p>
+
+${siteServices.length > 0 ? `
+<p><strong>Contracted Site Services:</strong></p>
+<table>
+  <tr><th>#</th><th>Service</th></tr>
+  ${siteServices.map((s, i) => `<tr><td>${i + 1}</td><td>${s}</td></tr>`).join('')}
+</table>
+<p style="font-size:11px;color:#555;font-style:italic">Services listed above are included in the Contract Price. Any services not listed require a separate agreement or Change Order.</p>
+` : ''}
 
 <hr>
 
@@ -183,7 +262,7 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 <h3>2.2 Sherman Homes Responsibilities (Site Work &amp; Installation)</h3>
 <ul>
   <li>Site preparation and grading</li>
-  <li>Foundation design coordination, permitting, and construction</li>
+  <li>Foundation design coordination, permitting, and construction per approved engineered drawings and manufacturer installation instructions</li>
   <li>Coordination of home delivery from the Manufacturer to the project site</li>
   <li>Transportation and oversize-load permit acquisition (see Section 3)</li>
   <li>Crane and set operations — placing the home unit on the foundation</li>
@@ -222,7 +301,14 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 
 <h2>8. Duties of the Owner</h2>
 <p>Except as specifically noted in the Owner's Responsibility Acknowledgement, the Owner shall communicate with subcontractors and the Manufacturer only through the Contractor. Owner is responsible for all utility account setups, fees, permits, installations, connections, and for all utility usage expenses.</p>
-<p><strong>Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date.</strong> This includes: foundation complete and inspected, driveway and site access clear and adequate for transport trucks and crane equipment, and any required site grading complete. Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order.</p>
+<p><strong>Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date.</strong> Site readiness requires:</p>
+<ul>
+  <li>Foundation complete, cured, and inspected before delivery date</li>
+  <li><strong>Access road</strong> capable of accommodating a semi-truck with 65'+ trailer and an 85-ton crane — minimum 45-foot turning radius and 16-foot overhead clearance</li>
+  <li>Electric, water, and sewer/septic available at the property line</li>
+  <li><strong>Staging area:</strong> minimum 50' × 100' clear area adjacent to the foundation for crane setup — site clear of debris, vehicles, and obstacles</li>
+</ul>
+<p>Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order. Installation cannot proceed in high winds, heavy rain, or icy conditions; weather-related delays are not the responsibility of Sherman Homes.</p>
 <p><strong>No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.</strong></p>
 
 <h2>9. Change Orders</h2>
@@ -287,10 +373,49 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
   <strong>(b)</strong> Under Minnesota law, you have the right to pay persons who supplied labor or materials for this improvement directly and deduct this amount from the contract price, or withhold the amounts due them from us until 120 days after completion of the improvement, unless we give you a lien waiver signed by persons who supplied any labor or material for the improvement and who gave you timely notice.
 </div>
 
+<h2>21. General Exclusions</h2>
+<p>Unless specifically listed in the Contracted Site Services above or added via Change Order, the following are <strong>NOT</strong> included in this Contract:</p>
+
+${unselectedServices.length > 0 ? `
+<h3>Available Services Not Selected for This Project</h3>
+<p style="font-size:12px;color:#555;margin-bottom:6px">The following services are available through Sherman Homes but were <strong>not selected</strong> for this project. Adding any of these after contract signing requires a Change Order per Section 9.</p>
+<ul>
+  ${unselectedServices.map(s => `<li>${s}</li>`).join('\n  ')}
+</ul>
+` : ''}
+
+<h3>Items Never Included in Any Sherman Homes Contract</h3>
+<ul>
+  <li>Fencing or property line work</li>
+  <li>Tree removal (unless obstructing delivery or foundation)</li>
+  <li>Retaining walls or major grading beyond standard site prep</li>
+  <li>Sheds, garages, or outbuildings</li>
+  <li>Interior painting or wall finishes beyond factory-installed</li>
+  <li>Flooring, cabinet, or countertop upgrades beyond factory-installed</li>
+  <li>Window treatments, blinds, or light fixture upgrades</li>
+  <li>Custom carpentry or built-ins beyond factory-installed</li>
+  <li>Utility account setup fees or meter installation fees</li>
+  <li>Water softener or filtration system</li>
+  <li>Security, alarm, or smart home systems</li>
+  <li>Driveway paving beyond gravel (unless surfaced driveway is contracted)</li>
+</ul>
+
+<h2>22. Project Assumptions</h2>
+<p>This Contract is based on the following assumptions. If actual conditions differ materially, the resulting cost or schedule impact shall be addressed as a Change Order per Section 9.</p>
+<ul>
+  <li><strong>Site:</strong> Normal soil conditions, adequate natural drainage, no rock, and water table below foundation depth</li>
+  <li><strong>Access:</strong> Unrestricted site access for all vehicles and equipment during normal business hours</li>
+  <li><strong>Utilities:</strong> Electric, water, and sewer/septic available at the property line with connections within 100 feet of the home</li>
+  <li><strong>Permits:</strong> All necessary permits are obtainable without unknown zoning restrictions or variances</li>
+  <li><strong>Schedule:</strong> Manufacturer delivers on agreed date; materials and subcontractors available as scheduled</li>
+  <li><strong>Structures:</strong> No demolition of existing buildings is required (unless specifically quoted)</li>
+</ul>
+
 <h2>Exhibits</h2>
 <ul>
   <li><strong>Exhibit A:</strong> Manufacturer's Quote, Floor Plan, and Specifications</li>
   <li><strong>Exhibit B:</strong> Manufacturer's Warranty Documentation</li>
+  <li><strong>Exhibit C:</strong> Approved Engineered Foundation Drawings (to be attached when available)</li>
 </ul>
 
 <div class="sig-section">

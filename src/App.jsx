@@ -29,7 +29,7 @@ import { CalcHelpers } from './utils/CalcHelpers.js';
 import { FolderUtils } from './utils/FolderUtils.js';
 import { calcTotals, enforceMiles, calcDefaultServicePrice, getFoundationAdjustment } from './utils/calculations.js';
 import { getServiceDescription, calcSurfacedDrivewayPrice, calcSurfacedPrice, SURFACED_DRIVEWAY_RATES } from './utils/serviceDescriptions.js';
-import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateScopeOfWorkDocument, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport, generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './utils/documents/index.js';
+import { generateQuoteHtml, generatePierDiagramHtml, generateCustomerQuote, generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument, generateJobSummaryReport, generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './utils/documents/index.js';
 import { createFolderSavers } from './utils/folderSavers.js';
 
 // Shared Components
@@ -44,8 +44,6 @@ import { useScrubbState } from './hooks/useScrubbState.js';
 import { useAuthState } from './hooks/useAuthState.js';
 import { useQuoteEditingState } from './hooks/useQuoteEditingState.js';
 import { useUIState } from './hooks/useUIState.js';
-import { useScopeEditState } from './hooks/useScopeEditState.js';
-
 // Supplemental utilities
 import { openDocumentWindow } from './utils/windowUtils.js';
 import { FOUNDATION_LABELS, CO_STATUS_BG, CO_STATUS_TEXT, getLabel } from './utils/labelMaps.js';
@@ -192,13 +190,6 @@ function AppInner() {
     expandedCO, setExpandedCO,
   } = useUIState();
 
-  // Scope of Work state (grouped — see src/hooks/useScopeEditState.js)
-  const {
-    scopeSections, setScopeSections,
-    scopeEditMode, setScopeEditMode,
-    scopeEditContent, setScopeEditContent,
-  } = useScopeEditState();
-
   // Scrubb state (grouped — see src/hooks/useScrubbState.js)
   const {
     scrubbEditingService, setScrubbEditingService,
@@ -344,7 +335,7 @@ function AppInner() {
     materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, homeModels,
     userName, currentUserData, quotes, contracts, selQuote, selContract, selCustomer,
     setSelQuote, setSelContract, saveQuotes, saveContracts,
-    generateQuoteHtml, generatePierDiagramHtml, generateScopeOfWorkDocument,
+    generateQuoteHtml, generatePierDiagramHtml,
     generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument,
   }), [materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, homeModels,
     userName, currentUserData, quotes, contracts, selQuote, selContract, selCustomer]);
@@ -1104,19 +1095,7 @@ function AppInner() {
         setSelContract(contract);
         setSelQuote(null);
       }
-      // Auto-generate Scope of Work
-      try {
-        const customer = customers.find(c => c.id === contract.customerId);
-        if (customer) {
-          await folderSavers.saveScopeOfWorkToFolders(contract, customer);
-          NotificationSystem.success('Quote accepted and converted to Contract!\n\nScope of Work document has been automatically generated and saved to Customer Docs folder.');
-        } else {
-          NotificationSystem.success('Quote accepted and converted to Contract!');
-        }
-      } catch (error) {
-        console.error('Error generating Scope of Work:', error);
-        alert('Quote accepted and converted to Contract!');
-      }
+      NotificationSystem.success('Quote accepted and converted to Contract!');
       // Final cleanup: ensure the quote is removed from localStorage and state
       // (folderSavers may have re-added it due to stale closure)
       const cleanQuotes = JSON.parse(localStorage.getItem('sherman_quotes') || '[]').filter(x => x.id !== q.id);
@@ -1148,41 +1127,6 @@ function AppInner() {
       await saveContracts(updated);
       if (selContract?.id === quoteId) setSelContract(updatedItem);
     }
-  };
-
-  // ======================================================================
-  // SCOPE OF WORK HANDLERS
-  // ======================================================================
-
-  const enterScopeEditMode = () => {
-    const existingContent = currentItem.customScopeContent || {};
-    setScopeEditContent(existingContent);
-    setScopeEditMode(true);
-  };
-
-  const saveScopeChanges = async () => {
-    const target = selContract || selQuote;
-    const updatedItem = { ...target, customScopeContent: scopeEditContent };
-    if (selContract) {
-      const updatedContracts = updateInArray(contracts, target.id, updatedItem);
-      await saveContracts(updatedContracts);
-      setSelContract(updatedItem);
-    } else {
-      const updatedQuotes = updateInArray(quotes, target.id, updatedItem);
-      await saveQuotes(updatedQuotes);
-      setSelQuote(updatedItem);
-    }
-    setScopeEditMode(false);
-    setScopeEditContent(null);
-  };
-
-  const cancelScopeEdit = () => {
-    setScopeEditMode(false);
-    setScopeEditContent(null);
-  };
-
-  const updateScopeField = (field, value) => {
-    setScopeEditContent(prev => ({ ...prev, [field]: value }));
   };
 
   // ======================================================================
@@ -1601,15 +1545,6 @@ function AppInner() {
                         openDocumentWindow(html);
                       }}
                     >🔧 Crew Work Order</button>
-                  )}
-                  {selContract && (
-                    <button
-                      style={S.btnGreen}
-                      onClick={() => {
-                        const html = generateScopeOfWorkDocument(currentItem, custForQuote, services);
-                        openDocumentWindow(html);
-                      }}
-                    >📋 Scope of Work</button>
                   )}
                   {selContract && isAdmin && (
                     <button

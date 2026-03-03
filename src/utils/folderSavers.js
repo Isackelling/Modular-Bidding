@@ -40,7 +40,6 @@ import { generateManufacturedHomeContract, generateFormaldehydeDisclosure, gener
  * @param {Function} deps.saveContracts - Async function to persist contracts array
  * @param {Function} deps.generateQuoteHtml - Generate quote HTML document
  * @param {Function} deps.generatePierDiagramHtml - Generate pier diagram HTML
- * @param {Function} deps.generateScopeOfWorkDocument - Generate scope of work HTML
  * @param {Function} deps.generateCrewWorkOrderDocument - Generate crew work order HTML
  * @param {Function} deps.generateAllowanceProgressDocument - Generate allowance progress HTML
  * @param {Function} deps.generateChangeOrderDocument - Generate change order HTML
@@ -67,7 +66,6 @@ export const createFolderSavers = ({
   saveContracts,
   generateQuoteHtml,
   generatePierDiagramHtml,
-  generateScopeOfWorkDocument,
   generateCrewWorkOrderDocument,
   generateAllowanceProgressDocument,
   generateChangeOrderDocument,
@@ -569,33 +567,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     NotificationSystem.success('Floor Plan link saved! Tip: For direct access, download the floor plan PDF from Clayton and drag it into this folder.');
   };
 
-  // ─── 7. Save Scope of Work to folders ───
-  const saveScopeOfWorkToFolders = async (quote, customer) => {
-    const cust = customer || selCustomer;
-
-    // Generate the scope of work document
-    const scopeDoc = generateScopeOfWorkDocument(quote, cust, services);
-
-    // Create file object
-    const docFileName = `Scope_of_Work_${new Date().toLocaleDateString('en-US').replace(/\//g, '-')}.html`;
-    const blob = new Blob([scopeDoc], { type: 'text/html' });
-    const scopeDataUrl = await blobToDataUrl(blob, 'Scope of Work');
-
-    const file = {
-      name: docFileName,
-      type: 'scope_of_work',
-      url: scopeDataUrl,
-      notes: `Scope of Work for Quote #${DocumentUtils.getQuoteNum(quote)}`,
-      addedBy: userName,
-      addedAt: new Date().toISOString(),
-    };
-
-    // Save to customer docs folder only
-    await autoSaveFileToFolders(file, ['change_orders'], quote, cust);
-    return file;
-  };
-
-  // ─── 8. Save Crew Work Order to folders ───
+  // ─── 7. Save Crew Work Order to folders ───
   const saveCrewWorkOrderToFolders = async (quote, customer) => {
     const cust = customer || selCustomer;
 
@@ -872,20 +844,6 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     updatedFolders.crew_files = [...(updatedFolders.crew_files || []).filter(f => !f.name.startsWith('Crew Work Order')), crewFile];
     savedCount++;
 
-    // 8. Scope of Work to Customer Docs
-    const scopeDoc = generateScopeOfWorkDocument(quote, cust, services);
-    const scopeBlob = new Blob([scopeDoc], { type: 'text/html' });
-    const scopeDataUrl = await blobToDataUrl(scopeBlob, 'Scope of Work');
-    const scopeFile = FolderUtils.createFileObject(
-      `Scope of Work - ${homeDesc}`,
-      'scope_of_work',
-      scopeDataUrl,
-      `Quote #${quoteNum} | ${cust.firstName} ${cust.lastName}`,
-      userName
-    );
-    updatedFolders.change_orders = [...(updatedFolders.change_orders || []).filter(f => !f.name.startsWith('Scope of Work') && !f.name.startsWith('Scope_of_Work')), scopeFile];
-    savedCount++;
-
     // Deduplicate all folders - keep only the latest version of each file by name
     const dedup = (files) => {
       const seen = new Map();
@@ -1015,7 +973,6 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     saveDecorChecklistToFolder,
     saveCustomerInfoToFolder,
     saveFloorPlanToFolders,
-    saveScopeOfWorkToFolders,
     saveCrewWorkOrderToFolders,
     saveAllowanceProgressToFolders,
     saveLatestChangeOrderToFolders,
