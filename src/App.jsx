@@ -1637,7 +1637,7 @@ function AppInner() {
                   <h4 style={{ margin: '0 0 12px 0', color: '#2c5530', borderBottom: '2px solid #2c5530', paddingBottom: 6 }}>Home</h4>
                   <div><strong>Model:</strong> {currentItem.homeModel !== 'NONE' ? currentItem.homeModel : 'Custom'}</div>
                   {currentItem.patioSize && currentItem.patioSize !== 'none' && (
-                    <div style={{ marginTop: 4 }}><strong>Gable Roof Extension Patio:</strong> 8' deep</div>
+                    <div style={{ marginTop: 4 }}><strong>Gable Roof Extension Patio:</strong> 6-10' deep (size reflects home selected)</div>
                   )}
                   <div style={{ marginTop: 4 }}><strong>Foundation:</strong> {getLabel(FOUNDATION_LABELS, currentItem.foundationType)}</div>
                   {/* Selected Home Options */}
@@ -3285,7 +3285,7 @@ function AppInner() {
                           <div key="patio" style={{ padding: 12, background: patioSelected ? (patioOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${patioSelected ? (patioOvr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
                             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                               <input type="checkbox" data-testid="quote-patioSize" checked={patioSelected} onChange={() => updateField('patioSize', patioSelected ? 'none' : '8')} />
-                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Gable Roof Extension Patio (8')</span>
+                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Gable Roof Extension Patio (6-10')</span>
                               <span style={{ fontSize: 13, fontWeight: 600, color: patioSelected ? (patioOvr ? '#856404' : '#2c5530') : '#999' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing['8'])}</span>
                             </label>
                             {patioSelected && (
@@ -3454,7 +3454,7 @@ function AppInner() {
                           <div key="patio" style={{ padding: 12, background: patioSelected ? (patioOvr ? '#fffbeb' : '#e8f5e9') : '#fff', borderRadius: 4, border: `1px solid ${patioSelected ? (patioOvr ? '#ffc107' : '#2c5530') : '#dee2e6'}` }}>
                             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                               <input type="checkbox" data-testid="quote-patioSize" checked={patioSelected} onChange={() => updateField('patioSize', patioSelected ? 'none' : '8')} />
-                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Gable Roof Extension Patio (8')</span>
+                              <span style={{ flex: 1, fontSize: 14, fontWeight: 500 }}>Gable Roof Extension Patio (6-10')</span>
                               <span style={{ fontSize: 13, fontWeight: 600, color: patioSelected ? (patioOvr ? '#856404' : '#2c5530') : '#999' }}>{fmt(patioOvr ? parseFloat(patioOvr) : patioPricing['8'])}</span>
                             </label>
                             {patioSelected && (

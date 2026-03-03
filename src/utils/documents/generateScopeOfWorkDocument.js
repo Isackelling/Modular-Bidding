@@ -27,7 +27,7 @@ export const generateScopeOfWorkDocument = (quote, customer, services) => {
   }
   if (quote.patioSize && quote.patioSize !== 'none') {
     const homeWidth = quote.houseWidth ? ` x ${quote.houseWidth}' wide` : '';
-    extraServices.push({ key: 'patio', name: `Gable Roof Extension Patio — 8' deep${homeWidth}` });
+    extraServices.push({ key: 'patio', name: `Gable Roof Extension Patio — 6-10' deep${homeWidth} (size reflects home selected)` });
   }
   if (quote.hasLandscaping) {
     extraServices.push({ key: 'landscaping', name: 'Landscaping' });

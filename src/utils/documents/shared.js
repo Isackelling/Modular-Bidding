@@ -98,10 +98,10 @@ export const collectOtherServices = (quote, totals) => {
     const homeWidth = quote.houseWidth ? `${quote.houseWidth}'` : null;
     items.push({
       key: 'patio', name: 'Gable Roof Extension Patio',
-      nameWithDetail: `Gable Roof Extension Patio (8' deep${homeWidth ? ` x ${homeWidth} wide` : ''})`,
+      nameWithDetail: `Gable Roof Extension Patio (6-10' deep${homeWidth ? ` x ${homeWidth} wide` : ''})`,
       description: homeWidth
-        ? `8' deep gable roof extension patio spanning the full ${homeWidth} width of your home`
-        : `8' deep gable roof extension patio spanning the full width of your home`,
+        ? `6-10' deep gable roof extension patio spanning the full ${homeWidth} width of your home — exact depth reflects the home selected`
+        : `6-10' deep gable roof extension patio spanning the full width of your home — exact depth reflects the home selected`,
       cost: totals?.svc?.find(s => s.key === 'patio')?.cost || 0,
       customerNote: quote.serviceNotes?.patio || '',
       publishedCustomerNotes: quote.publishedServiceNotes?.patio || [],
