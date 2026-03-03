@@ -451,29 +451,23 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
 <table>
   <tr><th style="width:35%">Item</th><th>Notes</th></tr>
   <tr><td><strong>Home Model &amp; Floor Plan</strong></td><td>Floor plan, room dimensions, exterior style, roofline, and structural upgrades. <strong>Cannot be changed once ordered.</strong></td></tr>
-  <tr><td><strong>Cabinetry &amp; Finishes</strong></td><td>Factory-installed cabinetry and interior finishes. Inform your Sherman Team before the order if selecting on-site cabinetry upgrades instead.</td></tr>
-  <tr><td><strong>Plumbing Fixtures</strong></td><td>Factory-plumbed fixtures must be selected before order. Site-connected items can be selected before site work begins.</td></tr>
-  <tr><td><strong>Fireplace</strong></td><td>Confirm with your Sherman Team whether the fireplace is a factory option or site-installed.</td></tr>
+  <tr><td><strong>Cabinetry &amp; Finishes</strong></td><td>Selected through and installed by the Manufacturer. Review your Specification Booklet for available options. Items not selected are not included.</td></tr>
+  <tr><td><strong>Countertops</strong></td><td>Selected through and installed by the Manufacturer. Material and style must be finalized before order. Items not selected are not included.</td></tr>
+  <tr><td><strong>Plumbing Fixtures</strong></td><td>Selected through and installed by the Manufacturer. Review your Specification Booklet for included fixtures and available upgrades. Items not selected are not included.</td></tr>
+  <tr><td><strong>Fireplace</strong></td><td>Selected through and installed by the Manufacturer. Confirm with your Sherman Team whether the fireplace is a factory option or site-installed.</td></tr>
+  <tr><td><strong>Electrical Fixtures</strong></td><td>Selected through and installed by the Manufacturer. Label each fixture with its intended location and orientation. Items not selected are not included.</td></tr>
+  <tr><td><strong>Appliances</strong></td><td>Selected through the Manufacturer. Review your Specification Booklet for included appliances. Any appliances not selected (e.g., washer, dryer) become the homeowner's responsibility to purchase and install. Sherman does not install appliances. <em>Exceptions: range hoods and dishwashers (plumber will install if on-site).</em></td></tr>
+  <tr><td><strong>Hardware &amp; Accessories</strong></td><td>Selected through the Manufacturer. Mirrors, towel bars, toilet paper holders, interior &amp; exterior door hardware. Items not selected become the homeowner's responsibility.</td></tr>
 </table>
 
 <h3>Site Selections <em style="font-weight:400">(Select before site finish work begins)</em></h3>
-<p>The items below are typically included in the manufacturer's base package. If on-site upgrades are part of your project, your Sherman Team will coordinate selections.</p>
 <table>
   <tr><th style="width:35%">Item</th><th>Notes</th></tr>
-  <tr><td><strong>Cabinetry, Countertops, Flooring, Tile</strong></td><td>On-site upgrades or additions beyond what the factory provides.</td></tr>
-  <tr><td><strong>Paint Colors</strong></td><td>Our painter uses Sherwin Williams but can color-match to other brands.</td></tr>
+  <tr><td><strong>Flooring &amp; Tile</strong></td><td>On-site upgrades or additions beyond what the factory provides. Your Sherman Team will coordinate selections.</td></tr>
 </table>
 
 <h3>After Home is Set on Foundation</h3>
 <p><strong>Cabinet &amp; Electrical Walkthrough:</strong> We'll schedule this once site framing/connections are underway. Before the walkthrough, start thinking about outlet placement, switch locations, charging stations, security systems, and TV locations.</p>
-
-<h3>Homeowner Purchases <em style="font-weight:400">(After painting is complete)</em></h3>
-<table>
-  <tr><th style="width:35%">Item</th><th>Notes</th></tr>
-  <tr><td><strong>Electrical Fixtures</strong></td><td>Purchase after the walkthrough. Label each fixture with its intended location and orientation.</td></tr>
-  <tr><td><strong>Appliances</strong></td><td>Confirm your retailer handles installation (Sherman does not install appliances). Your PM will coordinate delivery timing. <em>Exceptions: range hoods and dishwashers (plumber will install if on-site).</em></td></tr>
-  <tr><td><strong>Hardware &amp; Accessories</strong></td><td>Mirrors, towel bars, toilet paper holders, interior &amp; exterior door hardware. Sherman installs these; fees may apply.</td></tr>
-</table>
 
 <h3>Utilities</h3>
 <p>You are responsible for setting up utility accounts and all utility costs during construction. <strong>Open accounts early — utility delays can hold up foundation work and affect the delivery schedule.</strong></p>
