@@ -56,6 +56,8 @@ The Manufacturer's responsibilities, warranties, and obligations are governed so
 
 **Sherman Homes does not warrant, guarantee, or make any representations regarding the Manufacturer's work, products, warranties, or obligations.** Sherman Homes is not liable for defects, omissions, or non-conforming work originating in the manufacturing facility. Any claims related to factory-built components must be directed to the Manufacturer.
 
+> **Owner Assistance:** Although Sherman Homes is not a representative of the Manufacturer, Sherman Homes maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns directed toward the Manufacturer. This assistance is offered as a courtesy based on Sherman Homes' ongoing business relationship with the Manufacturer and does not make Sherman Homes responsible for the Manufacturer's response, decisions, obligations, or warranties.
+
 ### 2.2 Sherman Homes Responsibilities (Site Work & Installation)
 
 Sherman Homes is responsible for all site work and installation services, including:
@@ -186,7 +188,7 @@ Prior to placement on the foundation, Sherman Homes shall conduct a joint inspec
 
 ### 11.3 Reporting Factory Defects
 
-Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer directly by the Owner within **5 business days** of delivery. Sherman Homes may assist the Owner in documenting defects but **does not represent the Manufacturer, does not control the Manufacturer's response, and is not liable for factory defects or transit damage.** The Owner should contact the Manufacturer directly regarding repair, replacement, or warranty claims for factory-caused defects. The Manufacturer's response to such claims is governed solely by the Manufacturer's own policies and warranty terms, which Sherman Homes has no control over and makes no representations about.
+Any visible damage or defects discovered at delivery must be documented in writing and reported to the Manufacturer directly by the Owner within **5 business days** of delivery. Sherman Homes will make reasonable efforts to assist the Owner in documenting defects and communicating them to the Manufacturer, but **does not represent the Manufacturer, does not control the Manufacturer's response, and is not liable for factory defects or transit damage.** The Owner should contact the Manufacturer directly regarding repair, replacement, or warranty claims for factory-caused defects. The Manufacturer's response to such claims is governed solely by the Manufacturer's own policies and warranty terms, which Sherman Homes has no control over and makes no representations about.
 
 ### 11.4 Formal Acceptance
 
@@ -244,7 +246,7 @@ This warranty covers only work performed by Sherman Homes. It does not cover fac
 
 The Owner should contact the Manufacturer directly to obtain complete and current information about the Manufacturer's warranty, including coverage periods, exclusions, limitations, and claims procedures. Warranty documentation may be provided by the Manufacturer upon delivery of the home. Sherman Homes has no control over the Manufacturer's warranty program and cannot make promises or representations on the Manufacturer's behalf.
 
-To make a warranty claim for factory-built components, the Owner must contact the Manufacturer directly. Sherman Homes is not financially responsible for factory defects and has no authority over the Manufacturer's warranty process.
+To make a warranty claim for factory-built components, the Owner must contact the Manufacturer directly. Sherman Homes will make reasonable efforts to assist the Owner in navigating the Manufacturer's warranty process, but is not financially responsible for factory defects and has no authority over the Manufacturer's warranty decisions or response.
 
 ### 17.3 Warranty Date
 

@@ -80,7 +80,7 @@ These assertions apply to all four documents and are verifiable across the suite
 5. Every document that requires Owner signature includes an Acknowledgment and Signature block with fields for: Owner signature, Owner printed name, and date. Where two owners may exist, both signature lines are present.
 6. Every signature block that requires a Contractor representative signature includes fields for: representative signature, printed name, title, and date.
 7. All statutory citations reference the correct Minnesota statute and section number.
-8. All four documents must clearly state that the Manufacturer is an independent third-party entity, that the Contractor is not a representative, agent, or partner of the Manufacturer, and that the Contractor makes no representations about the Manufacturer's warranties, products, or business practices. The Owner must be directed to contact the Manufacturer directly for warranty information.
+8. All four documents must clearly state that the Manufacturer is an independent third-party entity, that the Contractor is not a representative, agent, or partner of the Manufacturer, and that the Contractor makes no representations about the Manufacturer's warranties, products, or business practices. The Owner must be directed to contact the Manufacturer directly for warranty information. Where appropriate, documents must also state that the Contractor maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns — as a courtesy, not as an obligation of the Manufacturer.
 
 ---
 
@@ -118,6 +118,7 @@ The Contract contains these sections in order, each present and titled:
 
 - Section 2.1 states that the Manufacturer is an independent third-party entity that constructs the Home Unit. Contractor is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's operations, construction methods, quality control, warranties, or business practices. Owner is directed to contact the Manufacturer directly for information about their responsibilities and processes.
 - Section 2.1 states that Contractor is **not** liable for defects originating at the Manufacturer's facility and does not warrant, guarantee, or make any representations regarding the Manufacturer's work.
+- Section 2.1 includes an **Owner Assistance** note: Although Contractor is not a representative of the Manufacturer, Contractor maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns directed toward the Manufacturer. This assistance is offered as a courtesy and does not make Contractor responsible for the Manufacturer's response, decisions, obligations, or warranties.
 - Section 2.2 enumerates Contractor's Site Work responsibilities, including: site prep and grading, foundation, delivery coordination, transportation and oversize permits, crane and set, Marriage Wall assembly, utility connections, on-site finish work, permitting, MN Building Code compliance, and broom-clean completion.
 
 ### Factory Order Lock-In (Section 4)
@@ -172,7 +173,7 @@ The Contract contains these sections in order, each present and titled:
 
 - Section 11.1: Transportation costs, oversize-load permits, and crane and set fees are included in the Contract Price unless otherwise specified. Owner-caused delays, inaccessible site, or additional permits from site location are Owner's financial responsibility.
 - Section 11.2: A Pre-Delivery Inspection is conducted jointly by Owner (or Owner's representative) and Contractor before the Home Unit is placed on the foundation. Condition is documented in writing. "Documented in writing" means a dated, signed record listing each observed condition item by location and description — for example: *"Master bedroom exterior wall, northwest corner: dent in siding approximately 6 inches diameter, noted before placement."* A verbal agreement or unmarked delivery receipt does not satisfy this requirement.
-- Section 11.3: Visible damage or factory defects discovered at delivery must be reported to Manufacturer **in writing within 5 business days of delivery**. Factory defects are the Manufacturer's responsibility. Contractor assists in filing claims but is not liable for factory defects. If responsibility for a defect is ambiguous — for example, a cracked window that could result from either factory installation or transit handling — Owner notifies both Contractor and Manufacturer in writing within 5 business days; the parties cooperate to determine origin before assigning responsibility. This mirrors the disputed-claims procedure in the Warranty Statement (Section F.3). Contractor is not liable during the investigation period solely because origin is unclear.
+- Section 11.3: Visible damage or factory defects discovered at delivery must be reported to Manufacturer **in writing within 5 business days of delivery**. Factory defects are the Manufacturer's responsibility. Contractor will make reasonable efforts to assist the Owner in documenting defects and communicating them to the Manufacturer, but is not liable for factory defects. If responsibility for a defect is ambiguous — for example, a cracked window that could result from either factory installation or transit handling — Owner notifies both Contractor and Manufacturer in writing within 5 business days; the parties cooperate to determine origin before assigning responsibility. This mirrors the disputed-claims procedure in the Warranty Statement (Section F.3). Contractor is not liable during the investigation period solely because origin is unclear.
 - Section 11.4: Formal acceptance does not occur until the Pre-Delivery Inspection is complete and documented. Formal acceptance occurs at final payment.
 
 ### Insurance (Section 12)
@@ -197,7 +198,7 @@ The Contract contains these sections in order, each present and titled:
   - 2 years — site-installed plumbing, heating, and electrical system defects
   - 10 years — structural defects related to foundation and site installation
 - Section 17.1 states this warranty covers only Contractor's Site Work; it does not cover factory-built components.
-- Section 17.2: Contractor is not a representative of the Manufacturer and does not warrant, guarantee, or make any representations regarding the Manufacturer's warranty coverage, terms, exclusions, or claims process. The Manufacturer is an independent third-party entity whose warranty obligations are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to the Contractor. Owner must contact the Manufacturer directly for warranty information. To claim on factory components, Owner contacts Manufacturer directly; Contractor is not financially responsible for factory defects.
+- Section 17.2: Contractor is not a representative of the Manufacturer and does not warrant, guarantee, or make any representations regarding the Manufacturer's warranty coverage, terms, exclusions, or claims process. The Manufacturer is an independent third-party entity whose warranty obligations are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to the Contractor. Owner must contact the Manufacturer directly for warranty information. To claim on factory components, Owner contacts Manufacturer directly; Contractor will make reasonable efforts to assist the Owner in navigating the Manufacturer's warranty process, but is not financially responsible for factory defects and has no authority over the Manufacturer's warranty decisions or response.
 - Section 17.3: Warranty Date for Contractor's warranty is the earlier of (1) first Owner occupancy or (2) Owner's legal title to the home — but not before the Home Unit is set on the foundation. Manufacturer's warranty date is governed by the Manufacturer's own terms — contact the Manufacturer directly.
 - Section 17.4: If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions. Owner is encouraged to consult a licensed MN attorney.
 - Section 17.5: Owner must provide written notice of any warranty claim to Contractor within **6 months of discovering the defect**, as required by MN Stat. § 327A.
@@ -237,8 +238,9 @@ The Contract contains these sections in order, each present and titled:
   7. The warning is printed in ALL CAPS (or all uppercase) so it is visually distinct from surrounding text.
 - Specifies that for modular and manufactured homes, factory construction introduces higher quantities of formaldehyde-emitting materials (particleboard, OSB, plywood, factory cabinetry, flooring).
 - States that the Manufacturer — an independent third-party entity — selects and installs factory-built materials. Contractor has no control over, knowledge of, or responsibility for these materials and makes no representations about them.
+- States that Contractor maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in communicating material concerns or questions to the Manufacturer upon request.
 - Informs Owner of the right to request material specifications from the Manufacturer before the Factory Order Lock-In Date.
-- Provides actionable steps: request low-formaldehyde or NAF options before ordering; ventilate after delivery; manage temperature and humidity.
+- Provides actionable steps: request low-formaldehyde or NAF options before ordering (Owner may ask Sherman Team to help coordinate the conversation); ventilate after delivery; manage temperature and humidity.
 - Includes Owner Acknowledgment and Signature block (two signature lines for dual-owner scenarios).
 - This disclosure does not limit or waive any Owner rights under MN or federal law.
 
@@ -254,6 +256,7 @@ The Contract contains these sections in order, each present and titled:
 ### Factory vs. Site Distinction
 
 - Clearly explains that two parallel workflows run: Manufacturer builds the Home Unit in the factory while Contractor prepares the site.
+- Contains an **Owner Assistance** note: Contractor maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns directed toward the Manufacturer — as a courtesy, not making Contractor responsible for the Manufacturer's response.
 - Contains a table distinguishing Factory-Locked Items (decided before Factory Order Lock-In Date) from Site Allowance Items (follow Sherman's standard timeline).
 
 ### Project Timeline
@@ -337,7 +340,7 @@ The Warranty Statement contains these sections in order:
 - States that the Manufacturer's warranty documentation will likely be provided by the Manufacturer with the home upon delivery.
 - Contains blank Manufacturer contact information fields (name, address, warranty contact, phone, email/website) with a disclaimer that the information is provided for Owner convenience only and that the Contractor does not guarantee its accuracy as the Manufacturer may update it at any time.
 - Does NOT contain specific warranty terms, coverage periods, or warranty summary tables — these are the Manufacturer's information to provide, not the Contractor's.
-- Provides a numbered three-step procedure for factory defect claims: (1) document in writing with photos, (2) contact Manufacturer directly, (3) optionally notify Contractor for documentation assistance only.
+- Provides a numbered three-step procedure for factory defect claims: (1) document in writing with photos, (2) contact Manufacturer directly, (3) notify Contractor — Contractor will make reasonable efforts to assist the Owner in documenting and communicating the issue to the Manufacturer, but has no authority over the Manufacturer's warranty process.
 
 ### Section D — Applicable Building Standards
 
@@ -360,8 +363,8 @@ The Warranty Statement contains these sections in order:
   3. Contractor provides written offer to repair within 15 days of inspection.
   4. If parties agree, Contractor performs repairs per written agreement.
   5. If parties disagree, matter proceeds to MN Home Warranty Dispute Resolution Process under MN Stat. § 327A.051 before any court action.
-- F.2 (Claims Against Manufacturer): three numbered steps: (1) contact Manufacturer directly, (2) follow Manufacturer's own claims procedure — Contractor has no authority over or knowledge of the Manufacturer's claims process, (3) optionally notify Contractor for documentation assistance only.
-- F.3 (Disputed Claims): if defect origin is unclear, Owner notifies both Contractor and Manufacturer in writing; Contractor inspects site work components; determination of Manufacturer's responsibility rests solely with the Manufacturer per the Manufacturer's own policies.
+- F.2 (Claims Against Manufacturer): three numbered steps: (1) contact Manufacturer directly, (2) follow Manufacturer's own claims procedure — Contractor has no authority over or knowledge of the Manufacturer's claims process, (3) notify Contractor — Contractor will make reasonable efforts to assist the Owner in documenting and communicating the claim to the Manufacturer, but does not control or guarantee the Manufacturer's response.
+- F.3 (Disputed Claims): if defect origin is unclear, Owner notifies both Contractor and Manufacturer in writing; Contractor inspects site work components and will make reasonable efforts to assist the Owner in communicating with the Manufacturer regarding the Manufacturer's portion; determination of Manufacturer's responsibility rests solely with the Manufacturer per the Manufacturer's own policies.
 
 ### Section G — Warranty Exclusions
 

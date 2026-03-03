@@ -48,6 +48,8 @@ This is the most important concept in your project. Your home is built in **two 
 > **Sherman Homes** is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).
 >
 > **Sherman Homes warrants only the work that Sherman Homes performs.** For questions about the home unit itself — including warranties, specifications, and factory-installed components — contact the Manufacturer directly.
+>
+> **Owner Assistance:** Although Sherman Homes is not a representative of the Manufacturer, Sherman Homes maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist you in navigating communications, warranty claims, service requests, and other concerns directed toward the Manufacturer. This assistance is offered as a courtesy and does not make Sherman Homes responsible for the Manufacturer's response, decisions, or warranties.
 
 ### What the Manufacturer Builds (Factory) — Independent Third Party
 
@@ -183,7 +185,7 @@ For all factory-locked items, contact the Manufacturer directly to review your M
 
 ### After Home is Set on Foundation
 
-**Post-Set Verification Walkthrough:** Once the home is set and Sherman begins utility connections, we'll schedule a walkthrough so you can verify the condition of the home. Any factory defects or missing items should be noted at this time so **you can report them directly to the Manufacturer.** Sherman Homes may assist in documentation but does not represent the Manufacturer and has no authority over the Manufacturer's response to defect claims.
+**Post-Set Verification Walkthrough:** Once the home is set and Sherman begins utility connections, we'll schedule a walkthrough so you can verify the condition of the home. Any factory defects or missing items should be noted at this time so **you can report them directly to the Manufacturer.** Sherman Homes will make reasonable efforts to assist you in documenting defects and communicating them to the Manufacturer, but does not represent the Manufacturer and has no authority over the Manufacturer's response to defect claims.
 
 ### Utilities
 
@@ -204,7 +206,7 @@ Delivery day is one of the most exciting and logistically complex days of your p
 - Before the home is placed on the foundation, you (or your designated representative) and a Sherman Homes representative will conduct a joint inspection of the home unit.
 - Document any visible damage, incomplete work, or items not matching specifications in writing.
 - Do not formally accept the unit until this inspection is complete and documented.
-- Any factory defects or transit damage must be reported by the Owner directly to the Manufacturer in writing within 5 business days of delivery. Sherman Homes may assist in documentation but does not represent the Manufacturer and has no authority over their claims process.
+- Any factory defects or transit damage must be reported by the Owner directly to the Manufacturer in writing within 5 business days of delivery. Sherman Homes will make reasonable efforts to assist you in documenting and communicating defects to the Manufacturer, but does not represent the Manufacturer and has no authority over their claims process.
 
 **Set Operations**
 - A crane will be used to lift and place the home unit(s) on the foundation.

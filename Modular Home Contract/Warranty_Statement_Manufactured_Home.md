@@ -40,6 +40,8 @@ Your home is built in **two places** by **two separate entities**:
 
 **Sherman Homes does not warrant, guarantee, or make any representations regarding the Manufacturer's work, products, or warranties.** The Manufacturer's warranty obligations — including coverage, terms, exclusions, and claims procedures — are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to Sherman Homes. Any claims related to factory-built components must be directed to the Manufacturer.
 
+> **Owner Assistance:** Although Sherman Homes is not a representative of the Manufacturer, Sherman Homes maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns directed toward the Manufacturer. This assistance is offered as a courtesy based on Sherman Homes' ongoing business relationship with the Manufacturer and does not make Sherman Homes responsible for the Manufacturer's response, decisions, obligations, or warranties.
+
 ---
 
 ## C. Manufacturer Warranty — Contact the Manufacturer Directly
@@ -63,7 +65,7 @@ Your home is built in **two places** by **two separate entities**:
 **If a Defect Occurs in Factory-Built Components:**
 1. Document the defect in writing with photographs.
 2. Contact the Manufacturer directly for warranty claims related to factory-built components.
-3. Optionally notify Sherman Homes in writing — Sherman Homes may assist in documentation but has no authority over the Manufacturer's warranty process and makes no representations about the Manufacturer's response.
+3. Notify Sherman Homes in writing — Sherman Homes will make reasonable efforts to assist the Owner in documenting and communicating the issue to the Manufacturer, but has no authority over the Manufacturer's warranty process and makes no guarantees about the Manufacturer's response.
 
 If it is not clear whether a defect originated in factory construction or site installation, the Owner should notify both Sherman Homes and the Manufacturer in writing.
 
@@ -107,11 +109,11 @@ The HUD Data Plate and/or certification label(s) must be present on the complete
 
 1. Contact the Manufacturer directly using the contact information obtained from the Manufacturer.
 2. Follow the Manufacturer's own claims procedure — Sherman Homes has no authority over or knowledge of the Manufacturer's claims process and makes no representations about it.
-3. Optionally notify Sherman Homes in writing. Sherman Homes may assist in documentation but does not control or guarantee the Manufacturer's response.
+3. Notify Sherman Homes in writing. Sherman Homes will make reasonable efforts to assist the Owner in documenting and communicating the claim to the Manufacturer, but does not control or guarantee the Manufacturer's response.
 
 ### F.3 — Disputed Claims (Origin Unclear)
 
-If it is not clear whether a defect originated in factory construction or site installation, notify **both** Sherman Homes and the Manufacturer in writing. Sherman Homes will inspect the site work components to determine whether the defect is within Sherman Homes' scope. Determination of the Manufacturer's responsibility rests solely with the Manufacturer per the Manufacturer's own policies.
+If it is not clear whether a defect originated in factory construction or site installation, notify **both** Sherman Homes and the Manufacturer in writing. Sherman Homes will inspect the site work components to determine whether the defect is within Sherman Homes' scope, and will make reasonable efforts to assist the Owner in communicating with the Manufacturer regarding the Manufacturer's portion. Determination of the Manufacturer's responsibility rests solely with the Manufacturer per the Manufacturer's own policies.
 
 ---
 
