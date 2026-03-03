@@ -2146,12 +2146,6 @@ function AppInner() {
                                           📷 Camera
                                           <input type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
                                         </label>
-                                        <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
-                                          const fileName = prompt('Document name:'); if (!fileName) return;
-                                          const fileUrl = prompt('Document URL (or leave blank):');
-                                          const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
-                                          saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
-                                        }}>+ Link</button>
                                       </div>
                                       {scrubbUploadingService === svc.key && <div style={{ fontSize: 11, color: '#1565c0', marginTop: 4 }}>Uploading...</div>}
                                       {scrubbDragOverService === svc.key && <div style={{ fontSize: 11, color: '#2c5530', marginTop: 4, textAlign: 'center' }}>Drop images or PDFs here</div>}
@@ -2215,12 +2209,6 @@ function AppInner() {
                                         📷 Camera
                                         <input type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={e => handleScrubbFileInput(e, svc.key)} />
                                       </label>
-                                      <button style={{ ...S.btnSm, padding: '4px 8px', fontSize: 11 }} onClick={() => {
-                                        const fileName = prompt('Document name:'); if (!fileName) return;
-                                        const fileUrl = prompt('Document URL (or leave blank):');
-                                        const doc = { id: genId(), name: fileName, url: fileUrl || '', addedAt: new Date().toISOString(), addedBy: userName };
-                                        saveScrubbUpdate(stampUpdate(currentItem, { scrubbDocs: { ...(currentItem.scrubbDocs || {}), [svc.key]: [...(currentItem.scrubbDocs?.[svc.key] || []), doc] } }, userName));
-                                      }}>+ Link</button>
                                     </div>
                                     {scrubbUploadingService === svc.key && <div style={{ fontSize: 11, color: '#1565c0', marginTop: 4 }}>Uploading...</div>}
                                     {scrubbDragOverService === svc.key && <div style={{ fontSize: 11, color: '#2c5530', marginTop: 4, textAlign: 'center' }}>Drop images or PDFs here</div>}
