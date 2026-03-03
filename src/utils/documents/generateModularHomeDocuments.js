@@ -400,14 +400,11 @@ ${unselectedServices.length > 0 ? `
 <ul>
   <li>Fencing or property line work</li>
   <li>Tree removal (unless obstructing delivery or foundation)</li>
-  <li>Retaining walls or major grading beyond standard site prep</li>
-  <li>Sheds, garages, or outbuildings</li>
   <li>Interior painting or wall finishes beyond factory-installed</li>
   <li>Flooring, cabinet, or countertop upgrades beyond factory-installed</li>
   <li>Window treatments, blinds, or light fixture upgrades</li>
   <li>Custom carpentry or built-ins beyond factory-installed</li>
   <li>Utility account setup fees or meter installation fees</li>
-  <li>Water softener or filtration system</li>
   <li>Security, alarm, or smart home systems</li>
   <li>Driveway paving beyond gravel (unless surfaced driveway is contracted)</li>
 </ul>
