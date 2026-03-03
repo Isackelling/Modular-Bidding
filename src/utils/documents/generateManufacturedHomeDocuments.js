@@ -610,7 +610,30 @@ export const generateWarrantyStatement = (quote, customer, totals) => {
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Warranty Statement — ${d.ownerName || 'Sherman Homes'}</title>
-<style>${STYLES}</style></head><body>
+<style>${STYLES}
+  /* === Warranty Statement — print-optimized layout === */
+  @media print {
+    @page { margin: 0.4in 0.5in; }
+    body.warranty { font-size: 10.5px; line-height: 1.25; padding: 0; margin: 0; max-width: none; }
+    body.warranty .header-bar { margin: 0 -0.5in 8px; padding: 6px 0.5in; }
+    body.warranty .header-bar h1 { font-size: 15px; }
+    body.warranty .header-bar .sub { font-size: 10px; }
+    body.warranty h2 { font-size: 12px; margin-top: 8px; margin-bottom: 2px; padding-bottom: 2px; }
+    body.warranty h3 { font-size: 11px; margin-top: 5px; margin-bottom: 2px; }
+    body.warranty p { margin: 2px 0; font-size: 10.5px; }
+    body.warranty blockquote { padding: 4px 8px; margin: 4px 0; font-size: 10.5px; line-height: 1.3; }
+    body.warranty table { margin: 4px 0; }
+    body.warranty th { padding: 3px 6px; font-size: 10px; }
+    body.warranty td { padding: 2px 6px; font-size: 10px; }
+    body.warranty ul, body.warranty ol { margin: 3px 0 3px 16px; }
+    body.warranty li { margin-bottom: 1px; font-size: 10.5px; }
+    body.warranty .sig-section { margin-top: 8px; padding-top: 6px; }
+    body.warranty .sig-section p { margin: 1px 0; }
+    body.warranty .generated-note { margin-top: 6px; padding-top: 4px; font-size: 9px; }
+    /* Keep related sections together */
+    body.warranty .warranty-group { page-break-inside: avoid; }
+  }
+</style></head><body class="warranty">
 ${printBar}
 <div class="header-bar">
   <h1>Warranty Statement</h1>
@@ -619,6 +642,7 @@ ${printBar}
 
 <blockquote><strong>Important Notice:</strong> This warranty statement covers a factory-built home. Construction responsibilities — and therefore warranty responsibilities — are divided between <strong>the Manufacturer</strong> (who builds the home unit in a factory) and <strong>Sherman Homes</strong> (who performs site work and installation). Read all sections carefully. This document does not constitute legal advice; consult a licensed Minnesota attorney with questions about your rights.</blockquote>
 
+<div class="warranty-group">
 <h2>A. Sherman Homes Statutory Warranties — Site Work &amp; Installation</h2>
 <p>Sherman Homes warrants the <strong>site work and installation</strong> portions of your home under Minnesota Statutes Chapter 327A, as follows:</p>
 <table>
@@ -630,18 +654,22 @@ ${printBar}
 <p><strong>Sherman Homes' warranties apply to site work and installation only.</strong> They do not cover defects originating in the manufacturing facility. See Section C for manufacturer warranty coverage.</p>
 <p><strong>Warranty Date:</strong> The Warranty Date for Sherman Homes' statutory warranties is the earlier of: (1) the date the Owner first occupies the home, or (2) the date the Owner takes legal title to the home — but not earlier than the date the home unit is set on the foundation and site work commences.</p>
 <p><strong>Claims Requirement:</strong> Written warranty claims against Sherman Homes must be reported within <strong>six months</strong> after the Owner discovers or should have discovered the defect.</p>
+</div>
 
+<div class="warranty-group">
 <h2>B. Scope of Responsibility — Why This Warranty Is Divided</h2>
 <p>Your home is built in <strong>two places</strong> by <strong>two separate teams</strong>, and there is a clear line between them:</p>
 <blockquote>
-  <strong>The Manufacturer</strong> is responsible for the home itself and everything inside it — structure, cabinetry, countertops, plumbing fixtures, electrical fixtures, flooring, fireplace, appliances, and all interior finishes.<br><br>
-  <strong>Sherman Homes</strong> is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).<br><br>
+  <strong>The Manufacturer</strong> is responsible for the home itself and everything inside it — structure, cabinetry, countertops, plumbing fixtures, electrical fixtures, flooring, fireplace, appliances, and all interior finishes.<br>
+  <strong>Sherman Homes</strong> is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).<br>
   <strong>If it's inside the home, it's the Manufacturer. If it's at the site, it's Sherman.</strong>
 </blockquote>
 <p><strong>The Manufacturer</strong> constructed the home unit in a factory, including: structural framing, roof, and exterior shell; factory-installed interior finishes, cabinetry, countertops, flooring; plumbing rough-in, plumbing fixtures, and electrical rough-in and fixtures completed at the factory; fireplace (if applicable); factory-installed appliances and mechanical systems.</p>
 <p><strong>Sherman Homes</strong> is responsible for: site preparation and grading; foundation design coordination and construction; delivery coordination and transportation permitting; crane and set operations (placing the home on the foundation); marriage wall assembly (multi-section homes); final utility connections (electric, plumbing, HVAC, fuel); all finish work completed on-site; site services (sewer, well, gravel driveway, sand pad, landscaping); site cleanup and final inspection coordination.</p>
 <p><strong>Defects in manufacturer-supplied components or factory workmanship are the responsibility of the Manufacturer</strong>, not Sherman Homes. Sherman Homes will assist the Owner in pursuing manufacturer warranty claims but does not assume liability for factory defects.</p>
+</div>
 
+<div class="warranty-group">
 <h2>C. Manufacturer Warranty</h2>
 <p>Sherman Homes will pass through to the Owner all warranties provided by the Manufacturer with respect to the factory-built home unit. The Manufacturer's warranty is separate from and in addition to Sherman Homes' statutory warranties.</p>
 <p><strong>Manufacturer Information:</strong></p>
@@ -674,7 +702,9 @@ ${printBar}
   <li>Sherman Homes will cooperate with and assist in the claims process.</li>
 </ol>
 <p>Sherman Homes does not assume any warranty obligation for items covered by the Manufacturer's warranty. However, if a defect is disputed between manufacturer and site-work origin, Sherman Homes and the Manufacturer will cooperate to determine responsibility.</p>
+</div>
 
+<div class="warranty-group">
 <h2>D. Applicable Building Standards — HUD Code vs. MN State Building Code</h2>
 <p><strong>HUD-Code Manufactured Home:</strong> Factory-built portions of a HUD-code manufactured home are constructed under <strong>federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280)</strong>. Federal HUD standards may govern warranty rights for factory-built components in ways that differ from or supersede Minnesota Chapter 327A.</p>
 <p><strong>Modular Home:</strong> A modular home is factory-built to <strong>Minnesota State Building Code</strong> standards. Minnesota Chapter 327A applies in full to both site work and factory-built portions.</p>
@@ -683,7 +713,9 @@ ${printBar}
 
 <h2>E. Warranty Date — Factory-Built Home Clarification</h2>
 <p><strong>For Sherman Homes' site work warranties</strong>, the Warranty Date shall not begin earlier than the <strong>date the home unit is set on the foundation and site work commences.</strong> <strong>For the Manufacturer's warranty</strong>, the warranty date and trigger are governed by the Manufacturer's warranty document (Exhibit W-1).</p>
+</div>
 
+<div class="warranty-group">
 <h2>F. Claims Procedures</h2>
 <h3>F.1 — Claims Against Sherman Homes (Site Work &amp; Installation)</h3>
 <ol>
@@ -702,7 +734,9 @@ ${printBar}
 </ol>
 <h3>F.3 — Disputed Claims (Origin Unclear)</h3>
 <p>If it is not clear whether a defect originated in factory construction or site installation, notify <strong>both</strong> Sherman Homes and the Manufacturer in writing. Both parties will cooperate to inspect and determine the responsible party. The Owner's claim rights are preserved against both parties during this process.</p>
+</div>
 
+<div class="warranty-group">
 <h2>G. Warranty Exclusions</h2>
 <p>The liability of Sherman Homes under this warranty is limited to site work and installation defects and does not extend to the following:</p>
 <ul>
@@ -716,7 +750,9 @@ ${printBar}
   <li>Loss or damage due to <strong>soil conditions on Owner-supplied land</strong> obtained independently of Sherman Homes</li>
   <li><strong>Defects in manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility</strong> — these are the responsibility of the Manufacturer and are governed by the Manufacturer's warranty (Exhibit W-1)</li>
 </ul>
+</div>
 
+<div class="warranty-group">
 <h2>H. Waiver and Modification</h2>
 <p>The warranties provided under Minnesota Statutes Chapter 327A cannot be waived or modified except as provided by § 327A.04. Any modification must be made by a written instrument, printed in boldface type of minimum 10-point size, signed by the Owner, describing the warranty involved, the Owner's consent, and the terms of the modified agreement.</p>
 
@@ -724,24 +760,23 @@ ${printBar}
 <p>The complete text of Minnesota Statutes Chapter 327A (New Home Warranties) is available at: <strong>https://www.revisor.mn.gov/statutes/cite/327A</strong></p>
 <p>A printed copy of Chapter 327A will be provided to the Owner upon request. The Owner's rights under Chapter 327A are fully preserved and are not limited by any provision of this document.</p>
 <p>Key provisions: § 327A.01 (Definitions) | § 327A.02 (Statutory Warranties) | § 327A.03 (Exclusions) | § 327A.04 (Waiver) | § 327A.05 (Remedies) | § 327A.051 (Dispute Resolution) | § 327A.08 (Limitations)</p>
+</div>
 
-<div class="sig-section">
+<div class="sig-section warranty-group">
   <h2 style="border:none;margin-top:0">Acknowledgment and Signature</h2>
   <p>By signing below, I/we acknowledge that I/we have received and reviewed this Warranty Statement, understand the division of warranty responsibility between Sherman Homes and the Manufacturer, and understand the warranty coverage, exclusions, claims procedures, and dispute resolution process.</p>
   <p>I/we understand that: Sherman Homes warrants <strong>site work and installation</strong> under MN Chapter 327A. The <strong>Manufacturer</strong> warrants factory-built components per Exhibit W-1. Written warranty claims must be reported within <strong>six months</strong> of discovery. The <strong>Manufacturer Warranty document (Exhibit W-1)</strong> is attached and has been provided to me/us.</p>
 
-  <p><strong>Owner Signature:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
+  <p style="margin-top:8px"><strong>Owner Signature:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
   <p><strong>Print Name:</strong> <span class="sig-prefilled">${d.ownerName || blank(200)}</span></p>
 
-  <br>
-  <p><strong>Owner Signature:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
+  <p style="margin-top:8px"><strong>Owner Signature:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
   <p><strong>Print Name:</strong> <span class="sig-prefilled">${d.owner2Name || blank(200)}</span></p>
 
-  <br>
-  <p><strong>Sherman Homes Representative:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
+  <p style="margin-top:8px"><strong>Sherman Homes Representative:</strong> ${blank(280)} &nbsp; <strong>Date:</strong> ${blank(110)}</p>
   <p><strong>Print Name / Title:</strong> ${blank(200)}</p>
 
-  <p style="margin-top:20px;font-size:12px;color:#555;font-style:italic">This Warranty Statement is a required contract document under MN Stat. § 327A.08. Failure to provide this warranty in writing is a violation of MN Stat. § 326B.84. This document does not constitute legal advice. Consult a licensed Minnesota construction attorney with questions about your rights under this warranty or under applicable HUD regulations.</p>
+  <p style="margin-top:12px;font-size:11px;color:#555;font-style:italic">This Warranty Statement is a required contract document under MN Stat. § 327A.08. Failure to provide this warranty in writing is a violation of MN Stat. § 326B.84. This document does not constitute legal advice. Consult a licensed Minnesota construction attorney with questions about your rights under this warranty or under applicable HUD regulations.</p>
 </div>
 
 <div class="generated-note">Generated by Sherman Bidding System &mdash; ${d.today}${d.quoteNum ? ` &mdash; Project #${d.quoteNum}` : ''} &mdash; ${COMPANY.name}, ${COMPANY.address}</div>
