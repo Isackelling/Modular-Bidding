@@ -244,7 +244,7 @@ function AppInner() {
   });
 
   // User management
-  const [newUser, setNewUser] = useState({ username: '', fullName: '', company: '', role: 'sales', phone: '' });
+  const [newUser, setNewUser] = useState({ username: '', fullName: '', company: '', role: 'sales', cellPhone: '', officePhone: '', email: '' });
 
   // ======================================================================
   // DATA LOADING
@@ -342,12 +342,12 @@ function AppInner() {
   // Folder saver functions (document generation + folder persistence)
   const folderSavers = useMemo(() => createFolderSavers({
     materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, homeModels,
-    userName, quotes, contracts, selQuote, selContract, selCustomer,
+    userName, currentUserData, quotes, contracts, selQuote, selContract, selCustomer,
     setSelQuote, setSelContract, saveQuotes, saveContracts,
     generateQuoteHtml, generatePierDiagramHtml, generateScopeOfWorkDocument,
     generateCrewWorkOrderDocument, generateAllowanceProgressDocument, generateChangeOrderDocument,
   }), [materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, homeModels,
-    userName, quotes, contracts, selQuote, selContract, selCustomer]);
+    userName, currentUserData, quotes, contracts, selQuote, selContract, selCustomer]);
 
   // ======================================================================
   // CALLER ID SYNC
@@ -1795,7 +1795,7 @@ function AppInner() {
                                 <button key={key} style={{ ...S.btnSm, padding: '5px 12px', fontSize: 12, background: '#2c5530', color: '#fff' }}
                                   onClick={() => {
                                     const totals = CalcHelpers.calculateQuoteTotals(currentItem, custForQuote, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing, projectCommandRates);
-                                    openDocumentWindow(fn(currentItem, custForQuote, totals));
+                                    openDocumentWindow(fn(currentItem, custForQuote, totals, currentUserData));
                                   }}
                                   title={`Open ${label}`}>
                                   📄 {label}
@@ -4525,8 +4525,16 @@ function AppInner() {
                   </select>
                 </div>
                 <div>
-                  <label style={S.label}>Phone</label>
-                  <input style={S.input} value={newUser.phone} onChange={e => setNewUser(p => ({ ...p, phone: e.target.value }))} />
+                  <label style={S.label}>Cell Phone</label>
+                  <input style={S.input} value={newUser.cellPhone} onChange={e => setNewUser(p => ({ ...p, cellPhone: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={S.label}>Office Phone</label>
+                  <input style={S.input} value={newUser.officePhone} onChange={e => setNewUser(p => ({ ...p, officePhone: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={S.label}>Email</label>
+                  <input style={S.input} value={newUser.email} onChange={e => setNewUser(p => ({ ...p, email: e.target.value }))} />
                 </div>
               </div>
               <button style={{ ...S.btn, width: 'auto' }} onClick={addUser}>Add User</button>
@@ -4540,7 +4548,9 @@ function AppInner() {
                   <th style={S.th}>Full Name</th>
                   <th style={S.th}>Company</th>
                   <th style={S.th}>Role</th>
-                  <th style={S.th}>Phone</th>
+                  <th style={S.th}>Cell</th>
+                  <th style={S.th}>Office</th>
+                  <th style={S.th}>Email</th>
                   <th style={S.th}>Actions</th>
                 </tr>
               </thead>
@@ -4551,7 +4561,9 @@ function AppInner() {
                     <td style={S.td}>{u.fullName}</td>
                     <td style={S.td}>{u.company}</td>
                     <td style={S.td}>{u.role}</td>
-                    <td style={S.td}>{u.phone}</td>
+                    <td style={S.td}>{u.cellPhone || u.phone}</td>
+                    <td style={S.td}>{u.officePhone}</td>
+                    <td style={S.td}>{u.email}</td>
                     <td style={S.td}>
                       <button style={{ ...S.btnDanger, padding: '4px 8px', fontSize: 12 }} onClick={() => deleteUser(u.id)}>Delete</button>
                     </td>

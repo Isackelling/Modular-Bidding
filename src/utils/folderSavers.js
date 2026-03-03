@@ -55,6 +55,7 @@ export const createFolderSavers = ({
   foundationPricing,
   homeModels,
   userName,
+  currentUserData,
   quotes,
   contracts,
   selQuote,
@@ -939,7 +940,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
     }
 
     const totals = CalcHelpers.calculateQuoteTotals(quote, cust, materials, services, sewerPricing, patioPricing, driveRates, foundationPricing);
-    const html = gen.fn(quote, cust, totals);
+    const html = gen.fn(quote, cust, totals, currentUserData);
     const blob = new Blob([html], { type: 'text/html' });
     const dataUrl = await blobToDataUrl(blob, gen.name);
 
@@ -973,7 +974,7 @@ iframe{width:100%;height:400px;border:2px solid #ddd;border-radius:8px}
       let updatedFolders = FolderUtils.getFolders(quote);
 
       for (const gen of generators) {
-        const html = gen.fn(quote, cust, totals);
+        const html = gen.fn(quote, cust, totals, currentUserData);
         const blob = new Blob([html], { type: 'text/html' });
         const dataUrl = await blobToDataUrl(blob, gen.name);
         const file = FolderUtils.createFileObject(

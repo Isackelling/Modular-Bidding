@@ -353,8 +353,9 @@ ${printBar}
 
 // ─── 3. Homeowner's Guide ───────────────────────────────────────────────────
 // Fills: Owner name in initials labels and signature print names; team contacts left blank (not in system)
-export const generateHomeownerGuide = (quote, customer, totals) => {
+export const generateHomeownerGuide = (quote, customer, totals, user) => {
   const d = prep(quote, customer, totals);
+  const u = user || {};
 
   const ack = (num, title, text) => `
 <div style="margin:14px 0;padding:12px;border:1px solid #ddd;border-radius:4px">
@@ -378,24 +379,24 @@ ${printBar}
 
 <h2>Your Sherman Team</h2>
 <p><strong>Project Design Representative:</strong><br>
-[Name]<br>
-Office: [Phone] | Cell: [Phone]<br>
-Email: [Email]</p>
+${u.fullName || blank(200)}<br>
+${u.officePhone ? `Office: ${u.officePhone} | ` : ''}Cell: ${u.cellPhone || u.phone || blank(140)}<br>
+Email: ${u.email || blank(200)}</p>
 
 <p><strong>Project Specification Coordinator:</strong><br>
-[Name]<br>
-Office: [Phone] | Cell: [Phone]<br>
-Email: [Email]</p>
+Katie Ryan<br>
+Office: 763-465-1016 | Cell: 763-464-8390<br>
+Email: Katie@shermanbuildings.com</p>
 
 <p><strong>Project Construction Manager:</strong><br>
-[Name]<br>
-Cell: [Phone]<br>
-Email: [Email]</p>
+Ryan Gunderson<br>
+Cell: 763-237-4252<br>
+Email: ryan@shermanbuildings.com</p>
 
-<p><strong>Manufacturer Sales Contact:</strong><br>
-[Name] — [Manufacturer Name]<br>
-Office: [Phone] | Cell: [Phone]<br>
-Email: [Email]</p>
+<p><strong>Manufacturer Sales Contact via Sherman:</strong><br>
+Isac Kelling<br>
+Cell: 320-515-1815<br>
+Email: isac@shermanbuildings.com</p>
 
 <h2>How This Process Works</h2>
 <p>The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.</p>
@@ -456,30 +457,28 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
 
 <h3>Plumbing Fixtures</h3>
 <p><em>Select: Before Factory Order Lock-In Date (factory-plumbed items) | Before Site Work Begins (site-connected items)</em></p>
-<p>Confirm with your Sherman Team which plumbing fixtures are factory-installed and which are site-connected. For site-connected fixtures, visit a showroom or select online. Let [Ferguson] know you're working with [Plumber Name] so your selections are linked to our account.</p>
-<p><strong>[Ferguson Showroom]</strong><br>Contact: [Name] | Phone: [Phone] | Email: [Email]</p>
+<p>Plumbing fixtures are typically included in the manufacturer's base package or available as factory upgrades. Confirm with your Manufacturer Sales Contact which fixtures are included and what upgrade options are available. For any site-connected plumbing items, coordinate with your Sherman Team.</p>
+<p><em>Refer to your Manufacturer's Quote and Specification Booklet for available selections.</em></p>
 
 <h3>Fireplace &amp; Finishes</h3>
 <p><em>Select: Before Factory Order Lock-In Date (if factory option) | Before Construction Starts (if site-installed)</em></p>
-<p>Confirm with your Manufacturer and Sherman Team whether a fireplace is a factory option or site-installed.</p>
-<p><strong>[Fireside Hearth and Home]</strong><br>Contact: [Bill] | 47 3rd St. NE, Waite Park, MN 56387 | (320) 251-2717</p>
+<p>Confirm with your Manufacturer Sales Contact and Sherman Team whether a fireplace is a factory option or site-installed. Refer to your Manufacturer's Quote and Specification Booklet for available fireplace options and finishes.</p>
 
 <h3>On-Site Cabinetry (If Applicable)</h3>
 <p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p><strong>[Maranatha Cabinets]</strong><br>Contact: [Brian] | maranathacabinets@yahoo.com | (320) 358-3774</p>
+<p>Cabinetry is typically included in the manufacturer's base package or available as factory upgrades. Refer to your Manufacturer's Quote and Specification Booklet. If on-site cabinetry upgrades are part of your project, your Sherman Team will coordinate selections.</p>
 
 <h3>Countertops – Quartz/Granite (On-Site)</h3>
 <p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p><strong>[Stone Tree]</strong> — 27875 MN-65 Bldg 4, Isanti, MN 55040 | (763) 309-8066<br>
-<strong>[L&amp;L Granite]</strong> — 8992 Main St, Sturgeon Lake, MN 55783 | (218) 451-0277</p>
+<p>Countertop selections are typically part of the manufacturer's specification process. Refer to your Manufacturer's Quote and Specification Booklet for available options. If on-site countertop upgrades are part of your project, your Sherman Team will coordinate selections.</p>
 
 <h3>Flooring (On-Site Upgrades or Additions)</h3>
 <p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p><strong>[Monarch Flooring]</strong> — 6372 Main St STE B, North Branch, MN 55056 | (651) 674-4300</p>
+<p>Flooring is typically included in the manufacturer's base package or available as factory upgrades. Refer to your Manufacturer's Quote and Specification Booklet. If on-site flooring upgrades are part of your project, your Sherman Team will coordinate selections.</p>
 
 <h3>Tile (On-Site)</h3>
 <p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p><strong>[Chris] – Tile Installation</strong> | Phone: (763) 458-0979</p>
+<p>Tile selections are typically part of the manufacturer's specification process. Refer to your Manufacturer's Quote and Specification Booklet. If on-site tile work is part of your project, your Sherman Team will coordinate selections and installation.</p>
 
 <h3>Paint Colors</h3>
 <p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
@@ -551,7 +550,7 @@ ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insur
 
   <p><strong>Sherman Homes Representative:</strong></p>
   <p>Signature: ${blank(300)} &nbsp; Date: ${blank(110)}</p>
-  <p>Printed Name: ${blank(200)}</p>
+  <p>Printed Name: <span class="sig-prefilled">${u.fullName || blank(200)}</span></p>
 
   <p style="font-size:14px;margin-top:20px;color:#2c5530;font-weight:600">Thank you for choosing Sherman Homes. Let's build something amazing together.</p>
   <p style="font-size:12px;color:#555;font-style:italic">This guide is for informational purposes and project coordination. It is incorporated by reference into the Main Contract. It does not constitute legal advice. Consult a licensed Minnesota construction attorney with any legal questions regarding your purchase.</p>
