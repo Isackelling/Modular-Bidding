@@ -88,10 +88,65 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     .signature-box { border-top: 2px solid #333; padding-top: 8px; }
     .signature-label { font-size: 12px; color: #666; }
     .footer { margin-top: 24px; text-align: center; font-size: 11px; color: #666; border-top: 1px solid #e0e0e0; padding-top: 14px; }
+    .contingency-box { background: #e3f2fd; padding: 12px 14px; border-radius: 8px; margin-top: 12px; }
+    .contingency-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 17px; color: #1565c0; margin-bottom: 6px; }
+    .contingency-desc { font-size: 12px; color: #666; line-height: 1.5; }
+    .total-investment { display: flex; justify-content: space-between; font-weight: 700; font-size: 24px; color: #2c5530; border-top: 3px solid #2c5530; padding-top: 12px; margin-top: 12px; }
+    .pay-heading { font-weight: 700; margin: 10px 0 8px; font-size: 14px; }
+    .pay-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+    .pay-pct { padding: 6px 10px; border-bottom: 1px solid #ddd; font-weight: 600; width: 60px; }
+    .pay-desc { padding: 6px 10px; border-bottom: 1px solid #ddd; }
+    .pay-amt { padding: 6px 10px; border-bottom: 1px solid #ddd; text-align: right; font-weight: 600; white-space: nowrap; }
+    .pay-note { background: #e8f5e9; border-left: 4px solid #2c5530; padding: 10px 14px; border-radius: 4px; margin-bottom: 14px; font-size: 13px; color: #333; }
     @media print {
-      body { padding: 14px; }
-      .no-print { display: none; }
-      .page-break-before { break-before: page; page-break-before: always; }
+      @page { size: letter; margin: 0.35in 0.4in; }
+      body { padding: 0; max-width: 100%; font-size: 11px; line-height: 1.35; }
+      .no-print { display: none !important; }
+      .header { padding-bottom: 8px; margin-bottom: 10px; }
+      .logo { font-size: 18px; }
+      .logo-sub { font-size: 11px; }
+      .company-info { font-size: 10px; }
+      .quote-title { font-size: 16px; padding: 7px 14px; margin-bottom: 10px; }
+      .quote-meta { margin-bottom: 10px; }
+      .meta-box { padding: 5px 8px; }
+      .meta-label { font-size: 9px; margin-bottom: 1px; }
+      .meta-value { font-size: 12px; }
+      .section { margin-bottom: 10px; }
+      .section-title { font-size: 13px; padding-bottom: 3px; margin-bottom: 6px; }
+      .info-grid { gap: 4px; }
+      .info-label { font-size: 9px; }
+      .info-value { font-size: 11px; }
+      .home-box { padding: 8px 12px; margin-bottom: 8px; }
+      .home-model { font-size: 14px; }
+      .home-specs { font-size: 11px; margin-top: 2px; }
+      .scope-section { margin-bottom: 6px; }
+      .scope-heading { font-size: 10px; padding-bottom: 2px; margin-bottom: 3px; }
+      .scope-items { column-gap: 12px; }
+      .scope-item { padding: 1px 0; font-size: 10px; }
+      .scope-item .svc-desc { font-size: 9px; margin: 0 0 1px 14px; }
+      .section.page-break-before { break-before: auto; page-break-before: auto; }
+      .total-section { padding: 10px 14px; break-before: page; page-break-before: always; }
+      .total-section .section-title { font-size: 13px; margin-bottom: 8px; }
+      .total-row.grand { font-size: 16px; margin-top: 4px; padding-top: 6px; }
+      .terms { margin-top: 10px; padding: 8px 10px; font-size: 10px; }
+      .terms-title { margin-bottom: 4px; }
+      .terms ul { margin-left: 14px; }
+      .signature-section { margin-top: 14px; gap: 24px; }
+      .signature-label { font-size: 10px; }
+      .contingency-box { padding: 6px 10px; margin-top: 6px; }
+      .contingency-header { font-size: 13px; margin-bottom: 3px; }
+      .contingency-desc { font-size: 10px; line-height: 1.35; }
+      .total-investment { font-size: 17px; padding-top: 6px; margin-top: 6px; border-top-width: 2px; }
+      .pay-heading { font-size: 11px; margin: 6px 0 4px; }
+      .pay-table td { padding: 3px 6px; font-size: 10px; }
+      .pay-note { padding: 5px 8px; margin-bottom: 8px; font-size: 10px; }
+      .scope-intro { margin-bottom: 6px !important; font-size: 10px; }
+      .allowance-note { padding: 5px 8px !important; margin-top: 6px !important; }
+      .allowance-note p { font-size: 10px !important; }
+      .notes-section { padding: 10px !important; margin: 10px 0 !important; }
+      .notes-section h3 { font-size: 13px; margin-bottom: 8px; }
+      .notes-section .note-card { padding: 6px; margin-bottom: 6px; }
+      .footer { margin-top: 10px; font-size: 9px; padding-top: 6px; }
       .avoid-break { break-inside: avoid; page-break-inside: avoid; }
     }
     .btn-group { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; }
@@ -234,9 +289,8 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       <div class="home-specs">${quote.houseWidth}' × ${quote.houseLength}' ${quote.singleDouble} Wide</div>
     </div>
     ${floorPlanUrl ? `
-    <div style="margin-top: 20px;">
-      <div style="font-weight: 600; margin-bottom: 10px; color: #2c5530;">Floor Plan</div>
-      <p style="margin: 0;"><a href="${floorPlanUrl}" target="_blank" style="color: #1565c0; text-decoration: none; font-size: 14px;">View Full Floor Plan, Photos & 3D Tour on Clayton Homes</a></p>
+    <div class="floor-plan-link" style="margin-top: 10px;">
+      <p style="margin: 0;"><a href="${floorPlanUrl}" target="_blank" style="color: #1565c0; text-decoration: none; font-size: 12px;">View Floor Plan, Photos & 3D Tour on Clayton Homes</a></p>
     </div>
     ` : ''}
   </div>
@@ -258,7 +312,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   
   <div class="section page-break-before">
     <div class="section-title">Scope of Work</div>
-    <p style="margin-bottom: 15px; color: #666;">This quote includes complete professional installation services:</p>
+    <p class="scope-intro" style="margin-bottom: 15px; color: #666;">This quote includes complete professional installation services:</p>
 
     ${homeSpecAdditions.length > 0 ? `
     <div class="scope-section">
@@ -300,7 +354,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     ` : ''}
 
     ${allowances.length > 0 ? `
-    <div style="background: #fff9e6; padding: 10px 14px; border-radius: 6px; margin-top: 12px; border-left: 4px solid #ffc107;">
+    <div class="allowance-note" style="background: #fff9e6; padding: 10px 14px; border-radius: 6px; margin-top: 12px; border-left: 4px solid #ffc107;">
       <p style="margin: 0; font-size: 12px; color: #856404;">
         <strong>*Allowances:</strong> Estimated costs based on 49 years of experience. Actual costs may vary depending on site conditions and location factors. Final costs confirmed upon site evaluation.
       </p>
@@ -312,17 +366,17 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     <div class="section-title" style="border: none; margin-bottom: 16px;">Investment Summary</div>
     <div class="total-row grand"><span>Total</span><span>${fmt(totals.total)}</span></div>
 
-    <div style="background: #e3f2fd; padding: 12px 14px; border-radius: 8px; margin-top: 12px;">
-      <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 17px; color: #1565c0; margin-bottom: 6px;">
+    <div class="contingency-box">
+      <div class="contingency-header">
         <span>Contingency Allowance</span>
         <span>${fmt(totals.contingency)}</span>
       </div>
-      <div style="font-size: 12px; color: #666; line-height: 1.5;">
+      <div class="contingency-desc">
         <strong>Purpose:</strong> A dedicated fund for change orders and allowance adjustments. If allowances (permits, well, sand pad, sewer, etc.) come in under budget, savings are added to this fund. If they exceed estimates or you make change orders, funds are drawn from here first. At project completion, if there are no overages or change orders, you receive back the full contingency amount plus any allowance savings.
       </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 24px; color: #2c5530; border-top: 3px solid #2c5530; padding-top: 12px; margin-top: 12px;">
+    <div class="total-investment">
       <span>Total Investment</span>
       <span>${fmt(totals.totalWithContingency)}</span>
     </div>
@@ -381,13 +435,13 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     if (allNotes.length === 0) return '';
 
     return `
-    <div style="background: #f0f7ff; border: 2px solid #1565c0; border-radius: 8px; padding: 20px; margin: 30px 0;">
-      <h3 style="margin: 0 0 16px; color: #1565c0; font-size: 18px;">📋 Important Project Information</h3>
+    <div class="notes-section" style="background: #f0f7ff; border: 2px solid #1565c0; border-radius: 8px; padding: 20px; margin: 30px 0;">
+      <h3 style="margin: 0 0 16px; color: #1565c0; font-size: 18px;">Important Project Information</h3>
       ${allNotes.map(note => `
-        <div style="background: #fff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid #1565c0;">
-          <div style="font-weight: 600; color: #2c5530; margin-bottom: 6px; font-size: 14px;">${note.serviceName}</div>
-          <div style="color: #333; margin-bottom: 6px; line-height: 1.5;">${note.text}</div>
-          <div style="font-size: 11px; color: #999;">
+        <div class="note-card" style="background: #fff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid #1565c0;">
+          <div style="font-weight: 600; color: #2c5530; margin-bottom: 4px; font-size: 13px;">${note.serviceName}</div>
+          <div style="color: #333; margin-bottom: 4px; line-height: 1.4; font-size: 12px;">${note.text}</div>
+          <div style="font-size: 10px; color: #999;">
             ${new Date(note.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} by ${note.publishedBy}
           </div>
         </div>
@@ -398,14 +452,14 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
 
   <div class="terms avoid-break">
     <div class="terms-title">Terms & Conditions</div>
-    <div style="font-weight:700;margin:10px 0 8px;font-size:14px">Payment Schedule:</div>
-    <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
-      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600;width:60px">50%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Down payment — due at signing to schedule project</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.5)}</td></tr>
-      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">30%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due at delivery — home is modular complete and requires payment before delivery</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.3)}</td></tr>
-      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due after installation — licensed requirements completed</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.1)}</td></tr>
-      <tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">10%</td><td style="padding:6px 10px;border-bottom:1px solid #ddd">Due upon project completion</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;text-align:right;font-weight:600;white-space:nowrap">${fmt(totals.totalWithContingency * 0.1)}</td></tr>
+    <div class="pay-heading">Payment Schedule:</div>
+    <table class="pay-table">
+      <tr><td class="pay-pct">50%</td><td class="pay-desc">Down payment — due at signing to schedule project</td><td class="pay-amt">${fmt(totals.totalWithContingency * 0.5)}</td></tr>
+      <tr><td class="pay-pct">30%</td><td class="pay-desc">Due at delivery — home is modular complete and requires payment before delivery</td><td class="pay-amt">${fmt(totals.totalWithContingency * 0.3)}</td></tr>
+      <tr><td class="pay-pct">10%</td><td class="pay-desc">Due after installation — licensed requirements completed</td><td class="pay-amt">${fmt(totals.totalWithContingency * 0.1)}</td></tr>
+      <tr><td class="pay-pct">10%</td><td class="pay-desc">Due upon project completion</td><td class="pay-amt">${fmt(totals.totalWithContingency * 0.1)}</td></tr>
     </table>
-    <div style="background:#e8f5e9;border-left:4px solid #2c5530;padding:10px 14px;border-radius:4px;margin-bottom:14px;font-size:13px;color:#333">
+    <div class="pay-note">
       <strong>Note:</strong> Any remaining contingency allowance balance will be subtracted from your final payment. If allowances come in under budget and no change orders are made, your final amount owed may be significantly less than the scheduled payment above.
     </div>
     <ul>
