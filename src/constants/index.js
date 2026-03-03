@@ -53,6 +53,13 @@ export const COMPANY = {
 };
 export const SHERMAN = COMPANY;
 
+// Team contacts for Homeowner's Guide and other documents
+export const TEAM_CONTACTS = {
+  specCoordinator: { name: 'Katie Ryan', office: '763-465-1016', cell: '763-464-8390', email: 'Katie@shermanbuildings.com' },
+  constructionManager: { name: 'Ryan Gunderson', cell: '763-237-4252', email: 'ryan@shermanbuildings.com' },
+  mfgSalesContact: { name: 'Isac Kelling', cell: '320-515-1815', email: 'isac@shermanbuildings.com' },
+};
+
 // Drive time and pricing constants
 export const MIN_MILES = 15;
 export const DRIVE_RATE_INSTALL = 22;
@@ -99,6 +106,7 @@ export const PRICING = {
   CLOSING_DIVISOR: 0.93,   // Divisor for closing costs calculation
   CONTINGENCY: 0.02,       // 2% contingency
   SLAB_COST_PER_SQ_FT: 8,  // $8 per square foot for slab/pad
+  CO_ADMIN_FEE: 300,       // $300 Change Order administrative fee
 };
 
 // Default home models with pricing - Updated Feb 23, 2026

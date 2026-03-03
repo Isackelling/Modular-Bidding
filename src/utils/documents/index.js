@@ -7,4 +7,4 @@ export { generateCrewWorkOrderDocument } from './generateCrewWorkOrderDocument.j
 export { generateAllowanceProgressDocument } from './generateAllowanceProgressDocument.js';
 export { generateAllowancesExplainerDocument } from './generateAllowancesExplainerDocument.js';
 export { generateJobSummaryReport } from './generateJobSummaryReport.js';
-export { generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './generateManufacturedHomeDocuments.js';
+export { generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './generateModularHomeDocuments.js';

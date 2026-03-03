@@ -8,7 +8,7 @@
 
 ## System Overview
 
-The Sherman Bidding System is a web application for managing manufactured home installation quotes, contracts, and project cost tracking for Sherman Pole Buildings (Sherman Lumber Inc., Mora MN).
+The Sherman Bidding System is a web application for managing modular home installation quotes, contracts, and project cost tracking for Sherman Pole Buildings (Sherman Lumber Inc., Mora MN).
 
 It handles the full lifecycle: customer intake → quote → accepted → contract → cost tracking (Scrubb) → completion.
 
@@ -41,6 +41,11 @@ Canonical definitions for every domain term used in this spec. All sections must
 | **emptyQuote()** | The factory function that defines all canonical field names with default values. Located in `src/App.jsx`. This is the schema source of truth. |
 | **Customer Portal** | A read-only view for customers accessed via password `mybid` + firstName + lastName. Shows quotes, budget tracker, and published notes. |
 | **Published Notes** | Notes that have been explicitly published (moved from draft to the published array). Only published notes appear in documents and the customer portal. Draft notes are private. |
+| **serviceDimensions** | Per-service dimension inputs (length, width, depth) used for dimension-based pricing. Currently used by `surfaced_driveway` and `surfaced_sidewalks`. Stored as `{ [serviceKey]: { length, width, depth } }`. |
+| **serviceDescriptions** | Per-service user-generated description strings displayed in documents. Stored as `{ [serviceKey]: string }`. |
+| **Surfaced Driveway / Sidewalks** | Services priced by area: `length × width × rate`, where rate depends on concrete depth (4" = $9.25/sqft, 6" = $13.75/sqft). Dimensions stored in `serviceDimensions`. |
+| **CO Administrative Fee** | A flat $300 fee added to each Change Order (except Allowance Overage COs). Defined as `PRICING.CO_ADMIN_FEE` in constants. |
+| **TEAM_CONTACTS** | Contact info for the Sherman team displayed in the Homeowner's Guide. Defined in `constants/index.js` so staff changes don't require code edits. |
 
 **Deprecated terms — do not use:**
 
@@ -134,6 +139,8 @@ Services:     selectedServices        (object: key → boolean)
               servicePriceOverrides   (object: key → price string)
               serviceQuantities       (object: key → number)
               serviceDays             (object: key → number)
+              serviceDimensions      (object: key → { length, width, depth })
+              serviceDescriptions    (object: key → string)
               serviceNotes            (object: key → string)
               serviceCrewNotes        (object: key → string)
               publishedServiceNotes   (object: key → array of note objects)
@@ -152,7 +159,7 @@ Tracking:     scrubbCosts {}           (key → actual cost number)
               scrubbDocs  {}           (key → array of doc objects)
               scrubbHistory []
               permitEntries []
-Folders:      folders: { clayton_docs[], crew_files[], estimates[], permits[], change_orders[] }
+Folders:      folders: { clayton_docs[], crew_files[], estimates[], permits[], change_orders[], contracts[] }
 ```
 
 **Dynamic fields** — not in `emptyQuote()`, added at runtime:
@@ -582,18 +589,23 @@ Original quote / contract → CO #1a → (revise) → CO #1b → (new CO) → CO
 
 > **Depends on:** calcTotals() must have run first — generators consume computed totals, not raw fields. All generators also depend on the Quote Object Schema (field names) and Customer Object Schema (customer data joined at generation time).
 
-All 8 generators are in `src/utils/documentGeneration.js`.
+Each generator is a separate file in `src/utils/documents/`, re-exported via `src/utils/documents/index.js`.
 
-| # | Function | Purpose | Saved To Folder |
-|---|----------|---------|-----------------|
-| 1 | `generateCustomerQuote` | Customer-facing pricing document | `estimates` |
-| 2 | `generateQuoteHtml` | Internal admin quote summary | `estimates` |
-| 3 | `generateCrewWorkOrderDocument` | Crew job-site instructions | `crew_files` |
-| 4 | `generateJobSummaryReport` | Post-completion tracking | `estimates` |
-| 5 | `generatePierDiagramHtml` | Visual pier layout | `crew_files` |
-| 6 | `generateScopeOfWorkDocument` | Legal scope of work | `estimates` |
-| 7 | `generateChangeOrderDocument` | Change order delta | `change_orders` |
-| 8 | `generateAllowanceProgressDocument` | Live allowance/contingency status | `estimates` |
+| # | Function | File | Purpose | Saved To Folder |
+|---|----------|------|---------|-----------------|
+| 1 | `generateCustomerQuote` | `generateCustomerQuote.js` | Customer-facing pricing document | `estimates` |
+| 2 | `generateQuoteHtml` | `generateQuoteHtml.js` | Internal admin quote summary | `estimates` |
+| 3 | `generateCrewWorkOrderDocument` | `generateCrewWorkOrderDocument.js` | Crew job-site instructions | `crew_files` |
+| 4 | `generateJobSummaryReport` | `generateJobSummaryReport.js` | Post-completion tracking | `estimates` |
+| 5 | `generatePierDiagramHtml` | `generatePierDiagramHtml.js` | Visual pier layout | `crew_files` |
+| 6 | `generateScopeOfWorkDocument` | `generateScopeOfWorkDocument.js` | Legal scope of work | `estimates` |
+| 7 | `generateChangeOrderDocument` | `generateChangeOrderDocument.js` | Change order delta | `change_orders` |
+| 8 | `generateAllowanceProgressDocument` | `generateAllowanceProgressDocument.js` | Live allowance/contingency status | `estimates` |
+| 9 | `generateManufacturedHomeContract` | `generateModularHomeDocuments.js` | Formal contract agreement | `contracts` |
+| 10 | `generateFormaldehydeDisclosure` | `generateModularHomeDocuments.js` | MN Statute 325F.182 compliance | `contracts` |
+| 11 | `generateHomeownerGuide` | `generateModularHomeDocuments.js` | Customer onboarding & key acknowledgements | `contracts` |
+| 12 | `generateWarrantyStatement` | `generateModularHomeDocuments.js` | Warranty terms & claims process | `contracts` |
+| 13 | `generateAllowancesExplainerDocument` | `generateAllowancesExplainerDocument.js` | Allowance system explainer for customers | `estimates` |
 
 ### What Each Document Must Include
 
@@ -636,6 +648,37 @@ All 8 generators are in `src/utils/documentGeneration.js`.
 **generateJobSummaryReport**
 - All service details including quantities, days, costs
 - Dimensions, walkDoors, sewerType, wellDepth, patioSize, driveTime
+
+**generateManufacturedHomeContract**
+- Customer names (both parties), full site and mailing addresses
+- Home model, totalWithContingency as contract price
+- Contractor info: Sherman Homes, Lic. # BC532878
+- Manufacturer: Schult Homes by Clayton, Redwood Falls MN
+- 50% down payment, 90–120 working day estimate
+- $300 change order administrative fee reference
+- Warranty periods: Schult 1-year workmanship, 10-year structural
+
+**generateFormaldehydeDisclosure**
+- Customer names only (legal compliance document)
+- MN Statute 325F.182 notice with health warnings (min 13px font)
+- Factory-built material list (particleboard, OSB, plywood, etc.)
+
+**generateHomeownerGuide**
+- All selected services (to describe scope of work)
+- User contact info (fullName, officePhone, cellPhone, email)
+- 7 key acknowledgements: document review, factory vs site division, factory lock-in deadlines, site readiness, joint inspection, warranty limitations, inspection/acceptance
+
+**generateWarrantyStatement**
+- Customer names and site address
+- Manufacturer warranty terms (Schult 1-year & 10-year)
+- Sherman warranty terms (structural & workmanship)
+- Claims process and exclusions
+
+**generateAllowancesExplainerDocument**
+- Customer names
+- All selected allowance items with costs from totals.svc
+- totals.contingency amount
+- Plain-language explanation of how allowances and contingency work
 
 ---
 
@@ -688,7 +731,7 @@ When `foundationType` changes, these must all update in the same `calcTotals()` 
 
 ## File Folder Structure
 
-Each quote has 5 folders in `quote.folders`:
+Each quote has 6 folders in `quote.folders`:
 
 | Key | Purpose |
 |-----|---------|
@@ -697,6 +740,7 @@ Each quote has 5 folders in `quote.folders`:
 | `estimates` | Customer quotes, scope of work, allowance updates |
 | `permits` | Permit documentation, inspection reports |
 | `change_orders` | Change order documents |
+| `contracts` | Contract agreements, disclosures, homeowner guide, warranty |
 
 File object: `{ id, name, type, url, notes, addedBy, addedAt }`
 
@@ -789,7 +833,7 @@ electric_connection, concrete_skirting, plumbing, gas_propane
 6. Certificate of Occupancy (Permit Issuer)
 7. Surety Bond
 8. Plot Plan
-9. Manufactured Home Warranty
+9. Modular Home Warranty
 10. Certificate of Origin (Manufacturer)
 11. Lien Release
 

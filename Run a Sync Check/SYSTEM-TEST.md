@@ -634,7 +634,7 @@ These values must be IDENTICAL across all documents that show them:
 
 ## AA. Modular Home Contracts — Manufactured Home Documents
 
-**Files:** `src/utils/documents/generateManufacturedHomeDocuments.js`, `src/utils/folderSavers.js` (function `saveManufacturedHomeDocToContracts`), `src/App.jsx` — project files section (line ~1792)
+**Files:** `src/utils/documents/generateModularHomeDocuments.js`, `src/utils/folderSavers.js` (function `saveManufacturedHomeDocToContracts`), `src/App.jsx` — project files section (line ~1792)
 
 ### AA-1. UI Trigger
 - [ ] In project files view, opening the `contracts` folder shows a "Manufactured Home Documents" sub-section

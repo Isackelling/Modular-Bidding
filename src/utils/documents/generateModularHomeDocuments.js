@@ -3,7 +3,7 @@
  * All blank fields (___, [Name], etc.) are filled from system data when available.
  * Fields that are NOT in the original document layout are never added.
  */
-import { COMPANY, DocumentUtils, fmt } from './shared.js';
+import { COMPANY, DocumentUtils, fmt, PRICING, TEAM_CONTACTS } from './shared.js';
 
 const STYLES = `
   body { font-family: Arial, sans-serif; max-width: 850px; margin: 20px auto; padding: 16px 24px; color: #222; line-height: 1.5; font-size: 13px; }
@@ -227,7 +227,7 @@ City, State, Zip: ${field(d.cityStateZip)}</p>
 
 <h2>9. Change Orders</h2>
 <p>A Change Order is any change to the original Contract Documents, including changes to factory-ordered items (subject to Manufacturer approval per Section 4). All Change Orders must be agreed upon in writing, including all costs and additional time considerations. <strong>100% of each Change Order cost must be paid prior to the change being made.</strong></p>
-<p>A <strong>$300 Change Order administrative fee</strong> shall be added to the cost of each Change Order. An Allowance Overage Change Order shall not be subject to an administrative fee but is subject to additional costs (material, tax, labor, overhead, and profit at the rate of 15%).</p>
+<p>A <strong>$${PRICING.CO_ADMIN_FEE} Change Order administrative fee</strong> shall be added to the cost of each Change Order. An Allowance Overage Change Order shall not be subject to an administrative fee but is subject to additional costs (material, tax, labor, overhead, and profit at the rate of 15%).</p>
 
 <h2>10. Allowances</h2>
 <p>The Allowance Budget includes an Allowance Contingency line item. The Allowance Contingency is a reserve fund designed to cover cost overruns in any allowance category without requiring a Change Order. When any allowance line item exceeds its allocated amount, the overage shall be automatically deducted from the Allowance Contingency. Only after the Allowance Contingency has been completely depleted will an Allowance Overage Change Order be required.</p>
@@ -421,19 +421,19 @@ ${u.officePhone ? `Office: ${u.officePhone} | ` : ''}Cell: ${u.cellPhone || u.ph
 Email: ${u.email || blank(200)}</p>
 
 <p><strong>Project Specification Coordinator:</strong><br>
-Katie Ryan<br>
-Office: 763-465-1016 | Cell: 763-464-8390<br>
-Email: Katie@shermanbuildings.com</p>
+${TEAM_CONTACTS.specCoordinator.name}<br>
+Office: ${TEAM_CONTACTS.specCoordinator.office} | Cell: ${TEAM_CONTACTS.specCoordinator.cell}<br>
+Email: ${TEAM_CONTACTS.specCoordinator.email}</p>
 
 <p><strong>Project Construction Manager:</strong><br>
-Ryan Gunderson<br>
-Cell: 763-237-4252<br>
-Email: ryan@shermanbuildings.com</p>
+${TEAM_CONTACTS.constructionManager.name}<br>
+Cell: ${TEAM_CONTACTS.constructionManager.cell}<br>
+Email: ${TEAM_CONTACTS.constructionManager.email}</p>
 
 <p><strong>Manufacturer Sales Contact via Sherman:</strong><br>
-Isac Kelling<br>
-Cell: 320-515-1815<br>
-Email: isac@shermanbuildings.com</p>
+${TEAM_CONTACTS.mfgSalesContact.name}<br>
+Cell: ${TEAM_CONTACTS.mfgSalesContact.cell}<br>
+Email: ${TEAM_CONTACTS.mfgSalesContact.email}</p>
 
 <h2>How This Process Works</h2>
 <p>The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.</p>

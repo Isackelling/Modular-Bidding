@@ -15,7 +15,7 @@ import { FolderUtils } from './FolderUtils.js';
 import { NotificationSystem } from './NotificationSystem.js';
 import { genId, fmt } from './helpers.js';
 import { calcMaterials } from './calculations.js';
-import { generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './documents/generateManufacturedHomeDocuments.js';
+import { generateManufacturedHomeContract, generateFormaldehydeDisclosure, generateHomeownerGuide, generateWarrantyStatement } from './documents/generateModularHomeDocuments.js';
 
 /**
  * Create all folder saver functions with the given dependencies.
