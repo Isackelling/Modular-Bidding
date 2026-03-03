@@ -16,7 +16,8 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
       const name = DEFAULT_SERVICES[k].name;
       const description = getServiceDescription(k, quote);
       if (ALLOWANCE_ITEMS.includes(k)) {
-        allowances.push({ name, key: k, description });
+        const cost = totals.svc?.find(s => s.key === k)?.cost || 0;
+        allowances.push({ name, key: k, description, cost });
       } else if (HOME_OPTIONS.includes(k)) {
         homeSpecAdditions.push(name);
       } else {
@@ -29,7 +30,7 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
   const others = collectOtherServices(quote, totals);
   others.forEach(o => {
     if (o.key === 'sewer' || o.key === 'well') {
-      allowances.push({ name: o.nameWithDetail, key: o.key });
+      allowances.push({ name: o.nameWithDetail, key: o.key, cost: o.cost || 0 });
     } else if (o.key === 'landscaping' || o.key === 'deck') {
       services.push({ name: o.nameWithDetail, description: getServiceDescription(o.key, quote) });
     } else {
@@ -350,8 +351,8 @@ export const generateCustomerQuote = (quote, totals, homeModels) => {
     ${allowances.length > 0 ? `
     <div class="scope-section">
       <div class="scope-heading allowance">Allowances*</div>
-      <div class="scope-items">
-        ${allowances.map(a => `<div class="scope-item allowance">${a.name}${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</div>`).join('')}
+      <div class="scope-items" style="columns:1;">
+        ${allowances.map(a => `<div class="scope-item allowance">${a.name}<span style="float:right;font-weight:600;color:#856404;">${fmt(a.cost)}</span>${a.description ? `<span class="svc-desc">${a.description}</span>` : ''}</div>`).join('')}
       </div>
     </div>
     ` : ''}
