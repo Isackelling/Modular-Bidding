@@ -91,7 +91,10 @@ const emptyQuote = () => ({
     permits: [], change_orders: [], contracts: [],
   },
   scrubbCosts: {}, scrubbDocs: {}, scrubbHistory: [],
-  permitEntries: []
+  permitEntries: [],
+  manufacturerName: '', manufacturerAddress: '',
+  manufacturerHUD: '', manufacturerPhone: '',
+  manufacturerEmail: '', manufacturerContact: ''
 });
 
 const emptyCustomer = () => ({
@@ -3157,6 +3160,21 @@ function AppInner() {
               onDeleteCrewNote={handleDeleteCrewNote}
               userName={userName}
             />
+
+            {/* Manufacturer Info */}
+            {newQ.homeModel && newQ.homeModel !== 'NONE' && (
+              <div style={{ marginTop: 16, padding: 16, background: '#faf8f0', border: '1px solid #e0d8c0', borderRadius: 8 }}>
+                <label style={{ ...S.label, fontWeight: 700, color: '#2c5530', marginBottom: 12 }}>Manufacturer Info <span style={{ fontWeight: 400, fontSize: 11, color: '#888' }}>(auto-fills into contracts)</span></label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div><label style={{ ...S.label, fontSize: 11 }}>Manufacturer Name</label><input style={S.input} value={newQ.manufacturerName || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerName: e.target.value }))} placeholder="e.g. Schult Homes by Clayton" /></div>
+                  <div><label style={{ ...S.label, fontSize: 11 }}>Address</label><input style={S.input} value={newQ.manufacturerAddress || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerAddress: e.target.value }))} placeholder="e.g. Redwood Falls, MN" /></div>
+                  <div><label style={{ ...S.label, fontSize: 11 }}>HUD Cert / License No.</label><input style={S.input} value={newQ.manufacturerHUD || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerHUD: e.target.value }))} placeholder="" /></div>
+                  <div><label style={{ ...S.label, fontSize: 11 }}>Warranty Contact Name</label><input style={S.input} value={newQ.manufacturerContact || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerContact: e.target.value }))} placeholder="" /></div>
+                  <div><label style={{ ...S.label, fontSize: 11 }}>Phone / Website</label><input style={S.input} value={newQ.manufacturerPhone || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerPhone: e.target.value }))} placeholder="" /></div>
+                  <div><label style={{ ...S.label, fontSize: 11 }}>Email / Website</label><input style={S.input} value={newQ.manufacturerEmail || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerEmail: e.target.value }))} placeholder="" /></div>
+                </div>
+              </div>
+            )}
             </>}
           </div>
 

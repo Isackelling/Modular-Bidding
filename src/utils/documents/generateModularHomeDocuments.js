@@ -120,6 +120,12 @@ const prep = (quote, customer, totals) => {
     homeType:      q.singleDouble === 'Double' ? 'Double-Wide' : 'Single-Wide',
     dimensions:    (q.houseWidth && q.houseLength) ? `${q.houseWidth}' × ${q.houseLength}'` : '',
     foundationType: q.foundationType || '',
+    mfgName:       q.manufacturerName || '',
+    mfgAddress:    q.manufacturerAddress || '',
+    mfgHUD:        q.manufacturerHUD || '',
+    mfgContact:    q.manufacturerContact || '',
+    mfgPhone:      q.manufacturerPhone || '',
+    mfgEmail:      q.manufacturerEmail || '',
   };
 };
 
@@ -221,9 +227,9 @@ Lic. # BC532878</p>
 
 <p><strong>And The Manufacturer (Independent Third Party):</strong><br>
 <em>(The manufacturer is an independent third-party entity that constructs the home unit off-site in a factory. Sherman Homes is not an agent, representative, or partner of the Manufacturer. Sherman Homes does not control, direct, or have authority over the Manufacturer's operations, business practices, warranties, or obligations.)</em><br>
-Name: ${blank(200)}<br>
-Address: ${blank(200)}<br>
-HUD Certification / License No.: ${blank(200)}</p>
+Name: ${d.mfgName ? field(d.mfgName) : blank(200)}<br>
+Address: ${d.mfgAddress ? field(d.mfgAddress) : blank(200)}<br>
+HUD Certification / License No.: ${d.mfgHUD ? field(d.mfgHUD) : blank(200)}</p>
 
 <p><strong>For The Project:</strong><br>
 Home Model: ${field(d.homeModel)} &nbsp; Type: ${field(d.homeType)} &nbsp; Dimensions: ${field(d.dimensions)}<br>
@@ -563,8 +569,8 @@ Email: ${TEAM_CONTACTS.constructionManager.email}</p>
 
 <p><strong>Manufacturer Contact</strong> <em>(The Manufacturer is an independent third-party entity; Sherman Homes is not a representative of the Manufacturer):</em><br>
 Contact the Manufacturer directly for questions about factory-built components, specifications, and warranties.<br>
-Manufacturer Name: ${blank(200)}<br>
-Manufacturer Phone / Website: ${blank(200)}</p>
+Manufacturer Name: ${d.mfgName ? field(d.mfgName) : blank(200)}<br>
+Manufacturer Phone / Website: ${d.mfgPhone ? field(d.mfgPhone) : blank(200)}</p>
 
 <h2>How This Process Works</h2>
 <p>The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.</p>
@@ -820,11 +826,11 @@ ${printBar}
 
 <p><strong>Manufacturer Contact Information</strong> <em>(provided for Owner convenience only &mdash; Sherman Homes does not guarantee the accuracy of this information as the Manufacturer may update it at any time):</em></p>
 <table>
-  <tr><td>Manufacturer Name</td><td>${blank(240)}</td></tr>
-  <tr><td>Address</td><td>${blank(240)}</td></tr>
-  <tr><td>Warranty Contact</td><td>${blank(240)}</td></tr>
-  <tr><td>Warranty Phone</td><td>${blank(240)}</td></tr>
-  <tr><td>Warranty Email / Website</td><td>${blank(240)}</td></tr>
+  <tr><td>Manufacturer Name</td><td>${d.mfgName ? field(d.mfgName) : blank(240)}</td></tr>
+  <tr><td>Address</td><td>${d.mfgAddress ? field(d.mfgAddress) : blank(240)}</td></tr>
+  <tr><td>Warranty Contact</td><td>${d.mfgContact ? field(d.mfgContact) : blank(240)}</td></tr>
+  <tr><td>Warranty Phone</td><td>${d.mfgPhone ? field(d.mfgPhone) : blank(240)}</td></tr>
+  <tr><td>Warranty Email / Website</td><td>${d.mfgEmail ? field(d.mfgEmail) : blank(240)}</td></tr>
 </table>
 
 <p><strong>Sherman Homes does not assume any warranty obligation for factory-built components or the Manufacturer's products.</strong> Sherman Homes has no authority over, knowledge of, or control over the Manufacturer's warranty program, claims process, or response to claims. The Owner is solely responsible for pursuing any warranty claims directly with the Manufacturer.</p>
