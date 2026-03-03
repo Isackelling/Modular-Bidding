@@ -34,6 +34,7 @@ const STYLES = `
   .checklist-table td:first-child { width: 85%; }
   .checklist-table td:last-child { width: 15%; text-align: center; font-size: 16px; }
   .generated-note { margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 11px; color: #999; }
+  .ack-block { margin: 14px 0; padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
   .editable { cursor: text; background: transparent; transition: background 0.15s; min-height: 1.1em; }
   .editable:hover { background: #fffde7; border-radius: 3px; }
   .editable:focus { outline: 2px solid #2c5530; background: #f0fff0; border-radius: 3px; }
@@ -41,7 +42,35 @@ const STYLES = `
   .print-bar button { background: #2c5530; color: #fff; border: none; padding: 9px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
   .print-bar button:hover { background: #1b3a20; }
   .print-bar .hint { font-size: 12px; color: #444; background: #fff; padding: 5px 10px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
-  @media print { body { margin: 16px; } .header-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .print-bar { display: none !important; } }
+  @media print {
+    body { margin: 0; padding: 10px 16px; font-size: 12px; line-height: 1.35; }
+    .header-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: -10px -16px 12px; padding: 8px 16px; }
+    .header-bar h1 { font-size: 16px; }
+    .header-bar .sub { font-size: 11px; }
+    .print-bar { display: none !important; }
+    h1 { font-size: 16px; margin-bottom: 3px; padding-bottom: 4px; }
+    h2 { font-size: 14px; margin-top: 12px; margin-bottom: 3px; padding-bottom: 3px; }
+    h3 { font-size: 13px; margin-top: 8px; margin-bottom: 3px; }
+    p { margin: 4px 0; }
+    th, td { padding: 3px 8px; font-size: 11px; }
+    blockquote { padding: 6px 10px; margin: 6px 0; font-size: 12px; }
+    ul, ol { margin: 4px 0 4px 18px; }
+    li { margin-bottom: 2px; font-size: 12px; }
+    .notice-box { padding: 8px 10px; margin: 6px 0; font-size: 12px; }
+    .important-notice { padding: 10px 12px; margin: 10px 0; }
+    .sig-section { margin-top: 14px; padding-top: 10px; }
+    .sig-block { margin-bottom: 8px; }
+    .generated-note { margin-top: 12px; padding-top: 6px; }
+    /* Page-break control */
+    table { page-break-inside: avoid; }
+    .notice-box, blockquote, .important-notice { page-break-inside: avoid; }
+    .sig-section { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    /* Acknowledgement blocks — keep each one together, tighten for print */
+    .ack-block { page-break-inside: avoid; margin: 8px 0; padding: 8px 10px; }
+    .ack-block p { font-size: 11.5px; margin: 0 0 4px; }
+    .initial-row { margin: 4px 0; }
+  }
 `;
 
 // If a value is present → show it bold; otherwise show a blank underline with dim placeholder text
@@ -358,7 +387,7 @@ export const generateHomeownerGuide = (quote, customer, totals, user) => {
   const u = user || {};
 
   const ack = (num, title, text) => `
-<div style="margin:14px 0;padding:12px;border:1px solid #ddd;border-radius:4px">
+<div class="ack-block">
   <p style="margin:0 0 8px"><strong>${num}. ${title}</strong></p>
   <p style="margin:0 0 10px;font-size:13px">${text}</p>
   <div class="initial-row">
