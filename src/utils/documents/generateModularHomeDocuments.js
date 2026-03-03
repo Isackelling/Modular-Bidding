@@ -299,6 +299,7 @@ ${siteServices.length > 0 ? `
 
 <h2>7. Duties of the Contractor</h2>
 <p>All site work and installation shall be in accordance with the Plans and the Specification Booklet, subject to Plan and Specification approval by all authorities with jurisdiction over the project. All site work and installation shall be completed in a workmanlike manner and shall comply with all applicable MN State Building Code and local codes. Factory-built portions of the home are the sole responsibility of the Manufacturer, an independent third-party entity. Sherman Homes makes no representations regarding the Manufacturer's compliance with federal HUD Manufactured Home Construction and Safety Standards or other applicable standards.</p>
+<p>Contractor holds a valid Manufactured Home Installer License as required by MN Statute 327B.</p>
 <p>Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense. Contractor will remove all construction debris and leave the project in a broom-clean condition.</p>
 
 <h2>8. Duties of the Owner</h2>
@@ -311,6 +312,7 @@ ${siteServices.length > 0 ? `
   <li><strong>Staging area:</strong> minimum 50' × 100' clear area adjacent to the foundation for crane setup — site clear of debris, vehicles, and obstacles</li>
 </ul>
 <p>Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order. Installation cannot proceed in high winds, heavy rain, or icy conditions; weather-related delays are not the responsibility of Sherman Homes.</p>
+<p><strong>Owner is responsible for snow plowing the driveway and construction site</strong> during cold-weather months to maintain site access for construction vehicles and personnel.</p>
 <p><strong>No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.</strong></p>
 
 <h2>9. Change Orders</h2>
@@ -354,7 +356,9 @@ ${siteServices.length > 0 ? `
 <p><strong>Sherman Homes is not a representative of the Manufacturer and does not warrant, guarantee, or make any representations regarding the Manufacturer's warranty coverage, terms, exclusions, or claims process.</strong> The Manufacturer is an independent third-party entity whose warranty obligations are governed solely by the Manufacturer's own agreements and policies, which may change at any time without notice to Sherman Homes. The Owner should contact the Manufacturer directly to obtain complete and current information about the Manufacturer's warranty. Warranty documentation may be provided by the Manufacturer upon delivery of the home. To make a warranty claim for factory-built components, the Owner must contact the Manufacturer directly. Sherman Homes will make reasonable efforts to assist the Owner in navigating the Manufacturer's warranty process, but is not financially responsible for factory defects and has no authority over the Manufacturer's warranty decisions or response.</p>
 <h3>17.3 Warranty Date</h3>
 <p>The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy — but not earlier than the date the home unit is set on the foundation and site work commences.</p>
-<h3>17.4 Warranty Claim Deadline</h3>
+<h3>17.4 HUD Preemption</h3>
+<p>If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions of the home. Owner is encouraged to consult a licensed Minnesota attorney to determine which warranty rules govern the factory-built portions of a HUD-code home.</p>
+<h3>17.5 Warranty Claim Deadline</h3>
 <p>As required by MN Stat. § 327A, Owner must provide written notice of any warranty claim to Sherman Homes within <strong>6 months</strong> of discovering the defect.</p>
 <blockquote><strong>Note:</strong> Read and sign the Warranty Statement.</blockquote>
 
@@ -606,8 +610,6 @@ Manufacturer Phone / Website: ${blank(200)}</p>
   <table>
     <tr><th>Acknowledgement</th>${initCols}</tr>
     ${ackRow(1, 'I/We have reviewed the Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer\'s Quote and Floor Plan. These documents define the scope, specifications, and pricing for this project.')}
-    ${ackRow(2, 'Only changes discussed directly with our Sherman Team project contacts (listed above) will be authorized. This ensures all modifications are properly documented and priced.')}
-    ${ackRow(3, 'The final price is subject to unknown conditions and enhancements as construction progresses. I/We accept responsibility for costs associated with changes or additions we request, including factory change fees.')}
   </table>
 </div>
 
@@ -615,8 +617,9 @@ Manufacturer Phone / Website: ${blank(200)}</p>
   <div class="ack-group-title">Factory &amp; Order</div>
   <table>
     <tr><th>Acknowledgement</th>${initCols}</tr>
-    ${ackRow(4, 'Once the factory order is placed, changes to factory-built components (floor plan, structural options, cabinetry, flooring, fixtures) may not be possible. Post-order changes the Manufacturer permits will be treated as a Change Order and are my/our sole financial responsibility, including restocking fees, factory change fees, or production delay costs.')}
-    ${ackRow(5, 'Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.')}
+    ${ackRow(2, 'Once the factory order is placed, changes to factory-built components (floor plan, structural options, cabinetry, flooring, fixtures) may not be possible. Post-order changes the Manufacturer permits will be treated as a Change Order and are my/our sole financial responsibility, including restocking fees, factory change fees, or production delay costs.')}
+    ${ackRow(3, 'Only changes discussed directly with our Sherman Team project contacts (listed above) will be authorized. This ensures all modifications are properly documented and priced.')}
+    ${ackRow(4, 'The final price is subject to unknown conditions and enhancements as construction progresses. I/We accept responsibility for costs associated with changes or additions we request, including factory change fees.')}
   </table>
 </div>
 
@@ -624,8 +627,9 @@ Manufacturer Phone / Website: ${blank(200)}</p>
   <div class="ack-group-title">Delivery &amp; Site</div>
   <table>
     <tr><th>Acknowledgement</th>${initCols}</tr>
-    ${ackRow(6, 'The project site must be fully ready on or before the confirmed delivery date — foundation complete and inspected, driveway and site access clear for transport trucks and crane equipment, all required grading complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.')}
-    ${ackRow(7, 'A joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.')}
+    ${ackRow(5, 'The project site must be fully ready on or before the confirmed delivery date — foundation complete and inspected, driveway and site access clear for transport trucks and crane equipment, all required grading complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.')}
+    ${ackRow(6, 'A joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.')}
+    ${ackRow(7, 'Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.')}
     ${ackRow(8, 'If we wish to hire additional contractors, we must inform Sherman Homes in advance. No third-party contractor work is permitted during the delivery and installation phase without prior written approval from Sherman Homes.')}
     ${ackRow(9, 'If we use subcontractors different from Sherman Homes\' standard team, Sherman Homes does not accept responsibility for their work quality, warranty, or performance. We should obtain written contracts and warranties directly from any subcontractors we select.')}
   </table>
@@ -691,6 +695,18 @@ Manufacturer Phone / Website: ${blank(200)}</p>
   <tr><td>Factory flooring selections made</td><td>☐</td></tr>
   <tr><td>Fireplace (if factory option) confirmed</td><td>☐</td></tr>
   <tr><td>Factory Order Lock-In Date confirmed in writing</td><td>☐</td></tr>
+</table>
+
+<h3>Site Selections &amp; Purchases <em style="font-weight:400;font-size:13px">(Sherman's scope — coordinate with your Sherman Team)</em></h3>
+<table>
+  <tr><th>Item</th><th>Timing</th></tr>
+  <tr><td>Foundation type confirmed</td><td>During site planning</td></tr>
+  <tr><td>Sewer connection type selected</td><td>Before site work begins</td></tr>
+  <tr><td>Well drilling coordinated (if applicable)</td><td>Before site work begins</td></tr>
+  <tr><td>Gravel driveway specifications confirmed</td><td>Before delivery</td></tr>
+  <tr><td>Sand pad preparation confirmed</td><td>Before delivery</td></tr>
+  <tr><td>Landscaping selections made (if applicable)</td><td>After site work is complete</td></tr>
+  <tr><td>Utility accounts opened (electric, gas, water)</td><td>Before foundation work</td></tr>
 </table>
 
 <h3>Project Milestones</h3>
@@ -856,27 +872,33 @@ ${printBar}
 <div class="warranty-group">
 <h2>G. Warranty Exclusions</h2>
 <p>The liability of Sherman Homes under this warranty is limited to site work and installation defects and does not extend to the following:</p>
-<ul>
-  <li>Loss or damage <strong>not reported in writing within six months</strong> after discovery</li>
-  <li>Loss or damage caused by <strong>defects in design, materials, or installation supplied or directed by the Owner</strong></li>
-  <li>Secondary loss or damage such as personal injury or property damage</li>
-  <li>Loss or damage from <strong>normal wear and tear</strong> or normal shrinkage within building standard tolerances</li>
-  <li>Loss or damage from dampness or condensation due to insufficient ventilation after occupancy</li>
-  <li>Loss or damage from <strong>negligence, improper maintenance, or alteration</strong> by parties other than Sherman Homes</li>
-  <li>Loss or damage from <strong>Acts of God</strong>, including fire, explosion, smoke, water escape, windstorm, hail, lightning, flood, and earthquake — except where caused by failure to comply with building standards</li>
-  <li>Loss or damage due to <strong>soil conditions on Owner-supplied land</strong> obtained independently of Sherman Homes</li>
-  <li><strong>Defects in manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility</strong> &mdash; the Manufacturer is an independent third-party entity; contact the Manufacturer directly regarding their warranty obligations</li>
-</ul>
+<p><strong>(a)</strong> Loss or damage <strong>not reported in writing within six months</strong> after discovery</p>
+<p><strong>(b)</strong> Loss or damage caused by <strong>defects in design, materials, or installation supplied or directed by the Owner</strong></p>
+<p><strong>(c)</strong> Secondary loss or damage such as personal injury or property damage</p>
+<p><strong>(d)</strong> Loss or damage from <strong>normal wear and tear</strong></p>
+<p><strong>(e)</strong> Normal shrinkage within building standard tolerances</p>
+<p><strong>(f)</strong> Loss or damage from dampness or condensation due to insufficient ventilation after occupancy</p>
+<p><strong>(g)</strong> Loss or damage from <strong>negligence, improper maintenance, or alteration</strong> by parties other than Sherman Homes</p>
+<p><strong>(h)</strong> Loss or damage from changes in site grading performed by parties other than Sherman Homes</p>
+<p><strong>(i)</strong> Loss or damage from landscaping or insect damage</p>
+<p><strong>(j)</strong> Loss or damage resulting from failure to properly maintain the home</p>
+<p><strong>(k)</strong> Loss or damage resulting from failure to take timely action to minimize damage after discovery of a defect</p>
+<p><strong>(l)</strong> Loss or damage to a home no longer used primarily as a residence</p>
+<p><strong>(m)</strong> Loss or damage from <strong>Acts of God</strong>, including fire, explosion, smoke, water escape, windstorm, hail, lightning, falling trees, aircraft, vehicles, flood, and earthquake &mdash; except where caused by failure to comply with building standards</p>
+<p><strong>(n)</strong> Loss or damage from soil movement that is compensated by legislation or covered by insurance</p>
+<p><strong>(o)</strong> Loss or damage due to <strong>soil conditions on Owner-supplied land</strong> obtained independently of Sherman Homes</p>
+<p><strong>(p)</strong> <strong>Defects in manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility</strong> &mdash; the Manufacturer is an independent third-party entity; contact the Manufacturer directly regarding their warranty obligations</p>
 </div>
 
 <div class="warranty-group">
 <h2>H. Waiver and Modification</h2>
-<p>The warranties provided under Minnesota Statutes Chapter 327A cannot be waived or modified except as provided by § 327A.04. Any modification must be made by a written instrument, printed in boldface type of minimum 10-point size, signed by the Owner, describing the warranty involved, the Owner's consent, and the terms of the modified agreement.</p>
+<p>The warranties provided under Minnesota Statutes Chapter 327A cannot be waived or modified except as provided by § 327A.04. Any modification must be made by a written instrument, printed in boldface type of minimum 10-point size, signed by the Owner, describing the warranty involved, the Owner's consent, and the terms of the modified agreement, with substitute express warranties offering substantially the same protections.</p>
 
 <h2>I. Minnesota Statutes Chapter 327A — Reference</h2>
 <p>The complete text of Minnesota Statutes Chapter 327A (New Home Warranties) is available at: <strong>https://www.revisor.mn.gov/statutes/cite/327A</strong></p>
 <p>A printed copy of Chapter 327A will be provided to the Owner upon request. The Owner's rights under Chapter 327A are fully preserved and are not limited by any provision of this document.</p>
 <p>Key provisions: § 327A.01 (Definitions) | § 327A.02 (Statutory Warranties) | § 327A.03 (Exclusions) | § 327A.04 (Waiver) | § 327A.05 (Remedies) | § 327A.051 (Dispute Resolution) | § 327A.08 (Limitations)</p>
+<p><strong>HUD Preemption Note:</strong> If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions of the home. Federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280) may govern the Manufacturer's obligations for the factory-built components. Owner is encouraged to consult a licensed Minnesota attorney to determine which warranty rules govern the factory-built portions of a HUD-code home.</p>
 </div>
 
 <div class="sig-section warranty-group">

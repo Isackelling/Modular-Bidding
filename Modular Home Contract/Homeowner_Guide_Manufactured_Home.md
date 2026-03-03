@@ -101,31 +101,31 @@ Please read each statement carefully and initial to confirm your understanding.
 
 _______ Initial _______ Initial
 
-**2.** Only changes discussed directly with our Sherman Team project contacts (listed above) will be authorized. This ensures all modifications are properly documented and priced.
-
-_______ Initial _______ Initial
-
-**3.** The final price is subject to unknown conditions and enhancements as construction progresses. I/We accept responsibility for costs associated with changes or additions we request, including factory change fees.
-
-_______ Initial _______ Initial
-
 ### Factory & Order
 
-**4.** Once the factory order is placed, changes to factory-built components (floor plan, structural options, cabinetry, flooring, fixtures) may not be possible. Post-order changes the Manufacturer permits will be treated as a Change Order and are my/our sole financial responsibility, including restocking fees, factory change fees, or production delay costs.
+**2.** Once the factory order is placed, changes to factory-built components (floor plan, structural options, cabinetry, flooring, fixtures) may not be possible. Post-order changes the Manufacturer permits will be treated as a Change Order and are my/our sole financial responsibility, including restocking fees, factory change fees, or production delay costs.
 
 _______ Initial _______ Initial
 
-**5.** Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.
+**3.** Only changes discussed directly with our Sherman Team project contacts (listed above) will be authorized. This ensures all modifications are properly documented and priced.
+
+_______ Initial _______ Initial
+
+**4.** The final price is subject to unknown conditions and enhancements as construction progresses. I/We accept responsibility for costs associated with changes or additions we request, including factory change fees.
 
 _______ Initial _______ Initial
 
 ### Delivery & Site
 
-**6.** The project site must be fully ready on or before the confirmed delivery date — foundation complete and inspected, driveway and site access clear for transport trucks and crane equipment, all required grading complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.
+**5.** The project site must be fully ready on or before the confirmed delivery date — foundation complete and inspected, driveway and site access clear for transport trucks and crane equipment, all required grading complete. Delays caused by site unreadiness are my/our financial responsibility and will be treated as a Change Order.
 
 _______ Initial _______ Initial
 
-**7.** A joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.
+**6.** A joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.
+
+_______ Initial _______ Initial
+
+**7.** Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.
 
 _______ Initial _______ Initial
 
@@ -233,6 +233,19 @@ Delivery day is one of the most exciting and logistically complex days of your p
 | Factory flooring selections made | ☐ |
 | Fireplace (if factory option) confirmed | ☐ |
 | Factory Order Lock-In Date confirmed in writing | ☐ |
+
+### Site Selections & Purchases
+*(Sherman's scope — coordinate with your Sherman Team)*
+
+| Item | Timing |
+|---|---|
+| Foundation type confirmed | During site planning |
+| Sewer connection type selected | Before site work begins |
+| Well drilling coordinated (if applicable) | Before site work begins |
+| Gravel driveway specifications confirmed | Before delivery |
+| Sand pad preparation confirmed | Before delivery |
+| Landscaping selections made (if applicable) | After site work is complete |
+| Utility accounts opened (electric, gas, water) | Before foundation work |
 
 ### Project Milestones
 

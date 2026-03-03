@@ -121,21 +121,43 @@ If it is not clear whether a defect originated in factory construction or site i
 
 The liability of Sherman Homes under this warranty is limited to site work and installation defects and does not extend to the following:
 
-- Loss or damage **not reported in writing within six months** after discovery
-- Loss or damage caused by **defects in design, materials, or installation supplied or directed by the Owner**
-- Secondary loss or damage such as personal injury or property damage
-- Loss or damage from **normal wear and tear** or normal shrinkage within building standard tolerances
-- Loss or damage from dampness or condensation due to insufficient ventilation after occupancy
-- Loss or damage from **negligence, improper maintenance, or alteration** by parties other than Sherman Homes
-- Loss or damage from **Acts of God**, including fire, explosion, smoke, water escape, windstorm, hail, lightning, flood, and earthquake — except where caused by failure to comply with building standards
-- Loss or damage due to **soil conditions on Owner-supplied land** obtained independently of Sherman Homes
-- **Defects in manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility** — the Manufacturer is an independent third-party entity; contact the Manufacturer directly regarding their warranty obligations
+**(a)** Loss or damage **not reported in writing within six months** after discovery
+
+**(b)** Loss or damage caused by **defects in design, materials, or installation supplied or directed by the Owner**
+
+**(c)** Secondary loss or damage such as personal injury or property damage
+
+**(d)** Loss or damage from **normal wear and tear**
+
+**(e)** Normal shrinkage within building standard tolerances
+
+**(f)** Loss or damage from dampness or condensation due to insufficient ventilation after occupancy
+
+**(g)** Loss or damage from **negligence, improper maintenance, or alteration** by parties other than Sherman Homes
+
+**(h)** Loss or damage from changes in site grading performed by parties other than Sherman Homes
+
+**(i)** Loss or damage from landscaping or insect damage
+
+**(j)** Loss or damage resulting from failure to properly maintain the home
+
+**(k)** Loss or damage resulting from failure to take timely action to minimize damage after discovery of a defect
+
+**(l)** Loss or damage to a home no longer used primarily as a residence
+
+**(m)** Loss or damage from **Acts of God**, including fire, explosion, smoke, water escape, windstorm, hail, lightning, falling trees, aircraft, vehicles, flood, and earthquake — except where caused by failure to comply with building standards
+
+**(n)** Loss or damage from soil movement that is compensated by legislation or covered by insurance
+
+**(o)** Loss or damage due to **soil conditions on Owner-supplied land** obtained independently of Sherman Homes
+
+**(p)** **Defects in manufacturer-supplied components, factory workmanship, or materials originating in the manufacturing facility** — the Manufacturer is an independent third-party entity; contact the Manufacturer directly regarding their warranty obligations
 
 ---
 
 ## H. Waiver and Modification
 
-The warranties provided under Minnesota Statutes Chapter 327A cannot be waived or modified except as provided by § 327A.04. Any modification must be made by a written instrument, printed in boldface type of minimum 10-point size, signed by the Owner, describing the warranty involved, the Owner's consent, and the terms of the modified agreement.
+The warranties provided under Minnesota Statutes Chapter 327A cannot be waived or modified except as provided by § 327A.04. Any modification must be made by a written instrument, printed in boldface type of minimum 10-point size, signed by the Owner, describing the warranty involved, the Owner's consent, and the terms of the modified agreement, with substitute express warranties offering substantially the same protections.
 
 ---
 
@@ -148,6 +170,8 @@ The complete text of Minnesota Statutes Chapter 327A (New Home Warranties), whic
 A printed copy of Chapter 327A will be provided to the Owner upon request. The Owner's rights under Chapter 327A are fully preserved and are not limited by any provision of this document.
 
 Key provisions: § 327A.01 (Definitions) | § 327A.02 (Statutory Warranties) | § 327A.03 (Exclusions) | § 327A.04 (Waiver) | § 327A.05 (Remedies) | § 327A.051 (Dispute Resolution) | § 327A.08 (Limitations)
+
+**HUD Preemption Note:** If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions of the home. Federal HUD Manufactured Home Construction and Safety Standards (24 CFR Part 3280) may govern the Manufacturer's obligations for the factory-built components. Owner is encouraged to consult a licensed Minnesota attorney to determine which warranty rules govern the factory-built portions of a HUD-code home.
 
 ---
 

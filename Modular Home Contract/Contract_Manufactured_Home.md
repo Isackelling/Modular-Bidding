@@ -131,6 +131,8 @@ All site work and installation shall be in accordance with the Plans and the Spe
 
 All site work and installation shall be completed in a workmanlike manner and shall comply with all applicable MN State Building Code and local codes. Factory-built portions of the home are the sole responsibility of the Manufacturer, an independent third-party entity. Sherman Homes makes no representations regarding the Manufacturer's compliance with federal HUD Manufactured Home Construction and Safety Standards or other applicable standards.
 
+Contractor holds a valid Manufactured Home Installer License as required by MN Statute 327B.
+
 Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense. Contractor will remove all construction debris and leave the project in a broom-clean condition.
 
 ---
@@ -151,6 +153,8 @@ Owner is responsible for all utility account setups, fees, permits, installation
 - **Staging area:** minimum 50' × 100' clear area adjacent to the foundation for crane setup — site clear of debris, vehicles, and obstacles
 
 Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order. Installation cannot proceed in high winds, heavy rain, or icy conditions; weather-related delays are not the responsibility of Sherman Homes.
+
+**Owner is responsible for snow plowing the driveway and construction site** during cold-weather months to maintain site access for construction vehicles and personnel.
 
 **No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.**
 
@@ -252,7 +256,11 @@ To make a warranty claim for factory-built components, the Owner must contact th
 
 The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy — but not earlier than the date the home unit is set on the foundation and site work commences.
 
-### 17.4 Warranty Claim Deadline
+### 17.4 HUD Preemption
+
+If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions of the home. Owner is encouraged to consult a licensed Minnesota attorney to determine which warranty rules govern the factory-built portions of a HUD-code home.
+
+### 17.5 Warranty Claim Deadline
 
 As required by MN Stat. § 327A, Owner must provide written notice of any warranty claim to Sherman Homes within **6 months** of discovering the defect.
 
