@@ -122,7 +122,6 @@ const prep = (quote, customer, totals) => {
     foundationType: q.foundationType || '',
     mfgName:       q.manufacturerName || '',
     mfgAddress:    q.manufacturerAddress || '',
-    mfgHUD:        q.manufacturerHUD || '',
     mfgContact:    q.manufacturerContact || '',
     mfgPhone:      q.manufacturerPhone || '',
     mfgEmail:      q.manufacturerEmail || '',
@@ -228,8 +227,7 @@ Lic. # BC532878</p>
 <p><strong>And The Manufacturer (Independent Third Party):</strong><br>
 <em>(The manufacturer is an independent third-party entity that constructs the home unit off-site in a factory. Sherman Homes is not an agent, representative, or partner of the Manufacturer. Sherman Homes does not control, direct, or have authority over the Manufacturer's operations, business practices, warranties, or obligations.)</em><br>
 Name: ${d.mfgName ? field(d.mfgName) : blank(200)}<br>
-Address: ${d.mfgAddress ? field(d.mfgAddress) : blank(200)}<br>
-HUD Certification / License No.: ${d.mfgHUD ? field(d.mfgHUD) : blank(200)}</p>
+Address: ${d.mfgAddress ? field(d.mfgAddress) : blank(200)}</p>
 
 <p><strong>For The Project:</strong><br>
 Home Model: ${field(d.homeModel)} &nbsp; Type: ${field(d.homeType)} &nbsp; Dimensions: ${field(d.dimensions)}<br>

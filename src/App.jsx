@@ -93,8 +93,8 @@ const emptyQuote = () => ({
   scrubbCosts: {}, scrubbDocs: {}, scrubbHistory: [],
   permitEntries: [],
   manufacturerName: '', manufacturerAddress: '',
-  manufacturerHUD: '', manufacturerPhone: '',
-  manufacturerEmail: '', manufacturerContact: ''
+  manufacturerPhone: '', manufacturerEmail: '',
+  manufacturerContact: ''
 });
 
 const emptyCustomer = () => ({
@@ -3168,7 +3168,6 @@ function AppInner() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div><label style={{ ...S.label, fontSize: 11 }}>Manufacturer Name</label><input style={S.input} value={newQ.manufacturerName || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerName: e.target.value }))} placeholder="e.g. Schult Homes by Clayton" /></div>
                   <div><label style={{ ...S.label, fontSize: 11 }}>Address</label><input style={S.input} value={newQ.manufacturerAddress || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerAddress: e.target.value }))} placeholder="e.g. Redwood Falls, MN" /></div>
-                  <div><label style={{ ...S.label, fontSize: 11 }}>HUD Cert / License No.</label><input style={S.input} value={newQ.manufacturerHUD || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerHUD: e.target.value }))} placeholder="" /></div>
                   <div><label style={{ ...S.label, fontSize: 11 }}>Warranty Contact Name</label><input style={S.input} value={newQ.manufacturerContact || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerContact: e.target.value }))} placeholder="" /></div>
                   <div><label style={{ ...S.label, fontSize: 11 }}>Phone / Website</label><input style={S.input} value={newQ.manufacturerPhone || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerPhone: e.target.value }))} placeholder="" /></div>
                   <div><label style={{ ...S.label, fontSize: 11 }}>Email / Website</label><input style={S.input} value={newQ.manufacturerEmail || ''} onChange={e => setNewQ(p => ({ ...p, manufacturerEmail: e.target.value }))} placeholder="" /></div>
