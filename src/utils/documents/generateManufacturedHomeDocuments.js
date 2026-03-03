@@ -443,66 +443,40 @@ ${ack(10, 'Seasonal Construction & Weather Delays', 'I/We understand that constr
 ${ack(11, 'Utility Costs During Construction', 'I/We understand that all utility bills accrued during construction (including but not limited to electric, gas, water, and sewer) are our responsibility and will be billed directly to us.')}
 ${ack(12, 'Insurance Requirements', 'I/We have reviewed and understand the insurance requirements detailed in Section 12 of our contract. Sherman Homes carries Workers Compensation, Liability, and Builder\'s Risk insurance covering the Contractor and its direct subcontractors during construction. I/We are required to maintain liability insurance on the property during construction and will acquire homeowners insurance immediately after drywall is hung.')}
 
-<h2>Your Selections &amp; Recommended Partners</h2>
-<blockquote><strong>IMPORTANT: Factory-Locked vs. Site Selections</strong><br>Before making any selection, confirm with your Sherman Team whether it is a factory-locked item (must be decided before the Factory Order Lock-In Date) or a site allowance item (follows Sherman's standard timeline). Making this distinction early prevents costly delays and change fees.</blockquote>
-<blockquote><strong>IMPORTANT: Monitor Your Allowances</strong><br>Throughout the selection process, keep track of your spending against the Allowance Budget. Regularly reviewing where you stand will help you make informed decisions and avoid surprises.</blockquote>
+<h2>Your Manufactured Home Selections</h2>
+<blockquote><strong>IMPORTANT:</strong> Selections fall into two categories: <strong>Factory-Locked</strong> (must be finalized before the Factory Order Lock-In Date — cannot be changed once the order is placed) and <strong>Site Allowance</strong> (follows Sherman's standard timeline). Confirm which category each item falls into with your Sherman Team. Monitor your spending against the Allowance Budget throughout the process.</blockquote>
+<p>For all factory-locked items, refer to your <strong>Manufacturer's Quote and Specification Booklet</strong> for base-package inclusions and available upgrades. Work with your Manufacturer Sales Contact to confirm selections and with your Sherman Team for any on-site upgrades.</p>
 
-<h3>Home Model &amp; Floor Plan</h3>
-<p><em>Select &amp; Finalize: Before Factory Order Lock-In Date — Type: Factory-Locked</em></p>
-<p>Your home model, floor plan, and all structural options must be finalized before the factory order is placed. Work directly with your Manufacturer Sales Contact and Sherman Team to confirm the floor plan, room dimensions, exterior style, roofline, and any structural upgrades. <strong>Once the order is placed, these cannot be changed.</strong></p>
+<h3>Factory-Locked Selections <em style="font-weight:400">(Finalize before Factory Order Lock-In Date)</em></h3>
+<table>
+  <tr><th style="width:35%">Item</th><th>Notes</th></tr>
+  <tr><td><strong>Home Model &amp; Floor Plan</strong></td><td>Floor plan, room dimensions, exterior style, roofline, and structural upgrades. <strong>Cannot be changed once ordered.</strong></td></tr>
+  <tr><td><strong>Cabinetry &amp; Finishes</strong></td><td>Factory-installed cabinetry and interior finishes. Inform your Sherman Team before the order if selecting on-site cabinetry upgrades instead.</td></tr>
+  <tr><td><strong>Plumbing Fixtures</strong></td><td>Factory-plumbed fixtures must be selected before order. Site-connected items can be selected before site work begins.</td></tr>
+  <tr><td><strong>Fireplace</strong></td><td>Confirm with your Sherman Team whether the fireplace is a factory option or site-installed.</td></tr>
+</table>
 
-<h3>Factory-Installed Cabinetry &amp; Finishes</h3>
-<p><em>Select: Before Factory Order Lock-In Date — Type: Factory-Locked</em></p>
-<p>Confirm with your Manufacturer Sales Contact exactly which items are included in your home's base package and what upgrade options are available. If you are selecting upgraded on-site cabinetry through Sherman's allowance process, inform your Sherman Team before the order is placed.</p>
+<h3>Site Selections <em style="font-weight:400">(Select before site finish work begins)</em></h3>
+<p>The items below are typically included in the manufacturer's base package. If on-site upgrades are part of your project, your Sherman Team will coordinate selections.</p>
+<table>
+  <tr><th style="width:35%">Item</th><th>Notes</th></tr>
+  <tr><td><strong>Cabinetry, Countertops, Flooring, Tile</strong></td><td>On-site upgrades or additions beyond what the factory provides.</td></tr>
+  <tr><td><strong>Paint Colors</strong></td><td>Our painter uses Sherwin Williams but can color-match to other brands.</td></tr>
+</table>
 
-<h3>Plumbing Fixtures</h3>
-<p><em>Select: Before Factory Order Lock-In Date (factory-plumbed items) | Before Site Work Begins (site-connected items)</em></p>
-<p>Plumbing fixtures are typically included in the manufacturer's base package or available as factory upgrades. Confirm with your Manufacturer Sales Contact which fixtures are included and what upgrade options are available. For any site-connected plumbing items, coordinate with your Sherman Team.</p>
-<p><em>Refer to your Manufacturer's Quote and Specification Booklet for available selections.</em></p>
+<h3>After Home is Set on Foundation</h3>
+<p><strong>Cabinet &amp; Electrical Walkthrough:</strong> We'll schedule this once site framing/connections are underway. Before the walkthrough, start thinking about outlet placement, switch locations, charging stations, security systems, and TV locations.</p>
 
-<h3>Fireplace &amp; Finishes</h3>
-<p><em>Select: Before Factory Order Lock-In Date (if factory option) | Before Construction Starts (if site-installed)</em></p>
-<p>Confirm with your Manufacturer Sales Contact and Sherman Team whether a fireplace is a factory option or site-installed. Refer to your Manufacturer's Quote and Specification Booklet for available fireplace options and finishes.</p>
-
-<h3>On-Site Cabinetry (If Applicable)</h3>
-<p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p>Cabinetry is typically included in the manufacturer's base package or available as factory upgrades. Refer to your Manufacturer's Quote and Specification Booklet. If on-site cabinetry upgrades are part of your project, your Sherman Team will coordinate selections.</p>
-
-<h3>Countertops – Quartz/Granite (On-Site)</h3>
-<p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p>Countertop selections are typically part of the manufacturer's specification process. Refer to your Manufacturer's Quote and Specification Booklet for available options. If on-site countertop upgrades are part of your project, your Sherman Team will coordinate selections.</p>
-
-<h3>Flooring (On-Site Upgrades or Additions)</h3>
-<p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p>Flooring is typically included in the manufacturer's base package or available as factory upgrades. Refer to your Manufacturer's Quote and Specification Booklet. If on-site flooring upgrades are part of your project, your Sherman Team will coordinate selections.</p>
-
-<h3>Tile (On-Site)</h3>
-<p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p>Tile selections are typically part of the manufacturer's specification process. Refer to your Manufacturer's Quote and Specification Booklet. If on-site tile work is part of your project, your Sherman Team will coordinate selections and installation.</p>
-
-<h3>Paint Colors</h3>
-<p><em>Select: Before Site Finish Work Begins — Type: Site Allowance</em></p>
-<p>Our painter uses Sherwin Williams but can color-match to other brands if needed.</p>
-
-<h3>Cabinet &amp; Electrical Walkthrough</h3>
-<p><em>Scheduled: After Home is Set on Foundation</em></p>
-<p>Once the home has been set on the foundation and site framing/connections are underway, we'll schedule a cabinet and electrical walkthrough. Before the walkthrough, start thinking about outlet placement, switch locations, charging stations, security systems, TV locations, etc.</p>
-
-<h3>Electrical Fixtures</h3>
-<p><em>Purchase: After Walkthrough | Deliver: After Painting</em></p>
-<p>You will need to purchase any interior and exterior hanging or wall light fixtures and ceiling fans. Please clearly label each fixture with its intended location and orientation.</p>
-
-<h3>Appliances</h3>
-<p><em>Purchase: After Painting — Coordinated with Project Manager</em></p>
-<p>Confirm that the retailer also handles installation (Sherman Homes does not install or hook up appliances). Your Project Manager will coordinate delivery timing to avoid damage or obstruction during construction. <strong>Exceptions:</strong> Range Hoods and Dishwashers (if the dishwasher arrives while the plumber is on site, the plumber will install it).</p>
-
-<h3>Additional Items to Purchase</h3>
-<p><em>Deliver: After Painting</em></p>
-<p>Mirrors | Towel bars and toilet paper holders | Interior door hardware | Exterior door hardware</p>
-<p><em>Sherman Homes installs all of these items; installation fees may apply.</em></p>
+<h3>Homeowner Purchases <em style="font-weight:400">(After painting is complete)</em></h3>
+<table>
+  <tr><th style="width:35%">Item</th><th>Notes</th></tr>
+  <tr><td><strong>Electrical Fixtures</strong></td><td>Purchase after the walkthrough. Label each fixture with its intended location and orientation.</td></tr>
+  <tr><td><strong>Appliances</strong></td><td>Confirm your retailer handles installation (Sherman does not install appliances). Your PM will coordinate delivery timing. <em>Exceptions: range hoods and dishwashers (plumber will install if on-site).</em></td></tr>
+  <tr><td><strong>Hardware &amp; Accessories</strong></td><td>Mirrors, towel bars, toilet paper holders, interior &amp; exterior door hardware. Sherman installs these; fees may apply.</td></tr>
+</table>
 
 <h3>Utilities</h3>
-<p>You are responsible for setting up utility accounts. <strong>Open accounts early — utility delays can hold up foundation work and affect the delivery schedule.</strong> You are responsible for all utility costs during construction.</p>
+<p>You are responsible for setting up utility accounts and all utility costs during construction. <strong>Open accounts early — utility delays can hold up foundation work and affect the delivery schedule.</strong></p>
 
 <h2>Factory Delivery &amp; Set — What to Expect</h2>
 <p><strong>Before Delivery:</strong> Sherman Homes will confirm the delivery date and time in writing. The foundation must be complete, inspected, and approved before delivery. Driveway and site access must be clear for transport trucks and crane equipment.</p>
