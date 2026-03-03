@@ -604,7 +604,7 @@ Email: isac@shermanbuildings.com</p>
 };
 
 // ─── 4. Warranty Statement ───────────────────────────────────────────────────
-// Fills: Manufacturer info blanks (not in system — left blank); signature print names
+// Fills: Manufacturer info (Schult/Clayton), warranty contact, coverage terms; signature print names
 export const generateWarrantyStatement = (quote, customer, totals) => {
   const d = prep(quote, customer, totals);
 
@@ -640,23 +640,23 @@ ${printBar}
 <p>Sherman Homes will pass through to the Owner all warranties provided by the Manufacturer with respect to the factory-built home unit. The Manufacturer's warranty is separate from and in addition to Sherman Homes' statutory warranties.</p>
 <p><strong>Manufacturer Information:</strong></p>
 <table>
-  <tr><td>Manufacturer Name</td><td>${blank(240)}</td></tr>
-  <tr><td>Address</td><td>${blank(240)}</td></tr>
+  <tr><td>Manufacturer Name</td><td><strong>Schult Homes by Clayton</strong></td></tr>
+  <tr><td>Address</td><td><strong>201 Industrial Dr, Redwood Falls, MN 56283</strong></td></tr>
   <tr><td>HUD Certification / License No.</td><td>${blank(240)}</td></tr>
-  <tr><td>Warranty Contact Name</td><td>${blank(240)}</td></tr>
-  <tr><td>Warranty Phone</td><td>${blank(240)}</td></tr>
-  <tr><td>Warranty Email / Portal</td><td>${blank(240)}</td></tr>
+  <tr><td>Warranty Contact Name</td><td><strong>Clayton Customer Advocacy Team</strong></td></tr>
+  <tr><td>Warranty Phone</td><td><strong>1-877-264-2812</strong></td></tr>
+  <tr><td>Warranty Email / Portal</td><td><strong>CustomerAdvocacy@claytonhomes.com &nbsp;|&nbsp; myhomeaccount.com</strong></td></tr>
 </table>
 
 <p><strong>Manufacturer Warranty Summary:</strong></p>
 <table>
   <tr><th>Coverage</th><th>Term</th><th>Notes</th></tr>
-  <tr><td>Structural / Home Unit</td><td>${blank(60)} Year(s)</td><td>Per manufacturer warranty document</td></tr>
-  <tr><td>Plumbing (factory-installed)</td><td>${blank(60)} Year(s)</td><td>Per manufacturer warranty document</td></tr>
-  <tr><td>Electrical (factory-installed)</td><td>${blank(60)} Year(s)</td><td>Per manufacturer warranty document</td></tr>
-  <tr><td>Roofing</td><td>${blank(60)} Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Structural / Home Unit</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Plumbing (factory-installed)</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Electrical (factory-installed)</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Roofing</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
   <tr><td>Appliances</td><td>Per appliance mfr.</td><td>Individual appliance warranties passed through</td></tr>
-  <tr><td>Windows &amp; Doors</td><td>${blank(60)} Year(s)</td><td>Per manufacturer warranty document</td></tr>
+  <tr><td>Windows &amp; Doors</td><td><strong>1</strong> Year(s)</td><td>Per manufacturer warranty document</td></tr>
 </table>
 <p><strong>The full manufacturer warranty document is attached to this Warranty Statement as Exhibit W-1.</strong> The Owner should review Exhibit W-1 carefully for complete coverage terms, exclusions, and claims procedures.</p>
 
