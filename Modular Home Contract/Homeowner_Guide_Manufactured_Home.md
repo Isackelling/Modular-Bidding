@@ -174,6 +174,8 @@ For all factory-locked items, contact the Manufacturer directly to review your M
 
 ### Site Selections *(Sherman's scope — select per Sherman's timeline)*
 
+> **Note:** Site selections are funded from the Allowance Budget. Monitor your spending against the Allowance Budget throughout the process. See your Contract (Section 10) for details on allowance overages, the Allowance Contingency, and Allowance Reallocations.
+
 | Item | Notes |
 |---|---|
 | **Foundation Type** | Coordinated and constructed by Sherman Homes. Type is determined during site planning. |

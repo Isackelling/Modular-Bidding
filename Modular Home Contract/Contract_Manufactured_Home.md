@@ -35,7 +35,7 @@ City, State, Zip: ___________________________
 
 The Contract Documents consist of this Agreement, the Plans, the Specification Booklet, the Allowance Budget, the Owner Responsibilities Acknowledgement, the Payment Schedule, and the Manufacturer's Quote, Floor Plan, and Specifications (attached as **Exhibit A**); as well as any Addendums, Change Orders, and Allowance Reallocations executed after the date of this Agreement. These Contract Documents represent the entire agreement between the parties and supersede any prior oral or written agreement(s). Physical and/or electronic copies of all Contract Documents will be provided to the Owner by the Contractor.
 
-> **Note:** The Homeowner Guide is incorporated into this Contract by reference. Owner must read, initial, and sign the Homeowner Guide as part of executing this Agreement.
+> **Note:** The Homeowner's Guide is incorporated into this Contract by reference. Owner must read, initial, and sign the Homeowner Guide as part of executing this Agreement.
 
 ---
 
@@ -82,7 +82,7 @@ The approximate commencement of site work shall be contingent upon the Manufactu
 
 The approximate completion date of the project shall be on or about **90–120 working days from site readiness**, subject to the Manufacturer's production schedule. "Site readiness" means the foundation is complete, site access is clear, and all utility stub-outs are in place for delivery.
 
-Change Orders, unusual weather, and Manufacturer production delays may affect the completion date. See Section 12 for Force Majeure provisions.
+Change Orders, unusual weather, and Manufacturer production delays may affect the completion date. See Section 14 for Force Majeure provisions.
 
 ---
 
@@ -94,11 +94,11 @@ Owner must finalize all selections that affect the factory order (including home
 
 ### 4.2 Changes After Factory Order
 
-Once the factory order has been placed with the Manufacturer, changes to factory-built components may not be possible. If the Manufacturer permits post-order changes, all associated factory change fees, restocking fees, and production delay costs shall be the Owner's sole financial responsibility and treated as a Change Order under Section 8.
+Once the factory order has been placed with the Manufacturer, changes to factory-built components may not be possible. If the Manufacturer permits post-order changes, all associated factory change fees, restocking fees, and production delay costs shall be the Owner's sole financial responsibility and treated as a Change Order under Section 9.
 
 ### 4.3 Factory-Locked vs. Site Allowances
 
-The Allowance Budget (Section 9) distinguishes between:
+The Allowance Budget (Section 10) distinguishes between:
 
 - **Factory-locked items:** Selections finalized at order (e.g., home model, base structural options, factory-installed finishes). These cannot be modified after the Factory Order Lock-In Date without Manufacturer approval and potential fees.
 - **Site allowance items:** Work completed on-site by Sherman Homes (e.g., foundation type, utilities, landscaping, site-finish upgrades). These are subject to the standard Change Order and Allowance processes.
@@ -190,7 +190,7 @@ Sherman Homes shall coordinate transportation of the home unit from the Manufact
 
 ### 11.2 Pre-Delivery Inspection
 
-Prior to placement on the foundation, Sherman Homes shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery, including any visible damage, incomplete work, or items not conforming to Exhibit A specifications.
+Prior to placement on the foundation, Sherman Homes shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery in a dated, signed written record listing each observed condition item by location and description — for example: *"Master bedroom exterior wall, northwest corner: dent in siding approximately 6 inches diameter, noted before placement."* A verbal agreement or unmarked delivery receipt does not satisfy this requirement. Documentation shall include any visible damage, incomplete work, or items not conforming to Exhibit A specifications.
 
 ### 11.3 Reporting Factory Defects
 
@@ -198,13 +198,17 @@ Any visible damage or defects discovered at delivery must be documented in writi
 
 ### 11.4 Formal Acceptance
 
-The Owner shall not formally accept the home unit until the joint pre-delivery inspection is complete and documented. Formal acceptance occurs at final payment per Section 19.
+The Owner shall not formally accept the home unit until the joint pre-delivery inspection is complete and documented. Formal acceptance occurs at final payment per Section 20.
 
 ---
 
 ## 12. INSURANCE
 
-The Owner shall maintain liability insurance on the property. The Contractor shall maintain Workers Compensation, Liability, and Builder's Risk insurance coverage as required by law. **Property shall not be occupied until the Owner acquires a homeowners insurance policy.** Owner shall acquire a homeowners insurance policy immediately after drywall is hung.
+The Owner shall maintain liability insurance on the project property throughout construction. The Contractor shall maintain Workers Compensation, Liability, and Builder's Risk insurance coverage as required by law. **Contractor's insurance covers only the Contractor and its direct subcontractors.**
+
+Unscheduled, unsupervised access to the project site by any person other than the Contractor's team requires a Certificate of Additional Insured provided to the Contractor in advance.
+
+**Property shall not be occupied until the Owner acquires a homeowners insurance policy.** Owner shall acquire a homeowners insurance policy immediately after drywall is hung.
 
 ---
 
@@ -256,7 +260,7 @@ To make a warranty claim for factory-built components, the Owner must contact th
 
 ### 17.3 Warranty Date
 
-The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Certificate of Occupancy — but not earlier than the date the home unit is set on the foundation and site work commences.
+The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Right to Occupy Certificate — but not earlier than the date the home unit is set on the foundation and site work commences.
 
 ### 17.4 HUD Preemption
 

@@ -41,6 +41,21 @@ Canonical terms are defined here. All four documents must use these terms consis
 
 ---
 
+## Terminology Extraction Notes
+
+The following synonym groupings and polysemic-term decisions were resolved during vocabulary extraction, before drafting requirements. This section is normative — a loop agent must not re-open these decisions without human direction.
+
+| Canonical Term | Rejected Synonyms / Rationale |
+|---|---|
+| **Home Unit** | Rejected: "home," "unit," "structure," "house." "Home" is permitted only in natural-language category references (e.g., "modular and manufactured homes") but NOT when referring to the specific factory-built object being delivered. |
+| **Project** | Rejected: "job," "work order," "engagement." All refer to the same concept. |
+| **Right to Occupy Certificate** | Rejected: "Certificate of Occupancy," "occupancy certificate." The municipal Certificate of Occupancy is a different document; "Right to Occupy Certificate" is the Contractor-issued document authorizing Owner move-in. This is a polysemic term — the two certificates serve different purposes and must not be conflated. |
+| **Site Work** | Rejected: "on-site construction," "field work," "installation work." "Site Work" is the umbrella term for all Contractor activities at the project property. "Installation" is a subset of Site Work (specifically placing and connecting the Home Unit). |
+| **Manufacturer** | Rejected: "factory," "builder," "maker." "Manufacturer" is the canonical term for the independent third-party entity. "Factory" may be used as an adjective (e.g., "factory-built," "factory-locked") but never as a noun synonym for the Manufacturer entity. |
+| **Allowance Contingency** | Rejected: "contingency fund," "reserve," "buffer." "Allowance Contingency" is the specific line item within the Allowance Budget. |
+
+---
+
 ## Document Suite Overview
 
 The suite consists of exactly four documents. Each document is complete and independently readable but cross-references the others by name. No document is optional; all four are required for contract execution.
@@ -204,6 +219,19 @@ The Contract contains these sections in order, each present and titled:
 - Section 17.3: Warranty Date for Contractor's warranty is the earlier of (1) first Owner occupancy or (2) Owner's legal title to the home — but not before the Home Unit is set on the foundation. Manufacturer's warranty date is governed by the Manufacturer's own terms — contact the Manufacturer directly.
 - Section 17.4: If the home is a HUD-code manufactured home, Minnesota Statute Chapter 327A may be affected by federal HUD preemption for factory-built portions. Owner is encouraged to consult a licensed MN attorney.
 - Section 17.5: Owner must provide written notice of any warranty claim to Contractor within **6 months of discovering the defect**, as required by MN Stat. § 327A.
+
+### Worked Examples — Ambiguous Scenarios
+
+These examples resolve edge cases that a loop agent cannot infer. Each is normative.
+
+> **Example 1 — Disputed-Claims Boundary (Section 11.3 / Warranty Statement F.3):**
+> A window in the master bedroom is cracked. The Owner notices it during the Pre-Delivery Inspection before placement on the foundation. The crack could be from factory installation (Manufacturer's responsibility) or from transit handling (carrier's responsibility — neither Contractor nor Manufacturer). **Resolution:** Owner documents the crack in the Pre-Delivery Inspection record and notifies both Contractor and Manufacturer in writing within 5 business days. Contractor inspects to confirm the defect is not in Site Work scope (it is not — the window was factory-installed). Contractor assists Owner in communicating with the Manufacturer as a courtesy. Contractor is NOT liable during the investigation period solely because origin is unclear. If the Manufacturer determines it was transit damage, the Manufacturer's carrier insurance applies — not Contractor's. Contractor's obligation ends at "reasonable efforts to assist."
+
+> **Example 2 — "Reasonable Efforts to Assist" Scope:**
+> The Owner reports a factory-installed furnace failure 8 months after occupancy. The Owner contacts the Manufacturer but receives no response after 2 weeks. The Owner asks Sherman Homes for help. **"Reasonable efforts" means:** Sherman Homes contacts the Manufacturer's warranty department on the Owner's behalf, provides the Manufacturer with the project details and Owner's contact information, and follows up once. **"Reasonable efforts" does NOT mean:** Sherman Homes dispatches its own HVAC crew to repair the furnace, pays for the repair, guarantees the Manufacturer will respond, or continues indefinitely escalating on the Owner's behalf. If the Manufacturer remains unresponsive, Sherman Homes has fulfilled its courtesy obligation by making the contact and follow-up. The Owner's next step is to pursue the Manufacturer directly or consult an attorney.
+
+> **Example 3 — Factory-Locked vs. Site Allowance Boundary:**
+> The Owner wants to upgrade the kitchen faucet after the Factory Order Lock-In Date. The faucet is a factory-installed item (Factory-Locked). The Manufacturer may or may not permit post-order changes. **Resolution:** Contractor contacts the Manufacturer on the Owner's behalf to inquire. If the Manufacturer permits the change, the cost (including any factory change fee, restocking fee, and production delay cost) is a Change Order per Section 9 with $300 administrative fee. If the Manufacturer does not permit the change, the Owner may purchase a replacement faucet independently and have it installed after the Home Unit is set — but this becomes the Owner's responsibility and is not warranted by Contractor.
 
 ### Termination (Section 18)
 
@@ -410,11 +438,37 @@ Contains at minimum these exclusions, labeled (a) through (p):
 
 ---
 
+## Cross-Section Dependencies
+
+The following explicit dependencies exist between Contract sections. A loop agent implementing any section must verify that the referenced section exists and is consistent. If a dependency target does not yet exist, the loop agent must flag it — not silently skip the reference.
+
+| Source Section | Depends On | Nature of Dependency |
+|---|---|---|
+| Section 3 (Time of Completion) | Section 14 (Force Majeure) | References Force Majeure for delay provisions |
+| Section 4.2 (Changes After Factory Order) | Section 9 (Change Orders) | Post-order factory changes treated as Change Orders |
+| Section 4.3 (Factory-Locked vs. Site) | Section 10 (Allowances) | References the Allowance Budget for site items |
+| Section 7 (Duties of Contractor) | Section 2.2 (Sherman Responsibilities) | Enumerates same scope — must stay synchronized |
+| Section 8 (Duties of Owner) | Section 9 (Change Orders) | Owner-caused delays treated as Change Orders |
+| Section 10 (Allowances) | Section 9 (Change Orders) | Allowance Overage triggers Change Order process |
+| Section 11.3 (Reporting Factory Defects) | Warranty Statement F.3 | Disputed-claims procedure mirrors Warranty Statement F.3 |
+| Section 11.4 (Formal Acceptance) | Section 20 (Acceptance and Occupancy) | Formal acceptance at final payment per Section 20 |
+| Section 15 (Hazardous Materials) | Formaldehyde Disclosure | References the Formaldehyde Disclosure as companion document |
+| Section 17 (Warranty) | Warranty Statement (all sections) | Contract warranty summary must be consistent with Warranty Statement detail |
+| Section 18.1 (Manufacturer Default) | Section 6 (Progress Payments) | Owner remains responsible for completed work per Payment Schedule |
+| Section 20 (Acceptance) | Section 17 (Warranty) | Occupancy triggers Warranty Date — § 327A.04 waiver compliance required |
+| Homeowner's Guide (Key Acknowledgements) | Contract Sections 4, 8, 9, 11, 12 | Each acknowledgement maps to a Contract section — must stay synchronized |
+
+---
+
 ## Known Open Items (Loop Agent Must Not Silently Resolve)
 
 These items require human decision-making before a loop agent can implement them. If a loop agent encounters one of these, it must flag it and skip — not infer a resolution:
 
-1. **Section 20 Early-Occupancy Waiver**: The current Contract language uses a conduct-based "deemed waiver" that does not satisfy MN Stat. § 327A.04. The human decision needed: remove the provision entirely, or replace it with a separately executed § 327A.04-compliant written waiver instrument. The loop agent may flag this finding but must not unilaterally rewrite Section 20 in a legally opinionated way without human direction.
+1. **Section 20 Early-Occupancy Waiver**: The current Contract language does not include an early-occupancy provision. A human decision is needed to choose one of the following options:
+   - **Option A — No early-occupancy clause (current state).** Section 20 simply prohibits occupancy before final payment and Right to Occupy Certificate. This is the safest default but provides no mechanism if Owner needs to move in before final completion.
+   - **Option B — Add a § 327A.04-compliant written waiver instrument.** Create a separate, standalone Early Occupancy Agreement as a new Contract Document. The instrument must be: printed in boldface type, minimum 10-point size, signed by Owner, describe the specific warranty rights being modified, state the terms of the modified agreement, and offer substitute express warranties providing substantially the same protections. This instrument must NOT be a conduct-based "deemed waiver" — it must be an affirmative, signed document.
+   - **Option C — Add an early-occupancy provision that preserves all warranty rights.** Allow conditional early occupancy (e.g., Owner assumes utility costs and maintenance responsibility) without waiving any statutory warranty rights under Chapter 327A. This avoids the § 327A.04 compliance burden but limits what Contractor can require of early-occupying Owners.
+   The loop agent must not implement any option without explicit human selection. If a loop agent encounters this item, it must output: "BLOCKED: Section 20 Early-Occupancy Waiver requires human decision — see Known Open Item 1 options A/B/C."
 
 2. **Manufacturer Warranty Information**: The Manufacturer is an independent third-party entity. The Contractor does not draft, control, or guarantee any Manufacturer warranty documentation. All manufacturer contact information in the contracts is left blank — to be filled in by the Owner based on information obtained directly from the Manufacturer. The Contractor makes no representations about the accuracy or currency of any Manufacturer information.
 

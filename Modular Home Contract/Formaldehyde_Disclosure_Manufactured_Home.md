@@ -10,7 +10,7 @@ License # BC532878
 
 Minnesota law requires us to inform you that some building materials used in construction may contain formaldehyde. Please carefully read the following important health information.
 
-**This disclosure is especially important for modular and manufactured homes.** Because the majority of construction occurs in a factory setting, your home contains significant quantities of engineered wood products — including particleboard, oriented strand board (OSB), plywood, factory-installed cabinetry, and flooring — which may emit higher concentrations of formaldehyde than materials used in traditional site-built construction. These materials are selected and installed by the Manufacturer, not by Sherman Homes.
+**This disclosure is especially important for modular and manufactured homes.** Because the majority of construction occurs in a factory setting, your Home Unit contains significant quantities of engineered wood products — including particleboard, oriented strand board (OSB), plywood, factory-installed cabinetry, and flooring — which may emit higher concentrations of formaldehyde than materials used in traditional site-built construction. These materials are selected and installed by the Manufacturer, not by Sherman Homes.
 
 ---
 
@@ -36,20 +36,20 @@ In modular and manufactured homes, formaldehyde-emitting materials are commonly 
 - Factory-installed flooring with adhesives or composite cores
 - Furniture and built-in components assembled at the factory
 
-Because the factory environment involves enclosed assembly of many of these materials simultaneously, formaldehyde concentrations in newly delivered manufactured homes may be higher than in site-built homes during the initial period after delivery and installation.
+Because the factory environment involves enclosed assembly of many of these materials simultaneously, formaldehyde concentrations in a newly delivered Home Unit may be higher than in site-built homes during the initial period after delivery and installation.
 
 ### Manufacturer — Independent Third Party
 
 The Manufacturer is an independent third-party entity that selects and installs factory-built materials, including those that may emit formaldehyde. **Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the materials the Manufacturer selects or installs.** Sherman Homes' role is limited to site work, installation, and finish work performed on-site.
 
-If you have questions about the specific materials used in your home — including formaldehyde emission levels, material specifications, or available alternatives — **contact the Manufacturer directly.** Sherman Homes cannot make representations about materials selected and installed by the Manufacturer. The Manufacturer may be able to provide information on lower-formaldehyde or no-added-formaldehyde (NAF) material options, but Sherman Homes makes no guarantees about the availability of such options.
+If you have questions about the specific materials used in your Home Unit — including formaldehyde emission levels, material specifications, or available alternatives — **contact the Manufacturer directly.** Sherman Homes cannot make representations about materials selected and installed by the Manufacturer. The Manufacturer may be able to provide information on lower-formaldehyde or no-added-formaldehyde (NAF) material options, but Sherman Homes makes no guarantees about the availability of such options.
 
 Although Sherman Homes does not control the Manufacturer's material selections, Sherman Homes maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in communicating material concerns or questions to the Manufacturer upon request.
 
 ### Steps You Can Take
 
 - **Before ordering:** Contact the Manufacturer directly — or ask your Sherman Team to help coordinate the conversation — to ask about low-formaldehyde or NAF (no-added-formaldehyde) options for cabinetry, flooring, and engineered wood panels. Sherman Homes does not control or have knowledge of the Manufacturer's material options but will assist in facilitating communication where possible.
-- **After delivery:** Ventilate the home thoroughly before and after move-in by opening windows and running ventilation systems.
+- **After delivery:** Ventilate the Home Unit thoroughly before and after move-in by opening windows and running ventilation systems.
 - **Ongoing:** Maintain moderate indoor temperatures and humidity levels to reduce formaldehyde off-gassing over time. Formaldehyde emissions typically decrease significantly within the first 1–2 years after manufacture.
 
 ---
@@ -69,3 +69,8 @@ Print Name: _________________________________
 
 Owner Signature: _________________________________ Date: _____________
 Print Name: _________________________________
+
+---
+
+Sherman Homes Representative: _________________________________ Date: _____________
+Print Name / Title: _________________________________
