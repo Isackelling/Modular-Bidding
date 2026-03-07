@@ -83,7 +83,7 @@ The Manufacturer builds your Home Unit in the factory (typically 4–8 weeks). D
 ### Phase 3 — Delivery & Set
 The completed Home Unit is transported from the factory to your site. Sherman Homes coordinates the crane and set operations, placing the home on the foundation. **A joint pre-delivery inspection is conducted by the Owner and Sherman Homes before the home is placed on the foundation.**
 
-### Phase 4 — Installation & Connections
+### Phase 4 — Installation & Site Finish
 Sherman Homes connects the home's systems to site utilities (electric, plumbing, HVAC, fuel), completes marriage wall assembly and sealing (if applicable), and coordinates required inspections.
 
 ### Phase 5 — Final Walkthrough & Occupancy

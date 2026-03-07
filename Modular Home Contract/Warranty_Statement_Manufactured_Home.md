@@ -90,7 +90,9 @@ The HUD Data Plate and/or certification label(s) must be present on the complete
 
 ## E. Warranty Date — Factory-Built Home Clarification
 
-**For Sherman Homes' site work warranties**, the Warranty Date shall not begin earlier than the **date the Home Unit is set on the foundation and site work commences.** **For the Manufacturer's warranty**, the warranty date and trigger are governed by the Manufacturer's own warranty terms. Contact the Manufacturer directly for details about when their warranty begins and what it covers.
+**For Sherman Homes' site work warranties**, the Warranty Date shall not begin earlier than the **date the Home Unit is set on the foundation and site work commences.** Because a manufactured or modular Home Unit may be titled as personal property before it reaches the project site, the Owner may take legal title to the Home Unit before Sherman Homes begins any site work. In that scenario, the Warranty Date is not triggered by the title transfer alone — it begins only when the Home Unit is physically set on the foundation and site work commences, ensuring that Sherman Homes' warranty period covers actual site work and installation rather than a pre-delivery ownership period during which no site work has been performed.
+
+**For the Manufacturer's warranty**, the warranty date and trigger are governed by the Manufacturer's own warranty terms. Contact the Manufacturer directly for details about when their warranty begins and what it covers.
 
 ---
 

@@ -104,7 +104,10 @@ These assertions apply to all four documents and are verifiable across the suite
 5. Every document that requires Owner signature includes an Acknowledgment and Signature block with fields for: Owner signature, Owner printed name, and date. Where two owners may exist, both signature lines are present.
 6. Every signature block that requires a Contractor representative signature includes fields for: representative signature, printed name, title, and date.
 7. All statutory citations reference the correct Minnesota statute and section number.
-8. All four documents must clearly state that the Manufacturer is an independent third-party entity, that the Contractor is not a representative, agent, or partner of the Manufacturer, and that the Contractor makes no representations about the Manufacturer's warranties, products, or business practices. The Owner must be directed to contact the Manufacturer directly for warranty information. Where appropriate, documents must also state that the Contractor maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns — as a courtesy, not as an obligation of the Manufacturer.
+8. **Manufacturer Independence — three sub-assertions (all four documents must satisfy each):**
+   - 8a. Each document clearly states that the Manufacturer is an independent third-party entity and that the Contractor is not a representative, agent, or partner of the Manufacturer.
+   - 8b. Each document states that the Contractor makes no representations about the Manufacturer's warranties, products, or business practices, and directs the Owner to contact the Manufacturer directly for warranty information.
+   - 8c. Where the document discusses Owner interactions with the Manufacturer, it states that the Contractor maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist the Owner in navigating communications, warranty claims, service requests, and other concerns — as a courtesy, not as an obligation of the Manufacturer.
 
 ---
 
