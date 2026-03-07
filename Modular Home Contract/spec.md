@@ -1,5 +1,14 @@
 # Spec — Sherman Homes Modular/Manufactured Home Contract Document Suite
 
+**Spec Version:** 1.0
+**Last Revised:** 2026-03-07
+
+## Revision History
+
+| Version | Date | Summary |
+|---|---|---|
+| 1.0 | 2026-03-07 | Initial versioned spec. Ralph Loop audit: fixed cross-document Warranty Date inconsistency, expanded Force Majeure, added Section 21 subsection, expanded termination remedies, added Section 20 repair obligation, normalized "Home Unit" capitalization, added "cannot be changed" to factory-locked items in Guide. |
+
 ## Purpose
 
 This spec describes the target state of Sherman Homes' contract document suite for modular and manufactured home projects in Minnesota. A loop agent reading this spec can evaluate any single document against these requirements and implement improvements independently, without needing context from prior iterations.

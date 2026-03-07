@@ -31,7 +31,7 @@ Manufacturer Phone / Website: ___________________________
 
 The Agreement, Plans, Specification Booklet, Allowance Budget, and Manufacturer's Quote and Floor Plan are all important documents that must be reviewed carefully to avoid discrepancies in expectations for both the final product and the process required to get there.
 
-Because your home is built in a manufacturing facility — not entirely on-site — this process works differently than a traditional custom home build. **Two separate workflows run in parallel:** the Manufacturer (an independent third-party entity) builds your home unit in the factory while Sherman Homes prepares your site, foundation, and utilities. Understanding how these two tracks connect is essential to a smooth experience. **Sherman Homes is not a representative, agent, or partner of the Manufacturer** and has no control over the Manufacturer's operations, timelines, products, or business practices.
+Because your home is built in a manufacturing facility — not entirely on-site — this process works differently than a traditional custom home build. **Two separate workflows run in parallel:** the Manufacturer (an independent third-party entity) builds your Home Unit in the factory while Sherman Homes prepares your site, foundation, and utilities. Understanding how these two tracks connect is essential to a smooth experience. **Sherman Homes is not a representative, agent, or partner of the Manufacturer** and has no control over the Manufacturer's operations, timelines, products, or business practices.
 
 Changes are almost always part of the process, but in a modular or manufactured home, **many selections are locked the moment the factory order is placed.** Changes that are easy and inexpensive before the order can become impossible — or very costly — after it. Please do not assume any specific materials or services are included. It's always better to ask for clarification early.
 
@@ -43,17 +43,17 @@ We're excited to partner with you on this journey and bring your new home to lif
 
 This is the most important concept in your project. Your home is built in **two places** by **two separate entities**:
 
-> **The Manufacturer** is an independent third-party entity that constructs the home unit in a factory. Sherman Homes is not a representative, agent, or partner of the Manufacturer and does not control, direct, or have authority over the Manufacturer's work, products, warranties, or business practices.
+> **The Manufacturer** is an independent third-party entity that constructs the Home Unit in a factory. Sherman Homes is not a representative, agent, or partner of the Manufacturer and does not control, direct, or have authority over the Manufacturer's work, products, warranties, or business practices.
 >
 > **Sherman Homes** is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).
 >
-> **Sherman Homes warrants only the work that Sherman Homes performs.** For questions about the home unit itself — including warranties, specifications, and factory-installed components — contact the Manufacturer directly.
+> **Sherman Homes warrants only the work that Sherman Homes performs.** For questions about the Home Unit itself — including warranties, specifications, and factory-installed components — contact the Manufacturer directly.
 >
 > **Owner Assistance:** Although Sherman Homes is not a representative of the Manufacturer, Sherman Homes maintains a professional working relationship with the Manufacturer and will make reasonable efforts to assist you in navigating communications, warranty claims, service requests, and other concerns directed toward the Manufacturer. This assistance is offered as a courtesy and does not make Sherman Homes responsible for the Manufacturer's response, decisions, or warranties.
 
 ### What the Manufacturer Builds (Factory) — Independent Third Party
 
-The Manufacturer is an independent third-party entity that constructs your home unit in a controlled factory environment. Sherman Homes does not control, direct, or oversee the Manufacturer's construction process. For questions about factory-built components, specifications, materials, or quality, contact the Manufacturer directly. Once the factory order is placed, **these items are locked.**
+The Manufacturer is an independent third-party entity that constructs your Home Unit in a controlled factory environment. Sherman Homes does not control, direct, or oversee the Manufacturer's construction process. For questions about factory-built components, specifications, materials, or quality, contact the Manufacturer directly. Once the factory order is placed, **these items are locked.**
 
 ### What Sherman Homes Does (Site Work & Installation)
 
@@ -78,10 +78,10 @@ Unlike a site-built home where construction happens in one place from start to f
 All factory selections must be finalized. Foundation design and permits are initiated. **Factory Order Lock-In Date is confirmed in writing by Sherman Homes.**
 
 ### Phase 2 — Factory Production
-The Manufacturer builds your home unit in the factory (typically 4–8 weeks). During this time, Sherman Homes completes site preparation, foundation, and utility stub-outs so the site is ready when the home arrives.
+The Manufacturer builds your Home Unit in the factory (typically 4–8 weeks). During this time, Sherman Homes completes site preparation, foundation, and utility stub-outs so the site is ready when the home arrives.
 
 ### Phase 3 — Delivery & Set
-The completed home unit is transported from the factory to your site. Sherman Homes coordinates the crane and set operations, placing the home on the foundation. **A joint pre-delivery inspection is conducted by the Owner and Sherman Homes before the home is placed on the foundation.**
+The completed Home Unit is transported from the factory to your site. Sherman Homes coordinates the crane and set operations, placing the home on the foundation. **A joint pre-delivery inspection is conducted by the Owner and Sherman Homes before the home is placed on the foundation.**
 
 ### Phase 4 — Installation & Connections
 Sherman Homes connects the home's systems to site utilities (electric, plumbing, HVAC, fuel), completes marriage wall assembly and sealing (if applicable), and coordinates required inspections.
@@ -121,7 +121,7 @@ _______ Initial _______ Initial
 
 _______ Initial _______ Initial
 
-**6.** A joint inspection of the home unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.
+**6.** A joint inspection of the Home Unit will be conducted at delivery, before placement on the foundation. I/We agree to participate in (or designate a representative for) this inspection and document any visible defects or damage. I/We will not formally accept the home until this inspection is complete.
 
 _______ Initial _______ Initial
 
@@ -164,13 +164,13 @@ For all factory-locked items, contact the Manufacturer directly to review your M
 | Item | Notes |
 |---|---|
 | **Home Model & Floor Plan** | Floor plan, room dimensions, exterior style, roofline, and structural upgrades. **Cannot be changed once ordered.** |
-| **Cabinetry & Finishes** | Selected through and installed by the Manufacturer. Review your Specification Booklet for available options. Items not selected are not included. |
-| **Countertops** | Selected through and installed by the Manufacturer. Material and style must be finalized before order. Items not selected are not included. |
-| **Plumbing Fixtures** | Selected through and installed by the Manufacturer. Review your Specification Booklet for included fixtures and available upgrades. Items not selected are not included. |
-| **Fireplace** | Selected through and installed by the Manufacturer. The fireplace is part of the home — it is a factory-locked item. Items not selected are not included. |
-| **Electrical Fixtures** | Selected through and installed by the Manufacturer. Label each fixture with its intended location and orientation. Items not selected are not included. |
-| **Appliances** | Selected through and installed by the Manufacturer. Review your Specification Booklet for included appliances. Any appliances not selected (e.g., washer, dryer) become the homeowner's responsibility to purchase and install. Appliances are the Manufacturer's scope — Sherman does not select, supply, or install appliances. |
-| **Hardware & Accessories** | Selected through the Manufacturer. Mirrors, towel bars, toilet paper holders, interior & exterior door hardware. Items not selected become the homeowner's responsibility. |
+| **Cabinetry & Finishes** | Selected through and installed by the Manufacturer. Review your Specification Booklet for available options. **Cannot be changed once ordered.** Items not selected are not included. |
+| **Countertops** | Selected through and installed by the Manufacturer. Material and style must be finalized before order. **Cannot be changed once ordered.** Items not selected are not included. |
+| **Plumbing Fixtures** | Selected through and installed by the Manufacturer. Review your Specification Booklet for included fixtures and available upgrades. **Cannot be changed once ordered.** Items not selected are not included. |
+| **Fireplace** | Selected through and installed by the Manufacturer. The fireplace is part of the home — it is a factory-locked item. **Cannot be changed once ordered.** Items not selected are not included. |
+| **Electrical Fixtures** | Selected through and installed by the Manufacturer. Label each fixture with its intended location and orientation. **Cannot be changed once ordered.** Items not selected are not included. |
+| **Appliances** | Selected through and installed by the Manufacturer. Review your Specification Booklet for included appliances. **Cannot be changed once ordered.** Any appliances not selected (e.g., washer, dryer) become the homeowner's responsibility to purchase and install. Appliances are the Manufacturer's scope — Sherman does not select, supply, or install appliances. |
+| **Hardware & Accessories** | Selected through the Manufacturer. Mirrors, towel bars, toilet paper holders, interior & exterior door hardware. **Cannot be changed once ordered.** Items not selected become the homeowner's responsibility. |
 
 ### Site Selections *(Sherman's scope — select per Sherman's timeline)*
 
@@ -205,13 +205,13 @@ Delivery day is one of the most exciting and logistically complex days of your p
 - Driveway and site access must be clear for transport trucks and crane equipment. Owner is responsible for ensuring adequate access; delays caused by site unreadiness are the Owner's financial responsibility.
 
 **Day of Delivery — Pre-Delivery Inspection**
-- Before the home is placed on the foundation, you (or your designated representative) and a Sherman Homes representative will conduct a joint inspection of the home unit.
+- Before the home is placed on the foundation, you (or your designated representative) and a Sherman Homes representative will conduct a joint inspection of the Home Unit.
 - Document any visible damage, incomplete work, or items not matching specifications in writing.
 - Do not formally accept the unit until this inspection is complete and documented.
 - Any factory defects or transit damage must be reported by the Owner directly to the Manufacturer in writing within 5 business days of delivery. Sherman Homes will make reasonable efforts to assist you in documenting and communicating defects to the Manufacturer, but does not represent the Manufacturer and has no authority over their claims process.
 
 **Set Operations**
-- A crane will be used to lift and place the home unit(s) on the foundation.
+- A crane will be used to lift and place the Home Unit(s) on the foundation.
 - **No guests, family members, or third-party contractors are permitted on site during set operations** for safety reasons.
 - For multi-section homes, marriage wall assembly and sealing will follow the set.
 

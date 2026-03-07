@@ -4,7 +4,7 @@
 
 ---
 
-> **Important Notice:** This warranty statement covers Sherman Homes' site work and installation only. The home unit itself is constructed by the Manufacturer, which is an **independent third-party entity**. Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's warranties, business practices, or obligations. For information about the Manufacturer's warranty, contact the Manufacturer directly. Read all sections carefully. This document does not constitute legal advice; consult a licensed Minnesota attorney with questions about your rights.
+> **Important Notice:** This warranty statement covers Sherman Homes' site work and installation only. The Home Unit itself is constructed by the Manufacturer, which is an **independent third-party entity**. Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's warranties, business practices, or obligations. For information about the Manufacturer's warranty, contact the Manufacturer directly. Read all sections carefully. This document does not constitute legal advice; consult a licensed Minnesota attorney with questions about your rights.
 
 ---
 
@@ -20,7 +20,7 @@ Sherman Homes warrants the **site work and installation** portions of your home 
 
 **Sherman Homes' warranties apply to site work and installation only.** They do not cover defects originating in the manufacturing facility. The Manufacturer is an independent third-party entity; contact the Manufacturer directly for information about their warranty coverage.
 
-**Warranty Date:** The Warranty Date for Sherman Homes' statutory warranties is the earlier of: (1) the date the Owner first occupies the home, or (2) the date the Owner takes legal title to the home — but not earlier than the date the home unit is set on the foundation and site work commences.
+**Warranty Date:** The Warranty Date for Sherman Homes' statutory warranties is the earlier of: (1) the date the Owner first occupies the home, or (2) the date the Owner takes legal title to the home — but not earlier than the date the Home Unit is set on the foundation and site work commences.
 
 **Claims Requirement:** Written warranty claims against Sherman Homes must be reported within **six months** after the Owner discovers or should have discovered the defect.
 
@@ -30,11 +30,11 @@ Sherman Homes warrants the **site work and installation** portions of your home 
 
 Your home is built in **two places** by **two separate entities**:
 
-> **The Manufacturer** is an independent third-party entity that constructs the home unit in a factory. Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's work, products, warranties, or business practices.
+> **The Manufacturer** is an independent third-party entity that constructs the Home Unit in a factory. Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's work, products, warranties, or business practices.
 >
 > **Sherman Homes** is responsible for your property and the services around the home — site preparation, foundation, setting the home, connecting it to utilities, and executing the site services you selected (sewer, well, driveway, etc.).
 >
-> **Sherman Homes warrants only the work that Sherman Homes performs.** The home unit itself — including everything inside it — comes from the Manufacturer, and any questions about the Manufacturer's work, warranties, or products must be directed to the Manufacturer.
+> **Sherman Homes warrants only the work that Sherman Homes performs.** The Home Unit itself — including everything inside it — comes from the Manufacturer, and any questions about the Manufacturer's work, warranties, or products must be directed to the Manufacturer.
 
 **Sherman Homes** is responsible for: site preparation and grading; foundation design coordination and construction; delivery coordination and transportation permitting; crane and set operations (placing the home on the foundation); marriage wall assembly (multi-section homes); final utility connections (electric, plumbing, HVAC, fuel); all finish work completed on-site; site services (sewer, well, gravel driveway, sand pad, landscaping); site cleanup and final inspection coordination.
 
@@ -90,7 +90,7 @@ The HUD Data Plate and/or certification label(s) must be present on the complete
 
 ## E. Warranty Date — Factory-Built Home Clarification
 
-**For Sherman Homes' site work warranties**, the Warranty Date shall not begin earlier than the **date the home unit is set on the foundation and site work commences.** **For the Manufacturer's warranty**, the warranty date and trigger are governed by the Manufacturer's own warranty terms. Contact the Manufacturer directly for details about when their warranty begins and what it covers.
+**For Sherman Homes' site work warranties**, the Warranty Date shall not begin earlier than the **date the Home Unit is set on the foundation and site work commences.** **For the Manufacturer's warranty**, the warranty date and trigger are governed by the Manufacturer's own warranty terms. Contact the Manufacturer directly for details about when their warranty begins and what it covers.
 
 ---
 

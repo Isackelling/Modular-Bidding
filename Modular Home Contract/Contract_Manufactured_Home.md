@@ -18,7 +18,7 @@ Mora, MN 55051
 Lic. # BC532878
 
 **And The Manufacturer (Independent Third Party):**
-*(The manufacturer is an independent third-party entity that constructs the home unit off-site in a factory. Sherman Homes is not an agent, representative, or partner of the Manufacturer. Sherman Homes does not control, direct, or have authority over the Manufacturer's operations, business practices, warranties, or obligations.)*
+*(The manufacturer is an independent third-party entity that constructs the Home Unit off-site in a factory. Sherman Homes is not an agent, representative, or partner of the Manufacturer. Sherman Homes does not control, direct, or have authority over the Manufacturer's operations, business practices, warranties, or obligations.)*
 Name: ___________________________
 Address: ___________________________
 HUD Certification / License No.: ___________________________
@@ -45,7 +45,7 @@ Because this project involves a factory-built home, construction responsibilitie
 
 ### 2.1 Manufacturer (Off-Site Factory Work) — Independent Third Party
 
-The Manufacturer is an independent third-party entity that constructs the home unit in a manufacturing facility. **Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's operations, construction methods, quality control, warranties, or business practices.**
+The Manufacturer is an independent third-party entity that constructs the Home Unit in a manufacturing facility. **Sherman Homes is not a representative, agent, or partner of the Manufacturer and has no control over, knowledge of, or responsibility for the Manufacturer's operations, construction methods, quality control, warranties, or business practices.**
 
 The Manufacturer's responsibilities, warranties, and obligations are governed solely by the Manufacturer's own agreements, policies, and applicable law. Owner should contact the Manufacturer directly for information regarding:
 
@@ -66,7 +66,7 @@ Sherman Homes is responsible for all site work and installation services, includ
 - Foundation design coordination, permitting, and construction
 - Coordination of home delivery from the Manufacturer to the project site
 - Transportation and oversize-load permit acquisition (see Section 3)
-- Crane and set operations — placing the home unit on the foundation
+- Crane and set operations — placing the Home Unit on the foundation
 - Marriage wall assembly and sealing for multi-section homes
 - Utility stub-outs and final connections (electric, plumbing, HVAC, fuel)
 - All finish work not completed at the factory as specified in Exhibit A
@@ -186,11 +186,11 @@ Owner may request Allowance Reallocations within the Allowance Budget total at n
 
 ### 11.1 Transportation & Permits
 
-Sherman Homes shall coordinate transportation of the home unit from the Manufacturer's facility to the project site. Unless otherwise specified in writing, the following are **included in the Contract Price**: transportation costs, oversize-load road permits, and crane and set fees. Any costs arising from Owner-caused delays, inaccessible site conditions, or additional permits required due to site location are the Owner's financial responsibility and shall be treated as a Change Order.
+Sherman Homes shall coordinate transportation of the Home Unit from the Manufacturer's facility to the project site. Unless otherwise specified in writing, the following are **included in the Contract Price**: transportation costs, oversize-load road permits, and crane and set fees. Any costs arising from Owner-caused delays, inaccessible site conditions, or additional permits required due to site location are the Owner's financial responsibility and shall be treated as a Change Order.
 
 ### 11.2 Pre-Delivery Inspection
 
-Prior to placement on the foundation, Sherman Homes shall conduct a joint inspection of the home unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery in a dated, signed written record listing each observed condition item by location and description — for example: *"Master bedroom exterior wall, northwest corner: dent in siding approximately 6 inches diameter, noted before placement."* A verbal agreement or unmarked delivery receipt does not satisfy this requirement. Documentation shall include any visible damage, incomplete work, or items not conforming to Exhibit A specifications.
+Prior to placement on the foundation, Sherman Homes shall conduct a joint inspection of the Home Unit with the Owner (or Owner's representative). Both parties shall document the condition of the unit at delivery in a dated, signed written record listing each observed condition item by location and description — for example: *"Master bedroom exterior wall, northwest corner: dent in siding approximately 6 inches diameter, noted before placement."* A verbal agreement or unmarked delivery receipt does not satisfy this requirement. Documentation shall include any visible damage, incomplete work, or items not conforming to Exhibit A specifications.
 
 ### 11.3 Reporting Factory Defects
 
@@ -198,7 +198,7 @@ Any visible damage or defects discovered at delivery must be documented in writi
 
 ### 11.4 Formal Acceptance
 
-The Owner shall not formally accept the home unit until the joint pre-delivery inspection is complete and documented. Formal acceptance occurs at final payment per Section 20.
+The Owner shall not formally accept the Home Unit until the joint pre-delivery inspection is complete and documented. Formal acceptance occurs at final payment per Section 20.
 
 ---
 
@@ -220,7 +220,11 @@ If conditions are encountered at the construction site which are subsurface or o
 
 ## 14. FORCE MAJEURE AND DELAYS BEYOND CONTRACTOR'S CONTROL
 
-If the Contractor is delayed at any time by causes beyond the Contractor's reasonable control — including but not limited to acts of God, fire, flood, epidemic, war, strikes, unavailability of materials, **Manufacturer production delays**, or any other Force Majeure Events — then the Contract completion date shall be extended by the amount of time lost. Contractor shall notify Owner in writing within **7 business days** of any Force Majeure Event.
+If the Contractor is delayed at any time by causes beyond the Contractor's reasonable control — including but not limited to acts of God, fire, flood, earthquake, tornado, epidemic, pandemic, quarantine, war, riot, civil unrest, strikes, labor disputes, government orders, unavailability of materials or labor, supplier failures, **Manufacturer production delays**, or any other Force Majeure Events — then the Contract completion date shall be extended by the amount of time lost. Contractor shall notify Owner in writing within **7 business days** of becoming aware of any Force Majeure Event.
+
+Force Majeure Events do not relieve the Owner of payment obligations for work completed before or during such events.
+
+Increased costs resulting from Force Majeure Events — including but not limited to extended overhead, storage, re-mobilization, and material price increases — shall be treated as a Change Order per Section 9.
 
 ---
 
@@ -260,7 +264,7 @@ To make a warranty claim for factory-built components, the Owner must contact th
 
 ### 17.3 Warranty Date
 
-The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the first purchaser occupies the completed home, or (2) the date the first purchaser receives the Right to Occupy Certificate — but not earlier than the date the home unit is set on the foundation and site work commences.
+The Warranty Date for Sherman Homes' warranty is the earlier of: (1) the date the Owner first occupies the completed home, or (2) the date the Owner takes legal title to the home — but not earlier than the date the Home Unit is set on the foundation and site work commences.
 
 ### 17.4 HUD Preemption
 
@@ -278,11 +282,11 @@ Owner acknowledges that Sherman Homes does not warrant work performed by others,
 
 ## 18. TERMINATION OF THE CONTRACT
 
-Should the Owner or Contractor fail to carry out this Contract, the non-defaulting party may declare the Contract in default and proceed against the defaulting party for recovery of all damages, including reasonable attorney fees. In the case of a defaulting Owner, the Down Payment shall be applied to legally ascertained damages.
+Should the Owner or Contractor fail to carry out this Contract, the non-defaulting party may declare the Contract in default and proceed against the defaulting party for recovery of all damages, including reasonable attorney fees. In the case of a defaulting Owner, the Down Payment shall be applied to legally ascertained damages. If the Down Payment is insufficient to cover damages, Contractor may claim the value of all work executed plus any losses incurred. Alternatively, Contractor may accept the Down Payment as liquidated damages in full settlement of all claims against the Owner.
 
 ### 18.1 Manufacturer Default
 
-The Manufacturer is an independent third-party entity over which Sherman Homes has no control. In the event the Manufacturer fails to deliver the home unit, delivers a non-conforming unit, or becomes insolvent or ceases operations prior to delivery, the following shall apply:
+The Manufacturer is an independent third-party entity over which Sherman Homes has no control. In the event the Manufacturer fails to deliver the Home Unit, delivers a non-conforming unit, or becomes insolvent or ceases operations prior to delivery, the following shall apply:
 
 - Sherman Homes shall notify the Owner in writing within 5 business days of becoming aware of such a Manufacturer default.
 - Owner and Sherman Homes shall cooperate in good faith to identify an alternate manufacturer or remedy.
@@ -299,7 +303,7 @@ In the event of any arbitration or litigation relating to the project, project p
 
 ## 20. ACCEPTANCE AND OCCUPANCY
 
-Upon Contract completion, the project shall be inspected jointly by the Owner and the Contractor. Upon final payment, Contractor will provide Owner and Loan Agency with Lien Waivers for all materials and labor for this project. The Owner shall not occupy the property until final payment has been received and a signed Right to Occupy Certificate has been issued by the Contractor.
+Upon Contract completion, the project shall be inspected jointly by the Owner and the Contractor. Contractor shall make any repairs necessary to bring the Site Work into compliance with the Contract Documents prior to requesting final payment. Upon final payment, Contractor will provide Owner and Loan Agency with Lien Waivers for all materials and labor for this project. The Owner shall not occupy the property until final payment has been received and a signed Right to Occupy Certificate has been issued by the Contractor.
 
 ---
 
@@ -314,6 +318,16 @@ Upon Contract completion, the project shall be inspected jointly by the Owner an
 ## 21. GENERAL EXCLUSIONS
 
 Unless specifically listed in the Contracted Site Services above or added via Change Order, the following are **NOT** included in this Contract:
+
+### Available Services Not Selected
+
+The following site services are offered by Sherman Homes but were **not selected** for this Project. These items may be added later via Change Order (Section 9), subject to availability and scheduling.
+
+- ___________________________
+- ___________________________
+- ___________________________
+
+*(Leave blank or mark "N/A" if all available services were selected.)*
 
 ### Items Never Included in Any Sherman Homes Contract
 
