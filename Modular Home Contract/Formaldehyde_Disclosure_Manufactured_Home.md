@@ -1,3 +1,11 @@
+<style>
+@page {
+  margin: 1.5in 1.25in;
+  @top-right { content: "Formaldehyde Disclosure — Modular / Manufactured Home"; font-size: 9pt; color: #555; }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-size: 9pt; color: #555; }
+}
+</style>
+
 # Formaldehyde Disclosure
 ## Modular / Manufactured Home
 

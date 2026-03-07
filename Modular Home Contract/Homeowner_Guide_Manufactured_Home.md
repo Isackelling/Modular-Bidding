@@ -1,3 +1,11 @@
+<style>
+@page {
+  margin: 1.5in 1.25in;
+  @top-right { content: "Homeowner's Guide & Owner Responsibilities Acknowledgement (Exhibit C)"; font-size: 9pt; color: #555; }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-size: 9pt; color: #555; }
+}
+</style>
+
 # Homeowner's Guide to Selections, Purchases & Key Milestones
 ## Modular / Manufactured Home
 
@@ -91,9 +99,11 @@ Final inspection, punch list completion, final payment, and issuance of the Righ
 
 ---
 
-## Key Acknowledgements
+---
 
-Please read each statement carefully and initial to confirm your understanding.
+## Exhibit C — Owner Responsibilities Acknowledgement
+
+*This section constitutes Exhibit C of the Main Contract. Owner must read each statement carefully, initial each item, and sign at the end.*
 
 ### Documents & Cost
 
@@ -125,7 +135,11 @@ _______ Initial _______ Initial
 
 _______ Initial _______ Initial
 
-**7.** Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.
+**7.** Any visible damage or defects discovered at delivery must be reported **directly to the Manufacturer in writing within 5 business days** of delivery. This is my/our responsibility as the Owner — not Sherman Homes'. Sherman Homes will make reasonable efforts to assist in documenting and communicating defects to the Manufacturer, but does not control the Manufacturer's response and is not liable for factory defects.
+
+_______ Initial _______ Initial
+
+**8.** Floor plan and framing layouts are subject to reasonable field tolerances. Factory-built dimensions may vary slightly from plan drawings. Any dimensions that must be precise will be explicitly noted in the contract documents.
 
 _______ Initial _______ Initial
 
@@ -174,7 +188,7 @@ For all factory-locked items, contact the Manufacturer directly to review your M
 
 ### Site Selections *(Sherman's scope — select per Sherman's timeline)*
 
-> **Note:** Site selections are funded from the Allowance Budget. Monitor your spending against the Allowance Budget throughout the process. See your Contract (Section 10) for details on allowance overages, the Allowance Contingency, and Allowance Reallocations.
+> **Note:** Site selections are funded from the Allowance Budget. Monitor your spending against the Allowance Budget throughout the process. See your Contract (Section 10) for details on allowance overages and Allowance Reallocations. Any allowance overage requires a formal Allowance Overage Change Order — no administrative fee, but the change must be documented in writing.
 
 | Item | Notes |
 |---|---|

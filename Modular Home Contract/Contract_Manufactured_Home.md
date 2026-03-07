@@ -1,3 +1,11 @@
+<style>
+@page {
+  margin: 1.5in 1.25in;
+  @top-right { content: "Fixed Contract Amount — Modular / Manufactured Home Purchase & Installation Agreement"; font-size: 9pt; color: #555; }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-size: 9pt; color: #555; }
+}
+</style>
+
 # Fixed Contract Amount
 ## Modular / Manufactured Home Purchase & Installation Agreement
 
@@ -33,7 +41,7 @@ City, State, Zip: ___________________________
 
 ## 1. CONTRACT DOCUMENTS
 
-The Contract Documents consist of this Agreement, the Plans, the Specification Booklet, the Allowance Budget, the Owner Responsibilities Acknowledgement, the Payment Schedule, and the Manufacturer's Quote, Floor Plan, and Specifications (attached as **Exhibit A**); as well as any Addendums, Change Orders, and Allowance Reallocations executed after the date of this Agreement. These Contract Documents represent the entire agreement between the parties and supersede any prior oral or written agreement(s). Physical and/or electronic copies of all Contract Documents will be provided to the Owner by the Contractor.
+The Contract Documents consist of this Agreement, the Plans, the Specification Booklet, the Allowance Budget, **Exhibit C (Owner Responsibilities Acknowledgement)**, the Payment Schedule, and the Manufacturer's Quote, Floor Plan, and Specifications (attached as **Exhibit A**); as well as any Addendums, Change Orders, and Allowance Reallocations executed after the date of this Agreement. These Contract Documents represent the entire agreement between the parties and supersede any prior oral or written agreement(s). Physical and/or electronic copies of all Contract Documents will be provided to the Owner by the Contractor.
 
 > **Note:** The Homeowner's Guide is incorporated into this Contract by reference. Owner must read, initial, and sign the Homeowner Guide as part of executing this Agreement.
 
@@ -133,30 +141,47 @@ All site work and installation shall be completed in a workmanlike manner and sh
 
 Contractor holds a valid Manufactured Home Installer License as required by MN Statute 327B.
 
-Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense. Contractor will remove all construction debris and leave the project in a broom-clean condition.
+Contractor shall obtain all permits necessary for site work and installation, at the Owner's expense per the Allowance Budget. Contractor will remove all construction debris and leave the project in a broom-clean condition.
 
 ---
 
 ## 8. DUTIES OF THE OWNER
 
-Except as specifically noted in the Owner's Responsibility Acknowledgement, the Owner shall communicate with subcontractors and the Manufacturer only through the Contractor.
+Except as specifically noted in Exhibit C (Owner Responsibilities Acknowledgement), the Owner shall communicate with subcontractors and the Manufacturer only through the Contractor.
 
 The Owner will not assume any liability or responsibility, nor have control over or charge of construction means, methods, techniques, sequences, or procedures, or for safety precautions and programs in connection with the project, since these are solely the Contractor's responsibility.
 
-Owner is responsible for all utility account setups, fees, permits, installations, connections, and for all utility (electric & fuel) usage expenses. This includes fuel for generators if electric service is not provided and fuel for heaters if propane or natural gas service is not provided for cold weather construction conditions.
+Owner is responsible for all utility account setups, fees, permits, installations, and connections, and for all utility (electric & fuel) usage expenses during construction. This includes fuel for generators if electric service is not provided and fuel for heaters if propane or natural gas service is not provided for cold weather construction conditions.
 
-**Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date.** Site readiness requires:
+### 8.1 Pre-Signing Site Verification
 
-- Foundation complete, cured, and inspected before delivery date
-- **Access road** capable of accommodating a semi-truck with 65'+ trailer and an 85-ton crane — minimum 45-foot turning radius and 16-foot overhead clearance
-- Electric, water, and sewer/septic available at the property line
-- **Staging area:** minimum 50' × 100' clear area adjacent to the foundation for crane setup — site clear of debris, vehicles, and obstacles
+Prior to executing this Contract, Sherman Homes will conduct a site inspection to verify that the access road and site conditions are suitable for this project. **The access road must be confirmed suitable by Sherman Homes before this Contract is executed.** A suitable access road can accommodate a semi-truck with a 65'+ trailer and an 85-ton crane — minimum 45-foot turning radius and 16-foot overhead clearance. If improvements are required, the scope and cost of that work will be agreed upon and included in the original Contract — not as a Change Order.
+
+Any site clearing or tree removal required to provide an adequate staging area will be identified during the pre-signing site inspection and included in the original Contract scope. Sherman Homes may determine that clearing beyond the Owner's specific requests is necessary to create a safe and functional construction environment. All required clearing will be identified and priced at signing — not after.
+
+### 8.2 Project Site Control
+
+**During the entire construction period, Sherman Homes shall have full operational control of the project site**, including approximately a one-acre area centered on the home footprint (or the full extent of the property, if smaller), all staging areas, and all approach routes.
+
+- Owner shall not store personal property, vehicles, or equipment within the construction zone during the construction period without prior written approval from Sherman Homes.
+- No personal, recreational, or landscaping activity shall occur within the construction zone during the construction period without prior written approval from Sherman Homes.
+- Personal property left in the construction zone without approval may be relocated by Sherman Homes at the Owner's expense.
+
+**No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.**
+
+### 8.3 Site Readiness for Delivery
+
+Owner is responsible for ensuring required utilities are available **at the property line prior to the commencement of Sherman Homes' utility connection work** — in advance of delivery, not merely by delivery day. Sherman Homes' subcontractors require utility availability at the property line to complete trenching and connection work before the home is set on the foundation. Utility delays that affect Sherman Homes' schedule are the Owner's financial responsibility and shall be treated as a Change Order.
+
+Owner is responsible for ensuring the project site is ready for delivery on or before the confirmed delivery date. Site readiness requires:
+
+- Foundation complete, cured, and inspected
+- Access route to foundation clear for transport trucks and crane equipment
+- All Owner-provided utilities available at the property line per Section 8.3 above
 
 Delays caused by site unreadiness are the Owner's financial responsibility and shall be treated as a Change Order. Installation cannot proceed in high winds, heavy rain, or icy conditions; weather-related delays are not the responsibility of Sherman Homes.
 
 **Owner is responsible for snow plowing the driveway and construction site** during cold-weather months to maintain site access for construction vehicles and personnel.
-
-**No third-party contractor or homeowner-hired work shall be performed during the delivery and installation phase without prior written approval from Sherman Homes.**
 
 ---
 
@@ -174,11 +199,13 @@ An Allowance Overage Change Order shall not be subject to an administrative fee 
 
 ## 10. ALLOWANCES
 
-The Allowance Budget includes an Allowance Contingency line item. The Allowance Contingency is a reserve fund designed to cover cost overruns in any allowance category without requiring a Change Order. When any allowance line item exceeds its allocated amount, the overage shall be automatically deducted from the Allowance Contingency. Only after the Allowance Contingency has been completely depleted will an Allowance Overage Change Order be required.
+The Allowance Budget contains line items for specific categories of site work (permits, gravel driveway, sand pad, sewer, well, crane, and any other allowance items listed). Each line item represents a budgeted amount for that category.
 
-Owner may request Allowance Reallocations within the Allowance Budget total at no administrative fee. An Allowance Reallocation redistributes funds between allowance line items without increasing the total Allowance Budget amount.
+When the actual cost of an allowance item exceeds its budgeted amount, an **Allowance Overage Change Order** is required per Section 9. Allowance Overage Change Orders are not subject to the $300 administrative fee but are subject to additional costs (material, tax, labor, overhead, and profit at the rate of 15%).
 
-**Unused funds in the Allowance Budget, including any unused Allowance Contingency, will be credited back to the Owner.**
+Owner may request **Allowance Reallocations** within the Allowance Budget total at no administrative fee. An Allowance Reallocation redistributes funds between allowance line items without increasing the total Allowance Budget amount.
+
+**Unused funds in the Allowance Budget will be credited back to the Owner at project completion.**
 
 ---
 
@@ -212,7 +239,7 @@ Unscheduled, unsupervised access to the project site by any person other than th
 
 ---
 
-## 13. GENERAL PROVISIONS
+## 13. CONCEALED AND UNFORESEEN CONDITIONS
 
 If conditions are encountered at the construction site which are subsurface or otherwise concealed or unknown (including but not limited to rocks, old foundations, sinkholes, buried debris, etc.) which differ from those ordinarily expected, the Owner and the Contractor shall promptly investigate such conditions. If they differ materially and cause an increase in the Contractor's cost or time, the condition and related cost shall be treated as a Change Order.
 
@@ -228,11 +255,11 @@ Increased costs resulting from Force Majeure Events — including but not limite
 
 ---
 
-## 15. HAZARDOUS MATERIALS, WASTE, AND FORMALDEHYDE
+## 15. HAZARDOUS MATERIALS AND WASTE
 
-Unless the scope of this Agreement specifically includes handling of hazardous materials, upon discovery of such materials the Contractor shall notify the Owner immediately and allow engagement of a properly licensed hazardous material contractor. Any such work shall be treated as a Change Order. Materials introduced during factory construction — including those that may contain formaldehyde — are selected and installed by the Manufacturer, an independent third-party entity. Sherman Homes does not select, specify, or control factory-installed materials and makes no representations about them.
+Unless the scope of this Agreement specifically includes handling of hazardous materials, upon discovery of such materials during site work — including but not limited to asbestos, lead-based paint, buried petroleum tanks, or contaminated soil — the Contractor shall notify the Owner immediately and allow engagement of a properly licensed hazardous material contractor. Any such remediation work shall be treated as a Change Order.
 
-> **Note:** Read and sign the Formaldehyde Disclosure before executing this Agreement.
+> **Formaldehyde Disclosure:** Engineered wood products commonly used in factory-built homes — including particleboard, OSB, plywood, and factory-installed cabinetry and flooring — may emit formaldehyde. This is a standard characteristic of manufactured and modular homes, and the Manufacturer's Formaldehyde Disclosure (included in this contract package) is provided to all purchasers of this Manufacturer's homes as required by federal and state law. Read and sign the Formaldehyde Disclosure before executing this Agreement.
 
 ---
 
@@ -323,7 +350,7 @@ Unless specifically listed in the Contracted Site Services above or added via Ch
 
 The following site services are offered by Sherman Homes but were **not selected** for this Project. These items may be added later via Change Order (Section 9), subject to availability and scheduling.
 
-- ___________________________
+- Driveway paving / surfaced driveway
 - ___________________________
 - ___________________________
 
@@ -332,7 +359,7 @@ The following site services are offered by Sherman Homes but were **not selected
 ### Items Never Included in Any Sherman Homes Contract
 
 - Fencing or property line work
-- Tree removal (unless obstructing delivery or foundation)
+- Cosmetic tree removal unrelated to construction access, delivery, or foundation work
 - Retaining walls or major grading beyond standard site prep
 - Sheds, garages, or outbuildings
 - Interior painting or wall finishes beyond factory-installed
@@ -342,7 +369,6 @@ The following site services are offered by Sherman Homes but were **not selected
 - Utility account setup fees or meter installation fees
 - Water softener or filtration system
 - Security, alarm, or smart home systems
-- Driveway paving beyond gravel (unless surfaced driveway is contracted)
 
 ---
 
@@ -363,6 +389,7 @@ This Contract is based on the following assumptions. If actual conditions differ
 
 - **Exhibit A:** Manufacturer's Quote, Floor Plan, and Specifications *(provided by the Manufacturer; Sherman Homes makes no representations regarding the accuracy or completeness of Manufacturer-supplied documents)*
 - **Exhibit B:** Approved Engineered Foundation Drawings (to be attached when available)
+- **Exhibit C:** Owner Responsibilities Acknowledgement *(included in the Homeowner's Guide — Owner must read, initial, and sign)*
 
 ---
 
